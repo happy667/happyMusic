@@ -1,6 +1,5 @@
 <template>
   <transition name="fade"
-              mode="out-in"
               appear>
     <div class="login-container">
       <div class="container">
@@ -74,7 +73,7 @@ export default {
   height: 100%;
   box-sizing: border-box;
   overflow: hidden;
-  background-color: $color-common-background;
+  background-image: $baImage;
 
   .container {
     .title {

@@ -2,7 +2,6 @@
   <div class="index-container">
     <!-- logo -->
     <transition name="fade"
-                mode="out-in"
                 appear>
       <div class="logo">
         <img src="../assets/images/LogoIndex.png" />
@@ -18,13 +17,11 @@
         <router-link to="/Login">登录</router-link>
       </transition>
       <transition name="fade"
-                  mode="out-in"
                   appear>
         <p>OR</p>
         <!-- 注册 -->
       </transition>
       <transition name="fadeOption2"
-                  mode="out-in"
                   appear>
         <router-link to="/Register">注册</router-link>
       </transition>
@@ -43,7 +40,7 @@ export default {
   padding: 3.5rem 2rem 2rem 2rem;
   width: 100%;
   box-sizing: border-box;
-  background-color: $color-common-background;
+  background-image: $baImage;
 
   .logo {
     margin: 0 auto;
