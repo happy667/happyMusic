@@ -1,22 +1,30 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-
+const Login = () => import('../views/Login')
+const Index = () => import('../views/Index')
+const Register = () => import('../views/Register')
 Vue.use(VueRouter)
 
 const routes = [
+  // 重定向到首页
   {
     path: '/',
-    name: 'home',
-    component: Home
+    redirect: '/Index'
   },
+  // 跳转到登录页面
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    path: '/Login',
+    component: Login
+  },
+  // 跳转到首页
+  {
+    path: '/Index',
+    component: Index
+  },
+  // 跳转到注册页面
+  {
+    path: '/Register',
+    component: Register
   }
 ]
 
