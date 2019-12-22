@@ -1,13 +1,22 @@
 <template>
-  <m-footer></m-footer>
+  <div class="home-container">
+    <!-- 头部tabbar -->
+    <m-header></m-header>
+    <router-view></router-view>
+  </div>
+
 </template>
 <script>
-import mFooter from '../components/home/Footer'
+
+import mHeader from '../components/home/Header'
 export default {
   components: {
-    mFooter
+    mHeader
   }
 }
 </script>
-<style>
+<style lang="stylus" scoped>
+.home-container {
+  padding: 0.5rem;
+}
 </style>
