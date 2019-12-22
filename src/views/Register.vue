@@ -60,6 +60,7 @@ export default {
   .container {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
 
     .title {
       text-align: center;

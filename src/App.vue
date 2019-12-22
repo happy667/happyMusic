@@ -5,8 +5,8 @@
       <img src="./assets/images/bgImages/bg1.jpg" />
     </div>
     <transition mode="out-in"
-                enter-active-class="animated fadeIn"
-                leave-active-class="animated fadeOut">
+                enter-active-class="animated fadeIn faster"
+                leave-active-class="animated fadeOut faster">
       <router-view></router-view>
     </transition>
   </div>
