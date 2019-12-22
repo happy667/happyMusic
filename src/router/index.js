@@ -5,6 +5,10 @@ const Index = () => import('../views/appIndex/Index')
 const Register = () => import('../views/appIndex/Register')
 const AppIndex = () => import('../views/AppIndex')
 const Home = () => import('../views/Home')
+// const Recommend = () => import('../components/home/Recommend')
+// const Ranking = () => import('../components/home/Ranking')
+// const Singer = () => import('../components/home/Singer')
+// const Search = () => import('../components/home/Search')
 Vue.use(VueRouter)
 
 const routes = [
@@ -17,6 +21,7 @@ const routes = [
     path: '/AppIndex',
     redirect: '/appIndex/Index'
   },
+
   // 首页
   {
     path: '/AppIndex',
@@ -44,6 +49,28 @@ const routes = [
   {
     path: '/Home',
     component: Home
+    // children: [
+    //   // 推荐页
+    //   {
+    //     path: 'Recommend',
+    //     component: Recommend
+    //   },
+    //   // 排行页
+    //   {
+    //     path: 'Ranking',
+    //     component: Ranking
+    //   },
+    //   // 歌手页
+    //   {
+    //     path: 'Singer',
+    //     component: Singer
+    //   },
+    //   // 搜索页
+    //   {
+    //     path: 'Search',
+    //     component: Search
+    //   }
+    // ]
   }
 
 ]
