@@ -44,6 +44,8 @@ export default {
   width: 100%;
 
   .container {
+    height: 100%;
+
     .logo {
       margin: 0 auto;
       width: 9rem;

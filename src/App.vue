@@ -20,10 +20,11 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  justify-items: center;
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  padding: 2rem 2rem 1rem 2rem;
+  padding: 0 2rem;
 
   .bgImage {
     img {

@@ -51,12 +51,12 @@ export default {
 
 .login-container {
   width: 100%;
-  height: 100%;
 
   .container {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    height: 100%;
 
     .title {
       text-align: center;
@@ -65,7 +65,8 @@ export default {
       .title-top {
         margin-bottom: 1rem;
         font-weight: bolder;
-        color: $color-login-text;
+        color: $color-common-x;
+        font-family: $font-title;
       }
 
       .title-Bottom {
@@ -100,6 +101,7 @@ export default {
           outline: 0;
           background: none;
           border: none;
+          color: $color-common-x;
         }
 
         &:last-child {
@@ -129,7 +131,7 @@ export default {
       }
 
       a {
-        color: #23203f;
+        color: $color-common-x;
         font-weight: bolder;
       }
     }
