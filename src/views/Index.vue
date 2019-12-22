@@ -1,30 +1,22 @@
 <template>
   <div class="index-container">
-    <!-- logo -->
-    <transition name="fade"
-                appear>
-      <div class="logo">
-        <img src="../assets/images/LogoIndex.png" />
-      </div>
-    </transition>
-
-    <!-- 操作 -->
-    <div class="option">
-      <!-- 登录 -->
-      <transition name="fadeOption1"
+    <div class="container">
+      <!-- logo -->
+      <transition name="fade"
                   mode="out-in"
                   appear>
-        <router-link to="/Login">登录</router-link>
+        <div class="logo">
+          <img src="../assets/images/logoIndex.png" />
+        </div>
       </transition>
-      <transition name="fade"
-                  appear>
+
+      <!-- 操作 -->
+      <div class="option">
+        <router-link to="/Login">登录</router-link>
         <p>OR</p>
         <!-- 注册 -->
-      </transition>
-      <transition name="fadeOption2"
-                  appear>
         <router-link to="/Register">注册</router-link>
-      </transition>
+      </div>
     </div>
   </div>
 </template>
@@ -36,66 +28,58 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
+.fade-enter {
+  opacity: 0;
+}
+
+.fade-enter-active {
+  transition: opacity 1s;
+}
+
+.fade-enter-to {
+  opacity: 1;
+}
+
 .index-container {
-  padding: 3.5rem 2rem 2rem 2rem;
   width: 100%;
-  box-sizing: border-box;
-  background-image: $baImage;
 
-  .logo {
-    margin: 0 auto;
-    margin-bottom: 2.5rem;
-    width: 9rem;
-    height: 100%;
-    text-align: center;
+  .container {
+    .logo {
+      margin: 0 auto;
+      width: 9rem;
+      height: 8rem;
+      text-align: center;
+      margin-bottom: 2rem;
 
-    img {
-      width: 100%;
-    }
-  }
-
-  .fade-enter {
-    opacity: 0;
-  }
-
-  .fade-enter-active {
-    transition: opacity 2s;
-  }
-
-  .option {
-    display: flex;
-    height: 10rem;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
-    text-align: center;
-
-    a {
-      padding: 0.6rem 0;
-      width: 8rem;
-      color: #fff;
-      font-size: $font-size-small;
-      border-radius: 1rem;
-      background: $color-common;
-      box-shadow: 0 0.4rem 1.2rem #F4B3C5;
+      img {
+        width: 100%;
+        height: 100%;
+      }
     }
 
-    p {
-      color: $color-common;
-      font-weight: bolder;
-      font-size: $font-size-small;
-    }
+    .option {
+      display: flex;
+      height: 9rem;
+      flex-direction: column;
+      justify-content: space-evenly;
+      align-items: center;
+      text-align: center;
 
-    .fadeOption1-enter-active, .fadeOption2-enter-active {
-      transition: transform 1s;
-    }
+      a {
+        padding: 0.6rem 0;
+        width: 8rem;
+        color: #fff;
+        font-size: $font-size-small;
+        border-radius: 1rem;
+        background: $color-common;
+        box-shadow: 0 0.4rem 1.2rem #F4B3C5;
+      }
 
-    .fadeOption1-enter {
-      transform: translate3d(-150%, 0, 0);
-    }
-
-    .fadeOption2-enter {
-      transform: translate3d(150%, 0, 0);
+      p {
+        color: $color-common;
+        font-weight: bolder;
+        font-size: $font-size-small;
+      }
     }
   }
 }
