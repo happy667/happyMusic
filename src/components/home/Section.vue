@@ -59,7 +59,6 @@ export default {
     ...mapMutations(['nextPage', 'prevPage'])
   },
   mounted () {
-  
     // 动态添加transition
     // 因为在css中写transition,在js中获取这个属性是获取不到的
     this.$refs.ulObj.style.transition = 'all 0.5s ease'

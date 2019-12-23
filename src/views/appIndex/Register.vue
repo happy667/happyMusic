@@ -40,7 +40,7 @@
       <!-- 去登陆 -->
       <div class="other-wrapper">
         <span>Already have an account?</span>
-        <router-link to="/AppIndex/Login">Login</router-link>
+        <router-link to="/appIndex/login">Login</router-link>
       </div>
     </div>
 

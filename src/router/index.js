@@ -18,36 +18,36 @@ const routes = [
     redirect: '/appIndex/Index'
   },
   {
-    path: '/AppIndex',
+    path: '/appIndex',
     redirect: '/appIndex/Index'
   },
 
   // 首页
   {
-    path: '/AppIndex',
+    path: '/appIndex',
     component: AppIndex,
     children: [
       // 跳转到首页
       {
-        path: 'Index',
+        path: 'index',
         component: Index
       },
       // 跳转到登录页面
       {
-        path: 'Login',
+        path: 'login',
         component: Login
       },
 
       // 跳转到注册页面
       {
-        path: 'Register',
+        path: 'register',
         component: Register
       }
     ]
   },
   // 音乐app首页
   {
-    path: '/Home',
+    path: '/home',
     component: Home
     // children: [
     //   // 推荐页

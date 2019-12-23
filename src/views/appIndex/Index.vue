@@ -12,10 +12,10 @@
 
       <!-- 操作 -->
       <div class="option">
-        <router-link to="/AppIndex/Login">登录</router-link>
+        <router-link to="/appIndex/login">登录</router-link>
         <p>OR</p>
         <!-- 注册 -->
-        <router-link to="/AppIndex/Register">注册</router-link>
+        <router-link to="/appIndex/register">注册</router-link>
       </div>
     </div>
   </div>

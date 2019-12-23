@@ -36,7 +36,7 @@
       <!-- 去注册 -->
       <div class="other-wrapper">
         <span>Don`t have an account?</span>
-        <router-link to="/AppIndex/Register">Sign up</router-link>
+        <router-link to="/appIndex/register">Sign up</router-link>
       </div>
     </div>
   </div>
