@@ -113,11 +113,10 @@ export default {
 
      .tabbar-list {
        display: flex;
-       justify-content: space-between;
        width: 100%;
        background: #fff;
        text-align: center;
-       font-size: $font-size-small-title;
+       font-size: $font-size-small;
        color: $color-common-x;
        font-family: $font-common;
 
