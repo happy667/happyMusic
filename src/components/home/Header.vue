@@ -2,6 +2,10 @@
   <div class="header-container">
     <div class="container"></div>
     <div class="tabbar-wrapper">
+      <!-- logo -->
+      <div class="logo">
+        <img src="../../assets/images/Logo.png">
+      </div>
       <ul class="tabbar-list">
         <li v-for="(item,index) in tabbarList"
             :key="index"
@@ -90,15 +94,32 @@ export default {
      top: 0;
      width: 100%;
      z-index: 10;
+     display: flex;
+
+     .logo {
+       display: flex;
+       justify-content: center;
+       flex-direction: column;
+       align-items: center;
+       width: 2.5rem;
+       box-sizing: border-box;
+       text-align: center;
+
+       img {
+         width: 1.1rem;
+         height: 1.5rem;
+       }
+     }
 
      .tabbar-list {
-       width: 100%;
        display: flex;
+       justify-content: space-between;
+       width: 100%;
        background: #fff;
        text-align: center;
-       font-size: $font-size-small;
+       font-size: $font-size-small-title;
        color: $color-common-x;
-       font-family: $font-title;
+       font-family: $font-common;
 
        .tabbar-item {
          flex: 1;
@@ -108,7 +129,8 @@ export default {
 
          .active {
            color: $color-common;
-           transition: all 0.3s;
+           font-size: $font-size-small;
+           transition: all 0.4s;
          }
 
          .activeItem {

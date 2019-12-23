@@ -40,7 +40,7 @@ export default {
        text-align: center;
        font-size: $font-size-large;
        color: $color-common-x;
-       font-family: $font-title;
+       font-family: $font-common;
      }
    }
  }
