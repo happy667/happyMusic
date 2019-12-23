@@ -70,7 +70,7 @@ export default {
         margin-bottom: 1rem;
         font-weight: bolder;
         color: $color-common-x;
-        font-family: $font-title;
+        font-family: $font-common;
       }
 
       .title-Bottom {
@@ -141,6 +141,7 @@ export default {
       a {
         color: $color-common-x;
         font-weight: bolder;
+        font-family :$font-common
       }
     }
   }
