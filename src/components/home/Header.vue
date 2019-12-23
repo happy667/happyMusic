@@ -129,7 +129,6 @@ export default {
 
          .active {
            color: $color-common;
-           font-size: $font-size-small;
            transition: all 0.4s;
          }
 
