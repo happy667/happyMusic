@@ -30,6 +30,7 @@ import Ranking from './section/Ranking'
 import Singer from './section/Singer'
 import Search from './section/Search'
 import { mapState, mapMutations } from 'vuex'
+
 export default {
   data () {
     return {
@@ -58,6 +59,7 @@ export default {
     ...mapMutations(['nextPage', 'prevPage'])
   },
   mounted () {
+  
     // 动态添加transition
     // 因为在css中写transition,在js中获取这个属性是获取不到的
     this.$refs.ulObj.style.transition = 'all 0.5s ease'
@@ -112,6 +114,7 @@ export default {
   }
 }
 </script>
+
 <style lang="stylus" scoped>
 .fun-Container {
   height: 100%;
@@ -124,7 +127,7 @@ export default {
 
   .fun-list {
     .fun-list-item {
-      flex: 1;
+      width: 25%;
     }
   }
 }

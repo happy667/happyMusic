@@ -95,6 +95,7 @@ export default {
      width: 100%;
      z-index: 10;
      display: flex;
+     background: #fff;
 
      .logo {
        display: flex;
@@ -114,7 +115,6 @@ export default {
      .tabbar-list {
        display: flex;
        width: 100%;
-       background: #fff;
        text-align: center;
        font-size: $font-size-small;
        color: $color-common-x;

@@ -2,8 +2,14 @@
   <div class="home-container">
     <!-- 头部tabbar -->
     <home-header></home-header>
-    <!-- 功能模块 -->
-    <home-section></home-section>
+    <div class="wrapper"
+         ref="wrapper">
+      <div class="container">
+        <!-- 功能模块 -->
+        <home-section></home-section>
+      </div>
+    </div>
+
   </div>
 
 </template>
@@ -17,6 +23,10 @@ export default {
     return {
 
     }
+  },
+  mounted () {
+    // 创建Bscroll实例实现特效
+
   },
   components: {
     homeHeader,
