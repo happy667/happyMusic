@@ -1,13 +1,17 @@
 <template>
   <div class="recommend-container">
-    推荐
+    <recommend-swiper></recommend-swiper>
   </div>
 </template>
 <script>
+import recommendSwiper from './recommend/Swiper'
 export default {
-
+  components: {
+    recommendSwiper
+  }
 }
 </script>
+
 <style lang="stylus" scoped>
 .recommend-container {
   width: 100%;

@@ -1,16 +1,16 @@
 <template>
   <div class="home-container">
     <!-- 头部tabbar -->
-    <m-header></m-header>
+    <home-header></home-header>
     <!-- 功能模块 -->
-    <m-section></m-section>
+    <home-section></home-section>
   </div>
 
 </template>
 <script>
 
-import mHeader from '../components/home/Header'
-import mSection from '../components/home/Section'
+import homeHeader from '../components/home/Header'
+import homeSection from '../components/home/Section'
 
 export default {
   data () {
@@ -19,8 +19,8 @@ export default {
     }
   },
   components: {
-    mHeader,
-    mSection
+    homeHeader,
+    homeSection
   }
 }
 </script>

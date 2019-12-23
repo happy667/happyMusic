@@ -31,12 +31,7 @@ import Singer from './section/Singer'
 import Search from './section/Search'
 import { mapState, mapMutations } from 'vuex'
 export default {
-  components: {
-    Recommend,
-    Ranking,
-    Singer,
-    Search
-  },
+
   data () {
     return {
       moveDiff: 0
@@ -109,6 +104,12 @@ export default {
         this.prevPage()
       }
     })
+  },
+  components: {
+    Recommend,
+    Ranking,
+    Singer,
+    Search
   }
 }
 </script>
