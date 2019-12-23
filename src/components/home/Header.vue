@@ -8,7 +8,8 @@
             tag="li"
             @click="changeIndex(index)"
             class="tabbar-item">
-          <span>{{item.title}}</span>
+          <span class="title"
+                :class="currentIndex==index?'active':''">{{item.title}}</span>
           <transition :name="transitionName"
                       mode="out-in"
                       appear>
@@ -67,14 +68,14 @@ export default {
  .transitionLeft-enter, .transitionRight-leave-active {
    opacity: 0;
    transform: translate3d(0%, 0, 0);
-   transition: all .7s ease; /* 定义动画的时间和过渡效果 */
+   transition: all 0.7s ease; /* 定义动画的时间和过渡效果 */
    /* 当左滑进入右滑进入过渡动画 */
  }
 
  .transitionLeft-leave-active, .transitionRight-enter {
    opacity: 0;
    transform: translate3d(-100%, 0, 0);
-   transition: all .7s ease; /* 定义动画的时间和过渡效果 */
+   transition: all 0.7s ease; /* 定义动画的时间和过渡效果 */
  }
 
  .header-container {
@@ -104,6 +105,11 @@ export default {
          height: 2rem;
          line-height: 2rem;
          position: relative;
+
+         .active {
+           color: $color-common;
+           transition: all 0.3s;
+         }
 
          .activeItem {
            content: '';

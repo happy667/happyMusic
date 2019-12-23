@@ -70,7 +70,7 @@ export default {
     // 监听手指松开
     this.$el.addEventListener('touchend', () => {
       // 移动幅度小获取未获取到最后位置就不执行切换页面
-      if (!touch.endX || Math.abs(touch.endX - touch.startX) < 10) {
+      if (!touch.endX || Math.abs(touch.endX - touch.startX) < 50) {
         return
       }
       if (touch.endX < touch.startX) {
