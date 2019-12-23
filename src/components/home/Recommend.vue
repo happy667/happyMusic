@@ -73,7 +73,7 @@ export default {
   .swiper-item {
     padding: 0.3rem;
     width: 100%;
-    height: 6rem;
+    height: 7rem;
     box-sizing: border-box;
     background: #fff;
 
@@ -113,9 +113,9 @@ export default {
 
       .latestSongs-list-item {
         box-sizing: border-box;
-        padding: 0.4rem 0.6rem 0.6rem 0.6rem;
-        margin-bottom: 4%;
-        width: 48%;
+        padding: 0.3rem 0.7rem 0.4rem 0.7rem;
+        margin-bottom: 4.5%;
+        width: 47.5%;
         height: 10rem;
         background: #fff;
         box-shadow: 0 0 46px rgba(0, 0, 0, 0.1);
@@ -123,7 +123,7 @@ export default {
 
         .sons-img {
           width: 100%;
-          height: 5.5rem;
+          height: 5.7rem;
           border-radius: 0.3rem;
           margin-bottom: 0.5rem;
         }
