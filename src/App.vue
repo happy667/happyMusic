@@ -1,10 +1,6 @@
 <template>
   <div id="app">
-    <transition mode="out-in"
-                enter-active-class="animated fadeIn faster"
-                leave-active-class="animated fadeOut faster">
-      <router-view></router-view>
-    </transition>
+      <router-view v-transition></router-view>
   </div>
 </template>
 <script>

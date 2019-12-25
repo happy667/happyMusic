@@ -5,6 +5,7 @@ const Index = () => import('../views/appIndex/Index')
 const Register = () => import('../views/appIndex/Register')
 const AppIndex = () => import('../views/AppIndex')
 const Home = () => import('../views/Home')
+const SongSheetSort = () => import('../components/home/recommend/songSheet/SongSheetSort')
 // const Recommend = () => import('../components/home/Recommend')
 // const Ranking = () => import('../components/home/Ranking')
 // const Singer = () => import('../components/home/Singer')
@@ -15,7 +16,7 @@ const routes = [
   // 重定向到首页
   {
     path: '/',
-    redirect: '/appIndex/Index'
+    redirect: '/home'
   },
   {
     path: '/appIndex',
@@ -48,29 +49,30 @@ const routes = [
   // 音乐app首页
   {
     path: '/home',
-    component: Home
-    // children: [
-    //   // 推荐页
-    //   {
-    //     path: 'Recommend',
-    //     component: Recommend
-    //   },
-    //   // 排行页
-    //   {
-    //     path: 'Ranking',
-    //     component: Ranking
-    //   },
-    //   // 歌手页
-    //   {
-    //     path: 'Singer',
-    //     component: Singer
-    //   },
-    //   // 搜索页
-    //   {
-    //     path: 'Search',
-    //     component: Search
-    //   }
-    // ]
+    component: Home,
+    children: [
+
+      //   // 排行页
+      //   {
+      //     path: 'Ranking',
+      //     component: Ranking
+      //   },
+      //   // 歌手页
+      //   {
+      //     path: 'Singer',
+      //     component: Singer
+      //   },
+      //   // 搜索页
+      //   {
+      //     path: 'Search',
+      //     component: Search
+      //   }
+    ]
+  },
+  // 歌单页
+  {
+    path: '/songSheetSort',
+    component: SongSheetSort
   }
 
 ]

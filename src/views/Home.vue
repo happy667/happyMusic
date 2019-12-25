@@ -25,10 +25,10 @@
   </div>
 </template>
 <script>
-import Recommend from '../components/home/Recommend'
-import Ranking from '../components/home/Ranking'
-import Singer from '../components/home/Singer'
-import Search from '../components/home/Search'
+import Recommend from '@/components/home/Recommend'
+import Ranking from '@/components/home/Ranking'
+import Singer from '@/components/home/Singer'
+import Search from '@/components/home/Search'
 
 export default {
   data () {
