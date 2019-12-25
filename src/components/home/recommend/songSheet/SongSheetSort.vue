@@ -1,9 +1,11 @@
 <template>
   <div class="songSheet-container">
     <!-- 头部导航栏 -->
-    <van-nav-bar title="songSheet"
-                 left-arrow
-                 @click-left="routerBack" />
+    <van-sticky>
+      <van-nav-bar title="songSheet"
+                   left-arrow
+                   @click-left="routerBack" />
+    </van-sticky>
     <!-- 歌单分类 -->
     <van-tabs v-model="currentIndex"
               title-active-color="#FD4979"

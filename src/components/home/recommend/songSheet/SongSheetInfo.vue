@@ -1,9 +1,11 @@
 <template>
   <div class="song-sheet-info-container">
     <!-- 头部导航栏 -->
-    <van-nav-bar title="歌单列表"
-                 left-arrow
-                 @click-left="routerBack" />
+    <van-sticky>
+      <van-nav-bar title="歌单列表"
+                   left-arrow
+                   @click-left="routerBack" />
+    </van-sticky>
     <!-- 歌单图片 -->
     <div class="songs-img">
       <img src="https://qpic.y.qq.com/music_cover/0yiaX8d9LSmnROyId1RsUUwkjSfBGpSGzgRE4yibD0nlZqfUZFFwxpiaQ/300?n=1">
@@ -78,7 +80,7 @@ export default {
 
       .playBtn {
         position: absolute;
-        right: .6rem;
+        right: 0.6rem;
         top: 0;
         margin-top: -0.8rem;
         display: flex;
