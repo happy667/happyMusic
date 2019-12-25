@@ -140,7 +140,7 @@ export default {
       margin-bottom: 0.5rem;
       padding: 0.3rem 0.4rem;
       background: $color-common-background;
-      box-shadow: 0 0.2rem 0.8rem rgba(0, 0, 0, 0.1);
+      box-shadow: 0 0.32rem 1rem rgba(0, 0, 0, 0.1);
       border-radius: 0.2rem;
 
       .song-img {
