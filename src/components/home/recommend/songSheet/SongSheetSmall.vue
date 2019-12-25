@@ -74,7 +74,7 @@ export default {
         word-wrap: break-word;
         font-size: $font-size-smaller;
         font-family: $font-common-title;
-        textOverFlow2();
+        no-wrap2();
       }
     }
   }

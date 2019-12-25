@@ -6,10 +6,13 @@
     <song-sheet-Large>
       <div class="songsSheet">
         <p class="songs-title">Latest Songs</p>
-        <router-link class="viewMore"
-                     to="/SongSheetSort">
-          View more
-        </router-link>
+        <div class="viewMore">
+          <router-link to="/SongSheetSort">
+            View more
+          </router-link>
+          <van-icon name="arrow" />
+        </div>
+
       </div>
     </song-sheet-Large>
   </div>
@@ -32,5 +35,17 @@ export default {
   width: 100%;
   padding: 0.5rem;
   box-sizing: border-box;
+
+  .songsSheet {
+    .viewMore {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      a {
+        margin-right: 0.1rem;
+      }
+    }
+  }
 }
 </style>

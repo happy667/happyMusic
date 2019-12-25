@@ -95,7 +95,7 @@ export default {
         word-wrap: break-word;
         font-size: $font-size-small-x;
         font-family: $font-common-title;
-        textOverFlow2();
+        no-wrap2();
       }
 
       .songs-author {
@@ -103,7 +103,7 @@ export default {
         width: 100%;
         color: #999;
         font-size: $font-size-smaller;
-        textOverFlow();
+        no-wrap();
       }
     }
   }

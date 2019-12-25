@@ -9,7 +9,14 @@ no-wrap()
   text-overflow: ellipsis
   overflow: hidden
   white-space: nowrap
-
+  //超过两行换
+no-wrap2(){
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+}
 // 扩展点击区域
 extend-click()
   position: relative

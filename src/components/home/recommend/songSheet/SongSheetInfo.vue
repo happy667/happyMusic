@@ -68,7 +68,7 @@ export default {
         line-height: 1rem;
         font-weight: 500;
         font-size: $font-size-large;
-        textOverFlow();
+        no-wrap();
       }
 
       .songs-num {
