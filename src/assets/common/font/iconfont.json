@@ -1,0 +1,37 @@
+{
+  "id": "1582673",
+  "name": "happyMusic",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "807279",
+      "name": "暂停",
+      "font_class": "zanting",
+      "unicode": "e664",
+      "unicode_decimal": 58980
+    },
+    {
+      "icon_id": "918722",
+      "name": "爱心",
+      "font_class": "aixin",
+      "unicode": "e663",
+      "unicode_decimal": 58979
+    },
+    {
+      "icon_id": "1629916",
+      "name": "爱心",
+      "font_class": "icon-test",
+      "unicode": "e62a",
+      "unicode_decimal": 58922
+    },
+    {
+      "icon_id": "7408037",
+      "name": "播放",
+      "font_class": "bofang",
+      "unicode": "e638",
+      "unicode_decimal": 58936
+    }
+  ]
+}

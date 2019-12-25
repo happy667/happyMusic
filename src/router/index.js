@@ -32,17 +32,20 @@ const routes = [
       // 跳转到首页
       {
         path: 'index',
+        name: 'index',
         component: Index
       },
       // 跳转到登录页面
       {
         path: 'login',
+        name: 'login',
         component: Login
       },
 
       // 跳转到注册页面
       {
         path: 'register',
+        name: 'register',
         component: Register
       }
     ]
@@ -50,6 +53,7 @@ const routes = [
   // 音乐app首页
   {
     path: '/home',
+    name: 'home',
     component: Home,
     children: [
 
@@ -73,11 +77,13 @@ const routes = [
   // 歌单页
   {
     path: '/songSheetSort',
+    name: 'songSheetSort',
     component: SongSheetSort
   },
   // 歌单详情
   {
     path: '/songSheetInfo',
+    name: 'songSheetInfo',
     component: SongSheetInfo
   }
 

@@ -64,54 +64,6 @@ export default {
 .songSheet-container {
   width: 100%;
   height: 100%;
-
-  .songsSheet-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-
-    .songsSheet-list-item {
-      box-sizing: border-box;
-      padding: 0.2rem;
-      margin-top: 2%;
-      width: 32%;
-      height: 5.5rem;
-      background: #fff;
-      box-shadow: 0 0 46px rgba(0, 0, 0, 0.1);
-      border-radius: 0.3rem;
-
-      .sons-img {
-        display: block;
-        margin: 0 auto;
-        width: 3.5rem;
-        height: 3.5rem;
-        border-radius: 0.3rem;
-        margin-bottom: 0.2rem;
-      }
-
-      .songs-desc {
-        width: 4rem;
-        height: 1rem;
-        line-height: 1rem;
-        word-wrap: break-word;
-        font-size: $font-size-small-x;
-        font-family: $font-common-title;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-      }
-
-      .songs-author {
-        width: 100%;
-        height: 1rem;
-        line-height: 1rem;
-        color: #999;
-        font-size: $font-size-smaller;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-      }
-    }
-  }
+  background: $color-common-background;
 }
 </style>

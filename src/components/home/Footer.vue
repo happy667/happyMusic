@@ -35,7 +35,7 @@ export default {
      .tabbar-list {
        width: 100%;
        display: flex;
-       background: #fff;
+       background: $color-common-background;
        height: 5rem;
        text-align: center;
        font-size: $font-size-large;

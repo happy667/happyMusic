@@ -95,7 +95,7 @@ export default {
      width: 100%;
      z-index: 10;
      display: flex;
-     background: #fff;
+     background: $color-common-background;
 
      .logo {
        display: flex;

@@ -2,30 +2,38 @@
   <div class="songsSheet-container">
     <slot></slot>
     <ul class="songsSheet-list">
-      <li class="songsSheet-list-item">
+      <router-link tag="li"
+                   to="/songSheetInfo"
+                   class="songsSheet-list-item">
         <img class="sons-img"
              src="http://p2.music.126.net/Fs0DjAvcAAyAZa1dgXzFfQ==/109951163571833739.webp?imageView&thumbnail=247x0&quality=75&tostatic=0&type=webp">
-        <p class="songs-desc">Sweetie,TheNewest</p>
-        <p class="songs-author">Tyler Ford</p>
-      </li>
-      <li class="songsSheet-list-item">
+        <div class="songs-desc">Sweetie,TheNewest</div>
+        <div class="songs-author">Tyler Ford</div>
+      </router-link>
+      <router-link tag="li"
+                   to="/songSheetInfo"
+                   class="songsSheet-list-item">
         <img class="sons-img"
              src="http://p2.music.126.net/Fs0DjAvcAAyAZa1dgXzFfQ==/109951163571833739.webp?imageView&thumbnail=247x0&quality=75&tostatic=0&type=webp">
-        <p class="songs-desc">Sweetie,TheNewest</p>
-        <p class="songs-author">Tyler Ford</p>
-      </li>
-      <li class="songsSheet-list-item">
+        <div class="songs-desc">Sweetie,TheNewest</div>
+        <div class="songs-author">Tyler Ford</div>
+      </router-link>
+      <router-link tag="li"
+                   to="/songSheetInfo"
+                   class="songsSheet-list-item">
         <img class="sons-img"
              src="http://p2.music.126.net/Fs0DjAvcAAyAZa1dgXzFfQ==/109951163571833739.webp?imageView&thumbnail=247x0&quality=75&tostatic=0&type=webp">
-        <p class="songs-desc">Sweetie,TheNewest</p>
-        <p class="songs-author">Tyler Ford</p>
-      </li>
-      <li class="songsSheet-list-item">
+        <div class="songs-desc">Sweetie,TheNewest</div>
+        <div class="songs-author">Tyler Ford</div>
+      </router-link>
+      <router-link tag="li"
+                   to="/songSheetInfo"
+                   class="songsSheet-list-item">
         <img class="sons-img"
              src="http://p2.music.126.net/Fs0DjAvcAAyAZa1dgXzFfQ==/109951163571833739.webp?imageView&thumbnail=247x0&quality=75&tostatic=0&type=webp">
-        <p class="songs-desc">Sweetie,TheNewest</p>
-        <p class="songs-author">Tyler Ford</p>
-      </li>
+        <div class="songs-desc">Sweetie,TheNewest</div>
+        <div class="songs-author">Tyler Ford</div>
+      </router-link>
     </ul>
   </div>
 </template>
@@ -39,6 +47,7 @@ export default {
 
 .songsSheet-container {
   width: 100%;
+  background: $color-common-background;
 
   .songsSheet {
     display: flex;
@@ -69,8 +78,8 @@ export default {
       padding: 0.3rem 0.5rem;
       margin-bottom: 0.5rem;
       width: 47.5%;
-      background: #fff;
-      box-shadow: 0 0 46px rgba(0, 0, 0, 0.1);
+      background: $color-common-background;
+      box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.1);
       border-radius: 0.2rem;
 
       .sons-img {
@@ -86,7 +95,7 @@ export default {
         word-wrap: break-word;
         font-size: $font-size-small-x;
         font-family: $font-common-title;
-        textOverflow2();
+        textOverFlow2();
       }
 
       .songs-author {
@@ -94,7 +103,7 @@ export default {
         width: 100%;
         color: #999;
         font-size: $font-size-smaller;
-        textOverflow();
+        textOverFlow();
       }
     }
   }

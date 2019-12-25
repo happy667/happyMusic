@@ -20,19 +20,24 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-.van-swipe {
-  .van-swipe-item {
-    padding: 0.1rem;
-    width: 100%;
-    height: 5rem !important;
-    box-sizing: border-box;
-    background: #fff;
-    border-radius: 0.3rem;
+.swiper-container {
+  width: 100%;
 
-    img {
+  .van-swipe {
+    width: 100%;
+
+    .van-swipe-item {
+      padding: 0.1rem;
       width: 100%;
-      height: 100%;
+      height: 4.2rem !important;
+      box-sizing: border-box;
       border-radius: 0.3rem;
+
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: 0.3rem;
+      }
     }
   }
 }

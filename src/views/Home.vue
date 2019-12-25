@@ -44,8 +44,10 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style lang="stylus" scoped>
+@import '~common/stylus/variable';
+
 .home-container {
-  background: #fdfdfd;
+  background: $color-common-background;
 }
 </style>
