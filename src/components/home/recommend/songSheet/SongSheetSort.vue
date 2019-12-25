@@ -3,7 +3,7 @@
     <!-- 头部导航栏 -->
     <van-nav-bar title="songSheet"
                  left-arrow
-                 @click-left="onClickLeft" />
+                 @click-left="routerBack" />
     <!-- 歌单分类 -->
     <van-tabs v-model="currentIndex"
               title-active-color="#FD4979"
@@ -38,6 +38,7 @@
 </template>
 <script>
 import songSheetSmall from './SongSheetSmall'
+
 export default {
   data () {
     return {
@@ -46,8 +47,9 @@ export default {
     }
   },
   methods: {
+
     // 返回上一个路由
-    onClickLeft () {
+    routerBack () {
       this.$router.back()
     }
   },

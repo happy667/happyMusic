@@ -1,5 +1,5 @@
 <template>
-  <div class="songsSheet-contianer">
+  <div class="songsSheet-container">
     <slot></slot>
     <ul class="songsSheet-list">
       <li class="songsSheet-list-item">
@@ -37,9 +37,8 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.songsSheet-contianer {
+.songsSheet-container {
   width: 100%;
-  margin-top: 0.5rem;
 
   .songsSheet {
     display: flex;
@@ -67,42 +66,35 @@ export default {
 
     .songsSheet-list-item {
       box-sizing: border-box;
-      padding: 0.3rem 0.7rem;
-      margin-bottom: 4.5%;
+      padding: 0.3rem 0.5rem;
+      margin-bottom: 0.5rem;
       width: 47.5%;
-      height: 10rem;
       background: #fff;
       box-shadow: 0 0 46px rgba(0, 0, 0, 0.1);
-      border-radius: 0.3rem;
+      border-radius: 0.2rem;
 
       .sons-img {
         display: block;
         width: 100%;
-        height: 5.7rem;
-        border-radius: 0.3rem;
-        margin-bottom: 0.5rem;
+        border-radius: 0.2rem;
+        margin-bottom: 0.3rem;
       }
 
       .songs-desc {
-        width: 5rem;
-        height: 1.8rem;
-        line-height: 0.85rem;
+        width: 100%;
+        line-height: 0.6rem;
         word-wrap: break-word;
         font-size: $font-size-small-x;
         font-family: $font-common-title;
-        text-overflow: ellipsis;
-        overflow: hidden;
+        textOverflow2();
       }
 
       .songs-author {
+        line-height: 0.6rem;
         width: 100%;
-        height: 1.2rem;
-        line-height: 1.2rem;
         color: #999;
         font-size: $font-size-smaller;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
+        textOverflow();
       }
     }
   }

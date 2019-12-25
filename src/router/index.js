@@ -6,6 +6,7 @@ const Register = () => import('../views/appIndex/Register')
 const AppIndex = () => import('../views/AppIndex')
 const Home = () => import('../views/Home')
 const SongSheetSort = () => import('../components/home/recommend/songSheet/SongSheetSort')
+const SongSheetInfo = () => import('../components/home/recommend/songSheet/SongSheetInfo')
 // const Recommend = () => import('../components/home/Recommend')
 // const Ranking = () => import('../components/home/Ranking')
 // const Singer = () => import('../components/home/Singer')
@@ -15,7 +16,7 @@ Vue.use(VueRouter)
 const routes = [
   // 重定向到首页
   {
-    path: '/',
+    path: '*',
     redirect: '/home'
   },
   {
@@ -73,6 +74,11 @@ const routes = [
   {
     path: '/songSheetSort',
     component: SongSheetSort
+  },
+  // 歌单详情
+  {
+    path: '/songSheetInfo',
+    component: SongSheetInfo
   }
 
 ]

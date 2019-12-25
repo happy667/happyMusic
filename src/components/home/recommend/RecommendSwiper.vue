@@ -22,9 +22,9 @@ export default {
 <style lang="stylus" scoped>
 .van-swipe {
   .van-swipe-item {
-    padding: 0.3rem;
+    padding: 0.1rem;
     width: 100%;
-    height: 7rem !important;
+    height: 5rem !important;
     box-sizing: border-box;
     background: #fff;
     border-radius: 0.3rem;

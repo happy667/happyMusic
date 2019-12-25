@@ -1,5 +1,5 @@
 <template>
-  <div class="songsSheet-contianer">
+  <div class="songsSheet-container">
     <slot></slot>
     <ul class="songsSheet-list">
       <li class="songsSheet-list-item">
@@ -25,7 +25,7 @@
         <img class="sons-img"
              src="http://p2.music.126.net/Fs0DjAvcAAyAZa1dgXzFfQ==/109951163571833739.webp?imageView&thumbnail=247x0&quality=75&tostatic=0&type=webp">
 
-        <div class="songs-desc">Sweetie,TheNewest</div>
+        <div class="songs-desc">Sweetie,TheNewest123213</div>
 
       </li>
     </ul>
@@ -53,28 +53,25 @@ export default {
       padding: 0.2rem 0.3rem;
       margin-top: 2%;
       width: 32%;
-      height: 5.5rem;
       background: #fff;
       box-shadow: 0 0 46px rgba(0, 0, 0, 0.1);
-      border-radius: 0.3rem;
+      border-radius: 0.2rem;
 
       .sons-img {
         display: block;
         margin: 0 auto;
-        width: 3.5rem;
-        height: 3.2rem;
-        border-radius: 0.3rem;
+        width: 100%;
+        border-radius: 0.2rem;
         margin-bottom: 0.2rem;
       }
 
       .songs-desc {
-        width: 4rem;
-        height: 1.5rem;
-        line-height: 0.7rem;
+        width: 100%;
+        line-height: 0.6rem;
         word-wrap: break-word;
-        font-size: $font-size-small-x;
+        font-size: $font-size-smaller;
         font-family: $font-common-title;
-        text-overflow: ellipsis;
+        textOverflow2();
       }
     }
   }

@@ -2,17 +2,32 @@
 $color-common=#FD4979
 $color-common-x=#23203f
 $color-common-background=#fff
-//字体定义规范
-$font-size-smaller = .55rem
-$font-size-small-x = .6rem
-$font-size-small = .7rem
-$font-size-large-x = .75rem
-$font-size-large = .8rem
-//背景图片
+// 字体定义规范
+$font-size-smaller = .4rem
+$font-size-small-x = .45rem
+$font-size-small = .55rem
+$font-size-large-x = .6rem
+$font-size-large = .65rem
+// 背景图片
 $baImage=url('./assets/images/bgImages/bg1.jpg');
-//字体样式
+// 字体样式
 $font-common='Roboto'
 $font-common-title='sans-serif'
+//文字体一行超出省略
+textOverflow(){
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+textOverflow2(){
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+}
+//文字体二行超出省略
+
 
 
 
