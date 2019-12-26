@@ -23,6 +23,7 @@ export default {
   width: 100%;
   display: flex;
   padding: 0.2rem 0.2rem 0 0.8rem;
+  box-sizing: border-box;
   background: $color-common-background;
 
   .logo {
