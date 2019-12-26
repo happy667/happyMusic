@@ -20,7 +20,7 @@ export default new Vuex.Store({
         path: '/Home/Singer'
       },
       {
-        title: '搜索',
+        title: 'mv',
         path: '/Home/Search'
       }
     ],

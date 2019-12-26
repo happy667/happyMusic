@@ -87,11 +87,11 @@ export default {
         justify-content: center;
         align-items: center;
         color: red;
-        background: linear-gradient(to right, #702cfa, #3f12fd);
+        background: linear-gradient(to bottom right, #f48faa, #f57f9e);
         width: 1.5rem;
         height: 1.5rem;
         border-radius: 50%;
-        box-shadow: 0 0.01rem 0.3rem #702cfa;
+        box-shadow: 0 0.01rem 0.3rem #f48faa;
 
         i {
           color: #fff;

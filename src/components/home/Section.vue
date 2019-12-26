@@ -17,9 +17,9 @@
       <li class="fun-list-item">
         <singer />
       </li>
-      <!-- 搜索页 -->
+      <!-- mv页 -->
       <li class="fun-list-item">
-        <search />
+        <!-- <search /> -->
       </li>
     </ul>
   </div>
@@ -28,7 +28,6 @@
 import Recommend from './section/Recommend'
 import Ranking from './section/Ranking'
 import Singer from './section/Singer'
-import Search from './section/Search'
 import { mapState, mapMutations } from 'vuex'
 
 export default {
@@ -108,8 +107,7 @@ export default {
   components: {
     Recommend,
     Ranking,
-    Singer,
-    Search
+    Singer
   }
 }
 </script>

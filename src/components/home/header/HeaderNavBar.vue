@@ -19,7 +19,7 @@
         <singer />
       </van-tab>
       <!-- 搜索页 -->
-      <van-tab title="搜索">
+      <van-tab title="MV">
         <search />
       </van-tab>
     </van-tabs>

@@ -32,6 +32,13 @@
       "font_class": "bofang",
       "unicode": "e638",
       "unicode_decimal": 58936
+    },
+    {
+      "icon_id": "10292039",
+      "name": "删 除",
+      "font_class": "shanchu",
+      "unicode": "e614",
+      "unicode_decimal": 58900
     }
   ]
 }

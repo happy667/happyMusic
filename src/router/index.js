@@ -10,7 +10,7 @@ const SongSheetInfo = () => import('../components/home/recommend/songSheet/SongS
 // const Recommend = () => import('../components/home/Recommend')
 // const Ranking = () => import('../components/home/Ranking')
 // const Singer = () => import('../components/home/Singer')
-// const Search = () => import('../components/home/Search')
+const Search = () => import('../components/home/Search')
 Vue.use(VueRouter)
 
 const routes = [
@@ -85,6 +85,12 @@ const routes = [
     path: '/songSheetInfo',
     name: 'songSheetInfo',
     component: SongSheetInfo
+  },
+  // 搜索页
+  {
+    path: '/search',
+    name: 'search',
+    component: Search
   }
 
 ]

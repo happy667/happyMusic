@@ -5,15 +5,25 @@
       <img src="@/assets/images/Logo.png">
     </div>
     <!-- 搜索框 -->
-    <div class="search">
-      <van-search placeholder="请输入搜索关键词" />
+    <div class="search"
+         @click="handleSearchClick">
+      <van-search disabled
+                  left-icon=""
+                  right-icon="search"
+                  shape="round"
+                  placeholder="请输入搜索关键词" />
     </div>
   </div>
 </template>
 <script>
 
 export default {
-
+  methods: {
+    // 点击搜索跳转搜索页面
+    handleSearchClick () {
+      this.$router.push('/search')
+    }
+  }
 }
 </script>
 <style lang="stylus" scoped>
