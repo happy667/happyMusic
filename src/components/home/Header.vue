@@ -6,6 +6,7 @@
     </van-sticky>
     <!-- 头部导航栏 -->
     <header-nav-bar></header-nav-bar>
+
   </div>
 </template>
 <script>

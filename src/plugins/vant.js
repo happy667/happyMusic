@@ -7,7 +7,10 @@ import {
   NavBar,
   Icon,
   search,
-  Sticky
+  Sticky,
+  IndexBar,
+  IndexAnchor,
+  cell
 } from 'vant'
 Vue.use(Tab)
 Vue.use(Tabs)
@@ -17,3 +20,6 @@ Vue.use(NavBar)
 Vue.use(Icon)
 Vue.use(search)
 Vue.use(Sticky)
+Vue.use(IndexBar)
+Vue.use(IndexAnchor)
+Vue.use(cell)

@@ -20,7 +20,7 @@
       </van-tab>
       <!-- 搜索页 -->
       <van-tab title="MV">
-        <search />
+        <video-list />
       </van-tab>
     </van-tabs>
   </div>
@@ -29,7 +29,7 @@
 import Recommend from '@/components/home/Recommend'
 import Ranking from '@/components/home/Ranking'
 import Singer from '@/components/home/Singer'
-import Search from '@/components/home/Search'
+import VideoList from '@/components/home/VideoList'
 export default {
   data () {
     return {
@@ -50,7 +50,7 @@ export default {
     Recommend,
     Ranking,
     Singer,
-    Search
+    VideoList
   }
 
 }

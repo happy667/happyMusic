@@ -27,6 +27,13 @@
       "unicode_decimal": 58922
     },
     {
+      "icon_id": "4320349",
+      "name": "时长",
+      "font_class": "shichang",
+      "unicode": "e659",
+      "unicode_decimal": 58969
+    },
+    {
       "icon_id": "7408037",
       "name": "播放",
       "font_class": "bofang",

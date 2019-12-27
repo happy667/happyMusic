@@ -12,7 +12,6 @@
           </router-link>
           <van-icon name="arrow" />
         </div>
-
       </div>
     </song-sheet-Large>
   </div>
