@@ -65,8 +65,6 @@ export default {
   }
 
   .songsSheet-list {
-    padding: 0.1rem;
-
     .songsSheet-list-item {
       box-shadow: 0 0 0.2rem rgba(0, 0, 0, 0.1) !important;
     }

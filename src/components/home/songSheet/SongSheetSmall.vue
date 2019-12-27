@@ -43,6 +43,8 @@ export default {
 
 .songs-sheet-small-container {
   width: 100%;
+  padding: 0 0.3rem;
+  box-sizing: border-box;
   background: $color-common-background;
 
   .songsSheet-list {
