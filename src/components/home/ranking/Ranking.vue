@@ -10,7 +10,7 @@
   </div>
 </template>
 <script>
-import RankingList from './ranking/RankingList'
+import RankingList from './RankingList'
 export default {
   components: {
     RankingList

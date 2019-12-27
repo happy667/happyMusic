@@ -10,7 +10,7 @@ const options = {
   sameDepthDisable: false, // url深度相同时禁用动画，默认为false
   map: {
     'home': {
-      enter: ['songSheetSort', 'songSheetInfo', 'search']
+      enter: ['songSheetSort', 'songSheetInfo', 'search', 'video']
     },
     'songSheetSort': {
       enter: ['songSheetInfo'],
@@ -20,6 +20,9 @@ const options = {
       leave: ['home', 'songSheetSort']
     },
     'search': {
+      leave: ['home']
+    },
+    'video': {
       leave: ['home']
     }
   },

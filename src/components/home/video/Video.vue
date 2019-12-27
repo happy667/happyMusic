@@ -1,34 +1,47 @@
 <template>
-  <div class="video-container">
-    <!-- 视频区域 -->
+  <div class="video-container"
+       @click="goToVideoInfo">
+    <!-- 播放器区域 -->
     <div class="player">
       <video src="@/assets/testMv/1.mp4"></video>
       <!-- 播放按钮 -->
       <div class="play-btn">
         <van-icon name="play-circle-o" />
       </div>
-
-      <div class="play-desc">
-        <!-- 播放次数 -->
-        <div class="play-left">
-          <i class="iconfont icon-bofang"></i>
-          123213
+      <div class="play-controller">
+        <div class="play-before">
+          <!-- 播放次数 -->
+          <div class="play-left">
+            <i class="iconfont icon-bofang"></i>
+            123213
+          </div>
+          <!-- 播放时长 -->
+          <div class="play-right">
+            <i class="iconfont icon-shichang"></i>
+            12:52
+          </div>
         </div>
-        <!-- 播放时长 -->
-        <div class="play-right">
-          <i class="iconfont icon-shichang"></i>
-          12:52
+        <div class="play-after">
+          <!-- 进度条 -->
+          <div class="progress">
+            <van-slider active-color="#FD4979"
+                        v-model="value" />
+          </div>
+          <!-- 放大图标 -->
+          <div class="full">
+            <i class="iconfont icon-amplification_icon"></i>
+          </div>
         </div>
       </div>
     </div>
-
+    <!-- 视频描述 -->
     <div class="play-info">
       <!-- 视频标题 -->
       <div class="play-title">差不多姑娘差不多姑娘差不多姑娘差不多姑娘差不多姑娘差不多姑娘差不多姑娘</div>
       <!-- 视频出处 -->
       <div class="play-source">
         <div class="play-source-img">
-          <img src="http://p3.music.126.net/Xl0WENt4F6wsgjjjQWuQsw==/109951164232034479.jpg?param=50y50" />
+          <avatar></avatar>
         </div>
         <div class="play-source-author">
           张艺兴
@@ -38,8 +51,23 @@
   </div>
 </template>
 <script>
+import Avatar from '../avatar/Avatar'
 export default {
+  data () {
+    return {
+      value: 50
+    }
+  },
 
+  methods: {
+    // 跳转到mv详情页
+    goToVideoInfo () {
+      this.$router.push('/video')
+    }
+  },
+  components: {
+    Avatar
+  }
 }
 </script>
 <style lang="stylus" scoped>
@@ -48,7 +76,7 @@ export default {
 .video-container {
   margin-bottom: 0.5rem;
   width: 100%;
-  box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.1);
+   box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
   border-radius: 0 0 0.3rem 0.3rem;
 
   .player {
@@ -82,18 +110,41 @@ export default {
       }
     }
 
-    .play-desc {
+    .play-controller {
       position: absolute;
       bottom: 0rem;
       left: 0;
-      display: flex;
-      justify-content: space-between;
       padding: 0 0.3rem;
       width: 100%;
       box-sizing: border-box;
       height: 1rem;
       line-height: 1rem;
       color: #fff;
+
+      .play-before, .play-after {
+        width: 100%;
+      }
+
+      .play-before {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .play-after {
+        .progress {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+        }
+
+        .full {
+          position: absolute;
+          top: 0;
+          right: 0.3rem;
+          font-size: $font-size-small;
+        }
+      }
     }
   }
 
@@ -104,7 +155,7 @@ export default {
       line-height: 1rem;
       font-size: $font-size-smaller;
       no-wrap();
-      border-bottom: 0.03rem solid #ccc;
+      border-bottom: 0.02rem solid #efefef;
     }
 
     .play-source {
@@ -114,15 +165,6 @@ export default {
 
       .play-source-img {
         margin-right: 0.3rem;
-        width: 1rem;
-        height: 1rem;
-
-        img {
-          display: block;
-          width: 100%;
-          height: 100%;
-          border-radius: 50%;
-        }
       }
 
       .play-source-author {

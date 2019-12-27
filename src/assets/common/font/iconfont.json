@@ -27,6 +27,13 @@
       "unicode_decimal": 58922
     },
     {
+      "icon_id": "2119410",
+      "name": "放大",
+      "font_class": "amplification_icon",
+      "unicode": "e666",
+      "unicode_decimal": 58982
+    },
+    {
       "icon_id": "4320349",
       "name": "时长",
       "font_class": "shichang",

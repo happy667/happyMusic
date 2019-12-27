@@ -17,8 +17,8 @@
   </div>
 </template>
 <script>
-import recommendSwiper from './recommend/RecommendSwiper'
-import songSheetLarge from './recommend/songSheet/SongSheetLarge'
+import recommendSwiper from './RecommendSwiper'
+import songSheetLarge from '@/components/home/songSheet/SongSheetLarge'
 export default {
   components: {
     recommendSwiper,

@@ -57,7 +57,7 @@ export default {
       margin-top: 3%;
       width: 31%;
       background: $color-common-background;
-      box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.1);
+     box-shadow: 0 0.25rem 0.6rem rgba(0, 0, 0, 0.1);
       border-radius: 0.2rem;
 
       .sons-img {

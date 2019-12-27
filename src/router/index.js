@@ -5,12 +5,12 @@ const Index = () => import('../views/appIndex/Index')
 const Register = () => import('../views/appIndex/Register')
 const AppIndex = () => import('../views/AppIndex')
 const Home = () => import('../views/Home')
-const SongSheetSort = () => import('../components/home/recommend/songSheet/SongSheetSort')
-const SongSheetInfo = () => import('../components/home/recommend/songSheet/SongSheetInfo')
-// const Recommend = () => import('../components/home/Recommend')
+const SongSheetSort = () => import('../components/home/songSheet/SongSheetSort')
+const SongSheetInfo = () => import('../components/home/songSheet/SongSheetInfo')
+const Video = () => import('../components/home/video/VideoInfo')
 // const Ranking = () => import('../components/home/Ranking')
 // const Singer = () => import('../components/home/Singer')
-const Search = () => import('../components/home/Search')
+const Search = () => import('../components/home/search/Search')
 Vue.use(VueRouter)
 
 const routes = [
@@ -91,8 +91,13 @@ const routes = [
     path: '/search',
     name: 'search',
     component: Search
+  },
+  // mv详情页
+  {
+    path: '/video',
+    name: 'video',
+    component: Video
   }
-
 ]
 
 const router = new VueRouter({

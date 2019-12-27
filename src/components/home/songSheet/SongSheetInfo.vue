@@ -27,7 +27,7 @@
   </div>
 </template>
 <script>
-import SongsList from '@/components/home/recommend/songs/SongsList'
+import SongsList from '@/components/home/songs/SongsList'
 export default {
   methods: {
     // 返回上一个路由

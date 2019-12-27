@@ -5,8 +5,9 @@
   </div>
 </template>
 <script>
-import VideoItem from './video/Video'
+import VideoItem from './Video'
 export default {
+
   components: {
     VideoItem
   }

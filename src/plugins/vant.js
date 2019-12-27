@@ -10,7 +10,8 @@ import {
   Sticky,
   IndexBar,
   IndexAnchor,
-  cell
+  cell,
+  slider
 } from 'vant'
 Vue.use(Tab)
 Vue.use(Tabs)
@@ -23,3 +24,4 @@ Vue.use(Sticky)
 Vue.use(IndexBar)
 Vue.use(IndexAnchor)
 Vue.use(cell)
+Vue.use(slider)
