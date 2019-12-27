@@ -33,8 +33,18 @@ import Search from '@/components/home/Search'
 export default {
   data () {
     return {
-      currentIndex: 0// 当前索引
     }
+  },
+  computed: {
+    currentIndex: {
+      get () {
+        return this.$store.state.currentIndex
+      },
+      set (index) {
+        this.$store.commit('setCurrentIndex', index)
+      }
+    }
+
   },
   components: {
     Recommend,
@@ -42,6 +52,7 @@ export default {
     Singer,
     Search
   }
+
 }
 </script>
 <style lang="stylus" scoped></style>

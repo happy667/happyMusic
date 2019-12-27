@@ -37,10 +37,24 @@ export default {
   box-sizing: border-box;
 
   .songsSheet {
+    display: flex;
+    justify-content: space-between;
+    font-size: $font-size-small-x;
+    height: 1.5rem;
+    line-height: 1.5rem;
+    font-family: $font-common-title;
+
+    .songs-title {
+      height: 1.5rem;
+      line-height: 1.5rem;
+    }
+
     .viewMore {
       display: flex;
       justify-content: center;
       align-items: center;
+      font-size: $font-size-smaller;
+      color: #999;
 
       a {
         margin-right: 0.1rem;

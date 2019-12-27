@@ -1,9 +1,12 @@
 <template>
   <div id="app">
-      <router-view v-transition></router-view>
+    <router-view v-transition></router-view>
   </div>
 </template>
 <script>
+export default {
+
+}
 </script>
 <style lang="stylus" scoped>
 #app {

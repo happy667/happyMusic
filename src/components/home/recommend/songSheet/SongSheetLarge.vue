@@ -7,7 +7,7 @@
                    class="songsSheet-list-item">
         <img class="sons-img"
              src="http://p2.music.126.net/Fs0DjAvcAAyAZa1dgXzFfQ==/109951163571833739.webp?imageView&thumbnail=247x0&quality=75&tostatic=0&type=webp">
-        <div class="songs-desc">Sweetie,TheNewest</div>
+        <div class="songs-desc">Sweetie,TheNewestsadadadsadasdsad</div>
         <div class="songs-author">Tyler Ford</div>
       </router-link>
       <router-link tag="li"
@@ -48,25 +48,6 @@ export default {
 .songsSheet-container {
   width: 100%;
   background: $color-common-background;
-
-  .songsSheet {
-    display: flex;
-    justify-content: space-between;
-    font-size: $font-size-small-x;
-    height: 1.5rem;
-    line-height: 1.5rem;
-    font-family: $font-common-title;
-
-    .songs-title {
-      height: 1.5rem;
-      line-height: 1.5rem;
-    }
-
-    .viewMore {
-      font-size: $font-size-smaller;
-      color: #999;
-    }
-  }
 
   .songsSheet-list {
     display: flex;
