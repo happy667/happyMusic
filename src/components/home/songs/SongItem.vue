@@ -25,7 +25,7 @@ export default {
 
 }
 </script>
-<style lang="stylus" scoped>
+<style lang="stylus">
 @import '~common/stylus/variable';
 
 .songs-list-item-containter {

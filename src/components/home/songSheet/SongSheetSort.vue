@@ -1,5 +1,5 @@
 <template>
-  <div class="songSheet-container">
+  <div class="song-sheet-sort-container">
     <!-- 头部导航栏 -->
     <van-sticky>
       <van-nav-bar title="songSheet"
@@ -63,7 +63,7 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.songSheet-container {
+.song-sheet-sort-container {
   width: 100%;
   height: 100%;
   background: $color-common-background;

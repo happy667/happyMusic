@@ -21,8 +21,7 @@ export default {
 @import '~common/stylus/variable';
 
 .singer-container {
-  .singer-list {
-    padding: 0.5rem;
-  }
+  padding: 0.5rem;
+
 }
 </style>

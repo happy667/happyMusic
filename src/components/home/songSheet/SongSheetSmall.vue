@@ -1,6 +1,5 @@
 <template>
-  <div class="songsSheet-container">
-    <slot></slot>
+  <div class="songs-sheet-small-container">
     <ul class="songsSheet-list">
       <router-link tag="li"
                    to="/songSheetInfo"
@@ -38,10 +37,11 @@ export default {
 
 }
 </script>
+
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.songSheet-container {
+.songs-sheet-small-container {
   width: 100%;
   background: $color-common-background;
 
@@ -57,7 +57,7 @@ export default {
       margin-top: 3%;
       width: 31%;
       background: $color-common-background;
-     box-shadow: 0 0.25rem 0.6rem rgba(0, 0, 0, 0.1);
+      box-shadow: 0 0.25rem 0.6rem rgba(0, 0, 0, 0.1);
       border-radius: 0.2rem;
 
       .sons-img {

@@ -1,5 +1,5 @@
 <template>
-  <div class="songsSheet-container">
+  <div class="songs-sheet-large-container">
     <slot></slot>
     <ul class="songsSheet-list">
       <router-link tag="li"
@@ -42,10 +42,10 @@ export default {
 
 }
 </script>
-<style lang="stylus" scoped>
+<style lang="stylus">
 @import '~common/stylus/variable';
 
-.songsSheet-container {
+.songs-sheet-large-container {
   width: 100%;
   background: $color-common-background;
 

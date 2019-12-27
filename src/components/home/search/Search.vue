@@ -45,14 +45,17 @@
           <li class="search-list-item">水电费的说法是否的发</li>
         </ul>
       </div>
+      <!-- 搜索结果 -->
+      <search-result></search-result>
     </section>
 
   </div>
 </template>
 <script>
+import SearchResult from './SearchResult'
 export default {
   components: {
-
+    SearchResult
   },
   methods: {
     // 返回上一个路由
@@ -65,13 +68,18 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
+.van-tabs {
+  height: 100% !important;
+}
+
 .search-container {
   width: 100%;
   height: 100%;
   background: #fff;
 
   section {
-    padding: 0.5rem;
+    height: 100%;
+    padding: 0 0.5rem 0.5rem 0.5rem;
 
     .search-list-header {
       display: flex;
