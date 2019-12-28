@@ -5,7 +5,7 @@
     <div class="comment-header">
       <!-- 用户头像 -->
       <div class="avatar">
-        <avatar></avatar>
+        <music-img></music-img>
       </div>
       <div class="comment-info">
         <!-- 用户昵称 -->
@@ -21,10 +21,10 @@
   </div>
 </template>
 <script>
-import Avatar from '../avatar/Avatar'
+import MusicImg from '../img/MusicImg'
 export default {
   components: {
-    Avatar
+    MusicImg
   }
 }
 </script>

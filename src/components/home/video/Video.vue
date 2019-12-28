@@ -41,7 +41,7 @@
       <!-- 视频出处 -->
       <div class="play-source">
         <div class="play-source-img">
-          <avatar></avatar>
+          <music-img></music-img>
         </div>
         <div class="play-source-author">
           张艺兴
@@ -51,7 +51,7 @@
   </div>
 </template>
 <script>
-import Avatar from '../avatar/Avatar'
+import MusicImg from '../img/MusicImg'
 export default {
   data () {
     return {
@@ -66,7 +66,7 @@ export default {
     }
   },
   components: {
-    Avatar
+    MusicImg
   }
 }
 </script>

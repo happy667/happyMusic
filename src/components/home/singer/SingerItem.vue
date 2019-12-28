@@ -3,7 +3,7 @@
     <div class="singer-list-item">
       <!-- 歌手头像 -->
       <div class="singer-avatar">
-        <avatar></avatar>
+        <music-img></music-img>
       </div>
       <!-- 歌手姓名 -->
       <p class="singer-name">隔壁老樊</p>
@@ -12,10 +12,10 @@
 
 </template>
 <script>
-import Avatar from '../avatar/Avatar'
+import MusicImg from '../img/MusicImg'
 export default {
   components: {
-    Avatar
+    MusicImg
   }
 }
 </script>
