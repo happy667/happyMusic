@@ -6,7 +6,7 @@
                    left-arrow
                    @click-left="routerBack" />
     </van-sticky>
-    <video-info></video-info>
+    <video-component></video-component>
     <section>
       <!-- 相关音乐 -->
       <div class="related-music">
@@ -20,8 +20,8 @@
   </div>
 </template>
 <script>
-import VideoInfo from './Video'
-import SongItem from '@/components/home/songs/SongItem'
+import VideoComponent from './Video'
+import SongItem from '@/components/home/song/SongItem'
 import CommentList from '@/components/home/comment/CommentList'
 export default {
   data () {
@@ -36,7 +36,7 @@ export default {
     }
   },
   components: {
-    VideoInfo,
+    VideoComponent,
     SongItem,
     CommentList
   }

@@ -12,6 +12,12 @@
 <script>
 import SongItem from './SongItem'
 export default {
+  methods: {
+    // 跳转到mv详情页
+    goToVideoInfo () {
+      this.$router.push('/videoInfo')
+    }
+  },
   components: {
     SongItem
   }

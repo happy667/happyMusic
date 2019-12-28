@@ -7,10 +7,10 @@ const AppIndex = () => import('../views/AppIndex')
 const Home = () => import('../views/Home')
 const SongSheetSort = () => import('../components/home/songSheet/SongSheetSort')
 const SongSheetInfo = () => import('../components/home/songSheet/SongSheetInfo')
-const Video = () => import('../components/home/video/VideoInfo')
-// const Ranking = () => import('../components/home/Ranking')
-// const Singer = () => import('../components/home/Singer')
+const VideoInfo = () => import('../components/home/video/VideoInfo')
 const Search = () => import('../components/home/search/Search')
+const Play = () => import('../components/home/play/Play')
+const SongComment = () => import('../components/home/song/SongComment')
 Vue.use(VueRouter)
 
 const routes = [
@@ -94,9 +94,22 @@ const routes = [
   },
   // mv详情页
   {
-    path: '/video',
-    name: 'video',
-    component: Video
+    path: '/videoInfo',
+    name: 'videoInfo',
+    component: VideoInfo
+  },
+  // 播放页面
+  {
+    path: '/play',
+    name: 'play',
+    component: Play
+  },
+  // 歌曲评论列表
+  {
+    path: '/songComment',
+    name: 'songComment',
+    component: SongComment
+
   }
 ]
 

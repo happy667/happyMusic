@@ -1,5 +1,6 @@
 <template>
-  <div class="footer-container">
+  <div class="footer-container"
+       @click="handleClick">
     <!-- 左侧图片 -->
     <div class="left">
       <img src="http://p2.music.126.net/bneNR7SFgi-qe814_bAgdQ==/109951164583628522.jpg?param=140y140">
@@ -40,7 +41,10 @@
 </template>
 <script>
 export default {
-  components: {
+  methods: {
+    handleClick () {
+      this.$router.push('/play')
+    }
   }
 }
 </script>

@@ -62,7 +62,7 @@ export default {
   methods: {
     // 跳转到mv详情页
     goToVideoInfo () {
-      this.$router.push('/video')
+      this.$router.push('/videoInfo')
     }
   },
   components: {
@@ -76,7 +76,7 @@ export default {
 .video-container {
   margin-bottom: 0.5rem;
   width: 100%;
-   box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
   border-radius: 0 0 0.3rem 0.3rem;
 
   .player {
