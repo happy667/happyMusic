@@ -1,0 +1,54 @@
+<template>
+  <header class="header">
+    <!-- 左侧播放类型 -->
+    <div class="left">
+      <div class="play-type icon">
+        <i class="iconfont icon-xunhuanbofang"></i>
+      </div>
+      <div class="type-name">随机播放</div>
+      <div class="list-num">(304首)</div>
+    </div>
+    <div class="right">
+      <div class="play-type icon">
+        <i class="iconfont icon-shanchu"></i>
+      </div>
+    </div>
+  </header>
+</template>
+<script>
+export default {
+
+}
+</script>
+<style lang="stylus" scoped>
+@import '~common/stylus/variable';
+
+.header {
+  width: 100%;
+  padding: 0 0.4rem;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  font-size: $font-size-smaller;
+  border-bottom: 0.02rem solid #efefef;
+
+  i {
+    font-size: $font-size-small;
+  }
+
+  .left {
+    height: 1.2rem;
+    line-height: 1.2rem;
+    display: flex;
+
+    .icon {
+      margin-right: 0.3rem;
+    }
+  }
+
+  .right {
+    height: 1.2rem;
+    line-height: 1.2rem;
+  }
+}
+</style>

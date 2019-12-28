@@ -5,6 +5,15 @@
     <comment-item></comment-item>
     <comment-item></comment-item>
     <comment-item></comment-item>
+    <comment-item></comment-item>
+    <comment-item></comment-item>
+    <comment-item></comment-item>
+    <comment-item></comment-item>
+    <comment-item></comment-item>
+    <comment-item></comment-item>
+    <comment-item></comment-item>
+    <comment-item></comment-item>
+    <comment-item></comment-item>
   </div>
 </template>
 <script>
@@ -19,6 +28,9 @@ export default {
 @import '~common/stylus/variable';
 
 .comment-list-container {
+  width: 100%;
+  background: #fff;
+
   .comment-list-title {
     font-size: $font-size-smaller;
     font-weight: bold;

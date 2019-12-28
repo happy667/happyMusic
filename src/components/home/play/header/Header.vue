@@ -23,7 +23,7 @@ export default {
 @import '~common/stylus/variable';
 
 .header-container {
-  margin: 0.3rem 0.3rem 1rem 0.3rem;
+  margin: 0.3rem 0.3rem 0 0.3rem;
   position: relative;
   display: flex;
   font-size: $font-size-small;

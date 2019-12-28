@@ -31,7 +31,7 @@ export default {
   .icon {
     i {
       color: $color-common;
-      font-size: 0.65rem;
+      font-size: 0.7rem;
     }
   }
 

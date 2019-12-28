@@ -26,14 +26,14 @@ export default {
 .play-progress-container {
   .progress {
     width: 100%;
-    margin-top: 0.5rem;
+    margin-top: 0.6rem;
   }
 
   .play-time {
     display: flex;
     justify-content: space-between;
-    height: 0.7rem;
-    line-height: 0.7rem;
+    height: 1.3rem;
+    line-height: 1.3rem;
 
     .start-time {
       color: #81898f;

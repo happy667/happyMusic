@@ -6,6 +6,8 @@
     <play-section></play-section>
     <!-- 页面底部 -->
     <play-footer></play-footer>
+    <!--歌曲列表-->
+    <play-list v-show="showPlayList"></play-list>
     <!-- 背景 -->
     <div class="bg"></div>
   </div>
@@ -14,20 +16,29 @@
 import PlayHeader from './header/Header'
 import PlaySection from './section/Section'
 import PlayFooter from './footer/Footer'
+import PlayList from '@/components/home/playList/PlayList'
 export default {
+  data () {
+    return {
+      showPlayList: false// 显示隐藏播放列表
+    }
+  },
   components: {
     PlayHeader,
     PlaySection,
-    PlayFooter
+    PlayFooter,
+    PlayList
   }
 }
 </script>
 <style lang="stylus" scoped>
 .play-container {
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  background: #fff;
 
   .bg {
     position: absolute;

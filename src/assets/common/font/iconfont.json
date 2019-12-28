@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "386337",
+      "name": "叉",
+      "font_class": "cha",
+      "unicode": "e61a",
+      "unicode_decimal": 58906
+    },
+    {
       "icon_id": "688097",
       "name": "上一首 上一个",
       "font_class": "shangyishoushangyige",
@@ -20,13 +27,6 @@
       "unicode_decimal": 59301
     },
     {
-      "icon_id": "807279",
-      "name": "暂停",
-      "font_class": "zanting",
-      "unicode": "e664",
-      "unicode_decimal": 58980
-    },
-    {
       "icon_id": "918722",
       "name": "爱心",
       "font_class": "aixin",
@@ -39,6 +39,13 @@
       "font_class": "icon-test",
       "unicode": "e62a",
       "unicode_decimal": 58922
+    },
+    {
+      "icon_id": "2118485",
+      "name": "播放",
+      "font_class": "bofang",
+      "unicode": "e654",
+      "unicode_decimal": 58964
     },
     {
       "icon_id": "2119410",
@@ -76,11 +83,11 @@
       "unicode_decimal": 58969
     },
     {
-      "icon_id": "7408037",
-      "name": "播放",
-      "font_class": "bofang",
-      "unicode": "e638",
-      "unicode_decimal": 58936
+      "icon_id": "6207819",
+      "name": "播放中",
+      "font_class": "ziyuanldpi",
+      "unicode": "e61c",
+      "unicode_decimal": 58908
     },
     {
       "icon_id": "7461119",
@@ -88,6 +95,13 @@
       "font_class": "bofangliebiao",
       "unicode": "e634",
       "unicode_decimal": 58932
+    },
+    {
+      "icon_id": "10143249",
+      "name": "暂停",
+      "font_class": "zanting",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
     },
     {
       "icon_id": "10292039",

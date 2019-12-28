@@ -17,6 +17,7 @@ export default {
   height: 10rem;
   display: flex;
   justify-content: center;
+  align-items: center;
 
   .song-img {
     width: 6.5rem;

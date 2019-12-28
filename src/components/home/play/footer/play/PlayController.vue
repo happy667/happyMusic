@@ -16,14 +16,28 @@
     <div class="next icon">
       <i class="iconfont icon-xiayigexiayishou"></i>
     </div>
-    <!-- 播放列表 -->
+    <!-- 歌曲列表 -->
     <div class="play-list icon">
       <i class="iconfont icon-bofangliebiao"></i>
     </div>
+
   </div>
 </template>
 <script>
+
 export default {
+  data () {
+    return {
+      showPlayList: false// 显示隐藏播放列表
+    }
+  }
+  // methods: {
+  //   // 查看歌曲列表
+  //   handlePlayList () {
+  //     // 显示播放列表
+  //     this.showPlayList = true
+  //   }
+  // }
 
 }
 </script>
@@ -38,7 +52,7 @@ export default {
   .icon {
     i {
       color: $color-common;
-      font-size: 0.65rem;
+      font-size: 0.7rem;
     }
   }
 
@@ -48,12 +62,12 @@ export default {
     align-items: center;
     color: red;
     background: $color-common;
-    width: 1.2rem;
-    height: 1.2rem;
+    width: 1.3rem;
+    height: 1.3rem;
     border-radius: 50%;
 
     i {
-      font-size: 0.8rem;
+      font-size: 1rem;
       color: #fff;
     }
   }

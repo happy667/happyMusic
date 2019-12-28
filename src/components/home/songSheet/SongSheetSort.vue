@@ -66,6 +66,6 @@ export default {
 .song-sheet-sort-container {
   width: 100%;
   height: 100%;
-  background: $color-common-background;
+  background: #fff;
 }
 </style>
