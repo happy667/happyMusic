@@ -13,8 +13,8 @@
     <!-- 歌单描述 -->
     <section>
       <div class="songs-desc">
-        <div class="songs-title">Catch me if you</div>
-        <div class="songs-num">23 songs</div>
+        <div class="songs-title">{{playlist.name}}</div>
+        <div class="songs-num">{{playlist.trackIds.length}}首</div>
         <!-- 播放按钮 -->
         <div class="playBtn">
           <i class="iconfont icon-bofang"></i>
@@ -28,15 +28,41 @@
 </template>
 <script>
 import SongsList from '@/components/home/song/SongList'
+import recommendApi from '@/api/recommend.js'
+import {
+  ERR_OK
+} from '@/api/config.js'
 export default {
+  props: {
+    id: String// 歌单id
+
+  },
+  data () {
+    return {
+      playlist: []// 歌单列表
+    }
+  },
   methods: {
     // 返回上一个路由
     routerBack () {
       this.$router.back()
+    },
+    // 根据id获取歌单列表
+    async  getSongSheetById (id) {
+      const { data: res } = await recommendApi.getSongSheetById(id)
+      console.log(res)
+      if (res.code === ERR_OK) {
+        this.playlist = res.playlist
+      }
     }
   },
   components: {
     SongsList
+  },
+  mounted () {
+    console.log(this.id)
+    // 根据id获取歌单列表
+    this.getSongSheetById(this.id)
   }
 }
 </script>

@@ -1,45 +1,37 @@
 <template>
   <div class="songs-sheet-large-container">
-    <slot></slot>
-    <ul class="songsSheet-list">
-      <router-link tag="li"
-                   to="/songSheetInfo"
-                   class="songsSheet-list-item">
-        <img class="sons-img"
-             src="http://p2.music.126.net/Fs0DjAvcAAyAZa1dgXzFfQ==/109951163571833739.webp?imageView&thumbnail=247x0&quality=75&tostatic=0&type=webp">
-        <div class="songs-desc">Sweetie,TheNewestsadadadsadasdsad</div>
-        <div class="songs-author">Tyler Ford</div>
-      </router-link>
-      <router-link tag="li"
-                   to="/songSheetInfo"
-                   class="songsSheet-list-item">
-        <img class="sons-img"
-             src="http://p2.music.126.net/Fs0DjAvcAAyAZa1dgXzFfQ==/109951163571833739.webp?imageView&thumbnail=247x0&quality=75&tostatic=0&type=webp">
-        <div class="songs-desc">Sweetie,TheNewest</div>
-        <div class="songs-author">Tyler Ford</div>
-      </router-link>
-      <router-link tag="li"
-                   to="/songSheetInfo"
-                   class="songsSheet-list-item">
-        <img class="sons-img"
-             src="http://p2.music.126.net/Fs0DjAvcAAyAZa1dgXzFfQ==/109951163571833739.webp?imageView&thumbnail=247x0&quality=75&tostatic=0&type=webp">
-        <div class="songs-desc">Sweetie,TheNewest</div>
-        <div class="songs-author">Tyler Ford</div>
-      </router-link>
-      <router-link tag="li"
-                   to="/songSheetInfo"
-                   class="songsSheet-list-item">
-        <img class="sons-img"
-             src="http://p2.music.126.net/Fs0DjAvcAAyAZa1dgXzFfQ==/109951163571833739.webp?imageView&thumbnail=247x0&quality=75&tostatic=0&type=webp">
-        <div class="songs-desc">Sweetie,TheNewest</div>
-        <div class="songs-author">Tyler Ford</div>
-      </router-link>
-    </ul>
+    <div class="songs-Sheet"
+         v-for="item in songSheet"
+         :key="item.tag">
+      <div class="songs-Sheet-title">
+        <p class="songs-title">{{item.tag}}</p>
+        <div class="viewMore">
+          <router-link to="/SongSheetSort">
+            View more
+          </router-link>
+          <van-icon name="arrow" />
+        </div>
+      </div>
+      <ul class="songsSheet-list">
+        <router-link tag="li"
+                     :to="'/songSheetInfo/'+songs.id"
+                     class="songsSheet-list-item"
+                     v-for="songs in item.playlists"
+                     :key="songs.id">
+          <img class="sons-img"
+               :src="songs.coverImgUrl">
+          <div class="songs-desc">{{songs.name}}</div>
+          <div class="songs-author">{{songs.creator.nickname}}</div>
+        </router-link>
+      </ul>
+    </div>
   </div>
 </template>
 <script>
 export default {
-
+  props: {
+    songSheet: Array
+  }
 }
 </script>
 <style lang="stylus">
@@ -49,42 +41,71 @@ export default {
   width: 100%;
   background: $color-common-background;
 
-  .songsSheet-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+  .songs-Sheet {
+    .songs-Sheet-title {
+      display: flex;
+      justify-content: space-between;
+      font-size: $font-size-small-x;
+      height: 1.5rem;
+      line-height: 1.5rem;
+      font-family: $font-common-title;
 
-    .songsSheet-list-item {
-      box-sizing: border-box;
-      padding: 0.3rem 0.5rem;
-      margin-bottom: 0.5rem;
-      width: 47.5%;
-      background: $color-common-background;
-      box-shadow: 0 0.25rem 0.6rem rgba(0, 0, 0, 0.1);
-      border-radius: 0.2rem;
-
-      .sons-img {
-        display: block;
-        width: 100%;
-        border-radius: 0.2rem;
-        margin-bottom: 0.3rem;
+      .songs-title {
+        height: 1.5rem;
+        line-height: 1.5rem;
       }
 
-      .songs-desc {
-        width: 100%;
-        line-height: 0.6rem;
-        word-wrap: break-word;
-        font-size: $font-size-small-x;
-        font-family: $font-common-title;
-        no-wrap2();
-      }
-
-      .songs-author {
-        line-height: 0.6rem;
-        width: 100%;
-        color: #999;
+      .viewMore {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         font-size: $font-size-smaller;
-        no-wrap();
+        color: #999;
+
+        a {
+          margin-right: 0.1rem;
+        }
+      }
+    }
+
+    .songsSheet-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+
+      .songsSheet-list-item {
+        box-sizing: border-box;
+        padding: 0.2rem 0.4rem 0.4rem;
+        margin-bottom: 0.6rem;
+        width: 46%;
+        background: $color-common-background;
+        box-shadow: 0 0.25rem 0.6rem rgba(0, 0, 0, 0.1);
+        border-radius: 0.3rem;
+
+        .sons-img {
+          display: block;
+          width: 100%;
+          border-radius: 0.3rem;
+          margin-bottom: 0.3rem;
+        }
+
+        .songs-desc {
+          margin-bottom: 0.2rem;
+          width: 100%;
+          line-height: 0.5rem;
+          word-wrap: break-word;
+          font-size: $font-size-smaller;
+          font-family: $font-common-title;
+          no-wrap2();
+        }
+
+        .songs-author {
+          line-height: 0.6rem;
+          width: 100%;
+          color: #999;
+          font-size: $font-size-smaller-x;
+          no-wrap();
+        }
       }
     }
   }

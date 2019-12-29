@@ -11,7 +11,6 @@ import 'vant/lib/index.css'
 import '@/assets/common/font/iconfont.css'
 // 转场动画插件
 import './plugins/vueg.js'
-import 'swiper/dist/css/swiper.css'
 // 解决移动端300ms延迟
 import fastclick from 'fastclick'
 // Vue.use(VueAwesomeSwiper)

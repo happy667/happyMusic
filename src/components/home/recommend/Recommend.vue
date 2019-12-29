@@ -1,39 +1,84 @@
 <template>
-  <div class="recommend-container">
-    <!-- 轮播图区域 -->
-    <recommend-swiper></recommend-swiper>
-    <!-- 推荐歌单区域 -->
-    <song-sheet-Large>
-      <div class="songsSheet">
-        <p class="songs-title">Latest Songs</p>
-        <div class="viewMore">
-          <router-link to="/SongSheetSort">
-            View more
-          </router-link>
-          <van-icon name="arrow" />
-        </div>
-      </div>
-    </song-sheet-Large>
+  <div class="recommend-container ">
+    <van-pull-refresh v-model="isLoading"
+                      success-text="已显示最新内容"
+                      pulling-text="获取最新内容"
+                      @refresh="onRefresh">
+      <!-- 轮播图区域 -->
+      <recommend-swiper :banners="banners"></recommend-swiper>
+      <!-- 推荐歌单区域 -->
+      <song-sheet-Large :songSheet="songSheet"></song-sheet-Large>
+    </van-pull-refresh>
   </div>
 </template>
 <script>
 import recommendSwiper from './RecommendSwiper'
 import songSheetLarge from '@/components/home/songSheet/SongSheetLarge'
 import recommendApi from '@/api/recommend.js'
+import {
+  ERR_OK
+} from '@/api/config.js'
+import { mapState, mapActions, mapMutations } from 'vuex'
 export default {
+  data () {
+    return {
+      banners: [], // 轮播图数据
+      isLoading: false
+    }
+  },
+  computed: {
+    ...mapState(['songSheet'])
+  },
+  methods: {
+    ...mapActions(['getSongSheet']),
+    ...mapMutations(['clearSongSheet']),
+    // 获取轮播图数据
+    async getBanner () {
+      const { data: res } = await recommendApi.getBanner()
+      if (res.code === ERR_OK) { // 成功获取轮播图数据
+        this.banners = res.banners
+      }
+    },
+    // 获取多个歌单内容
+    getSongSheets () {
+      this.$nextTick(() => {
+        this.getSongSheet({ tag: '流行', limit: 6 })
+      })
+      this.$nextTick(() => {
+        this.getSongSheet({ tag: '欧美', limit: 6 })
+      })
+      this.$nextTick(() => {
+        this.getSongSheet({ tag: '华语', limit: 6 })
+      })
+      this.$nextTick(() => {
+        this.getSongSheet({ tag: '古风', limit: 6 })
+      })
+    },
+    // 刷新获取最新表单内容和轮播图数据
+    onRefresh () {
+      setTimeout(() => {
+        this.isLoading = false
+        // 每次获取最新数据先清空原先数据，防止歌单列表一直push,vue的key值重复
+        this.clearSongSheet()
+        this.$nextTick(() => {
+          this.getBanner()
+        })
+        this.getSongSheets()
+      }, 500)
+    }
+  },
   mounted () {
     // 获取轮播图数据
-    recommendApi.getBanner().then(res => {
-      console.log(res)
-    }).catch(err => {
-      console.log(err)
-    })
+    this.getBanner()
+    // 获取歌单数据
+    this.getSongSheets()
   },
   components: {
     recommendSwiper,
     songSheetLarge
   }
 }
+
 </script>
 
 <style lang="stylus" scoped>
@@ -41,33 +86,8 @@ export default {
 
 .recommend-container {
   width: 100%;
-  padding: 0.5rem;
+  height: 100%;
+  padding: 0.5rem 0.5rem 0 0.5rem;
   box-sizing: border-box;
-
-  .songsSheet {
-    display: flex;
-    justify-content: space-between;
-    font-size: $font-size-small-x;
-    height: 1.5rem;
-    line-height: 1.5rem;
-    font-family: $font-common-title;
-
-    .songs-title {
-      height: 1.5rem;
-      line-height: 1.5rem;
-    }
-
-    .viewMore {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: $font-size-smaller;
-      color: #999;
-
-      a {
-        margin-right: 0.1rem;
-      }
-    }
-  }
 }
 </style>

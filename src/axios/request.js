@@ -10,7 +10,8 @@ const service = axios.create({
   method: 'get',
   withCredentials: true
 })
-
+// 配置请求根路径
+service.defaults.baseURL = ' http://localhost:3000'
 // request 请求收到后 拦截器设置
 service.interceptors.response.use(
   response => {

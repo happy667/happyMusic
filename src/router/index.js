@@ -82,9 +82,10 @@ const routes = [
   },
   // 歌单详情
   {
-    path: '/songSheetInfo',
+    path: '/songSheetInfo/:id',
     name: 'songSheetInfo',
-    component: SongSheetInfo
+    component: SongSheetInfo,
+    props: true
   },
   // 搜索页
   {

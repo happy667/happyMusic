@@ -12,7 +12,8 @@ import {
   IndexAnchor,
   cell,
   slider,
-  progress
+  progress,
+  PullRefresh
 } from 'vant'
 Vue.use(Tab)
 Vue.use(Tabs)
@@ -27,3 +28,4 @@ Vue.use(IndexAnchor)
 Vue.use(cell)
 Vue.use(slider)
 Vue.use(progress)
+Vue.use(PullRefresh)

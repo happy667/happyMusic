@@ -1,50 +1,46 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
+import recommendApi from '@/api/recommend.js'
+import {
+  ERR_OK
+} from '@/api/config.js'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    // tabbar列表信息
-    tabbarList: [
-      {
-        title: '推荐',
-        path: '/Home/Recommend'
-      },
-      {
-        title: '排行',
-        path: '/Home/Ranking'
-      },
-      {
-        title: '歌手',
-        path: '/Home/Singer'
-      },
-      {
-        title: 'mv',
-        path: '/Home/Search'
-      }
-    ],
-    // 当前索引
-    currentIndex: 0
+    songSheet: [] // 歌单(所有类型歌单)
   },
   mutations: {
     // 设置当前索引
     setCurrentIndex(state, index) {
       state.currentIndex = index
     },
-    // 下一页
-    nextPage(state) {
-      if (state.currentIndex < state.tabbarList.length - 1) {
-        state.currentIndex++
-      }
+    setSongSheet(state, listObj) {
+      state.songSheet.push(listObj)
+      console.log(state.songSheet)
     },
-    // 上一页
-    prevPage(state) {
-      if (state.currentIndex > 0) {
-        state.currentIndex--
+    // 获取完毕清空
+    clearSongSheet(state) {
+      state.songSheet = []
+    }
+  },
+  actions: {
+    // 获取歌单
+    async getSongSheet(context, params) {
+      const {
+        data: res
+      } = await recommendApi.getSongSheet(params.tag, params.limit)
+      if (res.code === ERR_OK) { // 成功获取歌单数据
+        // this.songSheet = res.banners
+        // console.log(res)
+        let listObj = {
+          tag: params.tag,
+          playlists: res.playlists
+        }
+
+        context.commit('setSongSheet', listObj)
       }
     }
   },
-  actions: {},
   modules: {}
 })

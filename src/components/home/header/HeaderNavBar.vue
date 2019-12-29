@@ -31,10 +31,6 @@ import Ranking from '@/components/home/ranking/Ranking'
 import SingerList from '@/components/home/singer/SingerList'
 import VideoList from '@/components/home/video/VideoList'
 export default {
-  data () {
-    return {
-    }
-  },
   computed: {
     currentIndex: {
       get () {
