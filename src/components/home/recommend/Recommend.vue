@@ -19,7 +19,16 @@
 <script>
 import recommendSwiper from './RecommendSwiper'
 import songSheetLarge from '@/components/home/songSheet/SongSheetLarge'
+import recommendApi from '@/api/recommend.js'
 export default {
+  mounted () {
+    // 获取轮播图数据
+    recommendApi.getBanner().then(res => {
+      console.log(res)
+    }).catch(err => {
+      console.log(err)
+    })
+  },
   components: {
     recommendSwiper,
     songSheetLarge
