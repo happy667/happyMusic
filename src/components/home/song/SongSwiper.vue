@@ -26,13 +26,17 @@ export default {
       var mySwiper = new Swiper('.swiper-container', {
         slidesPerView: 'auto',
         slidesPerGroup: 1,
-        resistanceRatio: 0
+        resistanceRatio: 3,
+        on: {
+          touchStart (e) {
+            e.stopPropagation()
+          }
+        }
       })
     }
   },
   mounted () {
     this.initSwiper()
-    console.log(this.recommendNewSong)
   },
   components: {
     SongImgItem

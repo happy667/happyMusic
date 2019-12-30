@@ -18,9 +18,4 @@ export default {
 #app>>>.van-loading {
   height: 100vh;
 }
-
-#app {
-  padding-bottom: 1.8rem;
-  box-sizing: border-box;
-}
 </style>

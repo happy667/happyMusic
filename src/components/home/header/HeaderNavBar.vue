@@ -4,7 +4,8 @@
     <van-tabs v-model="currentIndex"
               title-active-color="#FD4979"
               color="#FD4979"
-              animated>
+              animated
+              swipeable>
       <!-- 推荐页 -->
       <van-tab title="推荐">
         <Recommend />
