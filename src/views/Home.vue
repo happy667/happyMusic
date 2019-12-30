@@ -20,6 +20,7 @@ export default {
 
 .home-container {
   width: 100%;
+  height: 100%;
   background: $color-common-background;
 }
 </style>

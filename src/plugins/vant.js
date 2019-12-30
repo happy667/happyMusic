@@ -13,7 +13,8 @@ import {
   cell,
   slider,
   progress,
-  PullRefresh
+  PullRefresh,
+  Loading
 } from 'vant'
 Vue.use(Tab)
 Vue.use(Tabs)
@@ -29,3 +30,4 @@ Vue.use(cell)
 Vue.use(slider)
 Vue.use(progress)
 Vue.use(PullRefresh)
+Vue.use(Loading)

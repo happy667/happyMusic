@@ -6,6 +6,11 @@
                       @refresh="onRefresh">
       <!-- 轮播图区域 -->
       <recommend-swiper :banners="banners"></recommend-swiper>
+      <!-- loading -->
+      <van-loading v-show="songSheet.length==0"
+                   size="24px"
+                   color="#FD4979"
+                   vertical>加载中...</van-loading>
       <!-- 推荐歌单区域 -->
       <song-sheet-Large :songSheet="songSheet"></song-sheet-Large>
     </van-pull-refresh>
@@ -37,6 +42,7 @@ export default {
       const { data: res } = await recommendApi.getBanner()
       if (res.code === ERR_OK) { // 成功获取轮播图数据
         this.banners = res.banners
+        console.log(this.banners)
       }
     },
     // 获取多个歌单内容
@@ -86,8 +92,5 @@ export default {
 
 .recommend-container {
   width: 100%;
-  height: 100%;
-  padding: 0.5rem 0.5rem 0 0.5rem;
-  box-sizing: border-box;
 }
 </style>

@@ -18,8 +18,9 @@
                      class="songsSheet-list-item"
                      v-for="songs in item.playlists"
                      :key="songs.id">
-          <img class="sons-img"
-               :src="songs.coverImgUrl">
+          <div class="sons-img">
+            <img v-lazy="songs.coverImgUrl">
+          </div>
           <div class="songs-desc">{{songs.name}}</div>
           <div class="songs-author">{{songs.creator.nickname}}</div>
         </router-link>
@@ -43,6 +44,7 @@ export default {
 
   .songs-Sheet {
     .songs-Sheet-title {
+      padding: 0 0.4rem;
       display: flex;
       justify-content: space-between;
       font-size: $font-size-small-x;
@@ -72,21 +74,31 @@ export default {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
+      padding: 0 0.4rem 0.4rem;
 
       .songsSheet-list-item {
         box-sizing: border-box;
-        padding: 0.2rem 0.4rem 0.4rem;
+        padding: 0.3rem 0.5rem 0.4rem;
         margin-bottom: 0.6rem;
-        width: 46%;
+        width: 45.5%;
         background: $color-common-background;
         box-shadow: 0 0.25rem 0.6rem rgba(0, 0, 0, 0.1);
         border-radius: 0.3rem;
 
         .sons-img {
-          display: block;
           width: 100%;
+          padding:0 0.17rem
+          height: 3.2rem;
+          box-sizing: border-box;
           border-radius: 0.3rem;
-          margin-bottom: 0.3rem;
+          margin-bottom: 0.2rem;
+
+          img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            border-radius: 0.3rem;
+          }
         }
 
         .songs-desc {

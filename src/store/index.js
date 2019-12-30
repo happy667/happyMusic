@@ -17,7 +17,6 @@ export default new Vuex.Store({
     },
     setSongSheet(state, listObj) {
       state.songSheet.push(listObj)
-      console.log(state.songSheet)
     },
     // 获取完毕清空
     clearSongSheet(state) {
@@ -37,7 +36,7 @@ export default new Vuex.Store({
           tag: params.tag,
           playlists: res.playlists
         }
-
+        console.log(listObj)
         context.commit('setSongSheet', listObj)
       }
     }

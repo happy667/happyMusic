@@ -1,11 +1,15 @@
 <template>
   <div id="app">
-      <router-view v-transition></router-view>
+    <router-view v-transition></router-view>
   </div>
 </template>
 <script>
 </script>
 <style lang="stylus" scoped>
+#app>>>.van-loading {
+  height: 100vh;
+}
+
 #app {
   height: 100%;
 }

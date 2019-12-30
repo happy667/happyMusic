@@ -1,9 +1,8 @@
 <template>
   <div class="swiper-container">
-    <van-swipe :autoplay="3000"
-               indicator-color="white">
-      <van-swipe-item v-for="item in banners"
-                      :key="item.encodeId">
+    <van-swipe indicator-color="white">
+      <van-swipe-item v-for="(item,index) in banners"
+                      :key="index">
         <img :src="item.imageUrl">
       </van-swipe-item>
     </van-swipe>
@@ -27,9 +26,13 @@ export default {
 <style lang="stylus" scoped>
 .swiper-container {
   width: 100%;
+  padding: 0.2rem 0.4rem;
+  box-sizing: border-box;
+  border-radius: 0.3rem;
 
   .van-swipe {
     width: 100%;
+    border-radius: 0.3rem;
 
     .van-swipe-item {
       padding: 0.1rem;
