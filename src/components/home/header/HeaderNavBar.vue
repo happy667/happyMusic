@@ -4,8 +4,7 @@
     <van-tabs v-model="currentIndex"
               title-active-color="#FD4979"
               color="#FD4979"
-              animated
-              swipeable>
+              animated>
       <!-- 推荐页 -->
       <van-tab title="推荐">
         <Recommend />
@@ -51,5 +50,4 @@ export default {
 
 }
 </script>
-<style lang="stylus" scoped>
-</style>
+<style lang="stylus" scoped></style>

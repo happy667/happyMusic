@@ -1,17 +1,15 @@
 <template>
   <div class="home-container">
     <home-header></home-header>
-    <home-footer></home-footer>
+
   </div>
 </template>
 <script>
 import HomeHeader from '@/components/home/Header'
-import HomeFooter from '@/components/home/Footer'
 
 export default {
   components: {
-    HomeHeader,
-    HomeFooter
+    HomeHeader
   }
 }
 </script>

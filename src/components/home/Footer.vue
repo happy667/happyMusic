@@ -23,7 +23,6 @@
             </div>
             <div class="next icon">
               <i class="iconfont icon-xiayigexiayishou"></i>
-
             </div>
           </div>
         </div>
@@ -57,8 +56,6 @@ export default {
  }
 
  .footer-container {
-   height: 1.8rem;
-
    .fixed {
      position: fixed;
      width: 100%;

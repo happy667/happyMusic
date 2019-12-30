@@ -2,13 +2,13 @@
   <div class="songs-list-item-containter">
     <!-- 歌曲图片 -->
     <div class="song-img">
-      <img src="http://p1.music.126.net/DK1_4sP_339o5rowMdPXdw==/109951164071024476.jpg?imageView&thumbnail=360y360&quality=75&tostatic=0" />
+      <img v-lazy="song.al.picUrl" />
     </div>
     <div class="song-desc">
       <!-- 歌曲名称 -->
-      <div class="songName">Honey,Hold Me</div>
+      <div class="songName">{{song.name}}</div>
       <!-- 歌手名称-专辑名称 -->
-      <div class="sgInfo">隔壁老樊</div>
+      <div class="sgInfo">{{singers}}</div>
     </div>
     <!-- 选中前 -->
     <div class="love ">
@@ -22,7 +22,16 @@
 </template>
 <script>
 export default {
-
+  props: {
+    song: Object
+  },
+  computed: {
+    // 处理歌手
+    singers () {
+      let singers = this.song.ar.map(item => item.name).join('/')
+      return singers
+    }
+  }
 }
 </script>
 <style lang="stylus">
@@ -31,7 +40,7 @@ export default {
 .songs-list-item-containter {
   position: relative;
   display: flex;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.3rem;
   padding: 0.3rem 0.4rem;
   background: $color-common-background;
   box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
@@ -56,10 +65,14 @@ export default {
       line-height: 0.8rem;
       margin-bottom: 0.1rem;
       font-weight: 500;
+      max-width: 4rem;
+      no-wrap();
     }
 
     .sgInfo {
       color: #777;
+      max-width: 4rem;
+      no-wrap();
     }
   }
 

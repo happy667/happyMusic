@@ -7,7 +7,29 @@ export default {
       url
     })
   },
-  // 获取精品歌单推荐
+  // 获取推荐歌单
+  getRecommendSongSheet() {
+    const url = '/personalized?limit=6'
+    return request({
+      url
+    })
+  },
+  // 推荐新音乐
+  getRecommendNewSong() {
+    const url = '/personalized/newsong?limit=4'
+    return request({
+      url
+    })
+  },
+
+  // 获取歌单分类列表
+  getSongSheetCatList() {
+    const url = '/playlist/catlist'
+    return request({
+      url
+    })
+  },
+  // 根据歌单类型获取歌单
   getSongSheet(type = '全部', limit = 20) {
     const url = `/top/playlist/highquality?cat=${type}&limit=${limit}`
     return request({
@@ -20,9 +42,12 @@ export default {
     return request({
       url
     })
+  },
+  // 根据id获取音乐url
+  getSongUrl(ids) {
+    const url = `/song/url?id=${ids}`
+    return request({
+      url
+    })
   }
-  // 获取音乐详情
-  // getSongInfo(){
-  //   song/detail
-  // }
 }

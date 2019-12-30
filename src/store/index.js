@@ -8,23 +8,71 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    songSheet: [] // 歌单(所有类型歌单)
+    recommendSongSheet: [], // 推荐歌单
+    recommendNewSong: [], // 推荐新音乐
+    songSheet: [], // 歌单(所有类型歌单)
+    songSheetDisc: {}, // 歌单详情
+    songSheetCagetory: [] // 歌单分类
   },
   mutations: {
     // 设置当前索引
     setCurrentIndex(state, index) {
       state.currentIndex = index
     },
+    // 设置推荐歌单
+    setRecommendSongSheet(state, SongSheet) {
+      state.recommendSongSheet = SongSheet
+    },
+    setRecommendNewSong(state, SongList) {
+      state.recommendNewSong = SongList
+    },
     setSongSheet(state, listObj) {
       state.songSheet.push(listObj)
     },
-    // 获取完毕清空
+    // 清空歌单
     clearSongSheet(state) {
       state.songSheet = []
+    },
+    // 设置歌单详情
+    setSongSheetDisc(state, disc) {
+      state.songSheetDisc = disc
+    },
+    // 设置歌单分类
+    setSongSheetCagetory(state, songSheetCagetory) {
+      state.songSheetCagetory = songSheetCagetory
     }
   },
   actions: {
-    // 获取歌单
+    // 获取推荐歌单
+    async getRecommendSongSheet(context, params) {
+      const {
+        data: res
+      } = await recommendApi.getRecommendSongSheet()
+      if (res.code === ERR_OK) { // 成功获取推荐歌单
+        context.commit('setRecommendSongSheet', res.result)
+      }
+    },
+    // 获取推荐新音乐
+    async getRecommendNewSong(context, params) {
+      const {
+        data: res
+      } = await recommendApi.getRecommendNewSong()
+      if (res.code === ERR_OK) { // 成功获取推荐新音乐
+        console.log(res)
+        context.commit('setRecommendNewSong', res.result)
+      }
+    },
+    // 获取歌单分类
+    async getSongSheetCatList(context, params) {
+      const {
+        data: res
+      } = await recommendApi.getSongSheetCatList()
+      if (res.code === ERR_OK) { // 成功获取歌单分类
+        console.log(res)
+        // context.commit('setSongSheetCagetory', songSheetCagetory)
+      }
+    },
+    // 根据参数获取歌单
     async getSongSheet(context, params) {
       const {
         data: res
@@ -36,10 +84,58 @@ export default new Vuex.Store({
           tag: params.tag,
           playlists: res.playlists
         }
-        console.log(listObj)
         context.commit('setSongSheet', listObj)
+      }
+    },
+    // 根据id获取歌单列表
+
+    async getSongSheetById(context, id) {
+      // 先清空
+      context.commit('setSongSheetDisc', {})
+      const {
+        data: res
+      } = await recommendApi.getSongSheetById(id)
+      if (res.code === ERR_OK) {
+        console.log(res.playlist)
+        context.commit('setSongSheetDisc', res.playlist)
+
+        // 因为接口中返回的歌曲的值为id,所以需要再根据歌单列表中的歌曲id获取歌曲列表
+        // 需要将歌曲id用“,”连接传入url中
+        // const songIds = res.playlist.trackIds.map(v => v.id)
+        // const {
+        //   data: res2
+        // } = await recommendApi.getSongUrl(songIds)
+        // let playlist = [] // 歌曲列表
+        // if (res2.code === ERR_OK) {
+        //   console.log(res2)
+        // for (var i = 0; i < res.playlist.tracks.length; i++) {
+        //   // 创建歌曲对象
+        //   const songObj = {
+        //     id: res.playlist.tracks[i].id, // 歌曲id
+        //     name: res.playlist.tracks[i].name, // 歌曲名称
+        //     picUrl: res.playlist.tracks[i].al.picUrl, // 歌曲图片
+        //     url: res2.data[i].url // 歌曲路径
+        //   }
+        //   playlist.push(songObj)
+        // }
+
+        // 创建歌单对象
+        // const songSheetObj = {
+        //   name: res.playlist.name, // 歌单名称
+        //   coverImgUrl: res.playlist.coverImgUrl, // 歌单背景图片
+        //   songsCount: res2.data.length, // 歌曲数量
+        //   playlist: playlist // 歌曲列表
+        // }
+        // context.commit('setSongSheetDisc', songSheetObj)
+        // console.log(res.playlist)
       }
     }
   },
-  modules: {}
+  modules: {},
+  getters: {
+    // 获取歌单详情
+    songSheetDisc(state) {
+      return state.songSheetDisc
+    }
+  }
 })

@@ -6,61 +6,58 @@
                    left-arrow
                    @click-left="routerBack" />
     </van-sticky>
+
     <!-- 歌单图片 -->
     <div class="songs-img">
-      <img src="https://qpic.y.qq.com/music_cover/0yiaX8d9LSmnROyId1RsUUwkjSfBGpSGzgRE4yibD0nlZqfUZFFwxpiaQ/300?n=1">
+      <img :src="songSheetDisc.coverImgUrl">
     </div>
+    <!-- loading -->
+    <van-loading v-show="songSheetDisc.tracks==undefined"
+                 size="24px"
+                 color="#FD4979"
+                 vertical>加载中...</van-loading>
     <!-- 歌单描述 -->
-    <section>
+    <section v-if="songSheetDisc.tracks!=undefined">
       <div class="songs-desc">
-        <div class="songs-title">{{playlist.name}}</div>
-        <div class="songs-num">{{playlist.trackIds.length}}首</div>
+        <div class="songs-title">{{songSheetDisc.name}}</div>
+        <div class="songs-num">{{songSheetDisc.tracks.length}}首</div>
         <!-- 播放按钮 -->
         <div class="playBtn">
           <i class="iconfont icon-bofang"></i>
         </div>
       </div>
       <!-- 歌曲列表 -->
-      <songs-list></songs-list>
+      <songs-list :songsList="songSheetDisc.tracks"></songs-list>
     </section>
 
   </div>
 </template>
 <script>
 import SongsList from '@/components/home/song/SongList'
-import recommendApi from '@/api/recommend.js'
-import {
-  ERR_OK
-} from '@/api/config.js'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   props: {
-    id: String// 歌单id
-
+    id: String
   },
   data () {
     return {
       playlist: []// 歌单列表
     }
   },
+  computed: {
+    ...mapGetters(['songSheetDisc'])
+  },
   methods: {
+    ...mapActions(['getSongSheetById']),
     // 返回上一个路由
     routerBack () {
       this.$router.back()
-    },
-    // 根据id获取歌单列表
-    async  getSongSheetById (id) {
-      const { data: res } = await recommendApi.getSongSheetById(id)
-      console.log(res)
-      if (res.code === ERR_OK) {
-        this.playlist = res.playlist
-      }
     }
   },
   components: {
     SongsList
   },
   mounted () {
-    console.log(this.id)
     // 根据id获取歌单列表
     this.getSongSheetById(this.id)
   }
@@ -71,15 +68,21 @@ export default {
 
 .song-sheet-info-container {
   background: $color-common-background;
+  padding-bottom: 0.2rem;
 
   .songs-img {
+    position: relative;
     width: 100%;
     height: 0;
-    padding-bottom: 100%;
+    padding-top: 100%;
+    background: $color-common-b;
 
     img {
-      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
+      height: 100%;
     }
   }
 
@@ -92,11 +95,12 @@ export default {
       background: $color-common-background;
 
       .songs-title {
-        width: 6rem;
-        line-height: 1rem;
+        max-width: 7rem;
+        line-height: 0.8rem;
         font-weight: 500;
         font-size: $font-size-large;
-        no-wrap();
+        margin-bottom: 0.4rem;
+        no-wrap2();
       }
 
       .songs-num {
