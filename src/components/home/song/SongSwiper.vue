@@ -15,6 +15,7 @@
 <script>
 import Swiper from 'swiper'
 import SongImgItem from './SongImgItem'
+import 'jquery'
 export default {
   props: {
     recommendNewSong: Array
@@ -26,17 +27,24 @@ export default {
       var mySwiper = new Swiper('.swiper-container', {
         slidesPerView: 'auto',
         slidesPerGroup: 1,
-        resistanceRatio: 3,
+        allowSlidePrev: false, // 静止向左滑动
+        // 解决与vant标签页切换冲突问题
+        observer: true,
+        observeParents: true,
         on: {
           touchStart (e) {
             e.stopPropagation()
           }
         }
       })
+      // swipeRefreshLayout.measure(0, 0)
+      // swipeRefreshLayout.setRefreshing(true)
     }
   },
   mounted () {
-    this.initSwiper()
+    this.$nextTick(() => {
+      this.initSwiper()
+    })
   },
   components: {
     SongImgItem
