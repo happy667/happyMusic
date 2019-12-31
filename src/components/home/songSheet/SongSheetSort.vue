@@ -40,7 +40,7 @@
 </template>
 <script>
 import songSheetSmall from './SongSheetSmall'
-
+import { mapActions, mapState } from 'vuex'
 export default {
   data () {
     return {
@@ -48,7 +48,11 @@ export default {
 
     }
   },
+  computed: {
+    ...mapState('songSheetCagetory')
+  },
   methods: {
+    ...mapActions(['getSongSheetCatList', 'getRecommendSongSheet']),
 
     // 返回上一个路由
     routerBack () {
@@ -57,6 +61,13 @@ export default {
   },
   components: {
     songSheetSmall
+  },
+  mounted () {
+    // 获取分类列表
+    this.$nextTick(() => {
+      this.getSongSheetCatList(4)
+    })
+    console.log(this.songSheetCagetory)
   }
 }
 </script>

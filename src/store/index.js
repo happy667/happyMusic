@@ -10,6 +10,7 @@ export default new Vuex.Store({
   state: {
     recommendSongSheet: [], // 推荐歌单
     recommendNewSong: [], // 推荐新音乐
+    recommendNewSongSheet: [], // 新碟
     songSheet: [], // 歌单(所有类型歌单)
     songSheetDisc: {}, // 歌单详情
     songSheetCagetory: [] // 歌单分类
@@ -20,12 +21,20 @@ export default new Vuex.Store({
       state.currentIndex = index
     },
     // 设置推荐歌单
-    setRecommendSongSheet(state, SongSheet) {
-      state.recommendSongSheet = SongSheet
+    setRecommendSongSheet(state, songSheet) {
+      state.recommendSongSheet = songSheet
     },
-    setRecommendNewSong(state, SongList) {
-      state.recommendNewSong = SongList
+    // 设置推荐新音乐
+    setRecommendNewSong(state, songList) {
+      state.recommendNewSong = songList
+      console.log(state.recommendNewSong)
     },
+    // 设置推荐新碟歌单
+    setRecommendNewSongSheet(state, songSheet) {
+      state.recommendNewSongSheet = songSheet
+      console.log(state.recommendNewSongSheet)
+    },
+    // 设置歌单详情
     setSongSheet(state, listObj) {
       state.songSheet.push(listObj)
     },
@@ -49,17 +58,26 @@ export default new Vuex.Store({
         data: res
       } = await recommendApi.getRecommendSongSheet()
       if (res.code === ERR_OK) { // 成功获取推荐歌单
+        console.log(res)
         context.commit('setRecommendSongSheet', res.result)
       }
     },
     // 获取推荐新音乐
-    async getRecommendNewSong(context, params) {
+    async getRecommendNewSong(context) {
       const {
         data: res
       } = await recommendApi.getRecommendNewSong()
       if (res.code === ERR_OK) { // 成功获取推荐新音乐
-        console.log(res)
         context.commit('setRecommendNewSong', res.result)
+      }
+    },
+    // 获取推荐新碟
+    async getRecommendNewSongSheet(context, params) {
+      const {
+        data: res
+      } = await recommendApi.getRecommendNewSongSheet(params)
+      if (res.code === ERR_OK) { // 成功获取推荐新碟
+        context.commit('setRecommendNewSongSheet', res.albums)
       }
     },
     // 获取歌单分类
@@ -88,7 +106,6 @@ export default new Vuex.Store({
       }
     },
     // 根据id获取歌单列表
-
     async getSongSheetById(context, id) {
       // 先清空
       context.commit('setSongSheetDisc', {})

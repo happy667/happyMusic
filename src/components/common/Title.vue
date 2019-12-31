@@ -27,13 +27,14 @@ export default {
   display: flex;
   justify-content: space-between;
   font-size: $font-size-small-x;
-  height: 1.3rem;
-  line-height: 1.3rem;
+  height: 1.1rem;
+  line-height: 1.1rem;
   font-family: $font-common-title;
 
   .songs-title {
-    height: 1.3rem;
-    line-height: 1.3rem;
+    height: 1.1rem;
+    line-height: 1.1rem;
+    font-weight: bold;
   }
 
   .viewMore {

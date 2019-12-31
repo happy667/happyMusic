@@ -21,7 +21,13 @@ export default {
       url
     })
   },
-
+  // 获取推荐新碟上架
+  getRecommendNewSongSheet(offset = 0, limit = 12) {
+    const url = `/top/album?offset=${offset}&limit=${limit}`
+    return request({
+      url
+    })
+  },
   // 获取歌单分类列表
   getSongSheetCatList() {
     const url = '/playlist/catlist'

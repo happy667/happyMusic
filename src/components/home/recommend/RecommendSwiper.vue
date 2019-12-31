@@ -1,6 +1,6 @@
 <template>
   <div class="recommend-swiper-container">
-    <van-swipe indicator-color="white">
+    <van-swipe :autoplay="3000" indicator-color="white">
       <van-swipe-item v-for="(item,index) in banners"
                       :key="index">
         <img :src="item.imageUrl">

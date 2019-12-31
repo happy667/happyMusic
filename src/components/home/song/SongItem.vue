@@ -2,7 +2,7 @@
   <div class="songs-list-item-containter">
     <!-- 歌曲图片 -->
     <div class="song-img">
-      <img v-lazy="song.al.picUrl" />
+      <img v-lazy="picUrl" />
     </div>
     <div class="song-desc">
       <!-- 歌曲名称 -->
@@ -28,8 +28,14 @@ export default {
   computed: {
     // 处理歌手
     singers () {
-      let singers = this.song.ar.map(item => item.name).join('/')
+      let singers = this.song.song === undefined ? this.song.ar : this.song.song.artists
+      singers = singers.map(item => item.name).join('/')
       return singers
+    },
+    // 处理图片
+    picUrl () {
+      let picUrl = this.song.picUrl === undefined ? this.song.al.picUrl : this.song.picUrl
+      return picUrl
     }
   }
 }
@@ -40,10 +46,9 @@ export default {
 .songs-list-item-containter {
   position: relative;
   display: flex;
-  margin-bottom: 0.3rem;
   padding: 0.3rem 0.4rem;
   background: $color-common-background;
-  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0.1rem 0.8rem rgba(0, 0, 0, 0.1);
   border-radius: 0.2rem;
 
   .song-img {

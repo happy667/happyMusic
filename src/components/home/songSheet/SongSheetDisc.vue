@@ -68,7 +68,7 @@ export default {
 
 .song-sheet-info-container {
   background: $color-common-background;
-  padding-bottom: 0.2rem;
+  padding-bottom: 1.8rem;
 
   .songs-img {
     position: relative;

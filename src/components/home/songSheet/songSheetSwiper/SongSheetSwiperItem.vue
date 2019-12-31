@@ -1,34 +1,31 @@
 <template>
-  <div class="song-img-item-container">
-    <div class="song-img-item">
+  <div class="song-sheet-swiper-item-container">
+    <div class="song-sheet-swiper-item">
       <div class="song-img">
-        <img v-lazy="song.picUrl" />
+        <img v-lazy="songSheet.picUrl">
         <div class="play-icon">
           <van-icon name="play-circle-o" />
         </div>
       </div>
-      <div class="song-desc">{{song.name}}</div>
-
+      <div class="song-desc">{{songSheet.name}}</div>
     </div>
   </div>
 </template>
 <script>
 export default {
-
   props: {
-    song: Object
+    songSheet: Object
   }
-
 }
 </script>
 
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.song-img-item-container {
+.song-sheet-swiper-item-container {
   background: $color-common-background;
 
-  .song-img-item {
+  .song-sheet-swiper-item {
     box-sizing: border-box;
     padding: 0.3rem 0.2rem;
     width: 2.8rem;
