@@ -1,5 +1,5 @@
 <template>
-  <div class="swiper-container">
+  <div class="recommend-swiper-container">
     <van-swipe indicator-color="white">
       <van-swipe-item v-for="(item,index) in banners"
                       :key="index">
@@ -24,7 +24,7 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-.swiper-container {
+.recommend-swiper-container {
   width: 100%;
   padding: 0.2rem 0.4rem;
   box-sizing: border-box;
