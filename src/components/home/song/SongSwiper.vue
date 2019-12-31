@@ -27,7 +27,7 @@ export default {
       var mySwiper = new Swiper('.swiper-container', {
         slidesPerView: 'auto',
         slidesPerGroup: 1,
-        allowSlidePrev: false, // 静止向左滑动
+        resistanceRatio: 0, // 解决左滑留白问题
         // 解决与vant标签页切换冲突问题
         observer: true,
         observeParents: true,
