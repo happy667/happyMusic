@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import recommendApi from '@/api/recommend.js'
+import rankingApi from '@/api/ranking.js'
 import {
   ERR_OK
 } from '@/api/config.js'
@@ -13,7 +14,8 @@ export default new Vuex.Store({
     recommendNewSongSheet: [], // 新碟
     songSheet: [], // 歌单(所有类型歌单)
     songSheetDisc: {}, // 歌单详情
-    songSheetCagetory: [] // 歌单分类
+    songSheetCagetory: [], // 歌单分类
+    rankingList: [] // 榜单列表
   },
   mutations: {
     // 设置当前索引
@@ -27,12 +29,12 @@ export default new Vuex.Store({
     // 设置推荐新音乐
     setRecommendNewSong(state, songList) {
       state.recommendNewSong = songList
-      console.log(state.recommendNewSong)
+      // console.log(state.recommendNewSong)
     },
     // 设置推荐新碟歌单
     setRecommendNewSongSheet(state, songSheet) {
       state.recommendNewSongSheet = songSheet
-      console.log(state.recommendNewSongSheet)
+      // console.log(state.recommendNewSongSheet)
     },
     // 设置歌单详情
     setSongSheet(state, listObj) {
@@ -49,7 +51,12 @@ export default new Vuex.Store({
     // 设置歌单分类
     setSongSheetCagetory(state, songSheetCagetory) {
       state.songSheetCagetory = songSheetCagetory
+    },
+    // 设置歌单分类
+    setRankingList(state, rankingList) {
+      state.rankingList = rankingList
     }
+
   },
   actions: {
     // 获取推荐歌单
@@ -58,7 +65,7 @@ export default new Vuex.Store({
         data: res
       } = await recommendApi.getRecommendSongSheet()
       if (res.code === ERR_OK) { // 成功获取推荐歌单
-        console.log(res)
+        // console.log(res)
         context.commit('setRecommendSongSheet', res.result)
       }
     },
@@ -146,6 +153,37 @@ export default new Vuex.Store({
         // context.commit('setSongSheetDisc', songSheetObj)
         // console.log(res.playlist)
       }
+    },
+    // 获取排行榜
+    async getRankingList(context) {
+      // 根据id获取对应排行榜,首先根据接口将排行榜进行分类
+      // 分为官方榜，流行榜，推荐榜，其他榜
+      const rankingListIds = {
+        'official': [0, 1, 2, 3, 4], // 存放官方榜下所有排行榜id
+        'recommend': [23, 25, 26, 31, 32, 17, 22], // 存放推荐榜榜下所有排行榜id
+        'popular': [5, 14, 15, 27, 30, 24, 28], // 存放流行榜下所有排行榜id
+        'other': [6, 7, 8, 9, 10, 11, 12, 13, 16, 19, 20, 21, 29, 33] // 存放其他榜下所有排行榜id
+      }
+      // 存放榜单列表
+      const rankingList = []
+      // 遍历标题
+      for (let title in rankingListIds) {
+        let rankingObj = {
+          title,
+          'rankingList': []
+        }
+        // 遍历标题下所有榜单
+        for (let i = 0; i < rankingListIds[title].length; i++) {
+          const {
+            data: res
+          } = await rankingApi.getRankingListById(rankingListIds[title][i])
+          if (res.code === ERR_OK) {
+            rankingObj.rankingList.push(res.playlist)
+          }
+        }
+        rankingList.push(rankingObj)
+      }
+      context.commit('setRankingList', rankingList)
     }
   },
   modules: {},

@@ -16,6 +16,6 @@ export default {
 
 <style lang="stylus" scoped>
 #app>>>.van-loading {
-  height: 100vh;
+  height: 100vw;
 }
 </style>

@@ -38,6 +38,9 @@ export default {
           on: {
             touchStart (e) {
               e.stopPropagation()
+            },
+            touchEnd (e) {
+              e.stopPropagation()
             }
           }
         })
