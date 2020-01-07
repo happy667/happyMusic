@@ -52,8 +52,8 @@ export default {
     box-sizing: border-box;
 
     .official-list-img {
-      width: 2.2rem;
-      height: 2.2rem;
+      width: 2rem;
+      height: 2rem;
       border-radius: 0.2rem;
       margin-right: 0.3rem;
 
