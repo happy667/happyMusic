@@ -28,6 +28,7 @@ export default {
   background: $color-common-background;
   box-shadow: 0 0.25rem 0.6rem rgba(0, 0, 0, 0.1);
   border-radius: 0.3rem;
+  height: 5.3rem;
 
   .sons-img {
     width: 100%;

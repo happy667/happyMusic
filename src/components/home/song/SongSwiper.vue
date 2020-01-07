@@ -30,6 +30,7 @@ export default {
         var mySwiper = new Swiper('.sw-song', {
           slidesPerView: 1,
           slidesPerGroup: 1,
+          touchRatio: 1.2,
           // 解决与vant标签页切换冲突问题
           observer: true,
           observeParents: true,
