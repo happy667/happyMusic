@@ -9,7 +9,7 @@
 
     <!-- 歌单图片 -->
     <div class="songs-img">
-      <img :src="songSheetDisc.coverImgUrl">
+      <img :src="bgImg">
     </div>
     <!-- loading -->
     <van-loading v-show="songSheetDisc.tracks==undefined"
@@ -45,6 +45,9 @@ export default {
     }
   },
   computed: {
+    bgImg () {
+      return this.songSheetDisc.backgroundCoverUrl || this.songSheetDisc.coverImgUrl
+    },
     ...mapGetters(['songSheetDisc'])
   },
   methods: {

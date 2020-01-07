@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import recommendApi from '@/api/recommend.js'
 import rankingApi from '@/api/ranking.js'
+// import singerApi from '@/api/singer.js'
 import {
   ERR_OK
 } from '@/api/config.js'
@@ -46,6 +47,7 @@ export default new Vuex.Store({
     },
     // 设置歌单详情
     setSongSheetDisc(state, disc) {
+      console.log(disc)
       state.songSheetDisc = disc
     },
     // 设置歌单分类
@@ -185,6 +187,7 @@ export default new Vuex.Store({
       }
       context.commit('setRankingList', rankingList)
     }
+
   },
   modules: {},
   getters: {

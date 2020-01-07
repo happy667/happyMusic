@@ -1,11 +1,13 @@
 <template>
   <div class="avatar-wrapper">
-    <img src="http://p3.music.126.net/Xl0WENt4F6wsgjjjQWuQsw==/109951164232034479.jpg?param=50y50" />
+    <img v-lazy="avatar" />
   </div>
 </template>
 <script>
 export default {
-
+  props: {
+    avatar: String
+  }
 }
 </script>
 <style lang="stylus" scoped>

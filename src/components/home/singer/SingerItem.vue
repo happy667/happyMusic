@@ -3,10 +3,10 @@
     <div class="singer-list-item">
       <!-- 歌手头像 -->
       <div class="singer-avatar">
-        <music-img></music-img>
+        <music-img :avatar="singer.avatar"></music-img>
       </div>
       <!-- 歌手姓名 -->
-      <p class="singer-name">隔壁老樊</p>
+      <p class="singer-name">{{singer.name}}</p>
     </div>
   </div>
 
@@ -14,6 +14,9 @@
 <script>
 import MusicImg from '../img/MusicImg'
 export default {
+  props: {
+    singer: Object
+  },
   components: {
     MusicImg
   }
@@ -23,11 +26,12 @@ export default {
 @import '~common/stylus/variable';
 
 .singer-list-item-container {
+  padding: 0.25rem 0;
+
   .singer-list-item {
     display: flex;
     align-items: center;
     width: 100%;
-    margin-bottom: 0.3rem;
 
     .singer-avatar {
       margin-right: 0.5rem;
@@ -35,7 +39,6 @@ export default {
 
     .singer-name {
       font-size: $font-size-smaller;
-      color: #999;
     }
   }
 }
