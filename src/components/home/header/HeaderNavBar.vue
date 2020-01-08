@@ -51,4 +51,8 @@ export default {
 
 }
 </script>
-<style lang="stylus" scoped></style>
+<style lang="stylus" scoped>
+.header-navBar-container>>>.van-tabs__wrap {
+  height: 1.18rem;
+}
+</style>

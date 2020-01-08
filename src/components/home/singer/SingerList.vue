@@ -1,29 +1,32 @@
 <template>
-  <div class="singer-container">
-    <van-loading v-show="this.singerList.length === 0"
-                 size="24px"
-                 color="#FD4979"
-                 vertical>加载中...</van-loading>
+  <scroll>
+    <div class="singer-container">
+      <van-loading v-show="this.singerList.length === 0"
+                   size="24px"
+                   color="#FD4979"
+                   vertical>加载中...</van-loading>
 
-    <ul class="singer-list"
-        v-if="this.singerList.length !== 0">
-      <li class="singer-list-item"
-          v-for="(group,index) in singerList"
-          :key="index">
-        <h2 class="singer-list-group-title">{{group.title}}</h2>
-        <ul>
-          <li v-for="item in group.items"
-              :key="item.id">
-            <singer-item :singer="item"></singer-item>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </div>
+      <ul class="singer-list"
+          v-if="this.singerList.length !== 0">
+        <li class="singer-list-item"
+            v-for="(group,index) in singerList"
+            :key="index">
+          <h2 class="singer-list-group-title">{{group.title}}</h2>
+          <ul>
+            <li v-for="item in group.items"
+                :key="item.id">
+              <singer-item :singer="item"></singer-item>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </scroll>
 
 </template>
 <script>
 import SingerItem from './SingerItem'
+import Scroll from '@/components/common/Scroll'
 import singerApi from '@/api/singer.js'
 import Singer from '@/assets/common/js/singer.js'
 import {
@@ -40,9 +43,7 @@ export default {
       singerList: []// 歌手列表
     }
   },
-  components: {
-    SingerItem
-  },
+
   computed: {
     // ...mapState(['singerList'])
   },
@@ -132,6 +133,10 @@ export default {
     // this.getSingerList()
     // this.getRecommendSingerList()
     this.getSingerList()
+  },
+  components: {
+    SingerItem,
+    Scroll
   }
 }
 </script>
@@ -139,7 +144,12 @@ export default {
 @import '~common/stylus/variable';
 
 .singer-container {
+  width: 100%;
+  position: absolute;
+
   .singer-list {
+    width: 100%;
+
     .singer-list-item {
       .singer-list-group-title {
         padding: 0 0.5rem;

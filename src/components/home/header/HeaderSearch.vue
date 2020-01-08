@@ -31,6 +31,7 @@ export default {
 
 .header-search-container {
   width: 100%;
+  height: 1.7rem;
   display: flex;
   padding: 0.2rem 0.2rem 0 0.8rem;
   box-sizing: border-box;
