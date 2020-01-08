@@ -1,138 +1,135 @@
 <template>
-  <scroll>
-    <div class="singer-container">
-      <van-loading v-show="this.singerList.length === 0"
-                   size="24px"
-                   color="#FD4979"
-                   vertical>加载中...</van-loading>
+  <div class="singer-list-container">
+    <h2 class="fixed-title singer-list-group-title"
+        v-if="this.singerList.length!==0 && scrollIndex!==0">{{singerList[scrollIndex].title}}</h2>
+    <scroll :data="singerList"
+            ref="singerList"
+            @scroll="scroll"
+            @scrollToEnd="scrollToEnd"
+            @scrollCancle="handleScrollCancle"
+            :listenScroll="listenScroll"
+            :pullup="pullup"
+            :probeType="probeType">
+      <div class="singer-list-wrapper">
+        <ul class="singer-list"
+            v-if="this.singerList.length !== 0">
+          <li class="singer-list-item"
+              ref="listGroup"
+              v-for="(group,index) in singerList"
+              :key="index">
+            <h2 class="singer-list-group-title">{{group.title}}</h2>
+            <ul>
+              <li v-for="item in group.items"
+                  :key="item.id">
+                <singer-item :singer="item"></singer-item>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </scroll>
 
-      <ul class="singer-list"
-          v-if="this.singerList.length !== 0">
-        <li class="singer-list-item"
-            v-for="(group,index) in singerList"
-            :key="index">
-          <h2 class="singer-list-group-title">{{group.title}}</h2>
-          <ul>
-            <li v-for="item in group.items"
-                :key="item.id">
-              <singer-item :singer="item"></singer-item>
-            </li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-  </scroll>
+  </div>
+  <!-- 歌手列表 -->
 
 </template>
 <script>
-import SingerItem from './SingerItem'
 import Scroll from '@/components/common/Scroll'
-import singerApi from '@/api/singer.js'
-import Singer from '@/assets/common/js/singer.js'
-import {
-  ERR_OK
-} from '@/api/config.js'
-var pinyin = require('pinyin')
-// const pinyin = require('pinyin')
-const HOT_NAME = '热门'
-const HOT_LENGTH = 30// 热门歌手数量
-// import { mapActions, mapState } from 'vuex'
+import SingerItem from './SingerItem'
+import { mapState, mapMutations } from 'vuex'
 export default {
+  props: {
+    singerList: {
+      type: Array,
+      default: () => []
+    }
+
+  },
   data () {
     return {
-      singerList: []// 歌手列表
+      scrollY: -1,
+      isScroll: false
     }
   },
-
-  computed: {
-    // ...mapState(['singerList'])
-  },
-  methods: {
-    // ...mapActions(['getSingerList', 'getRecommendSingerList'])
-    // 处理歌手列表数据
-    handleSingerList (list) {
-      let map = {
-        hot: {
-          title: HOT_NAME,
-          items: []// 歌手
-        }
-      }
-      let hot = []// 热门
-      let ret = []// 根据字母查询
-      list.forEach((item, index) => {
-        // 处理热门歌手
-        if (index < HOT_LENGTH) {
-          map.hot.items.push(new Singer({
-            id: item.id,
-            name: item.name,
-            avatar: item.img1v1Url,
-            aliaName: item.alias.join(' / ')
-          }))
-        } else { // 处理歌手列表
-          const key = item.initial
-          // 判断是否存在该字母key
-          if (!map[key]) {
-            map[key] = {
-              title: key,
-              items: []
-            }
-          }
-          map[key].items.push(new Singer({
-            id: item.id,
-            name: item.name,
-            avatar: item.img1v1Url,
-            aliaName: item.alias[0]
-          }))
-        }
-      })
-      // 遍历map,处理歌手列表
-      for (const key in map) {
-        let val = map[key]
-        if (val.title.match(/[A-Z]/)) { // 匹配字母，添加到按字母查询数组中
-          ret.push(val)
-        } else if (val.title === HOT_NAME) { // 添加到热门歌手数组中
-          hot.push(val)
-        }
-      }
-      // 将字母进行排序（升序）
-      ret.sort((a, b) => {
-        return a.title.charCodeAt(0) - b.title.charCodeAt(0)
-      })
-      return hot.concat(ret)
-    },
-    // 获取歌手列表
-    async getSingerList () {
-      // 获取热门歌手
-      const {
-        data: res
-      } = await singerApi.getRecommendSingerList()
-      if (res.code === ERR_OK) {
-        this.singerList = res.artists
-        // 获取歌手列表
-        const {
-          data: res2
-        } = await singerApi.getSingerList()
-        if (res2.code === ERR_OK) {
-          res2.artists.map(item => {
-            // 获取歌手的首字母
-            let py = pinyin(item.name[0], {
-              style: pinyin.STYLE_FIRST_LETTER
-            })
-            item.initial = py[0][0].toUpperCase()
-          })
-          // 处理歌手列表数据
-          this.singerList = this.singerList.concat(res2.artists)// 合并歌手列表
-          this.singerList = this.handleSingerList(this.singerList)
-          console.log(this.singerList)
-        }
-      }
-    }
-
+  created () {
+    this.listHeight = [] // 列表高度
+    this.listenScroll = true// 可以监听页面滚动
+    this.pullup = true// 可以监听页面停止滚动
+    this.probeType = 3// 可以监听缓冲时的滑动位置
   },
   mounted () {
-    // this.getSingerList()
-    // this.getRecommendSingerList()
-    this.getSingerList()
+    console.log(this.$refs.singerList)
+  },
+  computed: {
+    ...mapState(['scrollIndex', 'stop'])
+  },
+  watch: {
+    // 监听滚动索引变化
+    scrollIndex () {
+      if (!this.isScroll) {
+        // 移动歌手列表分组元素
+        this.$refs.singerList.scrollToElement(this.$refs.listGroup[this.scrollIndex], 0)
+      }
+    },
+    // 监听是否取消滚动动画
+    stop () {
+      if (this.stop) {
+        this.$refs.singerList.stop()
+      }
+    },
+    singerList () {
+      setTimeout(() => {
+        this.caleHeight()
+      }, 20)
+    },
+    scrollY (newY) {
+      // 当滚动到顶部
+      if (newY > 0) {
+        this.setScrollIndex(0)
+        return
+      }
+      // 在中间部分滚动
+      const listHeight = this.listHeight
+      for (let i = 0; i < listHeight.length - 1; i++) {
+        // 获取两个分组区间范围高度
+        let height1 = listHeight[i]
+        let height2 = listHeight[i + 1]
+        // 滑动到了该区间位置
+        if (-newY >= height1 && -newY < height2) {
+          this.setScrollIndex(i)
+          return
+        }
+      }
+      // 滚动到底部
+      this.setScrollIndex(listHeight.length - 2)
+    }
+  },
+  methods: {
+    ...mapMutations(['setScrollIndex', 'setStop']),
+    // 计算歌手列表元素高度
+    caleHeight () {
+      let height = 0
+      this.listHeight.push(height)
+      const list = this.$refs.listGroup
+      for (let i = 0; i < list.length; i++) {
+        height += list[i].clientHeight
+        this.listHeight.push(height)
+      }
+      return this.listHeight
+    },
+
+    // 页面滚动
+    scroll (pos) {
+      this.isScroll = true
+      this.setStop(false)
+      this.scrollY = pos.y
+    },
+    scrollToEnd () {
+      this.isScroll = false
+    },
+    handleScrollCancle () {
+
+    }
   },
   components: {
     SingerItem,
@@ -143,22 +140,30 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.singer-container {
+.singer-list-container {
   width: 100%;
-  position: absolute;
+  position: relative;
 
-  .singer-list {
+  h2.fixed-title {
     width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 99;
+  }
 
+  h2.singer-list-group-title {
+    padding: 0 0.5rem;
+    height: 0.8rem;
+    line-height: 0.8rem;
+    font-size: $font-size-smaller;
+    background: #f4f4f4;
+  }
+}
+
+.singer-list-wrapper {
+  .singer-list {
     .singer-list-item {
-      .singer-list-group-title {
-        padding: 0 0.5rem;
-        height: 0.8rem;
-        line-height: 0.8rem;
-        font-size: $font-size-smaller;
-        background: #f4f4f4;
-      }
-
       ul {
         padding: 0 0.5rem;
         display: flex;

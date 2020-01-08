@@ -16,7 +16,7 @@
       </van-tab>
       <!-- 歌手页 -->
       <van-tab title="歌手">
-        <singer-list />
+        <singer />
       </van-tab>
       <!-- 搜索页 -->
       <van-tab title="MV">
@@ -28,7 +28,7 @@
 <script>
 import Recommend from '@/components/home/recommend/Recommend'
 import Ranking from '@/components/home/ranking/Ranking'
-import SingerList from '@/components/home/singer/SingerList'
+import Singer from '@/components/home/singer/Singer'
 import VideoList from '@/components/home/video/VideoList'
 export default {
   computed: {
@@ -45,7 +45,7 @@ export default {
   components: {
     Recommend,
     Ranking,
-    SingerList,
+    Singer,
     VideoList
   }
 

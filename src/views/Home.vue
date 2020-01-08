@@ -20,7 +20,6 @@ export default {
   width: 100%;
   height: 100%;
   background: $color-common-background;
-  padding-bottom: 1.8rem;
   box-sizing: border-box;
 }
 </style>

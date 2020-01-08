@@ -63,9 +63,7 @@ export default {
 
       if (this.pullup) {
         this.scroll.on('scrollEnd', () => {
-          if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
-            this.$emit('scrollToEnd')
-          }
+          this.$emit('scrollToEnd')
         })
       }
 
@@ -89,6 +87,9 @@ export default {
     },
     scrollToElement () {
       this.scroll && this.scroll.scrollToElement.apply(this.scroll, arguments)
+    },
+    stop () {
+      this.scroll && this.scroll.stop()
     }
   },
   watch: {

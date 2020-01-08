@@ -10,18 +10,28 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    currentIndex: 0,
     recommendSongSheet: [], // 推荐歌单
     recommendNewSong: [], // 推荐新音乐
     recommendNewSongSheet: [], // 新碟
     songSheet: [], // 歌单(所有类型歌单)
     songSheetDisc: {}, // 歌单详情
     songSheetCagetory: [], // 歌单分类
-    rankingList: [] // 榜单列表
+    rankingList: [], // 榜单列表
+    scrollIndex: 0, // 当前滑动的索引
+    stop: false // 是否停止滚动
   },
   mutations: {
     // 设置当前索引
     setCurrentIndex(state, index) {
       state.currentIndex = index
+    },
+    // 设置当前滑动索引
+    setScrollIndex(state, index) {
+      state.scrollIndex = index
+    },
+    setStop(state, stop) {
+      state.stop = stop
     },
     // 设置推荐歌单
     setRecommendSongSheet(state, songSheet) {
@@ -47,7 +57,6 @@ export default new Vuex.Store({
     },
     // 设置歌单详情
     setSongSheetDisc(state, disc) {
-      console.log(disc)
       state.songSheetDisc = disc
     },
     // 设置歌单分类
