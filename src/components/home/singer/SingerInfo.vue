@@ -108,15 +108,6 @@ export default {
         }
         console.log(this.singerDetail)
       }
-    },
-    async getSimilarSinger (id) {
-      // 获取相似歌手
-      const { data: res4 } = await SingerApi.getSimilarSinger(id)
-      console.log(res4)
-      if (res4.code === ERR_OK) { // 成功 获取相似歌手
-        // this.singerInfo.hotSongs = res.hotSongs
-        // console.log(res4)
-      }
     }
 
   },
