@@ -9,25 +9,25 @@
 
     <!-- 歌单图片 -->
     <div class="songs-img">
-      <img :src="bgImg">
+      <img :src="songSheetDisc.picUrl">
     </div>
     <!-- loading -->
-    <van-loading v-show="songSheetDisc.tracks==undefined"
+    <van-loading v-show="!songSheetDisc.songs"
                  size="24px"
                  color="#FD4979"
                  vertical>加载中...</van-loading>
     <!-- 歌单描述 -->
-    <section v-if="songSheetDisc.tracks!=undefined">
+    <section v-if="songSheetDisc.songs">
       <div class="songs-desc">
         <div class="songs-title">{{songSheetDisc.name}}</div>
-        <div class="songs-num">{{songSheetDisc.tracks.length}}首</div>
+        <div class="songs-num">{{songSheetDisc.songs.length}}首</div>
         <!-- 播放按钮 -->
         <div class="playBtn">
           <i class="iconfont icon-bofang"></i>
         </div>
       </div>
       <!-- 歌曲列表 -->
-      <songs-list :songsList="songSheetDisc.tracks"></songs-list>
+      <songs-list :songsList="songSheetDisc.songs"></songs-list>
     </section>
 
   </div>
@@ -39,19 +39,11 @@ export default {
   props: {
     id: String
   },
-  data () {
-    return {
-      playlist: []// 歌单列表
-    }
-  },
   computed: {
-    bgImg () {
-      return this.songSheetDisc.backgroundCoverUrl || this.songSheetDisc.coverImgUrl
-    },
     ...mapGetters(['songSheetDisc'])
   },
   methods: {
-    ...mapActions(['getSongSheetById']),
+    ...mapActions(['getSongSheetById', 'getSingerAlbumDetail']),
     // 返回上一个路由
     routerBack () {
       this.$router.back()
@@ -60,14 +52,36 @@ export default {
   components: {
     SongsList
   },
+  beforeRouteEnter: (to, from, next) => {
+    if (from.path === '/singerInfo') { // 说明从歌手页面传来
+      next(vm => {
+        vm.getSingerAlbumDetail(vm.id)
+      })
+    } else {
+      next(vm => {
+        vm.getSongSheetById(vm.id)
+      })
+    }
+  },
   mounted () {
     // 根据id获取歌单列表
-    this.getSongSheetById(this.id)
+    // Router.beforeEach((to, from, next) => {
+    //   console.log(from)
+    // })
+    // this.getSongSheetById(this.id)
+    // console.log(this.id)
+    //  this.getSingerAlbumDetail(this.id)
   }
 }
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
+
+.song-sheet-info-container>>>.van-loading {
+  /* 减去标题栏、图片高度、播放区域高度 */
+  height: calc(100vh - (100vw + 1.22667rem + 1.8rem));
+  background: #fff;
+}
 
 .song-sheet-info-container {
   background: $color-common-background;
@@ -90,10 +104,8 @@ export default {
   }
 
   section {
-    padding: 0 0.4rem;
-
     .songs-desc {
-      padding: 0.4rem 0;
+      padding: 0.4rem;
       position: relative;
       background: $color-common-background;
 

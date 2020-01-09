@@ -1,15 +1,13 @@
 export default class Singer {
   constructor({
     id,
-    name,
-    avatar,
-    aliaName,
-    picUrl
+    picUrl,
+    songs,
+    name
   }) {
     this.id = id
     this.name = name
-    this.avatar = avatar
-    this.aliaName = aliaName
+    this.songs = songs
     this.picUrl = picUrl
   }
 }

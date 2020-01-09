@@ -77,8 +77,4 @@ export default {
     }
   }
 }
-
-&:last-child {
-  margin-bottom: 0;
-}
 </style>

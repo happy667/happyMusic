@@ -10,14 +10,14 @@ const options = {
   sameDepthDisable: false, // url深度相同时禁用动画，默认为false
   map: {
     'home': {
-      enter: ['songSheetSort', 'songSheetInfo', 'search', 'videoInfo', 'play', 'songComment']
+      enter: ['songSheetDisc', 'songSheetInfo', 'search', 'videoInfo', 'play', 'songComment', 'singerInfo']
     },
-    'songSheetSort': {
+    'songSheetDisc': {
       enter: ['songSheetInfo'],
-      leave: ['home']
+      leave: ['home', 'singerInfo']
     },
     'songSheetInfo': {
-      leave: ['home', 'songSheetSort']
+      leave: ['home', 'songSheetDisc']
     },
     'search': {
       leave: ['home']
@@ -30,6 +30,10 @@ const options = {
     },
     'songComment': {
       leave: ['play']
+    },
+    'singerInfo': {
+      enter: ['songSheetDisc'],
+      leave: ['home']
     }
   },
   // 默认为[]，name对应路由的name,以实现类似app中点击tab页面水平转场效果，如tab[1]到tab[0]，会使用backAnim动画，tab[1]到tab[2]，会使用forwardAnim动画

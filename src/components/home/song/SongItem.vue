@@ -50,7 +50,6 @@ export default {
   display: flex;
   padding: 0.3rem 0.4rem;
   background: $color-common-background;
-  box-shadow: 0 0.1rem 0.8rem rgba(0, 0, 0, 0.1);
   border-radius: 0.2rem;
 
   .song-img {

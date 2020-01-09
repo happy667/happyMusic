@@ -59,6 +59,10 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
+.song-swiper-container>>>.swiper-container .swiper-wrapper .swiper-slide .songs-list-item-containter {
+  box-shadow: 0 0.1rem 0.8rem rgba(0, 0, 0, 0.1);
+}
+
 .song-swiper-container {
   .swiper-container {
     .swiper-wrapper {

@@ -1,5 +1,6 @@
 <template>
-  <div class="singer-list-item-container">
+  <div class="singer-list-item-container"
+       @click="selectItem(singer)">
     <div class="singer-list-item">
       <!-- 歌手头像 -->
       <div class="singer-avatar">
@@ -13,13 +14,24 @@
 </template>
 <script>
 import MusicImg from '../img/MusicImg'
+import { mapMutations } from 'vuex'
 export default {
   props: {
     singer: Object
   },
   components: {
     MusicImg
+  },
+  methods: {
+    ...mapMutations(['setSinger', 'setSingerCurrentIndex']),
+    // 选择歌手
+    selectItem (item) {
+      this.setSinger(item)
+      this.setSingerCurrentIndex(0)
+      this.$router.push('/singerInfo')
+    }
   }
+
 }
 </script>
 <style lang="stylus" scoped>

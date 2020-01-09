@@ -1,5 +1,10 @@
 <template>
   <div class="singer-list-container">
+    <!-- 正在加载 -->
+    <van-loading v-show="this.singerList.length === 0"
+                 size="24px"
+                 color="#FD4979"
+                 vertical>加载中...</van-loading>
     <h2 ref="fixed"
         class="fixed-title singer-list-group-title"
         v-show="fixedTitle">{{fixedTitle}}</h2>
@@ -57,9 +62,6 @@ export default {
     this.listenScroll = true// 可以监听页面滚动
     this.pullup = true// 可以监听页面停止滚动
     this.probeType = 3// 可以监听缓冲时的滑动位置
-  },
-  mounted () {
-    console.log(this.$refs.singerList)
   },
   computed: {
     ...mapState(['scrollIndex', 'stop']),
@@ -128,7 +130,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setScrollIndex', 'setStop']),
+    ...mapMutations(['setScrollIndex', 'setStop', 'setSinger']),
     // 计算歌手列表元素高度
     caleHeight () {
       let height = 0
@@ -150,6 +152,7 @@ export default {
     scrollToEnd () {
       this.isScroll = false
     }
+
   },
   components: {
     SingerItem,

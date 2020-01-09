@@ -34,10 +34,10 @@ export default {
   computed: {
     currentIndex: {
       get () {
-        return this.$store.state.currentIndex
+        return this.$store.state.homeCurrentIndex
       },
       set (index) {
-        this.$store.commit('setCurrentIndex', index)
+        this.$store.commit('setHomeCurrentIndex', index)
       }
     }
 
@@ -51,8 +51,4 @@ export default {
 
 }
 </script>
-<style lang="stylus" scoped>
-.header-navBar-container>>>.van-tabs__wrap {
-  height: 1.18rem;
-}
-</style>
+<style lang="stylus" scoped></style>

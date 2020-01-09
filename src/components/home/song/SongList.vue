@@ -7,7 +7,6 @@
         <song-item :song="item"></song-item>
       </li>
     </ul>
-
   </div>
 </template>
 <script>
@@ -28,13 +27,4 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
-.songs-list-containter {
-  .songs-list {
-    .songs-list-item {
-      margin-bottom: 0.3rem;
-    }
-  }
-}
 </style>

@@ -42,6 +42,11 @@ export default {
       border-radius: 0.2rem;
       margin-bottom: 0.3rem;
 
+      /* 选择最后一排 */
+      &:nth-last-child(-n+3) {
+        margin-bottom: 0;
+      }
+
       .list-item-img {
         margin: 0 auto;
         width: 2.2rem;

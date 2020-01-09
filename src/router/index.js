@@ -11,6 +11,7 @@ const VideoInfo = () => import('../components/home/video/VideoInfo')
 const Search = () => import('../components/home/search/Search')
 const Play = () => import('../components/home/play/Play')
 const SongComment = () => import('../components/home/song/SongComment')
+const SingerInfo = () => import('../components/home/singer/SingerInfo')
 Vue.use(VueRouter)
 
 const routes = [
@@ -54,25 +55,7 @@ const routes = [
   {
     path: '/home',
     name: 'home',
-    component: Home,
-    children: [
-
-      //   // 排行页
-      //   {
-      //     path: 'Ranking',
-      //     component: Ranking
-      //   },
-      //   // 歌手页
-      //   {
-      //     path: 'Singer',
-      //     component: Singer
-      //   },
-      //   // 搜索页
-      //   {
-      //     path: 'Search',
-      //     component: Search
-      //   }
-    ]
+    component: Home
   },
   // 歌单页
   {
@@ -111,6 +94,12 @@ const routes = [
     name: 'songComment',
     component: SongComment
 
+  },
+  // 歌手信息页
+  {
+    path: '/singerInfo',
+    name: 'singerInfo',
+    component: SingerInfo
   }
 ]
 
@@ -126,7 +115,5 @@ const router = new VueRouter({
       }
     }
   }
-
 })
-
 export default router

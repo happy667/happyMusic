@@ -14,9 +14,13 @@
         <template v-if="item.title==='official'">
           <ranking-title title="官方榜"
                          :key="item.name"></ranking-title>
-          <official-list v-for="rankingObj in item.rankingList"
-                         :key="rankingObj.id"
-                         :rankingObj="rankingObj"></official-list>
+          <div class="list-container"
+               :key="item.name">
+            <official-list v-for="rankingObj in item.rankingList"
+                           :key="rankingObj.id"
+                           :rankingObj="rankingObj"></official-list>
+          </div>
+
         </template>
         <!-- 推荐榜 -->
         <template v-else-if="item.title==='recommend'">
@@ -74,6 +78,10 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
+.ranking-container .list-container>>>.official-list-container:last-child {
+  margin-bottom: 0;
+}
+
 .ranking-container {
   width: 100%;
   height: 100%;

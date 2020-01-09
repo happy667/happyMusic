@@ -4,6 +4,7 @@
                  size="24px"
                  color="#FD4979"
                  vertical>加载中...</van-loading>
+
     <!-- 歌手列表 -->
     <singer-list :singer-list="singerList"></singer-list>
     <!-- 字母列表 -->
@@ -20,10 +21,8 @@ import {
   ERR_OK
 } from '@/api/config.js'
 var pinyin = require('pinyin')
-// const pinyin = require('pinyin')
 const HOT_NAME = '热门'
 const HOT_LENGTH = 30// 热门歌手数量
-// import { mapActions, mapState } from 'vuex'
 export default {
   data () {
     return {
@@ -58,7 +57,8 @@ export default {
             id: item.id,
             name: item.name,
             avatar: item.img1v1Url,
-            aliaName: item.alias.join(' / ')
+            aliaName: item.alias.join(' / '),
+            picUrl: item.picUrl
           }))
         } else { // 处理歌手列表
           const key = item.initial
@@ -73,7 +73,8 @@ export default {
             id: item.id,
             name: item.name,
             avatar: item.img1v1Url,
-            aliaName: item.alias[0]
+            aliaName: item.alias[0],
+            picUrl: item.picUrl
           }))
         }
       })
@@ -105,6 +106,7 @@ export default {
           data: res2
         } = await singerApi.getSingerList()
         if (res2.code === ERR_OK) {
+          console.log(res2)
           res2.artists.map(item => {
             // 获取歌手的首字母
             let py = pinyin(item.name[0], {

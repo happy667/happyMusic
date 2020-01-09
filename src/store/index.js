@@ -2,7 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import recommendApi from '@/api/recommend.js'
 import rankingApi from '@/api/ranking.js'
-// import singerApi from '@/api/singer.js'
+import singerApi from '@/api/singer.js'
+import SongSheetDetail from '@/assets/common/js/songSheetDetail.js'
 import {
   ERR_OK
 } from '@/api/config.js'
@@ -10,7 +11,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    currentIndex: 0,
+    homeCurrentIndex: 0,
+    singerCurrentIndex: 0,
     recommendSongSheet: [], // 推荐歌单
     recommendNewSong: [], // 推荐新音乐
     recommendNewSongSheet: [], // 新碟
@@ -19,16 +21,21 @@ export default new Vuex.Store({
     songSheetCagetory: [], // 歌单分类
     rankingList: [], // 榜单列表
     scrollIndex: 0, // 当前滑动的索引
-    stop: false // 是否停止滚动
+    stop: false, // 是否停止滚动
+    singer: {} // 歌手
   },
   mutations: {
     // 设置当前索引
-    setCurrentIndex(state, index) {
-      state.currentIndex = index
+    setHomeCurrentIndex(state, index) {
+      state.homeCurrentIndex = index
     },
-    // 设置当前滑动索引
+    // 设置字母表滚动索引
     setScrollIndex(state, index) {
       state.scrollIndex = index
+    },
+    // 设置歌手信息页当前索引
+    setSingerCurrentIndex(state, index) {
+      state.singerCurrentIndex = index
     },
     setStop(state, stop) {
       state.stop = stop
@@ -66,6 +73,10 @@ export default new Vuex.Store({
     // 设置歌单分类
     setRankingList(state, rankingList) {
       state.rankingList = rankingList
+    },
+    // 设置歌手
+    setSinger(state, singer) {
+      state.singer = singer
     }
 
   },
@@ -104,7 +115,7 @@ export default new Vuex.Store({
         data: res
       } = await recommendApi.getSongSheetCatList()
       if (res.code === ERR_OK) { // 成功获取歌单分类
-        console.log(res)
+
         // context.commit('setSongSheetCagetory', songSheetCagetory)
       }
     },
@@ -131,9 +142,12 @@ export default new Vuex.Store({
         data: res
       } = await recommendApi.getSongSheetById(id)
       if (res.code === ERR_OK) {
-        console.log(res.playlist)
-        context.commit('setSongSheetDisc', res.playlist)
-
+        context.commit('setSongSheetDisc', new SongSheetDetail({
+          id: res.playlist.id,
+          picUrl: res.playlist.coverImgUrl || res.playlist.backgroundCoverUrl,
+          songs: res.playlist.tracks,
+          name: res.playlist.name
+        }))
         // 因为接口中返回的歌曲的值为id,所以需要再根据歌单列表中的歌曲id获取歌曲列表
         // 需要将歌曲id用“,”连接传入url中
         // const songIds = res.playlist.trackIds.map(v => v.id)
@@ -195,6 +209,22 @@ export default new Vuex.Store({
         rankingList.push(rankingObj)
       }
       context.commit('setRankingList', rankingList)
+    },
+    // 根据id获取歌手专辑详情
+    async getSingerAlbumDetail(context, id) {
+      // 先清空
+      context.commit('setSongSheetDisc', {})
+      const {
+        data: res
+      } = await singerApi.getSingerAlbumDetail(id)
+      if (res.code === ERR_OK) {
+        context.commit('setSongSheetDisc', new SongSheetDetail({
+          id: res.album.id,
+          picUrl: res.album.picUrl,
+          songs: res.songs,
+          name: res.album.name
+        }))
+      }
     }
 
   },

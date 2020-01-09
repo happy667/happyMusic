@@ -1,0 +1,63 @@
+<template>
+  <div class="singer-detail-container">
+    <!-- loading -->
+    <van-loading v-show="isLoad"
+                 size="24px"
+                 color="#FD4979"
+                 vertical>加载中...</van-loading>
+    <!-- 歌手简介 -->
+    <div class="singer-synopsis">
+      <h2 class="title">歌手简介</h2>
+      <p class="context">
+        {{singerDetail.briefDesc}}
+      </p>
+    </div>
+    <div class="singer-introduction"
+         v-for="item in singerDetail.introduction"
+         :key="item.ti">
+      <h2 class="title">{{item.ti}}</h2>
+      <p class="context"
+         v-html="item.txt"></p>
+    </div>
+  </div>
+
+</template>
+<script>
+export default {
+  props: {
+    singerDetail: {
+      type: Object,
+      default: () => { }
+    }
+  },
+  computed: {
+    isLoad () {
+      return Object.keys(this.singerDetail).length === 0
+    }
+  }
+}
+</script>
+<style lang="stylus" scoped>
+.singer-detail-container {
+  @import '~common/stylus/variable';
+
+  padding: 0.4rem;
+
+  .title {
+    margin-bottom: 0.2rem;
+    font-size: $font-size-smaller;
+    font-weight: bold;
+    padding-left: 0.1rem;
+    border-left: 0.08rem solid $color-common;
+  }
+
+  .context {
+    line-height: 0.5rem;
+    white-space: pre-wrap;
+  }
+
+  .singer-introduction {
+    margin-top: 0.4rem;
+  }
+}
+</style>
