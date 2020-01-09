@@ -3,7 +3,7 @@
        @click="goToVideoInfo">
     <!-- 播放器区域 -->
     <div class="player">
-      <video src="@/assets/testMv/1.mp4"></video>
+      <video :src="video.videoUrl"></video>
       <!-- 播放按钮 -->
       <div class="play-btn">
         <van-icon name="play-circle-o" />
@@ -13,12 +13,12 @@
           <!-- 播放次数 -->
           <div class="play-left">
             <i class="iconfont icon-bofang"></i>
-            123213
+            {{video.playCount|convertPlayCount}}
           </div>
           <!-- 播放时长 -->
           <div class="play-right">
             <i class="iconfont icon-shichang"></i>
-            12:52
+            {{video.duration|converPlayTime}}
           </div>
         </div>
         <div class="play-after">
@@ -37,14 +37,14 @@
     <!-- 视频描述 -->
     <div class="play-info">
       <!-- 视频标题 -->
-      <div class="play-title">差不多姑娘差不多姑娘差不多姑娘差不多姑娘差不多姑娘差不多姑娘差不多姑娘</div>
+      <div class="play-title">{{video.name}}</div>
       <!-- 视频出处 -->
       <div class="play-source">
         <div class="play-source-img">
-          <music-img></music-img>
+          <music-img :avatar="video.avatar"></music-img>
         </div>
         <div class="play-source-author">
-          张艺兴
+          {{video.artistName}}
         </div>
       </div>
     </div>
@@ -52,7 +52,13 @@
 </template>
 <script>
 import MusicImg from '../img/MusicImg'
+import 'common/js/convert.js'
 export default {
+  props: {
+    video: {
+      type: Object
+    }
+  },
   data () {
     return {
       value: 50
@@ -82,6 +88,7 @@ export default {
   .player {
     position: relative;
     width: 100%;
+    background: $color-common-b;
 
     video {
       display: block;

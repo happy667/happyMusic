@@ -15,7 +15,6 @@
 <script>
 import Swiper from 'swiper'
 import SongSheetSwiperItem from './SongSheetSwiperItem'
-import 'jquery'
 export default {
   props: {
     recommendNewSongSheet: Array

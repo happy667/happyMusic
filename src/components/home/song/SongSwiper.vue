@@ -16,7 +16,6 @@
 import Swiper from 'swiper'
 // import SongImgItem from './SongImgItem'
 import SongItem from './SongItem'
-import 'jquery'
 export default {
   props: {
     recommendNewSong: Array
