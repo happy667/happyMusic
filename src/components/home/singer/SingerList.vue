@@ -161,11 +161,10 @@ export default {
 @import '~common/stylus/variable';
 
 .singer-list-container {
-  width: 100%;
   position: relative;
+  width: 100%;
 
   h2.fixed-title {
-    width: 100%;
     position: absolute;
     top: 0;
     left: 0;
@@ -173,11 +172,13 @@ export default {
   }
 
   h2.singer-list-group-title {
+    width: 100%;
     padding: 0 0.5rem;
     height: 0.8rem;
     line-height: 0.8rem;
     font-size: $font-size-smaller;
     background: #f4f4f4;
+    box-sizing: border-box;
   }
 }
 
