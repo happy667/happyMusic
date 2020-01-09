@@ -1,12 +1,12 @@
 <template>
   <div class="singer-list-container">
-    <h2 class="fixed-title singer-list-group-title"
-        v-if="this.singerList.length!==0 && scrollIndex!==0">{{singerList[scrollIndex].title}}</h2>
+    <h2 ref="fixed"
+        class="fixed-title singer-list-group-title"
+        v-show="fixedTitle">{{fixedTitle}}</h2>
     <scroll :data="singerList"
             ref="singerList"
             @scroll="scroll"
             @scrollToEnd="scrollToEnd"
-            @scrollCancle="handleScrollCancle"
             :listenScroll="listenScroll"
             :pullup="pullup"
             :probeType="probeType">
@@ -30,7 +30,6 @@
     </scroll>
 
   </div>
-  <!-- 歌手列表 -->
 
 </template>
 <script>
@@ -48,11 +47,13 @@ export default {
   data () {
     return {
       scrollY: -1,
-      isScroll: false
+      isScroll: false,
+      diff: -1
     }
   },
   created () {
     this.listHeight = [] // 列表高度
+    this.titleHeight = 0// 标题高度
     this.listenScroll = true// 可以监听页面滚动
     this.pullup = true// 可以监听页面停止滚动
     this.probeType = 3// 可以监听缓冲时的滑动位置
@@ -61,7 +62,14 @@ export default {
     console.log(this.$refs.singerList)
   },
   computed: {
-    ...mapState(['scrollIndex', 'stop'])
+    ...mapState(['scrollIndex', 'stop']),
+    // 固定标题
+    fixedTitle () {
+      if (this.scrollY > 0) {
+        return ''
+      }
+      return this.singerList[this.scrollIndex] ? this.singerList[this.scrollIndex].title : ''
+    }
   },
   watch: {
     // 监听滚动索引变化
@@ -80,6 +88,7 @@ export default {
     singerList () {
       setTimeout(() => {
         this.caleHeight()
+        this.titleHeight = this.$refs.fixed.clientHeight
       }, 20)
     },
     scrollY (newY) {
@@ -97,11 +106,25 @@ export default {
         // 滑动到了该区间位置
         if (-newY >= height1 && -newY < height2) {
           this.setScrollIndex(i)
+          // 两个分组标题之间的距离
+          this.diff = height2 + newY
           return
         }
       }
       // 滚动到底部
       this.setScrollIndex(listHeight.length - 2)
+    },
+    // 监听差值
+    diff (newVal) {
+      // 判断差值是否大于0并且是否小于分组标题的高度
+      let fixedTop = (newVal > 0 && newVal < this.titleHeight) ? newVal - this.titleHeight : 0
+      // 如果差值的高度等于标题高度就停止监听
+      if (this.fixedTop === fixedTop) {
+        return
+      }
+      // 移动动画
+      this.fixedTop = fixedTop
+      this.$refs.fixed.style.transform = `translate3d(0,${fixedTop}px,0)`
     }
   },
   methods: {
@@ -126,9 +149,6 @@ export default {
     },
     scrollToEnd () {
       this.isScroll = false
-    },
-    handleScrollCancle () {
-
     }
   },
   components: {
