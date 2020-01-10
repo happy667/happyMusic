@@ -77,7 +77,14 @@ export default {
     // 监听滚动索引变化
     scrollIndex () {
       if (!this.isScroll) {
-        // 移动歌手列表分组元素
+        if (!this.scrollIndex && this.scrollIndex !== 0) {
+          return
+        }
+        if (this.scrollIndex < 0) {
+          this.setScrollIndex(0)
+        } else if (this.scrollIndex > this.listHeight.length - 2) {
+          this.setScrollIndex(this.listHeight.length - 2)
+        }
         this.$refs.singerList.scrollToElement(this.$refs.listGroup[this.scrollIndex], 0)
       }
     },
@@ -94,13 +101,14 @@ export default {
       }, 20)
     },
     scrollY (newY) {
+      const listHeight = this.listHeight
       // 当滚动到顶部
       if (newY > 0) {
         this.setScrollIndex(0)
         return
       }
       // 在中间部分滚动
-      const listHeight = this.listHeight
+
       for (let i = 0; i < listHeight.length - 1; i++) {
         // 获取两个分组区间范围高度
         let height1 = listHeight[i]

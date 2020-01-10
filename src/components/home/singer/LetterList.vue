@@ -1,12 +1,13 @@
 <template>
   <div class="letter-list-container"
        ref="letterList"
-       @touchstart="handleTouchStart"
-       @touchmove.stop.prevent="handleTouchMove">
+       @touchstart.stop.prevent="handleTouchStart"
+       @touchmove.stop.prevent="handleTouchMove"
+       @touchend.stop>
     <!-- 右侧字母表 -->
     <ul class="letter-list">
       <li class="letter-list-item"
-          :class="scrollIndex==index?'active':''"
+          :class="scrollIndex===index?'active':''"
           :data-index="index"
           v-for="(item,index) in letterList"
           :key="index">{{item}}</li>
@@ -14,7 +15,7 @@
   </div>
 </template>
 <script>
-import { getDate } from '@/assets/common/js/dom.js'
+import { getData } from '@/assets/common/js/dom.js'
 import { mapMutations, mapState } from 'vuex'
 export default {
   props: {
@@ -50,8 +51,7 @@ export default {
     handleTouchStart (e) {
       // 停止滚动
       this.setStop(true)
-      let index = getDate(e.target, 'index')
-
+      let index = getData(e.target, 'index')
       // 获取当前触摸开始的距离
       let firstTouch = e.touches[0]
       this.touch.y1 = firstTouch.pageY
@@ -61,12 +61,14 @@ export default {
     },
     // 触摸移动
     handleTouchMove (e) {
+      this.setStop(false)
       let firstTouch = e.touches[0]
       this.touch.y2 = firstTouch.pageY
       let delta = (this.touch.y2 - this.touch.y1) / this.letterHeight | 0
+      if (delta <= 0) delta = 0
       // 加上上一次的滑动时的索引
-      // 因为this.touch.index获取的索引类型为string,所以需要转成数字类型再相加
-      let anchorIndex = +this.touch.index + delta
+      // 因为this.touch.index获取的索引 类型为string,所以需要转成数字类型再相加
+      let anchorIndex = parseInt(this.touch.index) + delta
       // 设置当前滑动的索引
       this.setScrollIndex(anchorIndex)
     }
@@ -80,11 +82,14 @@ export default {
   position: absolute;
   right: 0.1rem;
   top: 1rem;
+  z-index: 99;
 
   .letter-list {
     .letter-list-item {
-      height: 0.42rem;
-      line-height: 0.42rem;
+      width: 0.65rem;
+      text-align: center;
+      height: 0.44rem;
+      line-height: 0.44rem;
     }
 
     .active {
