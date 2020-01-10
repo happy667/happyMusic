@@ -1,50 +1,97 @@
 <template>
-  <div class="video-container"
-       @click="goToVideoInfo">
+  <div class="video-container">
     <!-- 播放器区域 -->
-    <div class="player">
-      <video :src="video.videoUrl"></video>
+    <div class="player"
+         ref="player"
+         @click.stop="handlFirstPlay">
+      <video :src="videoParams.videoUrl"
+             preload='auto'
+             ref="video"
+             webkit-playsinline='true'
+             playsinline='true'
+             x-webkit-airplay='true'
+             x5-video-player-type='h5'
+             x5-video-player-fullscreen='true'
+             x5-video-ignore-metadata='true'
+             :poster="videoParams.cover"></video>
       <!-- 播放按钮 -->
-      <div class="play-btn">
+      <div class="big-btn"
+           v-show="isFirstPlay">
         <van-icon name="play-circle-o" />
       </div>
-      <div class="play-controller">
-        <div class="play-before">
-          <!-- 播放次数 -->
-          <div class="play-left">
-            <i class="iconfont icon-bofang"></i>
-            {{video.playCount|convertPlayCount}}
-          </div>
-          <!-- 播放时长 -->
-          <div class="play-right">
-            <i class="iconfont icon-shichang"></i>
-            {{video.duration|converPlayTime}}
-          </div>
+      <transition-group enter-active-class="animated fadeIn faster"
+                        leave-active-class="animated fadeOut faster">
+        <div class="big-btn"
+             key="btn"
+             v-show="isClickScreen">
+          <van-icon @click.stop="handleTogglePlay"
+                    :name="icon" />
         </div>
-        <div class="play-after">
-          <!-- 进度条 -->
-          <div class="progress">
-            <van-slider active-color="#FD4979"
-                        v-model="value" />
+      </transition-group>
+      <div class="play-controller">
+        <div class="play-left">
+          <!-- 播放次数，未播放时显示 -->
+          <div class="play-count"
+               v-show="isFirstPlay">
+            <i class="iconfont icon-bofang"></i>
+            {{videoParams.playCount|convertPlayCount}}
           </div>
-          <!-- 放大图标 -->
-          <div class="full">
-            <i class="iconfont icon-amplification_icon"></i>
+          <transition-group enter-active-class="animated fadeIn faster"
+                            leave-active-class="animated fadeOut faster">
+            <!-- 播放时长，点击屏幕后显示 -->
+            <div class="play-time"
+                 key="play-time"
+                 v-show="isClickScreen">
+              {{currenTime|converPlayTime}}/{{videoParams.duration|converPlayTime}}
+            </div>
+          </transition-group>
+        </div>
+        <!-- 播放时长 未播放时显示-->
+        <div class="play-right">
+          <div class="play-time"
+               v-show="isFirstPlay">
+            <i class="iconfont icon-shichang"></i>
+            {{videoParams.duration|converPlayTime}}
           </div>
+          <transition-group enter-active-class="animated fadeIn faster"
+                            leave-active-class="animated fadeOut faster">
+            <!-- 放大图标 点击屏幕时显示-->
+            <div class="full"
+                 key="full"
+                 v-show="isClickScreen"
+                 @click.stop="handleFullScreen">
+              <i class="iconfont icon-amplification_icon"></i>
+            </div>
+          </transition-group>
+        </div>
+
+        <!-- 进度条 点击屏幕时显示-->
+        <div class="progress"
+             key="progress">
+          <van-slider active-color="#FD4979"
+                      @input="handleSlideChange"
+                      v-model="slideVal">
+            <div slot="button"
+                 key="button2"
+                 v-show="isClickScreen"
+                 :class="isClickScreen?'button':''">
+            </div>
+          </van-slider>
         </div>
       </div>
     </div>
     <!-- 视频描述 -->
     <div class="play-info">
       <!-- 视频标题 -->
-      <div class="play-title">{{video.name}}</div>
+      <div class="play-title"
+           @click="goToVideoInfo">{{videoParams.name}}</div>
       <!-- 视频出处 -->
       <div class="play-source">
         <div class="play-source-img">
-          <music-img :avatar="video.avatar"></music-img>
+          <music-img :avatar="videoParams.avatar"></music-img>
         </div>
         <div class="play-source-author">
-          {{video.artistName}}
+          {{videoParams.artistName}}
         </div>
       </div>
     </div>
@@ -55,13 +102,42 @@ import MusicImg from '../img/MusicImg'
 import 'common/js/convert.js'
 export default {
   props: {
-    video: {
+    videoParams: {
       type: Object
     }
   },
   data () {
     return {
-      value: 50
+      slideVal: 0,
+      isFirstPlay: true, // 是否是第一次播放
+      isPlay: false, // 是否播放
+      isFullScreen: false, // 是否全屏
+      isClickScreen: false, // 是否点击了播放器
+      currenTime: 0// 当前播放时长
+    }
+  },
+  mounted () {
+    // 获取播放时长时间
+    this.video = this.$refs.video
+    this.video.oncanplay = () => { // 可以播放了
+      setTimeout(() => {
+        // 修改时间
+        this.videoParams.duration = this.video.duration
+      }, 0)
+    }
+    // 更新时间
+    this.updateTime()
+  },
+  computed: {
+    icon () {
+      return this.isPlay ? 'pause-circle-o' : 'play-circle-o'
+    }
+  },
+  watch: {
+    currenTime () {
+      if (this.currenTime === this.video.duration) { // 播放完了
+        this.resetVideo()
+      }
     }
   },
 
@@ -69,7 +145,78 @@ export default {
     // 跳转到mv详情页
     goToVideoInfo () {
       this.$router.push('/videoInfo')
+    },
+    // 更新时间
+    updateTime () {
+      this.video.ontimeupdate = () => {
+        // 更新滚动条
+        let width = (this.video.currentTime / this.video.duration) * 100
+        this.currenTime = this.video.currentTime
+        this.slideVal = width
+      }
+    },
+    // 重置视频
+    resetVideo () {
+      // 重置播放
+      this.currentTime = 0
+      this.slideVal = 0
+      this.video.load()
+      this.isFirstPlay = true
+      this.isPlay = false
+    },
+    // 滑动进度条
+    handleSlideChange () {
+      this.video.currentTime = this.slideVal * this.video.duration / 100
+    },
+    // 点击屏幕
+    handleClickScreen () {
+      console.log('屏幕')
+      this.isClickScreen = !this.isClickScreen
+      this.hideBtn()
+    },
+    // 隐藏按钮
+    hideBtn () {
+      if (this.timer) clearTimeout(this.timer)
+      this.timer = setTimeout(() => { // 超过三秒如果没有操作就关掉控件
+        if (this.isClickScreen) {
+          // 判断是否为播放状态,如果是就隐藏
+          if (this.isPlay) this.isClickScreen = false
+        }
+      }, 3000)
+    },
+    // 点击播放暂停
+    handleTogglePlay () {
+      this.isPlay = !this.isPlay
+      this.isPlay ? this.video.play() : this.video.pause()
+      this.hideBtn()
+    },
+    // 是否为第一次播放
+    handlFirstPlay () {
+      if (this.isFirstPlay) {
+        console.log('first')
+        this.isFirstPlay = false
+        this.handleTogglePlay()
+      } else {
+        this.handleClickScreen()
+      }
+    },
+
+    // 切换全屏播放
+    handleFullScreen () {
+      this.isFullScreen = !this.isFullScreen
+      // this.videoFullScreen()
+      this.$refs.player.style.transform = 'rotate(90deg)'
+      this.isFullScreen ? this.$refs.player.webkitRequestFullScreen() : document.webkitCancelFullScreen()
     }
+    // 视频宽高设置为手机宽高
+    // videoFullScreen () {
+    //   let player = this.$refs.player
+    //   let width = document.documentElement.clientWidth
+    //   let height = document.documentElement.clientHeight
+    //   player.style.height = width + 'px'
+    //   player.style.width = height + 'px'
+    //   player.className = 'full'
+    // }
   },
   components: {
     MusicImg
@@ -84,30 +231,35 @@ export default {
   width: 100%;
   box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
   border-radius: 0 0 0.3rem 0.3rem;
+  touch-action: none;
 
   .player {
     position: relative;
     width: 100%;
-    background: $color-common-b;
+    margin-bottom: 0.2rem;
 
     video {
       display: block;
       width: 100%;
       height: 100%;
+      background: $color-common-b;
+      object-fit: cover;
+      object-position: center center;
     }
 
-    .play-btn {
+    .big-btn {
       position: absolute;
-      top: 0px;
-      left: 0px;
-      bottom: 0px;
-      right: 0px;
-      width: 100%;
-      height: 100%;
+      top: 50%;
+      left: 50%;
+      margin-left: -1rem;
+      margin-top: -1rem;
+      width: 2rem;
+      height: 2rem;
       background: rgba(255, 255, 255, 0);
       display: flex;
       align-items: center;
       justify-content: center;
+      z-index: 99;
 
       .van-icon {
         display: block;
@@ -127,29 +279,29 @@ export default {
       height: 1rem;
       line-height: 1rem;
       color: #fff;
+      display: flex;
+      justify-content: space-between;
 
-      .play-before, .play-after {
-        width: 100%;
-      }
-
-      .play-before {
-        display: flex;
-        justify-content: space-between;
-      }
-
-      .play-after {
-        .progress {
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          width: 100%;
-        }
-
+      .play-right {
         .full {
           position: absolute;
           top: 0;
           right: 0.3rem;
           font-size: $font-size-small;
+        }
+      }
+
+      .progress {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+
+        .button {
+          width: 0.25rem;
+          height: 0.25rem;
+          border-radius: 50%;
+          background: $color-common;
         }
       }
     }

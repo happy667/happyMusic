@@ -2,7 +2,7 @@ import request from '@/axios/request.js'
 export default {
   // 获取推荐视频
   getRecommendVideo(limit = 3) {
-    const url = `/mv/all?limit=${limit}`
+    const url = `/mv/first?limit=${limit}`
     return request({
       url
     })
