@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import SongSheetDetail from '@/assets/common/js/songSheetDetail.js'
 import recommendApi from '@/api/recommend.js'
 import rankingApi from '@/api/ranking.js'
 import singerApi from '@/api/singer.js'
-import SongSheetDetail from '@/assets/common/js/songSheetDetail.js'
+import videoApi from '@/api/video.js'
 import {
   ERR_OK
 } from '@/api/config.js'
@@ -22,7 +23,11 @@ export default new Vuex.Store({
     rankingList: [], // 榜单列表
     scrollIndex: 0, // 当前滑动的索引
     stop: false, // 是否停止滚动
-    singer: {} // 歌手
+    isScroll: false, // 是否是滚动状态
+    singer: {}, // 歌手
+    videoList: [], // mv列表
+    videoOffset: 0, // mv列表偏移量
+    selectVideo: {} // 选择的mv
   },
   mutations: {
     // 设置当前索引
@@ -37,8 +42,12 @@ export default new Vuex.Store({
     setSingerCurrentIndex(state, index) {
       state.singerCurrentIndex = index
     },
+    // 设置滚动停止
     setStop(state, stop) {
       state.stop = stop
+    },
+    setIsScroll(state, isScroll) {
+      state.isScroll = isScroll
     },
     // 设置推荐歌单
     setRecommendSongSheet(state, songSheet) {
@@ -77,8 +86,18 @@ export default new Vuex.Store({
     // 设置歌手
     setSinger(state, singer) {
       state.singer = singer
+    },
+    // 设置video列表偏移量
+    setVideoOffset(state, offset) {
+      state.videoOffset = offset
+    },
+    // 设置video列表
+    setVideoList(state, list) {
+      state.videoList = list
+    },
+    setSelectVideo(state, video) {
+      state.selectVideo = video
     }
-
   },
   actions: {
     // 获取推荐歌单
@@ -225,6 +244,55 @@ export default new Vuex.Store({
           name: res.album.name
         }))
       }
+    },
+    // 获取视频mv
+    async getVideoList(context) {
+      // 每次获取视频判断
+      const videoListLen = this.state.videoList.length
+      context.commit('setVideoOffset', videoListLen)
+      const offset = this.state.videoOffset
+      let videoList = await this.dispatch('getRecommendVideo', offset)
+      // 获取视频url
+      await this.dispatch('getVideoUrl', videoList)
+      // 获取歌手头像
+      await this.dispatch('getSingerAvatar', videoList)
+      // 使用settimeout异步的机制给videoList赋值
+      await setTimeout(() => {
+        context.commit('setVideoList', this.state.videoList.concat(videoList))
+      }, 20)
+    },
+    // 获取推荐视频
+    async getRecommendVideo(context, offset) {
+      console.log(offset)
+      const {
+        data: res
+      } = await videoApi.getRecommendVideo(offset)
+      if (res.code === ERR_OK) {
+        return res.data
+      }
+    },
+    // 获取视频url
+    async getVideoUrl(context, videoList) {
+      videoList.forEach(async (item) => {
+        const {
+          data: res
+        } = await videoApi.getRecommendVideoUrl(item.id)
+        if (res.code === ERR_OK) {
+          item.videoUrl = res.data.url
+        }
+      })
+    },
+    // 获取歌手头像
+    // 因为接口没有直接获取用户头像的所以借用获取歌手单曲来获取歌手头像
+    async getSingerAvatar(context, videoList) {
+      videoList.forEach(async (item) => {
+        const {
+          data: res2
+        } = await singerApi.getSingerSong(item.artistId)
+        if (res2.code === ERR_OK) {
+          item.artist = res2.artist
+        }
+      })
     }
 
   },

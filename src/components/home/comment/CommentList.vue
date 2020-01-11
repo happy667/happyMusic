@@ -1,24 +1,21 @@
 <template>
   <div class="comment-list-container">
-    <div class="comment-list-title">精彩评论</div>
-    <comment-item></comment-item>
-    <comment-item></comment-item>
-    <comment-item></comment-item>
-    <comment-item></comment-item>
-    <comment-item></comment-item>
-    <comment-item></comment-item>
-    <comment-item></comment-item>
-    <comment-item></comment-item>
-    <comment-item></comment-item>
-    <comment-item></comment-item>
-    <comment-item></comment-item>
-    <comment-item></comment-item>
-    <comment-item></comment-item>
+    <template v-for="item in commentList">
+      <comment-item :key="item.commentId"
+                    :comment="item"></comment-item>
+    </template>
+
   </div>
 </template>
 <script>
 import CommentItem from './CommentItem'
 export default {
+  props: {
+    commentList: {
+      type: Array,
+      default: () => []
+    }
+  },
   components: {
     CommentItem
   }
@@ -27,13 +24,14 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
+.comment-list-container>>>.comment-item-container {
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
 .comment-list-container {
   width: 100%;
   background: #fff;
-
-  .comment-list-title {
-    font-size: $font-size-smaller;
-    font-weight: bold;
-  }
 }
 </style>

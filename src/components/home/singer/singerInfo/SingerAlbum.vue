@@ -93,6 +93,11 @@ export default {
         }
       }
     }
+
+    .singer-album-list:after {
+      content: '';
+      width: 2.7rem;
+    }
   }
 }
 </style>

@@ -7,9 +7,8 @@
       <video :src="videoParams.videoUrl"
              preload='auto'
              ref="video"
-             webkit-playsinline='true'
+             muted
              playsinline='true'
-             x-webkit-airplay='true'
              x5-video-player-type='h5'
              x5-video-player-fullscreen='true'
              x5-video-ignore-metadata='true'
@@ -86,9 +85,10 @@
       <div class="play-title"
            @click="goToVideoInfo">{{videoParams.name}}</div>
       <!-- 视频出处 -->
-      <div class="play-source">
+      <div class="play-source"
+           @click="selectSinger(videoParams.artist)">
         <div class="play-source-img">
-          <music-img :avatar="videoParams.avatar"></music-img>
+          <music-img :avatar="this.videoParams.artist.img1v1Url"></music-img>
         </div>
         <div class="play-source-author">
           {{videoParams.artistName}}
@@ -100,10 +100,12 @@
 <script>
 import MusicImg from '../img/MusicImg'
 import 'common/js/convert.js'
+import { mapMutations } from 'vuex'
 export default {
   props: {
     videoParams: {
-      type: Object
+      type: Object,
+      default: () => { }
     }
   },
   data () {
@@ -118,15 +120,17 @@ export default {
   },
   mounted () {
     // 获取播放时长时间
-    this.video = this.$refs.video
-    this.video.oncanplay = () => { // 可以播放了
-      setTimeout(() => {
-        // 修改时间
-        this.videoParams.duration = this.video.duration
-      }, 0)
-    }
-    // 更新时间
-    this.updateTime()
+    this.$nextTick(() => {
+      this.video = this.$refs.video
+      this.video.oncanplay = () => { // 可以播放了
+        setTimeout(() => {
+          // 修改时间
+          this.videoParams.duration = this.video.duration
+        }, 0)
+      }
+      // 更新时间
+      this.updateTime()
+    })
   },
   computed: {
     icon () {
@@ -142,8 +146,10 @@ export default {
   },
 
   methods: {
+    ...mapMutations(['setSinger', 'setSingerCurrentIndex', 'setSelectVideo']),
     // 跳转到mv详情页
     goToVideoInfo () {
+      this.setSelectVideo(this.videoParams)
       this.$router.push('/videoInfo')
     },
     // 更新时间
@@ -192,12 +198,22 @@ export default {
     },
     // 是否为第一次播放
     handlFirstPlay () {
-      if (this.isFirstPlay) {
-        console.log('first')
-        this.isFirstPlay = false
-        this.handleTogglePlay()
-      } else {
-        this.handleClickScreen()
+      // 关闭静音
+      // 静音 告诉谷歌浏览器, 这个视频是安全的, 可以默默播放.
+      // this.video.style.muted = false
+      var playPromise = this.video.play()
+      console.log(playPromise)
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          this.video.muted = false
+          if (this.isFirstPlay) {
+            console.log('first')
+            this.isFirstPlay = false
+            this.handleTogglePlay()
+          } else {
+            this.handleClickScreen()
+          }
+        })
       }
     },
 
@@ -207,6 +223,12 @@ export default {
       // this.videoFullScreen()
       this.$refs.player.style.transform = 'rotate(90deg)'
       this.isFullScreen ? this.$refs.player.webkitRequestFullScreen() : document.webkitCancelFullScreen()
+    },
+    // 选择歌手
+    selectSinger (item) {
+      this.setSinger(item)
+      this.setSingerCurrentIndex(0)
+      this.$router.push('/singerInfo')
     }
     // 视频宽高设置为手机宽高
     // videoFullScreen () {
@@ -229,21 +251,23 @@ export default {
 .video-container {
   margin-bottom: 0.5rem;
   width: 100%;
-  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+  height: 8rem;
+  box-shadow: 0 0.05rem 1rem rgba(0, 0, 0, 0.1);
   border-radius: 0 0 0.3rem 0.3rem;
   touch-action: none;
 
   .player {
     position: relative;
     width: 100%;
+    height: 5rem;
     margin-bottom: 0.2rem;
 
     video {
       display: block;
       width: 100%;
-      height: 100%;
+      height: 5rem;
       background: $color-common-b;
-      object-fit: cover;
+      object-fit: fill;
       object-position: center center;
     }
 

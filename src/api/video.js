@@ -1,8 +1,8 @@
 import request from '@/axios/request.js'
 export default {
   // 获取推荐视频
-  getRecommendVideo(limit = 3) {
-    const url = `/mv/first?limit=${limit}`
+  getRecommendVideo(offset = 0, limit = 3) {
+    const url = `/mv/all?offset=${offset}&limit=${limit}`
     return request({
       url
     })
@@ -10,6 +10,12 @@ export default {
   // 获取推荐视频路径
   getRecommendVideoUrl(id) {
     const url = `/mv/url?id=${id}`
+    return request({
+      url
+    })
+  },
+  getVideoComment(id, offset = 0, limit = 15) {
+    const url = `comment/mv?id=${id}&offset=${offset}&limit=${limit}`
     return request({
       url
     })

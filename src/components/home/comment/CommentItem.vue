@@ -1,28 +1,34 @@
 <template>
   <div class="comment-item-container">
-
     <!-- 评论信息 -->
     <div class="comment-header">
       <!-- 用户头像 -->
       <div class="avatar">
-        <music-img></music-img>
+        <music-img :avatar="comment.user.avatarUrl"></music-img>
       </div>
       <div class="comment-info">
         <!-- 用户昵称 -->
-        <div class="comment-nikeName">123</div>
+        <div class="comment-nikeName">{{comment.user.nickname}}</div>
         <!--评论时间-->
-        <div class="comment-time">2019年12月15日</div>
+        <div class="comment-time">{{comment.time|convertTime}}</div>
       </div>
     </div>
     <!-- 评论内容 -->
     <div class="comment-content">
-      评论内容评论内容评论内容评论内容评论内容评论内容评论内容
+      {{comment.content}}
     </div>
   </div>
 </template>
 <script>
+import 'common/js/convert.js'
 import MusicImg from '../img/MusicImg'
 export default {
+  props: {
+    comment: {
+      type: Object,
+      default: () => { }
+    }
+  },
   components: {
     MusicImg
   }

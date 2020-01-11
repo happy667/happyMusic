@@ -13,7 +13,7 @@
             @scroll="scroll"
             @scrollToEnd="scrollToEnd"
             :listenScroll="listenScroll"
-            :pullup="pullup"
+            :scrollEnd="scrollEnd"
             :probeType="probeType">
       <div class="singer-list-wrapper">
         <ul class="singer-list"
@@ -52,7 +52,6 @@ export default {
   data () {
     return {
       scrollY: -1,
-      isScroll: false,
       diff: -1
     }
   },
@@ -60,11 +59,11 @@ export default {
     this.listHeight = [] // 列表高度
     this.titleHeight = 0// 标题高度
     this.listenScroll = true// 可以监听页面滚动
-    this.pullup = true// 可以监听页面停止滚动
+    this.scrollEnd = true// 可以监听页面停止滚动
     this.probeType = 3// 可以监听缓冲时的滑动位置
   },
   computed: {
-    ...mapState(['scrollIndex', 'stop']),
+    ...mapState(['scrollIndex', 'stop', 'isScroll']),
     // 固定标题
     fixedTitle () {
       if (this.scrollY > 0 || this.scrollIndex >= this.singerList.length - 1) {
@@ -77,15 +76,7 @@ export default {
     // 监听滚动索引变化
     scrollIndex () {
       if (!this.isScroll) {
-        if (!this.scrollIndex && this.scrollIndex !== 0) {
-          return
-        }
-        if (this.scrollIndex < 0) {
-          this.setScrollIndex(0)
-        } else if (this.scrollIndex > this.listHeight.length - 2) {
-          this.setScrollIndex(this.listHeight.length - 2)
-        }
-        this.$refs.singerList.scrollToElement(this.$refs.listGroup[this.scrollIndex], 0)
+        this._scrollTo(this.scrollIndex)
       }
     },
     // 监听是否取消滚动动画
@@ -94,6 +85,7 @@ export default {
         this.$refs.singerList.stop()
       }
     },
+
     singerList () {
       setTimeout(() => {
         this.caleHeight()
@@ -108,7 +100,7 @@ export default {
         return
       }
       // 在中间部分滚动
-      for (let i = 0; i < listHeight.length - 2; i++) {
+      for (let i = 0; i < listHeight.length - 1; i++) {
         // 获取两个分组区间范围高度
         let height1 = listHeight[i]
         let height2 = listHeight[i + 1]
@@ -120,6 +112,7 @@ export default {
           return
         }
       }
+
       // 滚动到底部
       this.setScrollIndex(listHeight.length - 2)
     },
@@ -137,7 +130,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setScrollIndex', 'setStop', 'setSinger']),
+    ...mapMutations(['setScrollIndex', 'setStop', 'setIsScroll', 'setSinger']),
     // 计算歌手列表元素高度
     caleHeight () {
       let height = 0
@@ -152,14 +145,26 @@ export default {
 
     // 页面滚动
     scroll (pos) {
-      this.isScroll = true
+      this.setIsScroll(true)
       this.setStop(false)
       this.scrollY = pos.y
     },
+    // 页面滚动停止
     scrollToEnd () {
-      this.isScroll = false
+      this.setIsScroll(false)
+    },
+    _scrollTo (index) {
+      if (!index && index !== 0) {
+        return
+      }
+      if (index < 0) {
+        this.setScrollIndex(0)
+      } else if (index > this.listHeight.length - 2) {
+        this.setScrollIndex(this.listHeight.length - 2)
+      }
+      this.scrollY = -this.listHeight[index]
+      this.$refs.singerList.scrollToElement(this.$refs.listGroup[index], 0)
     }
-
   },
   components: {
     SingerItem,

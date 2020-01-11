@@ -26,7 +26,11 @@ export default {
       type: Array,
       default: null
     },
-    pullup: {
+    pullUp: {
+      type: Boolean,
+      default: false
+    },
+    scrollEnd: {
       type: Boolean,
       default: false
     },
@@ -61,12 +65,16 @@ export default {
         })
       }
 
-      if (this.pullup) {
+      if (this.scrollEnd) {
         this.scroll.on('scrollEnd', () => {
           this.$emit('scrollToEnd')
         })
       }
-
+      if (this.pullUp) {
+        this.scroll.on('pullingUp', () => {
+          this.$emit('pullingUpLoad')
+        })
+      }
       if (this.beforeScroll) {
         this.scroll.on('beforeScrollStart', () => {
           this.$emit('beforeScroll')
@@ -90,6 +98,9 @@ export default {
     },
     stop () {
       this.scroll && this.scroll.stop()
+    },
+    finishPullUp () {
+      this.scroll && this.scroll.finishPullUp()
     }
   },
   watch: {

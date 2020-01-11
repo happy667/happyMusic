@@ -46,18 +46,18 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setScrollIndex', 'setStop']),
+    ...mapMutations(['setScrollIndex', 'setStop', 'setIsScroll']),
     // 触摸开始
     handleTouchStart (e) {
-      this.setStop(true)
+      this.setIsScroll(false)
       let index = getData(e.target, 'index')
       // 获取当前触摸开始的距离
       let firstTouch = e.touches[0]
       this.touch.y1 = firstTouch.pageY
       this.touch.index = index
-
       // 设置当前滑动的索引
       this.setScrollIndex(index)
+      this.setStop(true)
     },
     // 触摸移动
     handleTouchMove (e) {
