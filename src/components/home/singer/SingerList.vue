@@ -67,7 +67,7 @@ export default {
     ...mapState(['scrollIndex', 'stop']),
     // 固定标题
     fixedTitle () {
-      if (this.scrollY > 0) {
+      if (this.scrollY > 0 || this.scrollIndex >= this.singerList.length - 1) {
         return ''
       }
       return this.singerList[this.scrollIndex] ? this.singerList[this.scrollIndex].title : ''
@@ -108,8 +108,7 @@ export default {
         return
       }
       // 在中间部分滚动
-
-      for (let i = 0; i < listHeight.length - 1; i++) {
+      for (let i = 0; i < listHeight.length - 2; i++) {
         // 获取两个分组区间范围高度
         let height1 = listHeight[i]
         let height2 = listHeight[i + 1]
