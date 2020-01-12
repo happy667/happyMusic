@@ -2,7 +2,7 @@
 
   <div class="videoList-container">
     <!-- 正在加载 -->
-    <van-loading v-show="this.videoList.length === 0"
+    <van-loading v-if="this.videoList.length === 0"
                  size="24px"
                  color="#FD4979"
                  vertical>加载中...</van-loading>
@@ -11,7 +11,7 @@
             :pullUp="pullUp"
             @pullingUpLoad="handlePullingUp">
       <div class="video-list">
-        <template v-if="this.videoList.length!==0">
+        <template v-show="this.videoList.length!==0">
           <template v-for="item in videoList">
             <template v-if="item.artist&&item.videoUrl">
               <video-item :videoParams="item"

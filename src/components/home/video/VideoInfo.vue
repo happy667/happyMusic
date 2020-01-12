@@ -90,11 +90,6 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.videoInfo-container>>>.van-list__loading {
-  // 减去头部标题高度、video高度、评论标题高度、播放器高度
-  height: calc(100vh - (1.22667rem + 8.5rem + 1rem + 1.8rem));
-}
-
 .videoInfo-container {
   background: #fff;
   width: 100%;

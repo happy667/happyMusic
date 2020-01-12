@@ -28,6 +28,7 @@ export default new Vuex.Store({
     videoList: [], // mv列表
     videoOffset: 0, // mv列表偏移量
     selectVideo: {}, // 选择的mv
+    oldVideo: {}, // 上一次的video
     videoCommentOffset: 0, // mv评论偏移量
     commentObj: {
       isMusician: false,
@@ -52,6 +53,7 @@ export default new Vuex.Store({
     setStop(state, stop) {
       state.stop = stop
     },
+    // 设置是否在滚动
     setIsScroll(state, isScroll) {
       state.isScroll = isScroll
     },
@@ -104,6 +106,11 @@ export default new Vuex.Store({
     // 设置选择的video
     setSelectVideo(state, video) {
       state.selectVideo = video
+    },
+    // 设置上次播放的video
+    setOldVideo(state, video) {
+      console.log(video)
+      state.oldVideo = video
     },
     // 设置评论列表偏移量
     setVideoCommentOffset(state, offset) {
