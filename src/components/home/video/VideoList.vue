@@ -14,7 +14,8 @@
         <template v-show="this.videoList.length!==0">
           <template v-for="item in videoList">
             <template v-if="item.artist&&item.videoUrl">
-              <video-item :videoParams="item"
+              <video-item v-show="item.artist&&item.videoUrl"
+                          :videoParams="item"
                           :key="item.id"></video-item>
             </template>
 

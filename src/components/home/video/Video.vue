@@ -1,9 +1,14 @@
 <template>
+
   <div class="video-container">
     <!-- 播放器区域 -->
     <div class="player"
          ref="player"
          @click.stop="handlFirstPlay">
+      <van-loading class="load"
+                   size="1rem"
+                   color="#FD4979"
+                   v-show="!videoLoad" />
       <video :src="videoParams.videoUrl"
              preload='auto'
              ref="video"
@@ -16,20 +21,31 @@
              x5-video-player-fullscreen='true'
              x5-video-ignore-metadata='true'
              :poster="videoParams.cover"></video>
+
       <!-- 播放按钮 -->
       <div class="big-btn"
            v-show="isFirstPlay">
         <van-icon name="play-circle-o" />
       </div>
-      <transition-group enter-active-class="animated fadeIn faster"
-                        leave-active-class="animated fadeOut faster">
+      <template v-if="isFirstPlay">
+        <transition-group enter-active-class="animated fadeIn faster"
+                          leave-active-class="animated fadeOut faster">
+          <div class="big-btn"
+               key="btn"
+               v-show="isClickScreen">
+            <van-icon @click.stop="handleTogglePlay"
+                      :name="icon" />
+          </div>
+        </transition-group>
+      </template>
+      <template v-else>
         <div class="big-btn"
              key="btn"
              v-show="isClickScreen">
           <van-icon @click.stop="handleTogglePlay"
                     :name="icon" />
         </div>
-      </transition-group>
+      </template>
       <div class="play-controller"
            :style="isClickScreen?'bottom:.13rem':''">
         <div class="play-left">
@@ -56,18 +72,27 @@
             <i class="iconfont icon-shichang"></i>
             {{videoParams.duration|converPlayTime}}
           </div>
-          <transition-group enter-active-class="animated fadeIn faster"
-                            leave-active-class="animated fadeOut faster">
-            <!-- 放大图标 点击屏幕时显示-->
+          <template v-if="isFirstPlay">
             <div class="full"
                  key="full"
                  v-show="isClickScreen"
                  @click.stop="handleFullScreen">
               <i class="iconfont icon-amplification_icon"></i>
             </div>
-          </transition-group>
+          </template>
+          <template v-else>
+            <transition-group enter-active-class="animated fadeIn faster"
+                              leave-active-class="animated fadeOut faster">
+              <!-- 放大图标 点击屏幕时显示-->
+              <div class="full"
+                   key="full"
+                   v-show="isClickScreen"
+                   @click.stop="handleFullScreen">
+                <i class="iconfont icon-amplification_icon"></i>
+              </div>
+            </transition-group>
+          </template>
         </div>
-
         <!-- 进度条 点击屏幕时显示-->
         <div class="progress"
              key="progress">
@@ -119,17 +144,20 @@ export default {
       isPlay: false, // 是否播放
       isFullScreen: false, // 是否全屏
       isClickScreen: false, // 是否点击了播放器
-      currenTime: 0// 当前播放时长
+      currenTime: 0, // 当前播放时长
+      videoLoad: false// 动画是否加载完毕
     }
   },
   mounted () {
     // 获取播放时长时间
+
     this.$nextTick(() => {
       this.video = this.$refs.video
       this.video.oncanplay = () => { // 可以播放了
         setTimeout(() => {
           // 修改时间
           this.videoParams.duration = this.video.duration
+          this.videoLoad = true
         }, 0)
       }
       // 更新时间
@@ -188,10 +216,15 @@ export default {
     },
     // 暂停上一个视频
     pauseOldVideo (obj) {
-      if (obj.video.play) {
-        obj.isPlay = false
-        obj.isFirstPlay = true
-        obj.video.pause()
+      if (this.oldVideo && this.oldVideo.video) {
+        if (this !== this.oldVideo) {
+          if (obj.isPlay) {
+            obj.isPlay = false
+            obj.video.pause()
+          }
+          obj.isFirstPlay = true
+          obj.isClickScreen = false
+        }
       }
     },
     // 滑动进度条
@@ -217,12 +250,7 @@ export default {
     // 点击播放暂停
     handleTogglePlay () {
       this.isPlay = !this.isPlay
-      // 暂停上一次正在播放的video
-      if (this.oldVideo && this.oldVideo.video) {
-        this.pauseOldVideo(this.oldVideo)
-      }
       if (this.isPlay) {
-        this.setOldVideo(this)
         this.video.play()
       } else {
         this.video.pause()
@@ -233,18 +261,18 @@ export default {
     handlFirstPlay () {
       // 关闭静音
       // 静音 告诉谷歌浏览器, 这个视频是安全的, 可以默默播放.
-      var playPromise = this.video.play()
-      if (playPromise !== undefined) {
-        playPromise.then(() => {
-          this.video.muted = false
-          if (this.isFirstPlay) {
-            console.log('first')
-            this.isFirstPlay = false
-            this.handleTogglePlay()
-          } else {
-            this.handleClickScreen()
-          }
-        })
+      this.video.muted = false
+      // 暂停上一次正在播放的video
+      this.pauseOldVideo(this.oldVideo)
+      if (this !== this.oldVideo) {
+        this.setOldVideo(this)
+      }
+      if (this.isFirstPlay) {
+        console.log('first')
+        this.isFirstPlay = false
+        this.handleTogglePlay()
+      } else {
+        this.handleClickScreen()
       }
     },
 
@@ -290,6 +318,13 @@ export default {
     width: 100%;
     height: 5rem;
     margin-bottom: 0.2rem;
+
+    .load {
+      height: 5rem;
+      line-height: 5rem;
+      text-align: center;
+      background: $color-common-b;
+    }
 
     video {
       display: block;
