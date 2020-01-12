@@ -1,4 +1,5 @@
 <template>
+
   <div class="video-container">
     <!-- 播放器区域 -->
     <div class="player"
@@ -29,6 +30,7 @@
           <van-icon @click.stop="handleTogglePlay"
                     :name="icon" />
         </div>
+
       </transition-group>
       <div class="play-controller"
            :style="isClickScreen?'bottom:.13rem':''">
@@ -190,6 +192,7 @@ export default {
     pauseOldVideo (obj) {
       if (obj.video.play) {
         obj.isPlay = false
+        obj.isFirstPlay = true
         obj.isClickScreen = true
         obj.video.pause()
       }
@@ -217,12 +220,16 @@ export default {
     // 点击播放暂停
     handleTogglePlay () {
       this.isPlay = !this.isPlay
-      // 暂停上一次正在播放的video
-      if (this.oldVideo && this.oldVideo.video) {
-        this.pauseOldVideo(this.oldVideo)
-      }
+
       if (this.isPlay) {
-        this.setOldVideo(this)
+        // 暂停上一次正在播放的video
+        if (this !== this.oldVideo) {
+          if (this.oldVideo && this.oldVideo.video) {
+            this.pauseOldVideo(this.oldVideo)
+          }
+          this.setOldVideo(this)
+        }
+
         this.video.play()
       } else {
         this.video.pause()
