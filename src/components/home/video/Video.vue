@@ -220,7 +220,6 @@ export default {
     // 点击播放暂停
     handleTogglePlay () {
       this.isPlay = !this.isPlay
-      console.log(123)
       // 暂停上一次正在播放的video
       if (this.oldVideo && this.oldVideo.video) {
         if (this !== this.oldVideo) {
