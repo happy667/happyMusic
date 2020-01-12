@@ -8,8 +8,11 @@
              preload='auto'
              ref="video"
              muted
-             playsinline='true'
+             :id="videoParams.id"
+             playsinline="true"
+             x-webkit-airplay="allow"
              x5-video-player-type='h5'
+             x5-video-orientation="portraint"
              x5-video-player-fullscreen='true'
              x5-video-ignore-metadata='true'
              :poster="videoParams.cover"></video>
@@ -28,7 +31,7 @@
         </div>
       </transition-group>
       <div class="play-controller"
-           :style="isClickScreen?'bottom:.2rem':''">
+           :style="isClickScreen?'bottom:.13rem':''">
         <div class="play-left">
           <!-- 播放次数，未播放时显示 -->
           <div class="play-count"
@@ -101,7 +104,7 @@
 <script>
 import MusicImg from '../img/MusicImg'
 import 'common/js/convert.js'
-import { mapMutations } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 export default {
   props: {
     videoParams: {
@@ -134,6 +137,7 @@ export default {
     })
   },
   computed: {
+    ...mapState(['oldVideo']),
     icon () {
       return this.isPlay ? 'pause-circle-o' : 'play-circle-o'
     }
@@ -141,13 +145,13 @@ export default {
   watch: {
     currenTime () {
       if (this.currenTime === this.video.duration) { // 播放完了
-        this.resetVideo()
+        this.initVideo(this.video)
       }
     }
   },
 
   methods: {
-    ...mapMutations(['setSinger', 'setSingerCurrentIndex', 'setSelectVideo', 'setVideoCommentOffset', 'setCommentObj']),
+    ...mapMutations(['setSinger', 'setSingerCurrentIndex', 'setSelectVideo', 'setVideoCommentOffset', 'setCommentObj', 'setOldVideo']),
     // 跳转到mv详情页
     goToVideoInfo () {
       // 因为该组件用到了多个地方，但是在mv详情页不需要做跳转，所以需要判断当前路由地址
@@ -173,13 +177,22 @@ export default {
       }
     },
     // 重置视频
-    resetVideo () {
+    initVideo (video) {
       // 重置播放
-      this.currentTime = 0
-      this.slideVal = 0
-      this.video.load()
-      this.isFirstPlay = true
-      this.isPlay = false
+      video.currentTime = 0
+      video.slideVal = 0
+      video.load()
+      video.isFirstPlay = true
+      video.isPlay = false
+      video.isClickScreen = false
+    },
+    // 暂停上一个视频
+    pauseOldVideo (obj) {
+      if (obj.video.play) {
+        obj.isPlay = false
+        obj.isClickScreen = true
+        obj.video.pause()
+      }
     },
     // 滑动进度条
     handleSlideChange () {
@@ -204,16 +217,23 @@ export default {
     // 点击播放暂停
     handleTogglePlay () {
       this.isPlay = !this.isPlay
-      this.isPlay ? this.video.play() : this.video.pause()
+      // 暂停上一次正在播放的video
+      if (this.oldVideo && this.oldVideo.video) {
+        this.pauseOldVideo(this.oldVideo)
+      }
+      if (this.isPlay) {
+        this.setOldVideo(this)
+        this.video.play()
+      } else {
+        this.video.pause()
+      }
       this.hideBtn()
     },
     // 是否为第一次播放
     handlFirstPlay () {
       // 关闭静音
       // 静音 告诉谷歌浏览器, 这个视频是安全的, 可以默默播放.
-      // this.video.style.muted = false
       var playPromise = this.video.play()
-      console.log(playPromise)
       if (playPromise !== undefined) {
         playPromise.then(() => {
           this.video.muted = false
@@ -231,8 +251,6 @@ export default {
     // 切换全屏播放
     handleFullScreen () {
       this.isFullScreen = !this.isFullScreen
-      // this.videoFullScreen()
-      this.$refs.player.style.transform = 'rotate(90deg)'
       this.isFullScreen ? this.$refs.player.webkitRequestFullScreen() : document.webkitCancelFullScreen()
     },
     // 选择歌手
@@ -306,13 +324,13 @@ export default {
 
     .play-controller {
       position: absolute;
-      bottom: 0.01rem;
+      bottom: 0;
       left: 0;
       padding: 0 0.3rem;
       width: 100%;
       box-sizing: border-box;
-      height: 1rem;
-      line-height: 1rem;
+      height: 1.3rem;
+      line-height: 1.3rem;
       color: #fff;
       display: flex;
       justify-content: space-between;
@@ -344,7 +362,7 @@ export default {
 
   .play-info {
     .play-title {
-      padding: 0.1rem;
+      padding: 0.1rem 0.2rem;
       margin-bottom: 0.2rem;
       line-height: 1rem;
       font-size: $font-size-smaller;
@@ -353,7 +371,7 @@ export default {
     }
 
     .play-source {
-      padding: 0.1rem;
+      padding: 0.1rem 0.2rem;
       display: flex;
       align-items: center;
 

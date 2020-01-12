@@ -33,6 +33,7 @@ service.interceptors.response.use(
     }
   },
   error => {
+    this.$message.fail('加载失败')
     Message.error(ENV === 'development' ? error.message : '请求错误！')
     return Promise.reject(error.response.data) // 返回接口返回的错误信息
   })

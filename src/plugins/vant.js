@@ -14,7 +14,8 @@ import {
   slider,
   progress,
   PullRefresh,
-  Loading
+  Loading,
+  Toast
 } from 'vant'
 Vue.use(Tab)
 Vue.use(Tabs)
@@ -31,3 +32,5 @@ Vue.use(slider)
 Vue.use(progress)
 Vue.use(PullRefresh)
 Vue.use(Loading)
+Vue.use(Toast)
+Vue.$message = Toast
