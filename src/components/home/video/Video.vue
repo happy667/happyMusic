@@ -1,4 +1,5 @@
 <template>
+
   <div class="video-container">
     <!-- 播放器区域 -->
     <div class="player"
@@ -29,6 +30,7 @@
           <van-icon @click.stop="handleTogglePlay"
                     :name="icon" />
         </div>
+
       </transition-group>
       <div class="play-controller"
            :style="isClickScreen?'bottom:.13rem':''">
@@ -188,9 +190,10 @@ export default {
     },
     // 暂停上一个视频
     pauseOldVideo (obj) {
-      if (obj.video.play) {
+      if (obj.isPlay) {
         obj.isPlay = false
-        obj.isClickScreen = true
+        obj.isFirstPlay = true
+        obj.isClickScreen = false
         obj.video.pause()
       }
     },
@@ -217,12 +220,17 @@ export default {
     // 点击播放暂停
     handleTogglePlay () {
       this.isPlay = !this.isPlay
+      console.log(123)
       // 暂停上一次正在播放的video
       if (this.oldVideo && this.oldVideo.video) {
-        this.pauseOldVideo(this.oldVideo)
+        if (this !== this.oldVideo) {
+          this.pauseOldVideo(this.oldVideo)
+        }
+      }
+      if (this !== this.oldVideo) {
+        this.setOldVideo(this)
       }
       if (this.isPlay) {
-        this.setOldVideo(this)
         this.video.play()
       } else {
         this.video.pause()
@@ -233,18 +241,13 @@ export default {
     handlFirstPlay () {
       // 关闭静音
       // 静音 告诉谷歌浏览器, 这个视频是安全的, 可以默默播放.
-      var playPromise = this.video.play()
-      if (playPromise !== undefined) {
-        playPromise.then(() => {
-          this.video.muted = false
-          if (this.isFirstPlay) {
-            console.log('first')
-            this.isFirstPlay = false
-            this.handleTogglePlay()
-          } else {
-            this.handleClickScreen()
-          }
-        })
+      this.video.muted = false
+      if (this.isFirstPlay) {
+        console.log('first')
+        this.isFirstPlay = false
+        this.handleTogglePlay()
+      } else {
+        this.handleClickScreen()
       }
     },
 
