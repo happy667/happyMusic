@@ -190,7 +190,7 @@ export default {
     pauseOldVideo (obj) {
       if (obj.video.play) {
         obj.isPlay = false
-        obj.isClickScreen = true
+        obj.isFirstPlay = true
         obj.video.pause()
       }
     },
