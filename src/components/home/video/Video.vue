@@ -22,16 +22,25 @@
            v-show="isFirstPlay">
         <van-icon name="play-circle-o" />
       </div>
-      <transition-group enter-active-class="animated fadeIn faster"
-                        leave-active-class="animated fadeOut faster">
+      <template v-if="isFirstPlay">
+        <transition-group enter-active-class="animated fadeIn faster"
+                          leave-active-class="animated fadeOut faster">
+          <div class="big-btn"
+               key="btn"
+               v-show="isClickScreen">
+            <van-icon @click.stop="handleTogglePlay"
+                      :name="icon" />
+          </div>
+        </transition-group>
+      </template>
+      <template v-else>
         <div class="big-btn"
              key="btn"
              v-show="isClickScreen">
           <van-icon @click.stop="handleTogglePlay"
                     :name="icon" />
         </div>
-
-      </transition-group>
+      </template>
       <div class="play-controller"
            :style="isClickScreen?'bottom:.13rem':''">
         <div class="play-left">
@@ -58,18 +67,27 @@
             <i class="iconfont icon-shichang"></i>
             {{videoParams.duration|converPlayTime}}
           </div>
-          <transition-group enter-active-class="animated fadeIn faster"
-                            leave-active-class="animated fadeOut faster">
-            <!-- 放大图标 点击屏幕时显示-->
+          <template v-if="isFirstPlay">
             <div class="full"
                  key="full"
                  v-show="isClickScreen"
                  @click.stop="handleFullScreen">
               <i class="iconfont icon-amplification_icon"></i>
             </div>
-          </transition-group>
+          </template>
+          <template v-else>
+            <transition-group enter-active-class="animated fadeIn faster"
+                              leave-active-class="animated fadeOut faster">
+              <!-- 放大图标 点击屏幕时显示-->
+              <div class="full"
+                   key="full"
+                   v-show="isClickScreen"
+                   @click.stop="handleFullScreen">
+                <i class="iconfont icon-amplification_icon"></i>
+              </div>
+            </transition-group>
+          </template>
         </div>
-
         <!-- 进度条 点击屏幕时显示-->
         <div class="progress"
              key="progress">
@@ -190,11 +208,15 @@ export default {
     },
     // 暂停上一个视频
     pauseOldVideo (obj) {
-      if (obj.isPlay) {
-        obj.isPlay = false
-        obj.isFirstPlay = true
-        obj.isClickScreen = false
-        obj.video.pause()
+      if (this.oldVideo && this.oldVideo.video) {
+        if (this !== this.oldVideo) {
+          if (obj.isPlay) {
+            obj.isPlay = false
+            obj.video.pause()
+          }
+          obj.isFirstPlay = true
+          obj.isClickScreen = false
+        }
       }
     },
     // 滑动进度条
@@ -220,15 +242,6 @@ export default {
     // 点击播放暂停
     handleTogglePlay () {
       this.isPlay = !this.isPlay
-      // 暂停上一次正在播放的video
-      if (this.oldVideo && this.oldVideo.video) {
-        if (this !== this.oldVideo) {
-          this.pauseOldVideo(this.oldVideo)
-        }
-      }
-      if (this !== this.oldVideo) {
-        this.setOldVideo(this)
-      }
       if (this.isPlay) {
         this.video.play()
       } else {
@@ -241,6 +254,11 @@ export default {
       // 关闭静音
       // 静音 告诉谷歌浏览器, 这个视频是安全的, 可以默默播放.
       this.video.muted = false
+      // 暂停上一次正在播放的video
+      this.pauseOldVideo(this.oldVideo)
+      if (this !== this.oldVideo) {
+        this.setOldVideo(this)
+      }
       if (this.isFirstPlay) {
         console.log('first')
         this.isFirstPlay = false
