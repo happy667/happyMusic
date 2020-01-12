@@ -5,6 +5,10 @@
     <div class="player"
          ref="player"
          @click.stop="handlFirstPlay">
+      <van-loading class="load"
+                   size="1rem"
+                   color="#FD4979"
+                   v-show="!videoLoad" />
       <video :src="videoParams.videoUrl"
              preload='auto'
              ref="video"
@@ -17,6 +21,7 @@
              x5-video-player-fullscreen='true'
              x5-video-ignore-metadata='true'
              :poster="videoParams.cover"></video>
+
       <!-- 播放按钮 -->
       <div class="big-btn"
            v-show="isFirstPlay">
@@ -139,17 +144,20 @@ export default {
       isPlay: false, // 是否播放
       isFullScreen: false, // 是否全屏
       isClickScreen: false, // 是否点击了播放器
-      currenTime: 0// 当前播放时长
+      currenTime: 0, // 当前播放时长
+      videoLoad: false// 动画是否加载完毕
     }
   },
   mounted () {
     // 获取播放时长时间
+
     this.$nextTick(() => {
       this.video = this.$refs.video
       this.video.oncanplay = () => { // 可以播放了
         setTimeout(() => {
           // 修改时间
           this.videoParams.duration = this.video.duration
+          this.videoLoad = true
         }, 0)
       }
       // 更新时间
@@ -310,6 +318,13 @@ export default {
     width: 100%;
     height: 5rem;
     margin-bottom: 0.2rem;
+
+    .load {
+      height: 5rem;
+      line-height: 5rem;
+      text-align: center;
+      background: $color-common-b;
+    }
 
     video {
       display: block;
