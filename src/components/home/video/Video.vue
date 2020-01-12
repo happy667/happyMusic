@@ -215,7 +215,18 @@ export default {
       video.isClickScreen = false
     },
     // 暂停上一个视频
-
+    pauseOldVideo (obj) {
+      if (this.oldVideo && this.oldVideo.video) {
+        if (this !== this.oldVideo) {
+          if (obj.isPlay) {
+            obj.isPlay = false
+            obj.video.pause()
+          }
+          obj.isFirstPlay = true
+          obj.isClickScreen = false
+        }
+      }
+    },
     // 滑动进度条
     handleSlideChange () {
       this.video.currentTime = this.slideVal * this.video.duration / 100
