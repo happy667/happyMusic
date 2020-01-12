@@ -27,7 +27,8 @@
                     :name="icon" />
         </div>
       </transition-group>
-      <div class="play-controller">
+      <div class="play-controller"
+           :style="isClickScreen?'bottom:.2rem':''">
         <div class="play-left">
           <!-- 播放次数，未播放时显示 -->
           <div class="play-count"
@@ -146,11 +147,21 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['setSinger', 'setSingerCurrentIndex', 'setSelectVideo']),
+    ...mapMutations(['setSinger', 'setSingerCurrentIndex', 'setSelectVideo', 'setVideoCommentOffset', 'setCommentObj']),
     // 跳转到mv详情页
     goToVideoInfo () {
-      this.setSelectVideo(this.videoParams)
-      this.$router.push('/videoInfo')
+      // 因为该组件用到了多个地方，但是在mv详情页不需要做跳转，所以需要判断当前路由地址
+      if (this.$route.path !== '/videoInfo') {
+        this.setSelectVideo(this.videoParams)
+        // 重置state中的评论
+        this.setVideoCommentOffset(0)
+        this.setCommentObj({
+          isMusician: false,
+          comments: [],
+          total: 0
+        })// 评论列表
+        this.$router.push('/videoInfo')
+      }
     },
     // 更新时间
     updateTime () {
@@ -295,7 +306,7 @@ export default {
 
     .play-controller {
       position: absolute;
-      bottom: 0rem;
+      bottom: 0.01rem;
       left: 0;
       padding: 0 0.3rem;
       width: 100%;

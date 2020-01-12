@@ -27,7 +27,13 @@ export default new Vuex.Store({
     singer: {}, // 歌手
     videoList: [], // mv列表
     videoOffset: 0, // mv列表偏移量
-    selectVideo: {} // 选择的mv
+    selectVideo: {}, // 选择的mv
+    videoCommentOffset: 0, // mv评论偏移量
+    commentObj: {
+      isMusician: false,
+      comments: [],
+      total: 0
+    } // 评论列表
   },
   mutations: {
     // 设置当前索引
@@ -95,8 +101,17 @@ export default new Vuex.Store({
     setVideoList(state, list) {
       state.videoList = list
     },
+    // 设置选择的video
     setSelectVideo(state, video) {
       state.selectVideo = video
+    },
+    // 设置评论列表偏移量
+    setVideoCommentOffset(state, offset) {
+      state.videoCommentOffset = offset
+    },
+    // 设置评论对象
+    setCommentObj(state, commentObj) {
+      state.commentObj = commentObj
     }
   },
   actions: {
@@ -293,6 +308,22 @@ export default new Vuex.Store({
           item.artist = res2.artist
         }
       })
+    },
+    // 获取该mv评论
+    async getVideoComment(context) {
+      const {
+        data: res
+      } = await videoApi.getVideoComment(this.state.selectVideo.id, this.state.videoCommentOffset)
+      if (res.code === ERR_OK) {
+        let comments = this.state.commentObj.comments.concat(res.comments)
+        const commentObj = {
+          isMusician: res.isMusician,
+          comments,
+          total: res.total
+        }
+        context.commit('setCommentObj', commentObj)
+        context.commit('setVideoCommentOffset', this.state.commentObj.comments.length)
+      }
     }
 
   },

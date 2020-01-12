@@ -10,7 +10,7 @@ import {
   Sticky,
   IndexBar,
   IndexAnchor,
-  cell,
+  List,
   slider,
   progress,
   PullRefresh,
@@ -26,7 +26,7 @@ Vue.use(search)
 Vue.use(Sticky)
 Vue.use(IndexBar)
 Vue.use(IndexAnchor)
-Vue.use(cell)
+Vue.use(List)
 Vue.use(slider)
 Vue.use(progress)
 Vue.use(PullRefresh)

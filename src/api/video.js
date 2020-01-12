@@ -14,8 +14,8 @@ export default {
       url
     })
   },
-  getVideoComment(id, offset = 0, limit = 15) {
-    const url = `comment/mv?id=${id}&offset=${offset}&limit=${limit}`
+  getVideoComment(id, offset = 0) {
+    let url = `comment/mv?id=${id}&offset=${offset}`
     return request({
       url
     })

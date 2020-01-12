@@ -9,25 +9,30 @@
     <div class="video">
       <video-component :videoParams="selectVideo"></video-component>
     </div>
-    <div class="comment-title">精彩评论</div>
+    <div class="comment-title">精彩评论({{commentObj.total}})</div>
     <section>
 
-      <scroll :data="commentObj.comments"
+      <!-- <scroll :data="commentObj.comments"
               ref="commentScroll"
               :pullUp="pullUp"
               @pullingUpLoad="handlePullingUp">
-        <div class="content">
-          <!-- 相关音乐 -->
-          <div v-if="commentObj.isMusic"
-               class="related-music">
-            <p>相关音乐</p>
-            <!-- <song-item></song-item> -->
-          </div>
-          <!-- 评论列表 -->
-          <comment-list :commentList="commentObj.comments"></comment-list>
-        </div>
 
-      </scroll>
+      </scroll> -->
+      <div class="content">
+        <!-- 相关音乐 -->
+        <div v-if="commentObj.isMusic"
+             class="related-music">
+          <p>相关音乐</p>
+          <!-- <song-item></song-item> -->
+        </div>
+        <!-- 评论列表 -->
+        <van-list v-model="loading"
+                  :finished="finished"
+                  finished-text="没有更多了"
+                  @load="handlePullingUp">
+          <comment-list :commentList="commentObj.comments"></comment-list>
+        </van-list>
+      </div>
     </section>
 
   </div>
@@ -36,53 +41,35 @@
 import VideoComponent from './Video'
 // import SongItem from '@/components/home/song/SongItem'
 import CommentList from '@/components/home/comment/CommentList'
-import Scroll from '@/components/common/Scroll'
-import { mapState } from 'vuex'
-import videoApi from '@/api/video.js'
-import {
-  ERR_OK
-} from '@/api/config.js'
+// import Scroll from '@/components/common/Scroll'
+import { mapState, mapActions } from 'vuex'
 export default {
   data () {
     return {
-      offset: 0, // 偏移量
-      currentIndex: 0, // 当前索引
-      commentObj: {}// 评论
+      loading: false,
+      finished: false
     }
   },
-  created () {
-    this.pullUp = true// 允许上拉记载
-    this.getVideoComment()
-  },
   computed: {
-    ...mapState(['selectVideo'])
+    ...mapState(['selectVideo', 'commentObj'])
   },
   methods: {
-
+    ...mapActions(['getVideoComment']),
     // 返回上一个路由
     routerBack () {
       this.$router.back()
     },
-    // 获取该mv评论
-    async getVideoComment () {
-      const { data: res } = await videoApi.getVideoComment(this.selectVideo.id, this.offset)
-      if (res.code === ERR_OK) {
-        this.commentObj = {
-          isMusician: res.isMusician,
-          comments: res.comments
-        }
-        this.offset = this.commentObj.comments.length
-      }
-    },
+
     // 上拉加载
     handlePullingUp () {
-      console.log(123)
-      this.getVideoComment()
-    }
-  },
-  watch: {
-    commentObj () {
-      this.$refs.commentScroll.finishPullUp()
+      setTimeout(async () => {
+        await this.getVideoComment()
+
+        if (this.commentObj.comments.length >= this.commentObj.total) {
+          this.finished = true
+        }
+        this.loading = false
+      }, 500)
     }
   },
   beforeRouteEnter: (to, from, next) => {
@@ -95,16 +82,20 @@ export default {
   components: {
     VideoComponent,
     // SongItem,
-    CommentList,
-    Scroll
+    CommentList
+    // Scroll
   }
 }
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
+.videoInfo-container>>>.van-list__loading {
+  // 减去头部标题高度、video高度、评论标题高度、播放器高度
+  height: calc(100vh - (1.22667rem + 8.5rem + 1rem + 1.8rem));
+}
+
 .videoInfo-container {
-  // min-height: 100vh;
   background: #fff;
   width: 100%;
 
@@ -114,25 +105,14 @@ export default {
     text-indent: 1em;
     height: 1rem;
     line-height: 1rem;
-    background: #fff;
   }
 
   section {
     width: 100%;
-    height: 100%;
-    position: relative;
-    overflow: hidden;
-    background: #fff;
-    padding-bottom: 1.8rem;
-    box-sizing: border-box;
+    height: calc(100vh - (1.22667rem + 8.5rem + 1rem + 1.8rem));
 
     .content {
-      position: absolute;
-      width: 100%;
-      top: 0;
-      padding: 0 0.5rem;
-      box-sizing: border-box;
-      z-index: 0;
+      padding: 0 0.5rem 1.8rem;
 
       .related-music {
         p {
