@@ -33,4 +33,3 @@ Vue.use(progress)
 Vue.use(PullRefresh)
 Vue.use(Loading)
 Vue.use(Toast)
-Vue.$message = Toast

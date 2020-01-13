@@ -1,5 +1,4 @@
 <template>
-
   <div class="video-container">
     <!-- 播放器区域 -->
     <div class="player"
@@ -8,9 +7,9 @@
       <van-loading class="load"
                    size="1rem"
                    color="#FD4979"
-                   v-show="!videoLoad" />
+                   v-show="videoLoad" />
       <video :src="videoParams.videoUrl"
-             preload='auto'
+             preload='metadata'
              ref="video"
              muted
              :id="videoParams.id"
@@ -145,20 +144,19 @@ export default {
       isFullScreen: false, // 是否全屏
       isClickScreen: false, // 是否点击了播放器
       currenTime: 0, // 当前播放时长
-      videoLoad: false// 动画是否加载完毕
+      videoLoad: true// video是否加载
     }
   },
   mounted () {
     // 获取播放时长时间
-
     this.$nextTick(() => {
       this.video = this.$refs.video
       this.video.oncanplay = () => { // 可以播放了
         setTimeout(() => {
           // 修改时间
           this.videoParams.duration = this.video.duration
-          this.videoLoad = true
-        }, 0)
+          this.videoLoad = false
+        }, 20)
       }
       // 更新时间
       this.updateTime()
@@ -259,6 +257,7 @@ export default {
     },
     // 是否为第一次播放
     handlFirstPlay () {
+      if (this.videoLoad) return
       // 关闭静音
       // 静音 告诉谷歌浏览器, 这个视频是安全的, 可以默默播放.
       this.video.muted = false
@@ -320,8 +319,11 @@ export default {
     margin-bottom: 0.2rem;
 
     .load {
+      position: absolute;
+      width: 100%;
       height: 5rem;
       line-height: 5rem;
+      z-index: 99;
       text-align: center;
       background: $color-common-b;
     }
@@ -347,7 +349,7 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 99;
+      z-index: 10;
 
       .van-icon {
         display: block;
