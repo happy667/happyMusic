@@ -32,8 +32,6 @@ import { mapActions, mapState } from 'vuex'
 export default {
   created () {
     this.pullUp = true
-  },
-  mounted () {
     // 获取推荐视频
     this.$nextTick(() => { // 解决数据还未获取完dom就渲染结束
       setTimeout(() => {
