@@ -55,7 +55,10 @@ export default {
       }
       this.scroll = new BScroll(this.$refs.wrapper, {
         probeType: this.probeType,
-        click: this.click
+        click: this.click,
+        pullUpLoad: {
+          threshold: -30 // 当上拉到超过底部 30px 时，
+        }
       })
 
       if (this.listenScroll) {
@@ -73,6 +76,12 @@ export default {
       if (this.pullUp) {
         this.scroll.on('pullingUp', () => {
           this.$emit('pullingUpLoad')
+          this.$nextTick(function () {
+            this.scroll.finishPullUp()
+            setTimeout(() => {
+              this.scroll.refresh()
+            }, 500)
+          })
         })
       }
       if (this.beforeScroll) {

@@ -11,13 +11,6 @@
     </div>
     <div class="comment-title">精彩评论({{commentObj.total}})</div>
     <section>
-
-      <!-- <scroll :data="commentObj.comments"
-              ref="commentScroll"
-              :pullUp="pullUp"
-              @pullingUpLoad="handlePullingUp">
-
-      </scroll> -->
       <div class="content">
         <!-- 相关音乐 -->
         <div v-if="commentObj.isMusic"

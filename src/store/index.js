@@ -100,8 +100,9 @@ export default new Vuex.Store({
       state.videoOffset = offset
     },
     // 设置video列表
-    setVideoList(state, list) {
-      state.videoList = list
+    setVideoList(state, video) {
+      state.videoList.push(video)
+      console.log(state.videoList)
     },
     // 设置选择的video
     setSelectVideo(state, video) {
@@ -280,7 +281,10 @@ export default new Vuex.Store({
       await this.dispatch('getSingerAvatar', videoList)
       // 使用settimeout异步的机制给videoList赋值
       await setTimeout(() => {
-        context.commit('setVideoList', this.state.videoList.concat(videoList))
+        console.log(videoList)
+        for (let i = 0; i < videoList.length; i++) {
+          context.commit('setVideoList', videoList[i])
+        }
       }, 20)
     },
     // 获取推荐视频

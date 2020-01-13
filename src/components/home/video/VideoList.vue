@@ -2,23 +2,22 @@
 
   <div class="videoList-container">
     <!-- 正在加载 -->
-    <van-loading v-if="this.videoList.length === 0"
+    <van-loading v-if="this.videoList&&this.videoList.length === 0"
                  size="24px"
                  color="#FD4979"
                  vertical>加载中...</van-loading>
+
     <scroll :data="videoList"
             ref="videoListScroll"
             :pullUp="pullUp"
             @pullingUpLoad="handlePullingUp">
       <div class="video-list">
-        <template v-show="this.videoList.length!==0">
+        <template v-if="this.videoList&&this.videoList.length!==0">
           <template v-for="item in videoList">
             <template v-if="item.artist&&item.videoUrl">
-              <video-item v-show="item.artist&&item.videoUrl"
-                          :videoParams="item"
+              <video-item :videoParams="item"
                           :key="item.id"></video-item>
             </template>
-
           </template>
         </template>
       </div>
@@ -33,19 +32,19 @@ import { mapActions, mapState } from 'vuex'
 export default {
   created () {
     this.pullUp = true
+  },
+  mounted () {
     // 获取推荐视频
-    if (this.getVideoList.length === 0) {
-      this.getVideoList()
-    }
+    this.$nextTick(() => { // 解决数据还未获取完dom就渲染结束
+      setTimeout(() => {
+        if (this.videoList.length === 0) {
+          this.getVideoList()
+        }
+      }, 30)
+    })
   },
   computed: {
     ...mapState(['videoList'])
-  },
-
-  watch: {
-    videoList () {
-      this.$refs.videoListScroll.finishPullUp()
-    }
   },
   methods: {
     ...mapActions(['getVideoList']),
