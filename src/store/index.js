@@ -286,10 +286,6 @@ export default new Vuex.Store({
       context.commit('setVideoOffset', videoListLen)
       const offset = this.state.videoOffset
       let videoList = await this.dispatch('getRecommendVideo', offset)
-      // 获取视频url
-      await this.dispatch('getVideoUrl', videoList)
-      // 获取歌手头像
-      await this.dispatch('getSingerAvatar', videoList)
       // 使用settimeout异步的机制给videoList赋值
       await setTimeout(() => {
         context.commit('setVideoList', videoList)
@@ -297,12 +293,16 @@ export default new Vuex.Store({
     },
     // 获取推荐视频
     async getRecommendVideo(context, offset) {
-      console.log(offset)
       const {
         data: res
       } = await videoApi.getRecommendVideo(offset)
       if (res.code === ERR_OK) {
-        return res.data
+        let videoList = res.data
+        // 获取视频url
+        videoList = await this.dispatch('getVideoUrl', videoList)
+        // 获取歌手头像
+        videoList = await this.dispatch('getSingerAvatar', videoList)
+        return videoList
       }
     },
     // 获取视频url
@@ -315,6 +315,7 @@ export default new Vuex.Store({
           item.videoUrl = res.data.url
         }
       })
+      return videoList
     },
     // 获取歌手头像
     // 因为接口没有直接获取用户头像的所以借用获取歌手单曲来获取歌手头像
@@ -327,6 +328,7 @@ export default new Vuex.Store({
           item.artist = res2.artist
         }
       })
+      return videoList
     },
     // 获取该mv评论
     async getVideoComment(context) {
@@ -339,7 +341,6 @@ export default new Vuex.Store({
           comments,
           total: res.total
         }
-        console.log(commentObj)
         context.commit('setCommentObj', commentObj)
         context.commit('setVideoCommentOffset', this.state.commentObj.comments.length)
       }

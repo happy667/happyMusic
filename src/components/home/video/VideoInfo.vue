@@ -27,6 +27,7 @@
         <!-- 评论列表 -->
 
         <van-list v-model="loading"
+                  :immediate-check='false'
                   :finished="finished"
                   :finished-text="commentObj.total===0?'':'没有更多了'"
                   @load="handlePullingUp">
@@ -58,8 +59,8 @@ export default {
   },
   created () {
     this.$nextTick(() => {
-      console.log(123)
       this.getSimiMV()
+      this.getVideoComment()
     })
   },
   computed: {

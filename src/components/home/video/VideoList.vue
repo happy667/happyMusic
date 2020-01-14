@@ -1,18 +1,18 @@
 <template>
 
-  <div class="videoList-container">
+  <div class="videoList-container"
+       v-cloak>
     <!-- 正在加载 -->
     <van-loading v-if="this.videoList&&this.videoList.length === 0"
                  size="24px"
                  color="#FD4979"
                  vertical>加载中...</van-loading>
-
     <scroll :data="videoList"
             ref="videoListScroll"
             :pullUp="pullUp"
             @pullingUpLoad="handlePullingUp">
       <div class="video-list">
-        <template v-show="this.videoList&&this.videoList.length!==0">
+        <template v-if="this.videoList&&this.videoList.length!==0">
           <template v-for="item in videoList">
             <template v-if="item.artist&&item.videoUrl">
               <video-item :videoParams="item"
@@ -42,14 +42,13 @@ export default {
   },
   created () {
     this.pullUp = true
+  },
+  mounted () {
     // 获取推荐视频
-
-    setTimeout(() => {
-      this.$nextTick(() => { // 解决数据还未获取完dom就渲染结束
-        if (this.videoList.length === 0) {
-          this.getVideoList()
-        }
-      }, 20)
+    this.$nextTick(() => {
+      if (this.videoList.length === 0) {
+        this.getVideoList()
+      }
     })
   },
   computed: {
@@ -62,9 +61,8 @@ export default {
       this.loadMore = true
       this.loadTimer = setTimeout(() => {
         this.getVideoList()
-        this.$nextTick(() => { // 解决数据还未获取完dom就渲染结束
+        this.$nextTick(() => {
           this.$refs.videoListScroll.finishPullUp()
-          this.$refs.videoListScroll.refresh()
           this.loadMore = false
         })
       }, 500)
@@ -79,6 +77,10 @@ export default {
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
+
+[v-cloak] {
+  display: none;
+}
 
 .videoList-container {
   .video-list {
