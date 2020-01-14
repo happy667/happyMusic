@@ -60,7 +60,7 @@
             <div class="play-time"
                  key="play-time"
                  v-show="isClickScreen">
-              {{currenTime|converPlayTime}}/{{videoParams.duration|converPlayTime}}
+              {{currenTime|convertPlayTime}}/{{videoParams.duration|convertPlayTime}}
             </div>
           </transition-group>
         </div>
@@ -69,7 +69,7 @@
           <div class="play-time"
                v-show="isFirstPlay">
             <i class="iconfont icon-shichang"></i>
-            {{videoParams.duration|converPlayTime}}
+            {{videoParams.duration|convertPlayTime}}
           </div>
           <template v-if="isFirstPlay">
             <div class="full"
@@ -177,19 +177,12 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['setSinger', 'setSingerCurrentIndex', 'setSelectVideo', 'setVideoCommentOffset', 'setCommentObj', 'setOldVideo']),
+    ...mapMutations(['setSinger', 'setSelectVideo', 'setOldVideo', 'setSingerCurrentIndex']),
     // 跳转到mv详情页
     goToVideoInfo () {
       // 因为该组件用到了多个地方，但是在mv详情页不需要做跳转，所以需要判断当前路由地址
       if (this.$route.path !== '/videoInfo') {
         this.setSelectVideo(this.videoParams)
-        // 重置state中的评论
-        this.setVideoCommentOffset(0)
-        this.setCommentObj({
-          isMusician: false,
-          comments: [],
-          total: 0
-        })// 评论列表
         this.$router.push('/videoInfo')
       }
     },

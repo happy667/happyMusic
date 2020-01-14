@@ -1,38 +1,60 @@
 <template>
-  <div class="mv-list-item-container">
+  <div class="mv-list-item-container"
+       @click="goToVideoInfo">
     <!-- mv 图片 -->
     <div class="mv-img">
-      <img src="http://p1.music.126.net/5kxVGwb-9EfdFQu83L9NCw==/109951164583117120.jpg?param=137y103" />
+      <img :src="mv.cover" />
       <!-- 播放次数 -->
       <div class="play-num">
         <i class="iconfont icon-bofang"></i>
-        1232
+        {{mv.playCount|convertPlayCount}}
       </div>
     </div>
     <!-- mv信息 -->
     <div class="mv-info">
       <!-- 标题 -->
-      <div class="mv-title">是的范德萨范德萨</div>
+      <div class="mv-title">{{mv.name}}</div>
       <div class="bottom">
         <!-- 时间 -->
-        <div class="mv-time">12:12</div>
+        <div class="mv-time">{{mv.duration/1000|convertPlayTime}}</div>
         <!-- 来源 -->
-        <div class="mv-source">123</div>
+        <div class="mv-source">{{mv.artistName}}</div>
       </div>
 
     </div>
   </div>
 </template>
 <script>
+import 'common/js/convert.js'
+import { mapMutations } from 'vuex'
 export default {
-
+  props: {
+    mv: {
+      type: Object
+    }
+  },
+  inject: ['reload'],
+  methods: {
+    ...mapMutations(['setSelectVideo']),
+    goToVideoInfo () {
+      this.setSelectVideo(this.mv)
+      if (this.$route.path === '/videoInfo') {
+        this.reload()
+      } else {
+        this.$router.push('/videoInfo')
+      }
+    }
+  }
 }
 </script>
 <style lang="stylus" scoped>
+@import '~common/stylus/variable';
+
 .mv-list-item-container {
+  width: 100%;
   display: flex;
   margin-bottom: 0.3rem;
-  padding .1rem
+
   .mv-img {
     position: relative;
     margin-right: 0.4rem;
@@ -55,10 +77,13 @@ export default {
   }
 
   .mv-info {
+    flex: 1;
+
     .mv-title {
       margin-bottom: 0.2rem;
       line-height: 0.5rem;
       font-weight: bold;
+      no-wrap2();
     }
 
     .bottom {
@@ -67,6 +92,11 @@ export default {
 
       .mv-time {
         margin-right: 0.3rem;
+      }
+
+      .mv-source {
+        width: 3rem;
+        no-wrap();
       }
     }
   }

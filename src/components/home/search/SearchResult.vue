@@ -29,7 +29,7 @@
 import SongsList from '@/components/home/song/SongList'
 import singerList from '@/components/home/singer/SingerList'
 import SongSheetSmall from '@/components/home/songSheet/SongSheetSmall'
-import MvList from './mv/MvList'
+import MvList from '@/components/common/mv/MvList'
 export default {
   data () {
     return {

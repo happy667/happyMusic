@@ -1,18 +1,23 @@
 <template>
   <div class="mv-list-container">
     <div class="mv-list">
-      <mv-item></mv-item>
-      <mv-item></mv-item>
-      <mv-item></mv-item>
-      <mv-item></mv-item>
-      <mv-item></mv-item>
-      <mv-item></mv-item>
+      <template v-for="item in list">
+        <mv-item :mv="item"
+                 :key="item.id"></mv-item>
+      </template>
+
     </div>
   </div>
 </template>
 <script>
 import MvItem from './MvItem'
 export default {
+  props: {
+    list: {
+      type: Array,
+      default: () => []
+    }
+  },
   components: {
     MvItem
   }
@@ -21,9 +26,6 @@ export default {
 <style lang="stylus" scoped>
 .mv-list-container {
   width: 100%;
-
-  .mv-list {
-    padding: 0.3rem 0;
-  }
+  background: $color-common-background;
 }
 </style>

@@ -1,17 +1,31 @@
 <template>
   <div id="app">
-    <router-view v-transition></router-view>
-    <home-footer></home-footer>
+    <router-view v-transition
+                 v-if="isRouterAlive"></router-view>
+
   </div>
 </template>
 
 <script>
-import HomeFooter from '@/components/home/Footer'
+
 export default {
-  components: {
-    HomeFooter
+  provide () {
+    return {
+      reload: this.reload
+    }
+  },
+  data () {
+    return {
+      isRouterAlive: true
+    }
+  },
+  methods: {
+    reload () {
+      this.isRouterAlive = false
+      this.$nextTick(() => {
+        this.isRouterAlive = true
+      })
+    }
   }
 }
 </script>
-
-<style lang="stylus" scoped></style>

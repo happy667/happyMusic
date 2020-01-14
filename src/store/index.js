@@ -34,7 +34,8 @@ export default new Vuex.Store({
       isMusician: false,
       comments: [],
       total: 0
-    } // 评论列表
+    }, // 评论列表
+    simiMVList: [] // 相似mv
   },
   mutations: {
     // 设置当前索引
@@ -100,12 +101,18 @@ export default new Vuex.Store({
       state.videoOffset = offset
     },
     // 设置video列表
-    setVideoList(state, video) {
-      state.videoList.push(video)
-      console.log(state.videoList)
+    setVideoList(state, list) {
+      state.videoList = state.videoList.concat(list)
     },
     // 设置选择的video
     setSelectVideo(state, video) {
+      // 重置state中的评论
+      state.videoCommentOffset = 0
+      state.commentObj = {
+        isMusician: false,
+        comments: [],
+        total: 0
+      } // 评论列表
       state.selectVideo = video
     },
     // 设置上次播放的video
@@ -120,6 +127,10 @@ export default new Vuex.Store({
     // 设置评论对象
     setCommentObj(state, commentObj) {
       state.commentObj = commentObj
+    },
+    // 设置相似mv
+    setSimiMVList(state, list) {
+      state.simiMVList = list
     }
   },
   actions: {
@@ -281,10 +292,7 @@ export default new Vuex.Store({
       await this.dispatch('getSingerAvatar', videoList)
       // 使用settimeout异步的机制给videoList赋值
       await setTimeout(() => {
-        console.log(videoList)
-        for (let i = 0; i < videoList.length; i++) {
-          context.commit('setVideoList', videoList[i])
-        }
+        context.commit('setVideoList', videoList)
       }, 20)
     },
     // 获取推荐视频
@@ -328,15 +336,31 @@ export default new Vuex.Store({
       if (res.code === ERR_OK) {
         let comments = this.state.commentObj.comments.concat(res.comments)
         const commentObj = {
-          isMusician: res.isMusician,
           comments,
           total: res.total
         }
+        console.log(commentObj)
         context.commit('setCommentObj', commentObj)
         context.commit('setVideoCommentOffset', this.state.commentObj.comments.length)
       }
+    },
+    // 获取相似mv
+    async getSimiMV(context) {
+      const {
+        data: res
+      } = await videoApi.getSimiMV(this.state.selectVideo.id)
+      if (res.code === ERR_OK) {
+        let videoList = res.mvs
+        // 获取视频url
+        await this.dispatch('getVideoUrl', videoList)
+        // 获取歌手头像
+        await this.dispatch('getSingerAvatar', videoList)
+        // 使用settimeout异步的机制给videoList赋值
+        await setTimeout(() => {
+          context.commit('setSimiMVList', videoList)
+        }, 20)
+      }
     }
-
   },
   modules: {},
   getters: {

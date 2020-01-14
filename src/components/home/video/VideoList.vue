@@ -12,15 +12,20 @@
             :pullUp="pullUp"
             @pullingUpLoad="handlePullingUp">
       <div class="video-list">
-        <template v-if="this.videoList&&this.videoList.length!==0">
+        <template v-show="this.videoList&&this.videoList.length!==0">
           <template v-for="item in videoList">
             <template v-if="item.artist&&item.videoUrl">
               <video-item :videoParams="item"
                           :key="item.id"></video-item>
             </template>
           </template>
+          <van-loading v-if="loadMore"
+                       size="24px"
+                       color="#FD4979"
+                       vertical>加载更多...</van-loading>
         </template>
       </div>
+
     </scroll>
   </div>
 </template>
@@ -30,15 +35,21 @@ import Scroll from '@/components/common/Scroll'
 import { mapActions, mapState } from 'vuex'
 
 export default {
+  data () {
+    return {
+      loadMore: false
+    }
+  },
   created () {
     this.pullUp = true
     // 获取推荐视频
-    this.$nextTick(() => { // 解决数据还未获取完dom就渲染结束
-      setTimeout(() => {
+
+    setTimeout(() => {
+      this.$nextTick(() => { // 解决数据还未获取完dom就渲染结束
         if (this.videoList.length === 0) {
           this.getVideoList()
         }
-      }, 30)
+      }, 20)
     })
   },
   computed: {
@@ -46,8 +57,17 @@ export default {
   },
   methods: {
     ...mapActions(['getVideoList']),
-    handlePullingUp () {
-      this.getVideoList()
+    async handlePullingUp () {
+      clearTimeout(this.loadTimer)
+      this.loadMore = true
+      this.loadTimer = setTimeout(() => {
+        this.getVideoList()
+        this.$nextTick(() => { // 解决数据还未获取完dom就渲染结束
+          this.$refs.videoListScroll.finishPullUp()
+          this.$refs.videoListScroll.refresh()
+          this.loadMore = false
+        })
+      }, 500)
     }
   },
   components: {

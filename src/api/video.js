@@ -14,8 +14,16 @@ export default {
       url
     })
   },
+  // 获取mv评论
   getVideoComment(id, offset = 0) {
     let url = `comment/mv?id=${id}&offset=${offset}`
+    return request({
+      url
+    })
+  },
+  // 获取相似mv
+  getSimiMV(id) {
+    let url = `/simi/mv?mvid=${id}`
     return request({
       url
     })
