@@ -1,7 +1,7 @@
 <template>
   <div class="song-sheet-item-container">
     <div class="sons-img">
-      <img v-lazy="songSheet.picUrl">
+      <img v-lazy="songSheet.picUrl" :key="songSheet.picUrl">
     </div>
     <div class="songs-desc">{{songSheet.name}}</div>
     <div class="songs-playCount"

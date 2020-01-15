@@ -3,8 +3,8 @@
     <p class="songs-title">{{title}}</p>
     <div class="viewMore"
          v-if="isShowLoadMore">
-      <router-link to="/SongSheetSort">
-        view More
+      <router-link :to="path">
+        更多
       </router-link>
       <van-icon name="arrow" />
     </div>
@@ -15,7 +15,8 @@
 export default {
   props: {
     title: String,
-    isShowLoadMore: Boolean // 是否显示更多
+    isShowLoadMore: Boolean, // 是否显示更多
+    path: String
   }
 }
 </script>

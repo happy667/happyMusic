@@ -1,36 +1,41 @@
 <template>
   <div class="recommend-container ">
-    <van-pull-refresh v-model="isLoading"
-                      success-text="已显示最新内容"
-                      pulling-text="获取最新内容"
-                      @refresh="onRefresh">
-      <!-- 轮播图区域 -->
-      <recommend-swiper :banners="banners"></recommend-swiper>
-      <!-- loading -->
-      <van-loading v-show="this.banners.length === 0 || this.recommendSongSheet.length === 0 || this.recommendNewSong.length===0 || this.recommendNewSongSheet.length===0"
-                   size="24px"
-                   color="#FD4979"
-                   vertical>加载中...</van-loading>
-      <!-- 推荐新音乐 -->
-      <!-- 歌曲轮播 -->
-      <song-swiper v-show="recommendNewSong.length!==0"
-                   :recommendNewSong="recommendNewSong">
-        <template>
-          <song-sheet-title title="新歌推送"></song-sheet-title>
-        </template>
-      </song-swiper>
-      <!-- 推荐歌单区域 -->
-      <song-sheet-list title="推荐歌单"
-                       :recommendList="recommendSongSheet"></song-sheet-list>
+    <!-- loading -->
+    <van-loading v-if="this.banners.length === 0 || this.recommendSongSheet.length === 0 || this.recommendNewSong.length===0 || this.recommendNewSongSheet.length===0"
+                 size="24px"
+                 color="#FD4979"
+                 vertical>加载中...</van-loading>
+    <template v-if="this.banners.length !== 0 && this.recommendSongSheet.length !== 0 && this.recommendNewSong.length!==0 && this.recommendNewSongSheet.length!==0">
+      <van-pull-refresh v-model="isLoading"
+                        success-text="已显示最新内容"
+                        pulling-text="获取最新内容"
+                        @refresh="onRefresh">
+        <!-- 轮播图区域 -->
+        <recommend-swiper :banners="banners"></recommend-swiper>
 
-      <!-- 新碟上线 -->
-      <song-sheet-swiper v-show="recommendNewSongSheet.length!==0"
-                         :recommendNewSongSheet="recommendNewSongSheet">
-        <template>
-          <song-sheet-title title="新碟上线"></song-sheet-title>
-        </template>
-      </song-sheet-swiper>
-    </van-pull-refresh>
+        <!-- 推荐新音乐 -->
+        <song-swiper :recommendNewSong="recommendNewSong">
+          <template>
+            <song-sheet-title title="新歌推送"></song-sheet-title>
+          </template>
+        </song-swiper>
+        <!-- 推荐歌单区域 -->
+        <song-sheet-list :list="recommendSongSheet">
+          <template>
+            <song-sheet-title :isShowLoadMore="true"
+                              path='/SongSheetSquare'
+                              title="推荐歌单"></song-sheet-title>
+          </template>
+        </song-sheet-list>
+
+        <!-- 新碟上线 -->
+        <song-sheet-swiper :recommendNewSongSheet="recommendNewSongSheet">
+          <template>
+            <song-sheet-title title="新碟上线"></song-sheet-title>
+          </template>
+        </song-sheet-swiper>
+      </van-pull-refresh>
+    </template>
   </div>
 </template>
 <script>
@@ -49,11 +54,12 @@ export default {
   data () {
     return {
       banners: [], // 轮播图数据
+      recommendSongSheet: [], // 推荐歌单列表
       isLoading: false
     }
   },
   computed: {
-    ...mapState(['recommendSongSheet', 'recommendNewSong', 'recommendNewSongSheet'])
+    ...mapState(['recommendNewSong', 'recommendNewSongSheet'])
   },
   methods: {
     ...mapActions(['getSongSheet', 'getRecommendSongSheet', 'getRecommendNewSong', 'getRecommendNewSongSheet']),
@@ -65,43 +71,17 @@ export default {
         this.banners = res.banners
       }
     },
-    // 获取多个歌单内容
-    getSongSheets () {
 
-      // 每次获取最新数据先清空原先数据，防止歌单列表一直push,vue的key值重复
-      // this.$nextTick(() => {
-      //   this.clearSongSheet()
-      // })
-      // this.$nextTick(() => {
-      //   this.getSongSheet({ tag: '流行', limit: 6 })
-      // })
-      // this.$nextTick(() => {
-      //   this.getSongSheet({ tag: '华语', limit: 6 })
-      // })
-      // this.$nextTick(() => {
-      //   this.getSongSheet({ tag: '欧美', limit: 6 })
-      // })
-      // this.$nextTick(() => {
-      //   this.getSongSheet({ tag: '摇滚', limit: 6 })
-      // })
-      // this.$nextTick(() => {
-      //   this.getSongSheet({ tag: '古风', limit: 6 })
-      // })
-      // this.$nextTick(() => {
-      //   this.getSongSheet({ tag: '轻音乐', limit: 6 })
-      // })
-      // this.$nextTick(() => {
-      //   this.getSongSheet({ tag: 'ACG', limit: 6 })
-      // })
-    },
     // 刷新获取最新表单内容和轮播图数据
     onRefresh () {
-      setTimeout(() => {
+      setTimeout(async () => {
         this.isLoading = false
         this.$nextTick(() => {
           this.getBanner()
         })
-        this.getRecommendSongSheet()
+        this.getRecommendSongSheet(6).then((res) => {
+          this.recommendSongSheet = res
+        })
         this.getRecommendNewSong()
         this.getRecommendNewSongSheet()
       }, 500)
@@ -111,7 +91,9 @@ export default {
     // 获取轮播图数据
     this.getBanner()
     // 获取推荐歌单
-    this.getRecommendSongSheet()
+    this.getRecommendSongSheet(6).then((res) => {
+      this.recommendSongSheet = res
+    })
     // 获取最新音乐
     this.getRecommendNewSong()
     // 获取新碟上线

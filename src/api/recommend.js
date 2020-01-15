@@ -8,8 +8,8 @@ export default {
     })
   },
   // 获取推荐歌单
-  getRecommendSongSheet() {
-    const url = '/personalized?limit=6'
+  getRecommendSongSheet(limit = 30) {
+    const url = `/personalized?limit=${limit}`
     return request({
       url
     })
@@ -28,9 +28,9 @@ export default {
       url
     })
   },
-  // 获取歌单分类列表
+  // 获取推荐歌单分类列表
   getSongSheetCatList() {
-    const url = '/playlist/catlist'
+    const url = '/playlist/hot'
     return request({
       url
     })

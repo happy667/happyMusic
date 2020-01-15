@@ -1,11 +1,11 @@
 <template>
   <div class="songs-sheet-list-container">
-    <song-sheet-title :isShowLoadMore="true"
-                      :title="title"></song-sheet-title>
+
+    <slot></slot>
     <ul class="songs-sheet-list">
       <li @click="selectItem(item)"
           class="songs-sheet-list-item"
-          v-for="item in recommendList"
+          v-for="item in songSongList"
           :key="item.id">
         <song-sheet-item :song-sheet="item"></song-sheet-item>
       </li>
@@ -14,21 +14,40 @@
 </template>
 <script>
 
-import SongSheetTitle from '@/components/common/Title'
 import SongSheetItem from './SongSheetItem'
+import { mapActions } from 'vuex'
 export default {
   props: {
     title: String, // 标题
-    recommendList: Array// 推荐列表
+    list: Array// 列表
+  },
+  data () {
+    return {
+      newList: []// 新查询的列表
+    }
+  },
+  computed: {
+    songSongList () {
+      return this.title ? this.newList : this.list
+    }
   },
   methods: {
+    ...mapActions(['getSongSheet']),
     // 选择歌单进入歌单详情
     selectItem (item) {
       this.$router.push({ path: `/songSheetDisc/${item.id}` })
     }
   },
+  mounted () {
+    if (this.title) {
+      // 根据名称获取列表
+      this.getSongSheet({ name: this.title }).then((res) => {
+        this.newList = res
+      })
+    }
+  },
+
   components: {
-    SongSheetTitle,
     SongSheetItem
   }
 }

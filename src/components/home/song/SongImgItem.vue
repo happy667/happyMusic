@@ -2,7 +2,8 @@
   <div class="song-img-item-container">
     <div class="song-img-item">
       <div class="song-img">
-        <img v-lazy="song.picUrl" />
+        <img v-lazy="song.picUrl"
+             :key="picUrl" />
         <div class="play-icon">
           <van-icon name="play-circle-o" />
         </div>

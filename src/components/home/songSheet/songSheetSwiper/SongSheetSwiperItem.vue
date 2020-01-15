@@ -2,7 +2,7 @@
   <div class="song-sheet-swiper-item-container">
     <div class="song-sheet-swiper-item">
       <div class="song-img">
-        <img v-lazy="songSheet.picUrl">
+        <img :src="songSheet.picUrl">
         <div class="play-icon">
           <van-icon name="play-circle-o" />
         </div>

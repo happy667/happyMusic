@@ -2,7 +2,7 @@
   <div class="songs-list-item-containter">
     <!-- 歌曲图片 -->
     <div class="song-img">
-      <img v-lazy="picUrl" />
+      <img v-lazy="picUrl" :key="picUrl" />
     </div>
     <div class="song-desc">
       <!-- 歌曲名称 -->

@@ -5,7 +5,7 @@ const Index = () => import('../views/appIndex/Index')
 const Register = () => import('../views/appIndex/Register')
 const AppIndex = () => import('../views/AppIndex')
 const Home = () => import('../views/Home')
-const SongSheetSort = () => import('../components/home/songSheet/SongSheetSort')
+const SongSheetSquare = () => import('../components/home/songSheet/SongSheetSquare')
 const SongSheetDisc = () => import('../components/home/songSheet/SongSheetDisc')
 const VideoInfo = () => import('../components/home/video/VideoInfo')
 const Search = () => import('../components/home/search/Search')
@@ -59,9 +59,9 @@ const routes = [
   },
   // 歌单页
   {
-    path: '/songSheetSort',
-    name: 'songSheetSort',
-    component: SongSheetSort
+    path: '/SongSheetSquare',
+    name: 'SongSheetSquare',
+    component: SongSheetSquare
   },
   // 歌单详情
   {

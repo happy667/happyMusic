@@ -33,9 +33,7 @@
         </ul>
       </div>
     </scroll>
-
   </div>
-
 </template>
 <script>
 import Scroll from '@/components/common/Scroll'
