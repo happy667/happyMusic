@@ -5,6 +5,7 @@
           v-for="(item,index) in songsList"
           :key="item.id">
         <song-item :song="item"
+                   :top="index<3&&rank"
                    :index="index+1"></song-item>
       </li>
     </ul>
@@ -12,9 +13,13 @@
 </template>
 <script>
 import SongItem from './SongItem'
+import { mapState } from 'vuex'
 export default {
   props: {
     songsList: Array
+  },
+  computed: {
+    ...mapState(['rank'])
   },
   methods: {
     // 跳转到mv详情页

@@ -14,7 +14,7 @@ export default new Vuex.Store({
   state: {
     homeCurrentIndex: 0,
     singerCurrentIndex: 0,
-    // recommendSongSheet: [], // 推荐歌单
+    rank: false, // 是否为排行
     recommendNewSong: [], // 推荐新音乐
     recommendNewSongSheet: [], // 新碟
     songSheetDisc: {}, // 歌单详情
@@ -44,6 +44,11 @@ export default new Vuex.Store({
     // 设置字母表滚动索引
     setScrollIndex(state, index) {
       state.scrollIndex = index
+    },
+    // 设置rank
+    setRank(state, rank) {
+      state.rank = rank
+      console.log(state.rank)
     },
     // 设置歌手信息页当前索引
     setSingerCurrentIndex(state, index) {

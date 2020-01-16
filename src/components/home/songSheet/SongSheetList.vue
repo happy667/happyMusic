@@ -26,7 +26,7 @@
 <script>
 
 import SongSheetItem from './SongSheetItem'
-import { mapActions } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 export default {
   props: {
     title: String, // 标题
@@ -45,8 +45,10 @@ export default {
   },
   methods: {
     ...mapActions(['getSongSheet']),
+    ...mapMutations(['setRank']),
     // 选择歌单进入歌单详情
     selectItem (item) {
+      this.setRank(false)// 不需要排行
       this.$router.push({ path: `/songSheetDisc/${item.id}` })
     }
   },

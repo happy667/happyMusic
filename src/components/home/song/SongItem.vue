@@ -2,6 +2,7 @@
   <div class="songs-list-item-containter">
     <!-- 索引 -->
     <div class="song-index"
+         :class="top?'rank':''"
          v-if="index">{{index}}</div>
     <!-- 歌曲图片 -->
     <div class="song-img">
@@ -30,7 +31,11 @@
 export default {
   props: {
     song: Object,
-    index: Number
+    index: Number,
+    top: {
+      type: Boolean,
+      default: () => false
+    }
   },
   computed: {
     // 处理歌手
@@ -63,6 +68,10 @@ export default {
     margin-right: 0.5rem;
     font-size: $font-size-small;
     color: $color-common-b;
+
+    &.rank {
+      color: $color-common;
+    }
   }
 
   .song-img {
