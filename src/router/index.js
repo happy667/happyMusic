@@ -9,6 +9,8 @@ const SongSheetSquare = () => import('../components/home/songSheet/SongSheetSqua
 const SongSheetDisc = () => import('../components/home/songSheet/SongSheetDisc')
 const VideoInfo = () => import('../components/home/video/VideoInfo')
 const Search = () => import('../components/home/search/Search')
+const SearchBox = () => import('../components/home/search/SearchBox')
+const SearchResult = () => import('../components/home/search/SearchResult')
 const Play = () => import('../components/home/play/Play')
 const SongComment = () => import('../components/home/song/SongComment')
 const SingerInfo = () => import('../components/home/singer/SingerInfo')
@@ -74,7 +76,22 @@ const routes = [
   {
     path: '/search',
     name: 'search',
-    component: Search
+    component: Search,
+    redirect: '/search/searchPage',
+    children: [
+      {
+        path: '/search/searchPage',
+        name: 'search/searchPage',
+        component: SearchBox,
+        props: true
+      },
+      {
+        path: '/search/searchResult',
+        name: 'search/searchResult',
+        component: SearchResult,
+        props: true
+      }
+    ]
   },
   // mv详情页
   {

@@ -5,7 +5,8 @@
          :class="top?'rank':''"
          v-if="index">{{index}}</div>
     <!-- 歌曲图片 -->
-    <div class="song-img">
+    <div class="song-img"
+         v-if="picUrl">
       <img v-lazy="picUrl"
            :key="picUrl" />
     </div>
@@ -37,16 +38,31 @@ export default {
       default: () => false
     }
   },
+
   computed: {
     // 处理歌手
     singers () {
-      let singers = this.song.song === undefined ? this.song.ar : this.song.song.artists
+      let singers = ''
+      if (this.song.artists) {
+        singers = this.song.artists
+      } else if (this.song.song) {
+        singers = this.song.song.artists
+      } else {
+        singers = this.song.ar
+      }
       singers = singers.map(item => item.name).join('/')
       return singers
     },
     // 处理图片
     picUrl () {
-      let picUrl = this.song.picUrl === undefined ? this.song.al.picUrl : this.song.picUrl
+      let picUrl = ''
+      if (this.song.picUrl) {
+        picUrl = this.song.picUrl
+      } else {
+        if (this.song.al) {
+          picUrl = this.song.al.picUrl
+        }
+      }
       return picUrl
     }
   }
@@ -58,7 +74,7 @@ export default {
 .songs-list-item-containter {
   position: relative;
   display: flex;
-  padding: 0.3rem 0.4rem;
+  padding: 0.2rem 0.4rem;
   background: $color-common-background;
   border-radius: 0.2rem;
 
@@ -75,11 +91,13 @@ export default {
   }
 
   .song-img {
-    width: 1.4rem;
-    height: 1.4rem;
+    width: 1.3rem;
+    height: 1.3rem;
+    margin: 0.1rem;
     margin-right: 0.6rem;
 
     img {
+      text-align: center;
       width: 100%;
       height: 100%;
       border-radius: 50%;

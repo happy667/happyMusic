@@ -6,61 +6,57 @@
                    left-arrow
                    @click-left="routerBack" />
     </van-sticky>
-    <!-- 内容区 -->
-    <section>
-      <!--搜索框-->
-      <van-search left-icon=""
-                  right-icon="search"
-                  placeholder="请输入搜索关键词"
-                  shape="round">
-
-      </van-search>
-      <!-- 历史搜索 -->
-      <div class="oldSearch">
-        <!-- 搜索头部 -->
-        <div class="search-list-header">
-          <p class="title">历史搜索</p>
-          <div class="icon">
-            <i class="iconfont icon-shanchu"></i>
-          </div>
-
-        </div>
-        <!-- 搜索列表 -->
-        <ul class="search-list">
-          <li class="search-list-item">Popular Music</li>
-          <li class="search-list-item">Popular Music</li>
-          <li class="search-list-item">水电费的说法是否的发1231231</li>
-        </ul>
-      </div>
-      <!-- 热门搜索 -->
-      <div class="recommend-Search">
-        <!-- 搜索头部 -->
-        <div class="search-list-header">
-          <p class="title">热门搜索</p>
-        </div>
-        <!-- 搜索列表 -->
-        <ul class="search-list">
-          <li class="search-list-item">Popular Music</li>
-          <li class="search-list-item">Popular Music</li>
-          <li class="search-list-item">水电费的说法是否的发</li>
-        </ul>
-      </div>
-      <!-- 搜索结果 -->
-      <search-result></search-result>
-    </section>
-
+    <!--搜索框-->
+    <van-search left-icon=""
+                right-icon="search"
+                :placeholder="searchDefault"
+                shape="round"
+                @input="handleInput"
+                v-model="keywords"
+                @search="handleSearch">
+    </van-search>
+    <router-view></router-view>
   </div>
 </template>
 <script>
-import SearchResult from './SearchResult'
+import searchApi from '@/api/search.js'
+import { ERR_OK } from '@/api/config.js'
 export default {
-  components: {
-    SearchResult
+  data () {
+    return {
+      searchDefault: '', // 搜索默认关键词
+      keywords: '' // 搜索关键词
+    }
+  },
+  mounted () {
+    this.$nextTick(() => {
+      this.getSearchDefault()
+    })
   },
   methods: {
     // 返回上一个路由
     routerBack () {
       this.$router.back()
+    },
+    // 获取默认关键词
+    async  getSearchDefault () {
+      const { data: res } = await searchApi.getSearchDefault()
+      if (res.code === ERR_OK) {
+        this.searchDefault = res.data.realkeyword
+      }
+    },
+    // 搜索
+    async handleSearch () {
+      if (this.keywords.trim().length === 0) {
+        this.keywords = this.searchDefault
+      }// 没有输入按默认搜索关键词搜索
+      // 传参不能用path,需要使用name
+      this.$router.push({ name: 'search/searchResult', params: { 'keywords': this.keywords } })
+    },
+    handleInput () {
+      if (this.keywords.trim().length === 0) {
+        this.$router.push('/search/searchPage')
+      }
     }
   }
 }
@@ -72,71 +68,22 @@ export default {
   height: 100% !important;
 }
 
+.van-cell {
+  padding: 0.2rem 0.3rem;
+}
+
+.van-search__content {
+  background-color: #fff;
+  border: 0.03rem solid #e3e3e3;
+}
+
+.van-search {
+  height: 1.8rem;
+}
+
 .search-container {
   width: 100%;
-  height: 100%;
   background: #fff;
-
-  section {
-    height: 100%;
-    padding: 0 0.5rem 0.5rem 0.5rem;
-
-    .search-list-header {
-      display: flex;
-      justify-content: space-between;
-
-      .title {
-        font-weight: 300;
-        line-height: 1rem;
-        font-size: $font-size-smaller;
-      }
-
-      .icon {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: #999;
-      }
-    }
-
-    .search-list {
-      display: flex;
-      flex-wrap: wrap;
-      max-height: 10rem;
-      font-size: $font-size-smaller-x;
-
-      .search-list-item {
-        margin-bottom: 0.3rem;
-        margin-right: 0.2rem;
-        padding: 0.08rem 0.15rem;
-        word-break: break-all;
-        height: 0.7rem;
-        border-radius: 0.4rem;
-        line-height: 0.73rem;
-        color: #868e94;
-        background: #f2f2f2;
-        no-wrap();
-      }
-    }
-
-    .recommend-Search {
-      padding: 0;
-
-      .search-list-item {
-        color: #fff;
-        background: #f66d92;
-        box-shadow: 0 0.2rem 0.3rem rgba(246, 105, 146, 0.3);
-      }
-    }
-
-    .van-cell {
-      padding: 0.2rem 0.3rem;
-    }
-
-    .van-search__content {
-      background-color: #fff;
-      border: 0.03rem solid #e3e3e3;
-    }
-  }
+  min-height: 100vh;
 }
 </style>

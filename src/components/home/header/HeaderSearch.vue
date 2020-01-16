@@ -21,7 +21,7 @@ export default {
   methods: {
     // 点击搜索跳转搜索页面
     handleSearchClick () {
-      this.$router.push('/search')
+      this.$router.push('/search/searchPage')
     }
   }
 }
