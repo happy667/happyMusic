@@ -28,7 +28,10 @@
         <van-tab v-for="item in songSheetCagetory"
                  :key="item.id"
                  :title="item.playlistTag.name">
-          <song-sheet-list :list="songSheetList" :title="item.playlistTag.name"></song-sheet-list>
+          <div class="song-sheet-cagetory-list">
+            <song-sheet-list :list="songSheetList"
+                             :title="item.playlistTag.name"></song-sheet-list>
+          </div>
         </van-tab>
       </van-tabs>
     </template>
@@ -81,9 +84,14 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-// .song-sheet-square-container>>>.van-tab__pane {
-// padding: 0.5rem 0.3rem;
-// }
+.song-sheet-square-container>>>.load {
+  height: calc(100vh - 1.22667rem);
+}
+
+.song-sheet-square-container>>>.song-sheet-cagetory-list {
+  min-height: calc(100vh - 1.22667rem);
+}
+
 .song-sheet-square-container {
   width: 100%;
   height: 100%;
@@ -95,8 +103,8 @@ export default {
     box-sizing: border-box;
   }
 
-  .load {
-    height: calc(100vh - 1.22667rem);
+  .song-sheet-cagetory-list {
+    padding: 0.5rem 0;
   }
 }
 </style>

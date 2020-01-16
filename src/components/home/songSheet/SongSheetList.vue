@@ -2,14 +2,25 @@
   <div class="songs-sheet-list-container">
 
     <slot></slot>
-    <ul class="songs-sheet-list">
-      <li @click="selectItem(item)"
-          class="songs-sheet-list-item"
-          v-for="item in songSongList"
-          :key="item.id">
-        <song-sheet-item :song-sheet="item"></song-sheet-item>
-      </li>
-    </ul>
+    <van-loading v-if="this.songSongList.length===0&&!this.msg"
+                 size="24px"
+                 color="#FD4979"
+                 class="load"
+                 vertical>加载中...</van-loading>
+    <div v-if="this.msg"
+         class="songs-sheet-list-zw">
+      暂时还没有相关歌单哦~
+    </div>
+    <template v-if="this.songSongList.length!==0">
+      <ul class="songs-sheet-list">
+        <li @click="selectItem(item)"
+            class="songs-sheet-list-item"
+            v-for="item in songSongList"
+            :key="item.id">
+          <song-sheet-item :song-sheet="item"></song-sheet-item>
+        </li>
+      </ul>
+    </template>
   </div>
 </template>
 <script>
@@ -23,7 +34,8 @@ export default {
   },
   data () {
     return {
-      newList: []// 新查询的列表
+      newList: [], // 新查询的列表
+      msg: ''// 查询数据响应的信息
     }
   },
   computed: {
@@ -40,9 +52,14 @@ export default {
   },
   mounted () {
     if (this.title) {
+      console.log(this.title)
       // 根据名称获取列表
-      this.getSongSheet({ name: this.title }).then((res) => {
-        this.newList = res
+      this.getSongSheet({ tag: this.title }).then((res) => {
+        if (res.msg) {
+          this.msg = res.msg
+        } else {
+          this.newList = res.playlists
+        }
       })
     }
   },
@@ -69,6 +86,15 @@ export default {
       width: 46%;
       margin-bottom: 0.6rem;
     }
+  }
+
+  .songs-sheet-list-zw {
+    width: 100%;
+    height: 1rem;
+    line-height: 1rem;
+    color: $color-common-b;
+    font-size: $font-size-smaller;
+    text-align: center;
   }
 }
 </style>

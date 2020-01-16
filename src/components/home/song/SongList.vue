@@ -2,9 +2,10 @@
   <div class="songs-list-containter">
     <ul class="songs-list">
       <li class="songs-list-item"
-          v-for="item in songsList"
+          v-for="(item,index) in songsList"
           :key="item.id">
-        <song-item :song="item"></song-item>
+        <song-item :song="item"
+                   :index="index+1"></song-item>
       </li>
     </ul>
   </div>
@@ -26,5 +27,4 @@ export default {
   }
 }
 </script>
-<style lang="stylus" scoped>
-</style>
+<style lang="stylus" scoped></style>

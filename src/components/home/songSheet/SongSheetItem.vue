@@ -1,7 +1,8 @@
 <template>
   <div class="song-sheet-item-container">
     <div class="sons-img">
-      <img v-lazy="songSheet.picUrl" :key="songSheet.picUrl">
+      <img v-lazy="picUrl"
+           :key="picUrl">
     </div>
     <div class="songs-desc">{{songSheet.name}}</div>
     <div class="songs-playCount"
@@ -15,6 +16,11 @@ import 'common/js/convert.js'
 export default {
   props: {
     songSheet: Object
+  },
+  computed: {
+    picUrl () {
+      return this.songSheet.picUrl ? this.songSheet.picUrl : this.songSheet.coverImgUrl
+    }
   }
 }
 </script>

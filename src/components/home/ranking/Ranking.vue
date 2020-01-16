@@ -67,7 +67,9 @@ export default {
   mounted () {
     // 获取榜单列表
     this.$nextTick(() => {
-      this.getRankingList()
+      if (this.rankingList.length === 0) {
+        this.getRankingList()
+      }
     })
   },
   components: {

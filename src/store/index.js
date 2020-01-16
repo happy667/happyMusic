@@ -169,7 +169,7 @@ export default new Vuex.Store({
         data: res
       } = await recommendApi.getSongSheet(params.tag, params.limit)
       if (res.code === ERR_OK) { // 成功获取歌单数据
-        return res.playlists
+        return res
       }
     },
     // 根据id获取歌单列表

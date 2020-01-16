@@ -1,13 +1,13 @@
 <template>
   <div class="title-container">
     <p class="songs-title">{{title}}</p>
-    <div class="viewMore"
-         v-if="isShowLoadMore">
-      <router-link :to="path">
-        更多
-      </router-link>
+    <router-link tag="div"
+                 :to="path"
+                 class="viewMore"
+                 v-if="isShowLoadMore">
+      更多
       <van-icon name="arrow" />
-    </div>
+    </router-link>
   </div>
 </template>
 <script>

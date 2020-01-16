@@ -9,7 +9,10 @@
 
     <!-- 歌单图片 -->
     <div class="songs-img">
-      <img :src="songSheetDisc.picUrl">
+      <template v-if="songSheetDisc.picUrl">
+        <img :src="songSheetDisc.picUrl">
+      </template>
+
     </div>
     <!-- loading -->
     <van-loading v-show="!songSheetDisc.songs"
@@ -62,15 +65,6 @@ export default {
         vm.getSongSheetById(vm.id)
       })
     }
-  },
-  mounted () {
-    // 根据id获取歌单列表
-    // Router.beforeEach((to, from, next) => {
-    //   console.log(from)
-    // })
-    // this.getSongSheetById(this.id)
-    // console.log(this.id)
-    //  this.getSingerAlbumDetail(this.id)
   }
 }
 </script>
@@ -113,14 +107,14 @@ export default {
         max-width: 7rem;
         line-height: 0.8rem;
         font-weight: 500;
-        font-size: $font-size-large;
+        font-size: $font-size-small;
         margin-bottom: 0.4rem;
         no-wrap2();
       }
 
       .songs-num {
         font-size: $font-size-smaller;
-        color: #777;
+        color: $color-common-b;
       }
 
       .playBtn {

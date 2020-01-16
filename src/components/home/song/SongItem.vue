@@ -1,8 +1,12 @@
 <template>
   <div class="songs-list-item-containter">
+    <!-- 索引 -->
+    <div class="song-index"
+         v-if="index">{{index}}</div>
     <!-- 歌曲图片 -->
     <div class="song-img">
-      <img v-lazy="picUrl" :key="picUrl" />
+      <img v-lazy="picUrl"
+           :key="picUrl" />
     </div>
     <div class="song-desc">
       <!-- 歌曲名称 -->
@@ -25,7 +29,8 @@
 
 export default {
   props: {
-    song: Object
+    song: Object,
+    index: Number
   },
   computed: {
     // 处理歌手
@@ -51,6 +56,14 @@ export default {
   padding: 0.3rem 0.4rem;
   background: $color-common-background;
   border-radius: 0.2rem;
+
+  .song-index {
+    height: 1.4rem;
+    line-height: 1.4rem;
+    margin-right: 0.5rem;
+    font-size: $font-size-small;
+    color: $color-common-b;
+  }
 
   .song-img {
     width: 1.4rem;
