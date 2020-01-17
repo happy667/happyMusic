@@ -1,0 +1,114 @@
+<template>
+  <div class="songSheet-container">
+    <template v-if="songSheet.songSheetList.length===0&&!songSheet.isNull">
+      <van-loading size="24px"
+                   color="#FD4979"
+                   vertical>加载中...</van-loading>
+    </template>
+    <template v-if="songSheet.songSheetList.length!==0">
+      <van-list v-model="loading"
+                :finished="finished"
+                finished-text="没有更多了"
+                @load="handlePullingUp">
+        <song-sheet-list :list="songSheet.songSheetList"></song-sheet-list>
+      </van-list>
+    </template>
+    <template v-if="songSheet.isNull">
+      <div class="songSheet-list-null">
+        没有搜索到相关歌单
+      </div>
+    </template>
+  </div>
+</template>
+<script>
+import SongSheetList from '@/components/home/songSheet/SongSheetList'
+import searchApi from '@/api/search.js'
+import { ERR_OK } from '@/api/config.js'
+import { mapState } from 'vuex'
+export default {
+  data () {
+    return {
+      songSheet: {
+        songSheetCount: 0,
+        songSheetList: [],
+        isNull: false
+      },
+      loading: false,
+      finished: false
+    }
+  },
+  computed: {
+    ...mapState(['searchKeywords', 'searchCurrentIndex'])
+  },
+  mounted () {
+    this.getSearchSongSheet()
+  },
+  methods: {
+    // 查询歌单
+    async getSearchSongSheet () {
+      // 显示加载logo
+      this.loading = true
+      // 设置偏移量=歌单列表长度
+      let offset = this.songSheet.songSheetList.length
+      const { data: res } = await searchApi.getSearchResult(this.searchKeywords, 1000, offset, 12)
+      if (res.code === ERR_OK) {
+        // 没有查询到数据
+        if (res.result.playlistCount === 0) {
+          this.songSheet.isNull = true
+          return
+        }
+        if (this.songSheet.songSheetCount === 0) {
+          this.songSheet.songSheetCount = res.result.playlistCount
+        }
+
+        // 将每次查询的歌单追加到songSheet.songSheetList 中
+        // 因为可能存在重复数据，所以需要去重处理
+        let list = this.songSheet.songSheetList.concat(res.result.playlists)
+        const map = new Map()
+        list = list.filter(item => !map.has(item.id) && map.set(item.id, 1))
+        this.songSheet.songSheetList = list
+        // 关闭加载logo
+        this.loading = false
+      }
+    },
+    // 上拉加载更多歌单
+    handlePullingUp () {
+      // 加载时判断当前滚动的页面是否为该页面，因为其他页面在上拉加载时会干扰该页面
+      if (this.searchCurrentIndex === 2) {
+        setTimeout(async () => {
+          if (this.songSheet.songSheetList.length >= this.songSheet.songSheetCount) {
+            this.finished = true
+          } else {
+            await this.getSearchSongSheet()
+          }
+          this.loading = false
+        }, 500)
+      } else {
+        this.loading = false
+      }
+    }
+  },
+
+  components: {
+    SongSheetList
+  }
+}
+</script>
+<style lang="stylus" scoped>
+@import '~common/stylus/variable';
+
+.songSheet-container {
+  padding-top: 0.25rem;
+  min-height: calc(100vh - (1.8rem + 1.22667rem + 1.18rem)) !important;
+  box-sizing: border-box;
+
+  .songSheet-list-null {
+    width: 100%;
+    height: 1rem;
+    line-height: 1rem;
+    color: $color-common-b;
+    font-size: $font-size-smaller;
+    text-align: center;
+  }
+}
+</style>

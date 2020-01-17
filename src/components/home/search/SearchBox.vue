@@ -32,6 +32,7 @@
       <ul class="hot-search-list"
           v-if="this.hotSearchList.length!==0">
         <li class="hot-search-list-item"
+            @click="selectItem(item)"
             v-for="(item,index) in hotSearchList"
             :key="item.searchWord">
           <div class="left"
@@ -52,19 +53,30 @@
 <script>
 import searchApi from '@/api/search.js'
 import { ERR_OK } from '@/api/config.js'
+import { mapState, mapMutations } from 'vuex'
 export default {
   data () {
     return {
       hotSearchList: []// 热搜列表
     }
   },
+  computed: {
+    ...mapState(['searchKeywords'])
+  },
   methods: {
+    ...mapMutations(['setSearchKeywords', 'setSearchCurrentIndex']),
     // 获取热门搜索
     async getHotSearchList () {
       const { data: res } = await searchApi.getHotSearchList()
       if (res.code === ERR_OK) {
         this.hotSearchList = res.data
       }
+    },
+    selectItem (item) {
+      // 重置标签页到第一个
+      this.setSearchCurrentIndex(0)
+      this.setSearchKeywords(item.searchWord)
+      this.$router.push({ name: 'search/searchResult', params: { 'keywords': this.searchKeywords } })
     }
   },
   mounted () {

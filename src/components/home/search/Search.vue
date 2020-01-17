@@ -12,7 +12,7 @@
                 :placeholder="searchDefault"
                 shape="round"
                 @input="handleInput"
-                v-model="keywords"
+                v-model="searchVal"
                 @search="handleSearch">
     </van-search>
     <router-view></router-view>
@@ -21,11 +21,11 @@
 <script>
 import searchApi from '@/api/search.js'
 import { ERR_OK } from '@/api/config.js'
+import { mapState, mapMutations } from 'vuex'
 export default {
   data () {
     return {
-      searchDefault: '', // 搜索默认关键词
-      keywords: '' // 搜索关键词
+      searchDefault: '' // 搜索默认关键词
     }
   },
   mounted () {
@@ -33,7 +33,20 @@ export default {
       this.getSearchDefault()
     })
   },
+  computed: {
+    ...mapState(['searchKeywords']),
+    // 搜索框的值
+    searchVal: {
+      get () {
+        return this.searchKeywords ? this.searchKeywords : ''
+      },
+      set (val) {
+        this.setSearchKeywords(val)
+      }
+    }
+  },
   methods: {
+    ...mapMutations(['setSearchKeywords', 'setSearchCurrentIndex']),
     // 返回上一个路由
     routerBack () {
       this.$router.back()
@@ -47,14 +60,17 @@ export default {
     },
     // 搜索
     async handleSearch () {
-      if (this.keywords.trim().length === 0) {
-        this.keywords = this.searchDefault
+      // 重置标签页到第一个
+      this.setSearchCurrentIndex(0)
+      if (this.searchKeywords.trim().length === 0) {
+        this.setSearchKeywords(this.searchDefault)
       }// 没有输入按默认搜索关键词搜索
-      // 传参不能用path,需要使用name
-      this.$router.push({ name: 'search/searchResult', params: { 'keywords': this.keywords } })
+      if (this.$route.path !== '/search/searchResult') {
+        this.$router.push('/search/searchResult')
+      }
     },
     handleInput () {
-      if (this.keywords.trim().length === 0) {
+      if (this.searchKeywords.trim().length === 0) {
         this.$router.push('/search/searchPage')
       }
     }
@@ -62,8 +78,6 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .van-tabs {
   height: 100% !important;
 }

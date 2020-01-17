@@ -24,6 +24,12 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
+.mv-list-container>>>.mv-list-item-container {
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
 .mv-list-container {
   width: 100%;
   background: $color-common-background;

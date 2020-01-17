@@ -34,7 +34,9 @@ export default new Vuex.Store({
       comments: [],
       total: 0
     }, // 评论列表
-    simiMVList: [] // 相似mv
+    simiMVList: [], // 相似mv
+    searchKeywords: '', // 搜索关键词
+    searchCurrentIndex: 0 // 搜索页当前索引
   },
   mutations: {
     // 设置当前索引
@@ -126,6 +128,14 @@ export default new Vuex.Store({
     // 设置相似mv
     setSimiMVList(state, list) {
       state.simiMVList = list
+    },
+    // 设置搜索关键词
+    setSearchKeywords(state, keywords) {
+      state.searchKeywords = keywords
+    },
+    // 设置搜索页当前索引
+    setSearchCurrentIndex(state, index) {
+      state.searchCurrentIndex = index
     }
   },
   actions: {

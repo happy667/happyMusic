@@ -15,8 +15,8 @@ export default {
     })
   },
   // 获取搜索结果
-  getSearchResult(search) {
-    const url = `/search?keywords=${search.keywords}&offset=${search.offset}&limit=${search.limit}&type=${search.type}`
+  getSearchResult(keywords, type, offset, limit) {
+    const url = `/search?keywords=${keywords}&offset=${offset}&limit=${limit}&type=${type}`
     return request({
       url
     })

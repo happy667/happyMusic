@@ -19,11 +19,7 @@ service.interceptors.response.use(
       switch (response.status) {
         case 200:
           break
-          // case 'B1000':                                 //  清除token信息并跳转到登录页面
-          //   sessionStorage.removeItem('Authorization')  // 将token清空
-          //   Message.error(response.data.data.msg)       // 提示错误信息
-          //   router.replace({ path: '/login' })
-          //   break;
+
         default:
           Message.error(response.data.data.msg ? response.data.data.msg : '返回状态非200')
       }

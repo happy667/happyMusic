@@ -80,6 +80,7 @@ export default {
     flex: 1;
 
     .mv-title {
+      width :6rem;
       margin-bottom: 0.2rem;
       line-height: 0.5rem;
       font-weight: bold;
