@@ -15,7 +15,7 @@
     </template>
     <template v-if="song.isNull">
       <div class="song-list-null">
-        没有搜索到相关歌曲
+        暂无相关歌曲
       </div>
     </template>
   </div>
@@ -41,6 +41,10 @@ export default {
     ...mapState(['searchKeywords', 'searchCurrentIndex'])
   },
   mounted () {
+    if (this.searchKeywords.trim().length === 0) {
+      this.song.isNull = true
+      return
+    }
     this.getSearchSong()
   },
   methods: {
@@ -53,7 +57,7 @@ export default {
       const { data: res } = await searchApi.getSearchResult(this.searchKeywords, 1, offset, 20)
       if (res.code === ERR_OK) {
         // 没有查询到数据
-        if (res.result.songCount === 0) {
+        if (res.result.songCount === 0 || !res.result.songs) {
           this.song.isNull = true
           return
         }
@@ -66,14 +70,12 @@ export default {
         const map = new Map()
         list = list.filter(item => !map.has(item.id) && map.set(item.id, 1))
         this.song.songList = list
-        console.log(this.song.songList)
         // 关闭加载logo
         this.loading = false
       }
     },
     // 上拉加载更多单曲
     handlePullingUp () {
-      console.log(111111)
       // 加载时判断当前滚动的页面是否为该页面，因为其他页面在上拉加载时会干扰该页面
       if (this.searchCurrentIndex === 0) {
         setTimeout(async () => {

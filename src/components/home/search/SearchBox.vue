@@ -1,20 +1,23 @@
 <template>
   <div class="search-box-container">
     <!-- 历史搜索 -->
-    <div class="oldSearch">
+    <div class="oldSearch"
+         v-if="localSearchList&&localSearchList.length!==0">
       <!-- 搜索头部 -->
       <div class="search-list-header">
         <p class="title">历史搜索</p>
-        <div class="icon">
+        <div class="icon"
+             @click="clearLocalList">
           <i class="iconfont icon-shanchu"></i>
         </div>
 
       </div>
       <!-- 搜索列表 -->
       <ul class="old-search-list">
-        <li class="old-search-list-item">Popular Music</li>
-        <li class="old-search-list-item">Popular Music</li>
-        <li class="old-search-list-item">水电费的说法是否的发1231231</li>
+        <li class="old-search-list-item"
+            v-for="(item,index) in localSearchList"
+            @click="selectItem(item)"
+            :key="index">{{item}}</li>
       </ul>
     </div>
     <!-- 热门搜索 -->
@@ -51,20 +54,24 @@
   </div>
 </template>
 <script>
+import { Dialog } from 'vant'
 import searchApi from '@/api/search.js'
 import { ERR_OK } from '@/api/config.js'
 import { mapState, mapMutations } from 'vuex'
+import { getLocalList, clearLocalList, addLocalSearch } from '@/assets/common/js/localStorage.js'
 export default {
   data () {
     return {
-      hotSearchList: []// 热搜列表
+      hotSearchList: [], // 热搜列表
+      localSearchList: []// 历史搜索列表
     }
   },
   computed: {
     ...mapState(['searchKeywords'])
   },
+
   methods: {
-    ...mapMutations(['setSearchKeywords', 'setSearchCurrentIndex']),
+    ...mapMutations(['setSearchKeywords', 'setSearchCurrentIndex', 'selectSearchItem']),
     // 获取热门搜索
     async getHotSearchList () {
       const { data: res } = await searchApi.getHotSearchList()
@@ -72,16 +79,33 @@ export default {
         this.hotSearchList = res.data
       }
     },
+    // 选择搜索名称
     selectItem (item) {
       // 重置标签页到第一个
       this.setSearchCurrentIndex(0)
-      this.setSearchKeywords(item.searchWord)
-      this.$router.push({ name: 'search/searchResult', params: { 'keywords': this.searchKeywords } })
+      this.setSearchKeywords(item.searchWord || item)
+      // 将搜索的内容保存在本地
+      addLocalSearch(this.searchKeywords)
+      this.$router.push('/search/searchResult')
+    },
+    // 清空历史搜索记录
+    clearLocalList () {
+      Dialog.confirm({
+        message: '是否清空历史搜索记录',
+        confirmButtonColor: '#FD4979',
+        width: '265px'
+      }).then(() => {
+        clearLocalList()
+        this.localSearchList = []// 清空当前数组
+      }).catch(() => {
+
+      })
     }
   },
   mounted () {
     this.$nextTick(() => {
       this.getHotSearchList()
+      if (getLocalList()) { this.localSearchList = getLocalList() }// 如果本地存在历史记录就赋值
     })
   }
 }
@@ -91,16 +115,16 @@ export default {
 
 .search-box-container {
   height: 100%;
-  padding: 0 0.5rem 0.5rem 0.5rem;
+  padding: 0 0.5rem;
 
   .search-list-header {
     display: flex;
     justify-content: space-between;
 
     .title {
-      font-weight: 300;
+      font-weight: bold;
       line-height: 1rem;
-      font-size: $font-size-smaller;
+      font-size: $font-size-smaller-x;
     }
 
     .icon {
@@ -120,11 +144,11 @@ export default {
     .old-search-list-item {
       margin-bottom: 0.3rem;
       margin-right: 0.2rem;
-      padding: 0.08rem 0.15rem;
+      padding: 0 0.2rem;
       word-break: break-all;
-      height: 0.7rem;
-      border-radius: 0.4rem;
-      line-height: 0.73rem;
+      height: 0.8rem;
+      border-radius: 0.25rem;
+      line-height: 0.8rem;
       color: #868e94;
       background: #f2f2f2;
       no-wrap();

@@ -15,7 +15,7 @@
     </template>
     <template v-if="songSheet.isNull">
       <div class="songSheet-list-null">
-        没有搜索到相关歌单
+        暂无相关歌单
       </div>
     </template>
   </div>
@@ -41,6 +41,10 @@ export default {
     ...mapState(['searchKeywords', 'searchCurrentIndex'])
   },
   mounted () {
+    if (this.searchKeywords.trim().length === 0) {
+      this.songSheet.isNull = true
+      return
+    }
     this.getSearchSongSheet()
   },
   methods: {
@@ -53,7 +57,7 @@ export default {
       const { data: res } = await searchApi.getSearchResult(this.searchKeywords, 1000, offset, 12)
       if (res.code === ERR_OK) {
         // 没有查询到数据
-        if (res.result.playlistCount === 0) {
+        if (res.result.playlistCount === 0 || !res.result.playlists) {
           this.songSheet.isNull = true
           return
         }

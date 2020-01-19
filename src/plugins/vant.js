@@ -15,7 +15,8 @@ import {
   progress,
   PullRefresh,
   Loading,
-  Toast
+  Toast,
+  Dialog
 } from 'vant'
 Vue.use(Tab)
 Vue.use(Tabs)
@@ -33,3 +34,4 @@ Vue.use(progress)
 Vue.use(PullRefresh)
 Vue.use(Loading)
 Vue.use(Toast)
+Vue.use(Dialog)

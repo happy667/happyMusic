@@ -17,7 +17,7 @@
     </template>
     <template v-if="mv.isNull">
       <div class="mv-list-null">
-        没有搜索到相关MV
+        暂无相关MV
       </div>
     </template>
   </div>
@@ -40,9 +40,17 @@ export default {
     }
   },
   computed: {
-    ...mapState(['searchKeywords', 'searchCurrentIndex'])
+    ...mapState(['searchKeywords', 'searchCurrentIndex']),
+    listenChange () {
+      const { searchKeywords, searchCurrentIndex } = this
+      return { searchKeywords, searchCurrentIndex }
+    }
   },
   mounted () {
+    if (this.searchKeywords.trim().length === 0) {
+      this.mv.isNull = true
+      return
+    }
     this.getSearchMV()
   },
   methods: {
@@ -56,7 +64,7 @@ export default {
       const { data: res } = await searchApi.getSearchResult(this.searchKeywords, 1004, offset, 8)
       if (res.code === ERR_OK) {
         // 没有查询到数据
-        if (res.result.mvCount === 0) {
+        if (res.result.mvCount === 0 || !res.result.mvs) {
           this.mv.isNull = true
           return
         }

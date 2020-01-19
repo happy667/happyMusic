@@ -16,11 +16,15 @@
   </div>
 </template>
 <script>
+import { mapMutations } from 'vuex'
 
 export default {
   methods: {
+    ...mapMutations(['setSearchKeywords']),
     // 点击搜索跳转搜索页面
     handleSearchClick () {
+      // 清空搜索内容
+      this.setSearchKeywords('')
       this.$router.push('/search/searchPage')
     }
   }

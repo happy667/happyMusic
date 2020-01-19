@@ -21,7 +21,7 @@
     </template>
     <template v-if="singer.isNull">
       <div class="singer-list-null">
-        没有搜索到相关歌手
+        暂无相关歌手
       </div>
     </template>
   </div>
@@ -47,7 +47,12 @@ export default {
   computed: {
     ...mapState(['searchKeywords', 'searchCurrentIndex'])
   },
+
   mounted () {
+    if (this.searchKeywords.trim().length === 0) {
+      this.singer.isNull = true
+      return
+    }
     this.getSearchSinger()
   },
   methods: {
@@ -60,7 +65,7 @@ export default {
       const { data: res } = await searchApi.getSearchResult(this.searchKeywords, 100, offset, 15)
       if (res.code === ERR_OK) {
         // 没有查询到数据
-        if (res.result.singerCount === 0) {
+        if (res.result.singerCount === 0 || !res.result.artists) {
           this.singer.isNull = true
           return
         }

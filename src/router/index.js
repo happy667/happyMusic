@@ -82,14 +82,12 @@ const routes = [
       {
         path: '/search/searchPage',
         name: 'search/searchPage',
-        component: SearchBox,
-        props: true
+        component: SearchBox
       },
       {
         path: '/search/searchResult',
         name: 'search/searchResult',
-        component: SearchResult,
-        props: true
+        component: SearchResult
       }
     ]
   },

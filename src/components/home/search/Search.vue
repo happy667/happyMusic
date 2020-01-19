@@ -15,19 +15,41 @@
                 v-model="searchVal"
                 @search="handleSearch">
     </van-search>
-    <router-view></router-view>
+    <!-- 搜索列表 -->
+    <div class="search-list-container"
+         v-show="showSearchList">
+      <ul class="search-list">
+        <li class="search-list-item"
+            @click="selectItem(item)"
+            v-for="(item,index) in searchList"
+            :key="index">
+          <div class="icon">
+            <van-icon name="search" />
+          </div>
+          {{item}}
+        </li>
+      </ul>
+    </div>
+    <template>
+      <router-view></router-view>
+    </template>
+
   </div>
 </template>
 <script>
 import searchApi from '@/api/search.js'
 import { ERR_OK } from '@/api/config.js'
+import { addLocalSearch } from '@/assets/common/js/localStorage.js'
 import { mapState, mapMutations } from 'vuex'
 export default {
   data () {
     return {
-      searchDefault: '' // 搜索默认关键词
+      searchDefault: '', // 搜索默认关键词
+      searchList: '', // 搜索列表
+      showSearchList: false// 显示搜索列表
     }
   },
+  inject: ['reload'],
   mounted () {
     this.$nextTick(() => {
       this.getSearchDefault()
@@ -45,10 +67,17 @@ export default {
       }
     }
   },
+
   methods: {
     ...mapMutations(['setSearchKeywords', 'setSearchCurrentIndex']),
     // 返回上一个路由
     routerBack () {
+      if (this.$route.path === '/search/searchPage') {
+        this.$router.push('/home')
+        return
+      }
+      // 清空搜索内容
+      this.setSearchKeywords('')
       this.$router.back()
     },
     // 获取默认关键词
@@ -58,8 +87,18 @@ export default {
         this.searchDefault = res.data.realkeyword
       }
     },
+    // 搜索综合内容
+    async getSearchAll () {
+      const { data: res } = await searchApi.getSearchAll(this.searchKeywords)
+      if (res.code === ERR_OK) {
+        if (res.result.allMatch) {
+          this.searchList = res.result.allMatch.map(item => item.keyword)
+        }
+      }
+    },
     // 搜索
     async handleSearch () {
+      this.showSearchList = false
       // 重置标签页到第一个
       this.setSearchCurrentIndex(0)
       if (this.searchKeywords.trim().length === 0) {
@@ -68,16 +107,35 @@ export default {
       if (this.$route.path !== '/search/searchResult') {
         this.$router.push('/search/searchResult')
       }
+      // 将搜索的内容保存在本地
+      addLocalSearch(this.searchKeywords)
     },
+    // 输入搜索内容
     handleInput () {
-      if (this.searchKeywords.trim().length === 0) {
-        this.$router.push('/search/searchPage')
+      this.searchKeywords.trim().length === 0 ? this.showSearchList = false : this.showSearchList = true
+      this.getSearchAll()
+    },
+    // 选择搜索名称
+    selectItem (item) {
+      this.setSearchKeywords(item)
+      this.showSearchList = false
+      // 重置标签页到第一个
+      this.setSearchCurrentIndex(0)
+      // 将搜索的内容保存在本地
+      addLocalSearch(this.searchKeywords)
+      if (this.$route.path === '/search/searchPage') {
+        this.$router.push('/search/searchResult')
+      } else {
+        this.reload()
       }
     }
+
   }
 }
 </script>
 <style lang="stylus" scoped>
+@import '~common/stylus/variable';
+
 .van-tabs {
   height: 100% !important;
 }
@@ -93,11 +151,41 @@ export default {
 
 .van-search {
   height: 1.8rem;
+  padding: 0.25rem 0.32rem;
+  box-sizing: border-box;
 }
 
 .search-container {
   width: 100%;
   background: #fff;
   min-height: 100vh;
+
+  .search-list-container {
+    position: absolute;
+    background: $color-common-background;
+    width: 100%;
+    padding: 0 0.4rem;
+    box-sizing: border-box;
+    max-height: 8rem;
+    z-index: 99;
+    box-shadow: 0 0.25rem 0.6rem rgba(0, 0, 0, 0.1);
+
+    .search-list {
+      .search-list-item {
+        display: flex;
+        padding: 0 0.2rem;
+        border-top: 0.02rem solid #efefef;
+        line-height: 1rem;
+        height: 1rem;
+        font-size: $font-size-smaller-x;
+        color: $color-common-x;
+
+        .icon {
+          margin-right: 0.2rem;
+          font-size: 0.45rem;
+        }
+      }
+    }
+  }
 }
 </style>
