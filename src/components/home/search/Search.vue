@@ -104,11 +104,13 @@ export default {
       if (this.searchKeywords.trim().length === 0) {
         this.setSearchKeywords(this.searchDefault)
       }// 没有输入按默认搜索关键词搜索
-      if (this.$route.path !== '/search/searchResult') {
-        this.$router.push('/search/searchResult')
-      }
       // 将搜索的内容保存在本地
       addLocalSearch(this.searchKeywords)
+      if (this.$route.path === '/search/searchPage') {
+        this.$router.push('/search/searchResult')
+      } else {
+        this.reload()
+      }
     },
     // 输入搜索内容
     handleInput () {
