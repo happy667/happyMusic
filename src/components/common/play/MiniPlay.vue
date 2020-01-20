@@ -1,5 +1,5 @@
 <template>
-  <div class="footer-container"
+  <div class="mini-play-container"
        @click="handleClick">
     <div class="fixed">
       <!-- 左侧图片 -->
@@ -40,10 +40,12 @@
   </div>
 </template>
 <script>
+import { mapMutations } from 'vuex'
 export default {
   methods: {
+    ...mapMutations(['setPlayerFullScreen']),
     handleClick () {
-      this.$router.push('/play')
+      this.setPlayerFullScreen(true)
     }
   }
 }
@@ -55,7 +57,7 @@ export default {
    width: 100%;
  }
 
- .footer-container {
+ .mini-play-container {
    .fixed {
      position: fixed;
      width: 100%;

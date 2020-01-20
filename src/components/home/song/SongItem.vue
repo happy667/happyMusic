@@ -6,15 +6,15 @@
          v-if="index">{{index}}</div>
     <!-- 歌曲图片 -->
     <div class="song-img"
-         v-if="picUrl">
-      <img v-lazy="picUrl"
-           :key="picUrl" />
+         v-if="song.picUrl">
+      <img v-lazy="song.picUrl"
+           :key="song.picUrl" />
     </div>
     <div class="song-desc">
       <!-- 歌曲名称 -->
       <div class="songName">{{song.name}}</div>
       <!-- 歌手名称-专辑名称 -->
-      <div class="sgInfo">{{singers}}</div>
+      <div class="sgInfo">{{song.singers}}</div>
     </div>
     <!-- 选中前 -->
     <div class="love ">
@@ -36,34 +36,6 @@ export default {
     top: {
       type: Boolean,
       default: () => false
-    }
-  },
-
-  computed: {
-    // 处理歌手
-    singers () {
-      let singers = ''
-      if (this.song.artists) {
-        singers = this.song.artists
-      } else if (this.song.song) {
-        singers = this.song.song.artists
-      } else {
-        singers = this.song.ar
-      }
-      singers = singers.map(item => item.name).join('/')
-      return singers
-    },
-    // 处理图片
-    picUrl () {
-      let picUrl = ''
-      if (this.song.picUrl) {
-        picUrl = this.song.picUrl
-      } else {
-        if (this.song.al) {
-          picUrl = this.song.al.picUrl
-        }
-      }
-      return picUrl
     }
   }
 }

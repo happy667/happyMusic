@@ -1,13 +1,16 @@
 <template>
   <section class="section-container">
     <div class="song-img">
-      <img src="http://p2.music.126.net/8dzD62VK8jLDbhEqkmpIAg==/18277181788626198.jpg?imageView&thumbnail=360y360&quality=75&tostatic=0">
+      <img :src="currentSong.picUrl">
     </div>
   </section>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 export default {
-
+  computed: {
+    ...mapGetters(['currentSong'])
+  }
 }
 </script>
 <style lang="stylus" scoped>
@@ -22,13 +25,13 @@ export default {
   .song-img {
     width: 6.5rem;
     height: 6.5rem;
-    border-radius: 0.3rem;
+    border-radius: 50%;
 
     img {
       display: block;
       width: 100%;
       height: 100%;
-      border-radius: 0.3rem;
+      border-radius: 50%;
     }
   }
 }

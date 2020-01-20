@@ -15,11 +15,13 @@
       </div>
     </div>
     <!-- 歌曲列表 -->
-    <song-list :songsList="singerSong" />
+    <song-list @select="handleSelect"
+               :songsList="singerSong" />
   </div>
 </template>
 <script>
 import SongList from '@/components/home/song/SongList'
+import { mapActions } from 'vuex'
 export default {
   props: {
     singerSong: {
@@ -29,6 +31,18 @@ export default {
   },
   components: {
     SongList
+  },
+  methods: {
+    ...mapActions(['selectPlay']),
+    // 选择歌曲
+    handleSelect (item, index) {
+      console.log(item, index)
+      // 设置当前播放歌曲
+      this.selectPlay({
+        list: this.singerSong,
+        index: index
+      })
+    }
   }
 }
 </script>

@@ -6,8 +6,12 @@ import rankingApi from '@/api/ranking.js'
 import singerApi from '@/api/singer.js'
 import videoApi from '@/api/video.js'
 import {
+  playMode
+} from '@/assets/common/js/config.js'
+import {
   ERR_OK
 } from '@/api/config.js'
+import Song from '@/assets/common/js/song.js'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -36,7 +40,13 @@ export default new Vuex.Store({
     }, // 评论列表
     simiMVList: [], // 相似mv
     searchKeywords: '', // 搜索关键词
-    searchCurrentIndex: 0 // 搜索页当前索引
+    searchCurrentIndex: 0, // 搜索页当前索引
+    playing: false, // 播放状态
+    playList: [], // 播放列表
+    playerFullScreen: false, // 是否展开播放
+    sequenceList: [], // 顺序播放列表
+    playMode: playMode.sequence, // 播放模式
+    currentPlayIndex: -1 // 当前播放索引
   },
   mutations: {
     // 设置当前索引
@@ -136,6 +146,30 @@ export default new Vuex.Store({
     // 设置搜索页当前索引
     setSearchCurrentIndex(state, index) {
       state.searchCurrentIndex = index
+    },
+    // 设置播放状态
+    setPlaying(state, playing) {
+      state.playing = playing
+    },
+    // 设置播放列表
+    setPlayList(state, list) {
+      state.playList = list
+    },
+    // 设置是否展开播放
+    setPlayerFullScreen(state, playerFullScreen) {
+      state.playerFullScreen = playerFullScreen
+    },
+    // 设置播放模式
+    setPlayMode(state, mode) {
+      state.playMode = mode
+    },
+    // 设置播放顺序列表
+    setSequenceList(state, list) {
+      state.sequenceList = list
+    },
+    // 设置当前播放索引
+    setCurrentPlayIndex(state, index) {
+      state.currentPlayIndex = index
     }
   },
   actions: {
@@ -156,7 +190,18 @@ export default new Vuex.Store({
         data: res
       } = await recommendApi.getRecommendNewSong()
       if (res.code === ERR_OK) { // 成功获取推荐新音乐
-        context.commit('setRecommendNewSong', res.result)
+        let songList = []
+        res.result.map((item) => { // 循环数组对象对每个数据进行处理 返回需要得数据
+          let singers = item.song.artists.map(item => item.name).join('/')
+          songList.push(new Song({
+            id: item.id,
+            name: item.name,
+            singers,
+            picUrl: item.picUrl
+          }))
+        })
+        context.commit('setRecommendNewSong', songList)
+        console.log(res.result)
       }
     },
     // 获取推荐新碟
@@ -195,10 +240,20 @@ export default new Vuex.Store({
         data: res
       } = await recommendApi.getSongSheetById(id)
       if (res.code === ERR_OK) {
+        let songList = []
+        res.playlist.tracks.map((item) => { // 循环数组对象对每个数据进行处理 返回需要得数据
+          let singers = item.ar.map(item => item.name).join('/')
+          songList.push(new Song({
+            id: item.id,
+            name: item.name,
+            singers,
+            picUrl: item.al.picUrl
+          }))
+        })
         context.commit('setSongSheetDisc', new SongSheetDetail({
           id: res.playlist.id,
           picUrl: res.playlist.coverImgUrl || res.playlist.backgroundCoverUrl,
-          songs: res.playlist.tracks,
+          songs: songList,
           name: res.playlist.name
         }))
       }
@@ -332,6 +387,20 @@ export default new Vuex.Store({
           context.commit('setSimiMVList', videoList)
         }, 20)
       }
+    },
+    // 选择音乐播放播放
+    selectPlay({
+      commit,
+      state
+    }, {
+      list,
+      index
+    }) {
+      commit('setPlaying', true)
+      commit('setPlayerFullScreen', true)
+      commit('setPlayList', list)
+      commit('setSequenceList', list)
+      commit('setCurrentPlayIndex', index)
     }
   },
   modules: {},
@@ -339,6 +408,10 @@ export default new Vuex.Store({
     // 获取歌单详情
     songSheetDisc(state) {
       return state.songSheetDisc
+    },
+    // 当前歌曲
+    currentSong(state) {
+      return state.playList[state.currentPlayIndex] || {}
     }
   }
 })

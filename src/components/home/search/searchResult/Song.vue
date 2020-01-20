@@ -25,6 +25,8 @@ import SongList from '@/components/home/song/SongList'
 import searchApi from '@/api/search.js'
 import { ERR_OK } from '@/api/config.js'
 import { mapState } from 'vuex'
+import Song from '@/assets/common/js/song.js'
+
 export default {
   data () {
     return {
@@ -66,9 +68,15 @@ export default {
         }
         // 将每次查询的歌曲追加到song.songList中
         // 因为可能存在重复数据，所以需要去重处理
-        let list = this.song.songList.concat(res.result.songs)
-        const map = new Map()
-        list = list.filter(item => !map.has(item.id) && map.set(item.id, 1))
+        let songList = []
+        res.result.songs.map((item) => { // 循环数组对象对每个数据进行处理 返回需要得数据
+          let singers = item.artists.map(item => item.name).join('/')
+          songList.push(new Song({ id: item.id, name: item.name, singers }))
+        })
+        let list = this.song.songList.concat(songList)
+        // const map = new Map()
+        // list = list.filter(item => !map.has(item.id) && map.set(item.id, 1))
+
         this.song.songList = list
         // 关闭加载logo
         this.loading = false

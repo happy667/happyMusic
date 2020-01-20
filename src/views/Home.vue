@@ -1,16 +1,17 @@
 <template>
   <div class="home-container">
     <home-header></home-header>
-    <home-footer></home-footer>
+    <!-- 头部导航栏 -->
+    <home-section></home-section>
   </div>
 </template>
 <script>
 import HomeHeader from '@/components/home/Header'
-import HomeFooter from '@/components/home/Footer'
+import HomeSection from '@/components/home/Section'
 export default {
   components: {
     HomeHeader,
-    HomeFooter
+    HomeSection
   }
 }
 </script>

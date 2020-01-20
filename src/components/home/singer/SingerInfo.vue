@@ -39,6 +39,7 @@ import SingerSong from './singerInfo/SingerSong'
 import SingerAlbum from './singerInfo/SingerAlbum'
 import SingerDetail from './singerInfo/SingerDetail'
 import SingerApi from '@/api/singer.js'
+import Song from '@/assets/common/js/song.js'
 import {
   ERR_OK
 } from '@/api/config.js'
@@ -85,26 +86,30 @@ export default {
       // 获取歌手单曲
       const { data: res } = await SingerApi.getSingerSong(id)
       if (res.code === ERR_OK) { // 成功获取歌手单曲
-        this.singerSong = res.hotSongs
-        console.log(this.singerSong)
+        let songList = []
+        res.hotSongs.map((item) => { // 循环数组对象对每个数据进行处理 返回需要得数据
+          let singers = item.ar.map(item => item.name).join('/')
+          songList.push(new Song({ id: item.id, name: item.name, singers, picUrl: item.al.picUrl }))
+        })
+        this.singerSong = songList
       }
     },
     async getSingerAlbum (id) {
       // 获取歌手专辑
-      const { data: res2 } = await SingerApi.getSingerAlbum(id)
-      if (res2.code === ERR_OK) { // 成功获取歌手单曲
-        this.singerAlbum = res2.hotAlbums
+      const { data: res } = await SingerApi.getSingerAlbum(id)
+      if (res.code === ERR_OK) { // 成功获取歌手单曲
+        this.singerAlbum = res.hotAlbums
         console.log(this.singerAlbum)
       }
     },
     async getSingerDetail (id) {
       // 获取歌手详情
-      const { data: res3 } = await SingerApi.getSingerDetail(id)
-      if (res3.code === ERR_OK) { // 成功 获取歌手详情
+      const { data: res } = await SingerApi.getSingerDetail(id)
+      if (res.code === ERR_OK) { // 成功 获取歌手详情
         this.singerDetail = {
-          briefDesc: res3.briefDesc,
-          introduction: res3.introduction,
-          topicData: res3.topicData
+          briefDesc: res.briefDesc,
+          introduction: res.introduction,
+          topicData: res.topicData
         }
         console.log(this.singerDetail)
       }

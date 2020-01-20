@@ -2,20 +2,25 @@
   <header class="header-container">
     <div class="back"
          @click="handleBack">
-      <van-icon name="arrow-left" />
+      <van-icon name="arrow-down" />
     </div>
     <div class="song-info">
-      <div class="song-name">Faded</div>
-      <div class="singer">Alan Walker</div>
+      <div class="song-name">{{currentSong.name}}</div>
+      <div class="singer">{{currentSong.singers}}</div>
     </div>
   </header>
 </template>
 <script>
+import { mapGetters, mapMutations } from 'vuex'
 export default {
   methods: {
+    ...mapMutations(['setPlayerFullScreen']),
     handleBack () {
-      this.$router.back()
+      this.setPlayerFullScreen(false)
     }
+  },
+  computed: {
+    ...mapGetters(['currentSong'])
   }
 }
 </script>
@@ -36,6 +41,7 @@ export default {
     height: 0.7rem;
     line-height: 0.7rem;
     color: $color-common;
+    z-index: 999;
   }
 
   .song-info {

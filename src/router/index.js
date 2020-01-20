@@ -11,7 +11,7 @@ const VideoInfo = () => import('../components/home/video/VideoInfo')
 const Search = () => import('../components/home/search/Search')
 const SearchBox = () => import('../components/home/search/SearchBox')
 const SearchResult = () => import('../components/home/search/SearchResult')
-const Play = () => import('../components/home/play/Play')
+const Player = () => import('../components/common/Player')
 const SongComment = () => import('../components/home/song/SongComment')
 const SingerInfo = () => import('../components/home/singer/SingerInfo')
 Vue.use(VueRouter)
@@ -101,7 +101,7 @@ const routes = [
   {
     path: '/play',
     name: 'play',
-    component: Play
+    component: Player
   },
   // 歌曲评论列表
   {

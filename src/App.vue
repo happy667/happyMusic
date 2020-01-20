@@ -1,13 +1,15 @@
 <template>
   <div id="app">
-    <router-view v-transition
-                 v-if="isRouterAlive"></router-view>
-
+    <keep-alive>
+      <router-view v-transition
+                   v-if="isRouterAlive"></router-view>
+    </keep-alive>
+    <player></player>
   </div>
 </template>
 
 <script>
-
+import Player from '@/components/common/Player'
 export default {
   provide () {
     return {
@@ -26,6 +28,9 @@ export default {
         this.isRouterAlive = true
       })
     }
+  },
+  components: {
+    Player
   }
 }
 </script>
