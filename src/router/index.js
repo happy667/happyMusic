@@ -112,7 +112,7 @@ const routes = [
   },
   // 歌手信息页
   {
-    path: '/singerInfo',
+    path: '/singerInfo/:id',
     name: 'singerInfo',
     component: SingerInfo
   }

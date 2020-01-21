@@ -6,18 +6,33 @@
     </div>
     <div class="song-info">
       <div class="song-name">{{currentSong.name}}</div>
-      <div class="singer">{{currentSong.singers}}</div>
+      <div class="singer"
+           @click="selectSingers">{{currentSong.singers}}</div>
     </div>
   </header>
 </template>
 <script>
 import { mapGetters, mapMutations } from 'vuex'
 export default {
+  inject: ['reload'],
   methods: {
-    ...mapMutations(['setPlayerFullScreen']),
+    ...mapMutations(['setPlayerFullScreen', 'setSinger', 'setSingerCurrentIndex']),
     handleBack () {
       this.setPlayerFullScreen(false)
+    },
+    // 选择歌手
+    selectSingers () {
+      console.log(this.currentSong)
+      // if (!this.currentSong.singersId.length) { // 只有一个歌手
+      // 跳转到歌手页面
+      // 根据id查询歌手
+      console.log(this.currentSong)
+      this.setSingerCurrentIndex(0)
+      this.reload()
+      this.$router.push(`/singerInfo/${this.currentSong.singersId}`)
+      // }
     }
+
   },
   computed: {
     ...mapGetters(['currentSong'])

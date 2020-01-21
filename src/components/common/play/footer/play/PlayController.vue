@@ -48,10 +48,10 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  color: $color-common;
 
   .icon {
     i {
-      color: $color-common;
       font-size: 0.7rem;
     }
   }

@@ -35,3 +35,4 @@ Vue.use(PullRefresh)
 Vue.use(Loading)
 Vue.use(Toast)
 Vue.use(Dialog)
+Vue.prototype.$Dialog = Dialog

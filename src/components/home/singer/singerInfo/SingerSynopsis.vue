@@ -15,10 +15,9 @@
   </div>
 </template>
 <script>
-import { mapState } from 'vuex'
 export default {
-  computed: {
-    ...mapState(['singer'])
+  props: {
+    singer: Object
   }
 
 }

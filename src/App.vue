@@ -1,9 +1,7 @@
 <template>
   <div id="app">
-    <keep-alive>
       <router-view v-transition
                    v-if="isRouterAlive"></router-view>
-    </keep-alive>
     <player></player>
   </div>
 </template>

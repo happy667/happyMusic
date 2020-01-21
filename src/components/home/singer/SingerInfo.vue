@@ -8,7 +8,7 @@
                    @click-left="routerBack" />
     </van-sticky>
     <!-- 歌手简介 -->
-    <singer-synopsis />
+    <singer-synopsis :singer="singerDesc" />
     <!--歌手信息-->
     <div class="singer-info">
       <van-tabs title-active-color="#FD4979"
@@ -40,6 +40,7 @@ import SingerAlbum from './singerInfo/SingerAlbum'
 import SingerDetail from './singerInfo/SingerDetail'
 import SingerApi from '@/api/singer.js'
 import Song from '@/assets/common/js/song.js'
+import Singer from '@/assets/common/js/singer.js'
 import {
   ERR_OK
 } from '@/api/config.js'
@@ -47,6 +48,7 @@ import { mapState, mapMutations } from 'vuex'
 export default {
   data () {
     return {
+      singerDesc: {},
       singerSong: [], // 歌手单曲
       singerAlbum: [], // 歌手专辑
       singerDetail: {} // 歌手详情
@@ -89,8 +91,17 @@ export default {
         let songList = []
         res.hotSongs.map((item) => { // 循环数组对象对每个数据进行处理 返回需要得数据
           let singers = item.ar.map(item => item.name).join('/')
-          songList.push(new Song({ id: item.id, name: item.name, singers, picUrl: item.al.picUrl }))
+          let singersId = item.ar.map(item => item.id).join(',')
+          songList.push(new Song({ id: item.id, name: item.name, singers, singersId, picUrl: item.al.picUrl }))
         })
+        let singer = new Singer({
+          id: res.artist.id,
+          name: res.artist.name,
+          avatar: res.artist.img1v1Url,
+          aliaName: res.artist.alias[0],
+          picUrl: res.artist.picUrl
+        })
+        this.singerDesc = singer
         this.singerSong = songList
       }
     },

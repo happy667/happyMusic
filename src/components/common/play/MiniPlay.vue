@@ -4,14 +4,14 @@
     <div class="fixed">
       <!-- 左侧图片 -->
       <div class="left">
-        <img src="http://p2.music.126.net/bneNR7SFgi-qe814_bAgdQ==/109951164583628522.jpg?param=140y140">
+        <img :src="currentSong.picUrl">
       </div>
       <div class="right">
         <div class="top">
           <!--歌曲信息-->
           <div class="song-info">
-            <p class="song-name">This Girl</p>
-            <p class="singer">Kungs</p>
+            <p class="song-name">{{currentSong.name}}</p>
+            <p class="singer">{{currentSong.singers}}</p>
           </div>
           <!-- 按钮区域 -->
           <div class="player-controller">
@@ -40,8 +40,11 @@
   </div>
 </template>
 <script>
-import { mapMutations } from 'vuex'
+import { mapMutations, mapGetters } from 'vuex'
 export default {
+  computed: {
+    ...mapGetters(['currentSong'])
+  },
   methods: {
     ...mapMutations(['setPlayerFullScreen']),
     handleClick () {
@@ -74,6 +77,7 @@ export default {
        margin-right: 0.25rem;
        width: 1.2rem;
        height: 1.2rem;
+       animation: turn 10s linear infinite;
 
        img {
          display: block;
@@ -92,6 +96,8 @@ export default {
          justify-content: space-between;
 
          .song-info {
+           flex :1;
+           width :4rem;
            margin-right: 0.5rem;
 
            .song-name {
@@ -103,6 +109,7 @@ export default {
            }
 
            .singer {
+             flex: 1;
              height: 0.5rem;
              line-height: 0.5rem;
              font-size: $font-size-smaller-x;
@@ -112,6 +119,7 @@ export default {
          }
 
          .player-controller {
+           flex:1;
            width: 3.25rem;
            display: flex;
            justify-content: space-between;
@@ -141,6 +149,28 @@ export default {
          }
        }
      }
+   }
+ }
+
+ @keyframes turn {
+   0% {
+     transform: rotate(0deg);
+   }
+
+   25% {
+     transform: rotate(90deg);
+   }
+
+   50% {
+     transform: rotate(180deg);
+   }
+
+   75% {
+     transform: rotate(270deg);
+   }
+
+   100% {
+     transform: rotate(360deg);
    }
  }
 </style>

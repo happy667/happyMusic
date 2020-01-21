@@ -5,6 +5,7 @@ import recommendApi from '@/api/recommend.js'
 import rankingApi from '@/api/ranking.js'
 import singerApi from '@/api/singer.js'
 import videoApi from '@/api/video.js'
+import songApi from '@/api/song.js'
 import {
   playMode
 } from '@/assets/common/js/config.js'
@@ -242,11 +243,13 @@ export default new Vuex.Store({
       if (res.code === ERR_OK) {
         let songList = []
         res.playlist.tracks.map((item) => { // 循环数组对象对每个数据进行处理 返回需要得数据
-          let singers = item.ar.map(item => item.name).join('/')
+          let singerName = item.ar.map(item => item.name).join('/')
+          let singersId = item.ar.map(item => item.id).join(',')
           songList.push(new Song({
             id: item.id,
             name: item.name,
-            singers,
+            singers: singerName,
+            singersId,
             picUrl: item.al.picUrl
           }))
         })
@@ -401,7 +404,15 @@ export default new Vuex.Store({
       commit('setPlayList', list)
       commit('setSequenceList', list)
       commit('setCurrentPlayIndex', index)
+    },
+    // 检查音乐是否可用
+    async checkMusic(context, id) {
+      const {
+        data: res
+      } = await songApi.checkMusic(id)
+      return res
     }
+
   },
   modules: {},
   getters: {

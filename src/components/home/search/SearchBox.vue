@@ -54,7 +54,6 @@
   </div>
 </template>
 <script>
-import { Dialog } from 'vant'
 import searchApi from '@/api/search.js'
 import { ERR_OK } from '@/api/config.js'
 import { mapState, mapMutations } from 'vuex'
@@ -90,7 +89,7 @@ export default {
     },
     // 清空历史搜索记录
     clearLocalList () {
-      Dialog.confirm({
+      this.$Dialog.confirm({
         message: '是否清空历史搜索记录',
         confirmButtonColor: '#FD4979',
         width: '265px'

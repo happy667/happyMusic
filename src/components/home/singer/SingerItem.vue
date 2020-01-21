@@ -28,7 +28,7 @@ export default {
     selectItem (item) {
       this.setSinger(item)
       this.setSingerCurrentIndex(0)
-      this.$router.push('/singerInfo')
+      this.$router.push(`/singerInfo/${item.id}`)
     }
   }
 

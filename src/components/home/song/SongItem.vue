@@ -46,17 +46,17 @@ export default {
 .songs-list-item-containter {
   position: relative;
   display: flex;
-  padding: 0.2rem 0.4rem;
+  padding: 0.2rem;
   background: $color-common-background;
   border-radius: 0.2rem;
 
   .song-index {
+    width :1.3rem
     height: 1.4rem;
     line-height: 1.4rem;
-    margin-right: 0.5rem;
     font-size: $font-size-small;
     color: $color-common-b;
-
+    text-align :center;
     &.rank {
       color: $color-common;
     }
@@ -66,7 +66,7 @@ export default {
     width: 1.3rem;
     height: 1.3rem;
     margin: 0.1rem;
-    margin-right: 0.6rem;
+    margin-right: 0.4rem;
 
     img {
       text-align: center;

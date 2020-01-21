@@ -33,14 +33,21 @@ export default {
     SongList
   },
   methods: {
-    ...mapActions(['selectPlay']),
+    ...mapActions(['selectPlay', 'checkMusic']),
     // 选择歌曲
     handleSelect (item, index) {
-      console.log(item, index)
-      // 设置当前播放歌曲
-      this.selectPlay({
-        list: this.singerSong,
-        index: index
+      // 检查音乐是否可用
+      this.checkMusic(item.id).then(res => {
+        if (res.success) {
+          // 设置当前播放歌曲
+          this.selectPlay({
+            list: this.singerSong,
+            index: index
+          })
+        } else {
+          // 提示
+          this.$toast(res.message)
+        }
       })
     }
   }
