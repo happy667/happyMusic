@@ -12,9 +12,9 @@
     </div>
     <div class="song-desc">
       <!-- 歌曲名称 -->
-      <div class="songName">{{song.name}}</div>
+      <div class="song-name">{{song.name}}</div>
       <!-- 歌手名称-专辑名称 -->
-      <div class="sgInfo">{{song.singers}}</div>
+      <div class="sg-info">{{song.singers}}</div>
     </div>
     <!-- 选中前 -->
     <div class="love ">
@@ -46,24 +46,24 @@ export default {
 .songs-list-item-containter {
   position: relative;
   display: flex;
-  padding: 0.2rem;
-  border-radius: 0.2rem;
+  margin: 0.2rem 0;
 
   .song-index {
-    width :1.3rem
+    width: 1.3rem;
     height: 1.4rem;
     line-height: 1.4rem;
     font-size: $font-size-small;
     color: $color-common-b;
-    text-align :center;
+    text-align: center;
+
     &.rank {
       color: $color-common;
     }
   }
 
   .song-img {
-    width: 1.3rem;
-    height: 1.3rem;
+    width: 1.2rem;
+    height: 1.2rem;
     margin: 0.1rem;
     margin-right: 0.4rem;
 
@@ -78,7 +78,7 @@ export default {
   .song-desc {
     font-size: $font-size-smaller;
 
-    .songName {
+    .song-name {
       line-height: 0.8rem;
       margin-bottom: 0.1rem;
       font-weight: 500;
@@ -86,7 +86,7 @@ export default {
       no-wrap();
     }
 
-    .sgInfo {
+    .sg-info {
       color: #777;
       max-width: 4rem;
       no-wrap();

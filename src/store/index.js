@@ -28,7 +28,6 @@ export default new Vuex.Store({
     scrollIndex: 0, // 当前滑动的索引
     stop: false, // 是否停止滚动
     isScroll: false, // 是否是滚动状态
-    singer: {}, // 歌手
     videoList: [], // mv列表
     videoOffset: 0, // mv列表偏移量
     selectVideo: {}, // 选择的mv
@@ -99,10 +98,6 @@ export default new Vuex.Store({
     // 设置歌单分类
     setRankingList(state, rankingList) {
       state.rankingList = rankingList
-    },
-    // 设置歌手
-    setSinger(state, singer) {
-      state.singer = singer
     },
     // 设置video列表偏移量
     setVideoOffset(state, offset) {

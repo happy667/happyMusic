@@ -74,12 +74,12 @@ export default {
 .song-sheet-desc-container>>>.van-loading {
   /* 减去标题栏、图片高度 */
   height: calc(100vh - (100vw + 1.22667rem));
-  background: #fff;
+  background: $color-common-background;
 }
 
 .song-sheet-desc-container {
-  box-shadow: none !important;
-
+  background: $color-common-background;
+  min-height :100vh;
   .songs-img {
     position: relative;
     width: 100%;

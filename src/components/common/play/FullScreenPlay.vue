@@ -60,7 +60,7 @@ export default {
 @import '~common/stylus/variable';
 
 .full-screen-play-container {
-  position: absolute;
+  position: fixed;
   width: 100%;
   height: 100%;
   display: flex;

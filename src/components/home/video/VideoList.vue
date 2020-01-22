@@ -33,7 +33,6 @@
 import VideoItem from './Video'
 import Scroll from '@/components/common/Scroll'
 import { mapActions, mapState } from 'vuex'
-
 export default {
   data () {
     return {
@@ -73,7 +72,6 @@ export default {
     Scroll
   }
 }
-
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
@@ -83,9 +81,10 @@ export default {
 }
 
 .videoList-container {
+
   .video-list {
-    padding: 0.5rem;
     width: 100%;
+    padding: 0.5rem;
     box-sizing: border-box;
     position: absolute;
   }

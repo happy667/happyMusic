@@ -1,5 +1,6 @@
 <template>
-  <div ref="wrapper">
+  <div ref="wrapper"
+       class="scroll">
     <slot></slot>
   </div>
 </template>
@@ -115,4 +116,9 @@ export default {
 }
 </script>
 
-<style scoped lang="stylus" rel="stylesheet/stylus"></style>
+<style scoped lang="stylus" rel="stylesheet/stylus">
+.scroll {
+  /* 减去搜索框、导航栏 */
+  height: calc(100vh - (1.7rem + 1.18rem));
+}
+</style>
