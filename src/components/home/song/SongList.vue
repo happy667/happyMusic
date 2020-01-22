@@ -2,7 +2,7 @@
   <div class="songs-list-containter">
     <ul class="songs-list">
       <li class="songs-list-item"
-          :class="index===currentIndex?'active':''"
+          :class="currentSong.id === item.id ? 'active' : ''"
           v-for="(item,index) in songsList"
           @click="selectItem(item,index)"
           :key="item.id">
@@ -15,14 +15,15 @@
 </template>
 <script>
 import SongItem from './SongItem'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 export default {
   props: {
     songsList: Array,
     currentIndex: Number
   },
   computed: {
-    ...mapState(['rank'])
+    ...mapState(['rank']),
+    ...mapGetters(['currentSong'])
   },
 
   methods: {
@@ -50,7 +51,18 @@ export default {
         .sg-info, .song-name, .song-index {
           color: $color-common;
         }
-        border-left: 3px solid $color-common;
+
+        &::after {
+          position: absolute;
+          top: 50%;
+          left: 0;
+          content: '';
+          display: block;
+          margin-top: -0.65rem;
+          width: 3px;
+          height: 1.3rem;
+          background: $color-common;
+        }
       }
     }
   }
