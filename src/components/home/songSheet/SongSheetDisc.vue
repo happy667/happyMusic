@@ -1,5 +1,5 @@
 <template>
-  <div class="song-sheet-info-container">
+  <div class="song-sheet-desc-container">
     <!-- 头部导航栏 -->
     <van-sticky>
       <van-nav-bar title="歌单列表"
@@ -71,22 +71,20 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.song-sheet-info-container>>>.van-loading {
-  /* 减去标题栏、图片高度、播放区域高度 */
-  height: calc(100vh - (100vw + 1.22667rem + 1.8rem));
+.song-sheet-desc-container>>>.van-loading {
+  /* 减去标题栏、图片高度 */
+  height: calc(100vh - (100vw + 1.22667rem));
   background: #fff;
 }
 
-.song-sheet-info-container {
-  background: $color-common-background;
-  padding-bottom: 1.8rem;
+.song-sheet-desc-container {
+  box-shadow: none !important;
 
   .songs-img {
     position: relative;
     width: 100%;
     height: 0;
     padding-top: 100%;
-    background: $color-common-b;
 
     img {
       position: absolute;
@@ -101,7 +99,6 @@ export default {
     .songs-desc {
       padding: 0.4rem;
       position: relative;
-      background: $color-common-background;
 
       .songs-title {
         max-width: 7rem;

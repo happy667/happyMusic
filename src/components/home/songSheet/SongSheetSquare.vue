@@ -85,26 +85,25 @@ export default {
 @import '~common/stylus/variable';
 
 .song-sheet-square-container>>>.load {
-  height: calc(100vh - 1.22667rem);
+  height: calc(100vh - (1.22667rem + 1.7rem));
 }
 
 .song-sheet-square-container>>>.song-sheet-cagetory-list {
-  min-height: calc(100vh - 1.22667rem);
+  min-height: calc(100vh - (1.22667rem + 1.7rem));
 }
 
 .song-sheet-square-container {
   width: 100%;
   height: 100%;
-  background: #fff;
 
   .recommend-list>>>.songs-sheet-list-container {
     width: 100%;
-    padding: 0.5rem 0;
+    padding-top: 0.5rem;
     box-sizing: border-box;
   }
 
   .song-sheet-cagetory-list {
-    padding: 0.5rem 0;
+    padding-top: 0.5rem;
   }
 }
 </style>

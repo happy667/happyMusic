@@ -16,7 +16,8 @@ import {
   PullRefresh,
   Loading,
   Toast,
-  Dialog
+  Dialog,
+  Lazyload
 } from 'vant'
 Vue.use(Tab)
 Vue.use(Tabs)
@@ -35,4 +36,5 @@ Vue.use(PullRefresh)
 Vue.use(Loading)
 Vue.use(Toast)
 Vue.use(Dialog)
+Vue.use(Lazyload)
 Vue.prototype.$Dialog = Dialog

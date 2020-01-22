@@ -71,19 +71,19 @@ export default {
      display: flex;
      box-sizing: border-box;
      background: $color-common-background;
-     box-shadow: 0.25rem 0 0.5rem rgba(0, 0, 0, 0.2);
+     box-shadow: 0 -0.15rem 1rem rgba(0, 0, 0, 0.2);
 
      .left {
        margin-right: 0.25rem;
        width: 1.2rem;
        height: 1.2rem;
-       animation: turn 10s linear infinite;
 
        img {
          display: block;
          width: 100%;
          height: 100%;
          border-radius: 50%;
+         animation: turn 10s linear infinite;
        }
      }
 
@@ -96,8 +96,8 @@ export default {
          justify-content: space-between;
 
          .song-info {
-           flex :1;
-           width :4rem;
+           flex: 1;
+           width: 4rem;
            margin-right: 0.5rem;
 
            .song-name {
@@ -119,7 +119,7 @@ export default {
          }
 
          .player-controller {
-           flex:1;
+           flex: 1;
            width: 3.25rem;
            display: flex;
            justify-content: space-between;

@@ -2,16 +2,19 @@
   <!-- 歌手简介 -->
   <div class="singer-synopsis-container">
     <!-- loading -->
-    <van-loading v-show="!singer"
+    <van-loading v-if="!singer"
                  size="24px"
                  color="#FD4979"
                  vertical>加载中...</van-loading>
-    <!-- 歌手图片 -->
-    <div class="singer-img">
-      <img :src="singer.picUrl">
-    </div>
-    <!-- 歌手名称 -->
-    <div class="singer-name">{{singer.name}}</div>
+    <template v-show="singer">
+      <!-- 歌手图片 -->
+      <div class="singer-img">
+        <img :src="singer.picUrl">
+      </div>
+      <!-- 歌手名称 -->
+      <div class="singer-name">{{singer.name}}</div>
+    </template>
+
   </div>
 </template>
 <script>

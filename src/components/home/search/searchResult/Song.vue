@@ -74,9 +74,6 @@ export default {
           songList.push(new Song({ id: item.id, name: item.name, singers }))
         })
         let list = this.song.songList.concat(songList)
-        // const map = new Map()
-        // list = list.filter(item => !map.has(item.id) && map.set(item.id, 1))
-
         this.song.songList = list
         // 关闭加载logo
         this.loading = false

@@ -1,22 +1,24 @@
 <template>
   <div class="singer-song-container">
     <!-- loading -->
-    <van-loading v-show="singerSong.length===0"
+    <van-loading v-if="singerSong.length===0"
                  size="24px"
                  color="#FD4979"
                  vertical>加载中...</van-loading>
     <!-- 歌曲数量 -->
-    <div class="play">
-      <div class="play-icon">
-        <van-icon name="play-circle-o" />
+    <template v-show="singerSong.length!==0">
+      <div class="play">
+        <div class="play-icon">
+          <van-icon name="play-circle-o" />
+        </div>
+        <div class="play-all">
+          播放全部({{singerSong.length}})
+        </div>
       </div>
-      <div class="play-all">
-        播放全部({{singerSong.length}})
-      </div>
-    </div>
-    <!-- 歌曲列表 -->
-    <song-list @select="handleSelect"
-               :songsList="singerSong" />
+      <!-- 歌曲列表 -->
+      <song-list @select="handleSelect"
+                 :songsList="singerSong" />
+    </template>
   </div>
 </template>
 <script>

@@ -24,14 +24,20 @@ export default {
     initSwiper () {
       // eslint-disable-next-line no-unused-vars
       var mySwiper = new Swiper('.sw-song-sheet', {
+
         slidesPerView: 'auto',
+        slidesPerGroup: 1,
         resistanceRatio: 0, // 解决左滑留白问题
         // 解决与vant标签页切换冲突问题
         observer: true,
         observeParents: true,
         loop: true,
+        touchRatio: 1.2,
         on: {
           touchStart (e) {
+            e.stopPropagation()
+          },
+          touchEnd (e) {
             e.stopPropagation()
           }
         }

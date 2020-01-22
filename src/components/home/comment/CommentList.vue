@@ -32,6 +32,5 @@ export default {
 
 .comment-list-container {
   width: 100%;
-  background: #fff;
 }
 </style>

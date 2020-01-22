@@ -47,7 +47,6 @@ export default {
   position: relative;
   display: flex;
   padding: 0.2rem;
-  background: $color-common-background;
   border-radius: 0.2rem;
 
   .song-index {

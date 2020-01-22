@@ -147,7 +147,6 @@ export default {
 }
 
 .van-search__content {
-  background-color: #fff;
   border: 0.03rem solid #e3e3e3;
 }
 

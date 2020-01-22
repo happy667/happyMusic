@@ -40,6 +40,8 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
+@import '~common/stylus/variable';
+
 .play-container {
   position: absolute;
   left: 0;
@@ -47,5 +49,6 @@ export default {
   right: 0;
   bottom: 0;
   z-index: 99;
+  background: $color-common-background;
 }
 </style>

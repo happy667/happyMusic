@@ -27,13 +27,11 @@ export default {
 @import '~common/stylus/variable';
 
 .song-img-item-container {
-  background: $color-common-background;
 
   .song-img-item {
     box-sizing: border-box;
     padding: 0.3rem 0.2rem;
     width: 2.8rem;
-    background: $color-common-background;
     box-shadow: 0 0.25rem 0.6rem rgba(0, 0, 0, 0.1);
     border-radius: 0.3rem;
 

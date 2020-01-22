@@ -10,7 +10,7 @@
     <play-list v-show="showPlayList"></play-list>
     <!-- 背景 -->
     <div class="bg"
-         :style="background"></div>
+         v-lazy:background-image="currentSong.picUrl "></div>
     <audio ref="audio"
            autoplay
            :src="musicUrl"></audio>
@@ -31,12 +31,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['currentSong']),
-    background () {
-      return {
-        backgroundImage: 'url(' + this.currentSong.picUrl + ')'
-      }
-    }
+    ...mapGetters(['currentSong'])
   },
   watch: {
     currentSong () {
@@ -62,6 +57,8 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
+@import '~common/stylus/variable';
+
 .full-screen-play-container {
   position: absolute;
   width: 100%;
@@ -69,7 +66,6 @@ export default {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  background: #fff;
   z-index: 99;
 
   .bg {
@@ -85,6 +81,7 @@ export default {
     filter: blur(10px);
     z-index: -1;
     opacity: 0.3;
+    background: $color-common-b;
   }
 }
 </style>

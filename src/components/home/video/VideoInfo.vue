@@ -105,7 +105,6 @@ export default {
 @import '~common/stylus/variable';
 
 .videoInfo-container {
-  background: $color-common-background;
   width: 100%;
 
   .content {

@@ -68,7 +68,7 @@ export default {
       .swiper-slide {
         width: 100%;
         box-sizing: border-box;
-        padding: 0.4rem;
+        padding: 0.45rem 0.4rem;
       }
     }
   }

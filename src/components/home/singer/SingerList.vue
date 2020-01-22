@@ -9,13 +9,14 @@
         class="fixed-title singer-list-group-title"
         v-show="fixedTitle">{{fixedTitle}}</h2>
     <scroll :data="singerList"
+            class="scroll"
             ref="singerList"
             @scroll="scroll"
             @scrollToEnd="scrollToEnd"
             :listenScroll="listenScroll"
             :scrollEnd="scrollEnd"
             :probeType="probeType">
-      <div class="singer-list-wrapper">
+      <div class="singer-list-wrapper" :style="paddingBottom">
         <ul class="singer-list"
             v-if="this.singerList.length !== 0">
           <li class="singer-list-item"
@@ -38,7 +39,7 @@
 <script>
 import Scroll from '@/components/common/Scroll'
 import SingerItem from './SingerItem'
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapGetters } from 'vuex'
 export default {
   props: {
     singerList: {
@@ -62,12 +63,17 @@ export default {
   },
   computed: {
     ...mapState(['scrollIndex', 'stop', 'isScroll']),
+    ...mapGetters(['currentSong']),
     // 固定标题
     fixedTitle () {
       if (this.scrollY > 0 || this.scrollIndex >= this.singerList.length - 1) {
         return ''
       }
       return this.singerList[this.scrollIndex] ? this.singerList[this.scrollIndex].title : ''
+    },
+
+    paddingBottom () {
+      return Object.keys(this.currentSong).length === 0 ? '' : { paddingBottom: '1.8rem' }
     }
   },
   watch: {
@@ -176,6 +182,11 @@ export default {
 .singer-list-container {
   position: relative;
   width: 100%;
+
+  .scroll {
+    /* 减去搜索框、导航栏 */
+    height: calc(100vh - (1.7rem + 1.18rem));
+  }
 
   h2.fixed-title {
     position: absolute;

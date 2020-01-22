@@ -28,11 +28,11 @@ export default {
 
   .song-img {
     position: relative;
-    width: 5.4rem;
-    height: 5.4rem;
+    width:4.3rem;
+    height: 4.3rem;
     border-radius: 50%;
     animation: turn 10s linear infinite;
-    padding: 1.1rem;
+    padding: 1.3rem;
     background: transparent url('http://s3.music.126.net/mobile-new/img/disc-plus.png?b700b62e1971b351dcb8b8ce1c9ceea3=') center center;
     background-size: 100% 100%;
     border-radius: 50%;
@@ -42,6 +42,7 @@ export default {
       width: 100%;
       height: 100%;
       border-radius: 50%;
+      background :$color-common-b;
     }
 
     .img {

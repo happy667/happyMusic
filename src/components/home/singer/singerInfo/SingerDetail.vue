@@ -40,9 +40,7 @@ export default {
 <style lang="stylus" scoped>
 .singer-detail-container {
   @import '~common/stylus/variable';
-
   padding: 0.4rem;
-
   .title {
     margin-bottom: 0.2rem;
     font-size: $font-size-smaller;

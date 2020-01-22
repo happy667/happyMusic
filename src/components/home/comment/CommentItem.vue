@@ -40,7 +40,6 @@ export default {
 .comment-item-container {
   padding: 0.35rem 0;
   border-bottom: 0.03rem solid #efefef;
-  background: #fff;
 
   .comment-header {
     display: flex;

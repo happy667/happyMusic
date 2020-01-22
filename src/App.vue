@@ -1,13 +1,15 @@
 <template>
-  <div id="app">
-      <router-view v-transition
-                   v-if="isRouterAlive"></router-view>
+  <div id="app"
+       :style="paddingBottom">
+    <router-view v-transition
+                 v-if="isRouterAlive"></router-view>
     <player></player>
   </div>
 </template>
 
 <script>
 import Player from '@/components/common/Player'
+import { mapGetters } from 'vuex'
 export default {
   provide () {
     return {
@@ -17,6 +19,12 @@ export default {
   data () {
     return {
       isRouterAlive: true
+    }
+  },
+  computed: {
+    ...mapGetters(['currentSong']),
+    paddingBottom () {
+      return Object.keys(this.currentSong).length === 0 ? '' : { paddingBottom: '1.8rem' }
     }
   },
   methods: {

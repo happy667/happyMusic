@@ -1,13 +1,11 @@
 <template>
-  <div ref="wrapper"
-       class="scroll">
+  <div ref="wrapper">
     <slot></slot>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 import BScroll from 'better-scroll'
-
 export default {
   props: {
     probeType: {
@@ -43,6 +41,7 @@ export default {
       default: 20
     }
   },
+
   mounted () {
     setTimeout(() => {
       this._initScroll()
@@ -116,9 +115,4 @@ export default {
 }
 </script>
 
-<style scoped lang="stylus" rel="stylesheet/stylus">
-.scroll {
-  /* 减去搜索框、导航栏、底部播放区域高度 */
-  height: calc(100vh - (1.7rem + 1.18rem + 1.8rem));
-}
-</style>
+<style scoped lang="stylus" rel="stylesheet/stylus"></style>

@@ -33,7 +33,6 @@ export default {
 <style lang="stylus" scoped>
 .song-comment-container {
   height: 100%;
-  background: #fff;
 
   .section {
     padding: 0.5rem;

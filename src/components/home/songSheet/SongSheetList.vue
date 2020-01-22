@@ -76,7 +76,6 @@ export default {
 
 .songs-sheet-list-container {
   width: 100%;
-  background: $color-common-background;
 
   .songs-sheet-list {
     display: flex;
