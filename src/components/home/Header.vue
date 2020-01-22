@@ -15,8 +15,3 @@ export default {
   }
 }
 </script>
-<style lang="stylus" scoped>
-.header-container {
-  height: 100%;
-}
-</style>

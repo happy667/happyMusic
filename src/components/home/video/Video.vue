@@ -176,9 +176,8 @@ export default {
       }
     }
   },
-
   methods: {
-    ...mapMutations(['setSinger', 'setSelectVideo', 'setOldVideo', 'setSingerCurrentIndex']),
+    ...mapMutations(['setSelectVideo', 'setOldVideo', 'setSingerCurrentIndex']),
     // 跳转到mv详情页
     goToVideoInfo () {
       // 因为该组件用到了多个地方，但是在mv详情页不需要做跳转，所以需要判断当前路由地址
@@ -268,7 +267,6 @@ export default {
         this.handleClickScreen()
       }
     },
-
     // 切换全屏播放
     handleFullScreen () {
       this.isFullScreen = !this.isFullScreen
@@ -276,9 +274,8 @@ export default {
     },
     // 选择歌手
     selectSinger (item) {
-      this.setSinger(item)
       this.setSingerCurrentIndex(0)
-      this.$router.push('/singerInfo')
+      this.$router.push(`/singerInfo/${item.id}`)
     }
     // 视频宽高设置为手机宽高
     // videoFullScreen () {

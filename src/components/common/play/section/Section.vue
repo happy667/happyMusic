@@ -21,14 +21,13 @@ export default {
 .section-container {
   flex: 1;
   width: 100%;
-  height: 10rem;
   display: flex;
   justify-content: center;
   align-items: center;
 
   .song-img {
     position: relative;
-    width:4.3rem;
+    width: 4.3rem;
     height: 4.3rem;
     border-radius: 50%;
     animation: turn 10s linear infinite;
@@ -42,7 +41,7 @@ export default {
       width: 100%;
       height: 100%;
       border-radius: 50%;
-      background :$color-common-b;
+      background: $color-common-b;
     }
 
     .img {
@@ -60,18 +59,6 @@ export default {
   @keyframes turn {
     0% {
       transform: rotate(0deg);
-    }
-
-    25% {
-      transform: rotate(90deg);
-    }
-
-    50% {
-      transform: rotate(180deg);
-    }
-
-    75% {
-      transform: rotate(270deg);
     }
 
     100% {

@@ -46,6 +46,9 @@ import {
 } from '@/api/config.js'
 import { mapState, mapMutations } from 'vuex'
 export default {
+  props: {
+    id: String
+  },
   data () {
     return {
       singerDesc: {},
@@ -61,7 +64,7 @@ export default {
   },
   beforeRouteEnter: (to, from, next) => {
     next(vm => {
-      if (!vm.singer.id) {
+      if (!vm.id) {
         vm.$router.push('/home')
       }
     })
@@ -74,13 +77,13 @@ export default {
     handleTabsChange (name) {
       switch (name) {
         case 0:// 歌手单曲
-          if (this.singerSong.length === 0) this.getSingerSong(this.singer.id)
+          if (this.singerSong.length === 0) this.getSingerSong(this.id)
           break
         case 1:// 歌手专辑
-          if (this.singerAlbum.length === 0) this.getSingerAlbum(this.singer.id)
+          if (this.singerAlbum.length === 0) this.getSingerAlbum(this.id)
           break
         case 2: // 歌手详情
-          if (Object.keys(this.singerDetail).length === 0) this.getSingerDetail(this.singer.id)
+          if (Object.keys(this.singerDetail).length === 0) this.getSingerDetail(this.id)
           break
       }
     },
@@ -148,6 +151,7 @@ export default {
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
+
 .singer-info-container>>>.van-loading {
   // 减去头部标题高度、歌手图片高度、标签页高度
   height: calc(100vh - (1.22667rem + 6rem + 1.18rem));
@@ -155,6 +159,7 @@ export default {
 
 .singer-info-container {
   width: 100%;
-  height: 100%;
+  min-height: 100vh;
+  background-color: $color-common-background;
 }
 </style>
