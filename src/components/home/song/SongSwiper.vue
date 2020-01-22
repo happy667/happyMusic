@@ -59,6 +59,8 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .song-swiper-container>>>.swiper-container .swiper-wrapper .swiper-slide .songs-list-item-containter {
+  padding: 0.2rem;
+  border-radius: 0.2rem;
   box-shadow: 0 0.1rem 0.8rem rgba(0, 0, 0, 0.1);
 }
 
