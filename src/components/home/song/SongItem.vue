@@ -46,7 +46,7 @@ export default {
 .songs-list-item-containter {
   position: relative;
   display: flex;
-  margin: 0.2rem 0;
+  padding: 0.2rem 0;
 
   .song-index {
     width: 1.3rem;
