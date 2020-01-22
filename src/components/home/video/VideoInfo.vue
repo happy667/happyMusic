@@ -75,7 +75,6 @@ export default {
     routerBack () {
       this.$router.back()
     },
-
     // 上拉加载
     handlePullingUp () {
       setTimeout(async () => {
@@ -105,6 +104,7 @@ export default {
 @import '~common/stylus/variable';
 
 .videoInfo-container {
+  background: $color-common-background;
   width: 100%;
 
   .content {

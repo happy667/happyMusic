@@ -1,25 +1,26 @@
 <template>
   <div class="singer-album-container">
     <!-- loading -->
-    <van-loading v-show="singerAlbum.length===0"
+    <van-loading v-if="singerAlbum.length===0"
                  size="24px"
                  color="#FD4979"
                  vertical>加载中...</van-loading>
-    <div class="singer-album-wrapper">
-      <ul class="singer-album-list">
-        <li class="singer-album-list-item"
-            @click="selectItem(item)"
-            v-for="item in singerAlbum"
-            :key="item.id">
-          <div class="item-img">
-            <img v-lazy="item.picUrl" />
-          </div>
-          <div class="item-name">{{item.name}}</div>
-          <div class="item-pub-time">{{item.publishTime|convertTime}}</div>
-        </li>
-
-      </ul>
-    </div>
+    <template v-show="singerAlbum.length!==0">
+      <div class="singer-album-wrapper">
+        <ul class="singer-album-list">
+          <li class="singer-album-list-item"
+              @click="selectItem(item)"
+              v-for="item in singerAlbum"
+              :key="item.id">
+            <div class="item-img">
+              <img v-lazy="item.picUrl" />
+            </div>
+            <div class="item-name">{{item.name}}</div>
+            <div class="item-pub-time">{{item.publishTime|convertTime}}</div>
+          </li>
+        </ul>
+      </div>
+    </template>
   </div>
 </template>
 <script>

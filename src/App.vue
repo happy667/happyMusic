@@ -40,3 +40,8 @@ export default {
   }
 }
 </script>
+<style lang="stylus" scoped>
+#app {
+ box-shadow :none;
+}
+</style>

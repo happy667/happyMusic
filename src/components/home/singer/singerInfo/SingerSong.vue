@@ -11,19 +11,21 @@
         <div class="play-icon">
           <van-icon name="play-circle-o" />
         </div>
-        <div class="play-all">
+        <div class="play-all"
+             @click="handlePlayAll">
           播放全部({{singerSong.length}})
         </div>
       </div>
       <!-- 歌曲列表 -->
       <song-list @select="handleSelect"
+                 :currentIndex="currentPlayIndex"
                  :songsList="singerSong" />
     </template>
   </div>
 </template>
 <script>
 import SongList from '@/components/home/song/SongList'
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 export default {
   props: {
     singerSong: {
@@ -33,6 +35,9 @@ export default {
   },
   components: {
     SongList
+  },
+  computed: {
+    ...mapState(['currentPlayIndex'])
   },
   methods: {
     ...mapActions(['selectPlay', 'checkMusic']),
@@ -50,6 +55,13 @@ export default {
           // 提示
           this.$toast(res.message)
         }
+      })
+    },
+    handlePlayAll () {
+      // 设置当前播放歌曲
+      this.selectPlay({
+        list: this.singerSong,
+        index: 0
       })
     }
   }

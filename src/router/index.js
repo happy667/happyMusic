@@ -114,7 +114,8 @@ const routes = [
   {
     path: '/singerInfo/:id',
     name: 'singerInfo',
-    component: SingerInfo
+    component: SingerInfo,
+    props: true
   }
 ]
 

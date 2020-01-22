@@ -23,10 +23,9 @@ export default {
     MusicImg
   },
   methods: {
-    ...mapMutations(['setSinger', 'setSingerCurrentIndex']),
+    ...mapMutations(['setSingerCurrentIndex']),
     // 选择歌手
     selectItem (item) {
-      this.setSinger(item)
       this.setSingerCurrentIndex(0)
       this.$router.push(`/singerInfo/${item.id}`)
     }
