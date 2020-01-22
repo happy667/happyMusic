@@ -62,8 +62,8 @@ export default {
   }
 
   .song-img {
-    width: 1.3rem;
-    height: 1.3rem;
+    width: 1.2rem;
+    height: 1.2rem;
     margin: 0.1rem;
     margin-right: 0.4rem;
 
