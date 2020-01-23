@@ -6,20 +6,20 @@
                  color="#FD4979"
                  vertical>加载中...</van-loading>
     <!-- 歌手简介 -->
-    <template v-show="!isLoad">
-    <div class="singer-synopsis">
-      <h2 class="title">歌手简介</h2>
-      <p class="context">
-        {{singerDetail.briefDesc}}
-      </p>
-    </div>
-    <div class="singer-introduction"
-         v-for="item in singerDetail.introduction"
-         :key="item.ti">
-      <h2 class="title">{{item.ti}}</h2>
-      <p class="context"
-         v-html="item.txt"></p>
-    </div>
+    <template v-if="!isLoad">
+      <div class="singer-synopsis">
+        <h2 class="title">歌手简介</h2>
+        <p class="context">
+          {{singerDetail.briefDesc}}
+        </p>
+      </div>
+      <div class="singer-introduction"
+          v-for="item in singerDetail.introduction"
+          :key="item.ti">
+        <h2 class="title">{{item.ti}}</h2>
+        <p class="context"
+          v-html="item.txt"></p>
+      </div>
     </template>
   </div>
 
@@ -42,7 +42,7 @@ export default {
 <style lang="stylus" scoped>
 .singer-detail-container {
   @import '~common/stylus/variable';
-  padding: 0.4rem;
+  padding: 0.4rem 0.4rem 0 0.4rem;
   .title {
     margin-bottom: 0.2rem;
     font-size: $font-size-smaller;

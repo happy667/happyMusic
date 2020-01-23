@@ -12,7 +12,7 @@
           <van-icon name="play-circle-o" />
         </div>
         <div class="play-all"
-             @click="handlePlayAll">
+             @click="handleSelect(singerSong[0],0)">
           播放全部({{singerSong.length}})
         </div>
       </div>
@@ -40,30 +40,16 @@ export default {
     ...mapState(['currentPlayIndex'])
   },
   methods: {
-    ...mapActions(['selectPlay', 'checkMusic']),
+    ...mapActions(['setSelectPlay', 'playMusic']),
     // 选择歌曲
     handleSelect (item, index) {
-      // 检查音乐是否可用
-      this.checkMusic(item.id).then(res => {
-        if (res.success) {
-          // 设置当前播放歌曲
-          this.selectPlay({
-            list: this.singerSong,
-            index: index
-          })
-        } else {
-          // 提示
-          this.$toast(res.message)
-        }
-      })
-    },
-    handlePlayAll () {
-      // 设置当前播放歌曲
-      this.selectPlay({
+      this.playMusic({
         list: this.singerSong,
-        index: 0
+        index,
+        song: item
       })
     }
+
   }
 }
 </script>

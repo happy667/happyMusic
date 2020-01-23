@@ -23,19 +23,29 @@
     <section v-if="songSheetDisc.songs">
       <div class="songs-desc">
         <div class="songs-title">{{songSheetDisc.name}}</div>
-        <div class="songs-num">{{songSheetDisc.songs.length}}首</div>
+        <div class="songs-nt">
+          <div class="songs-num">{{songSheetDisc.songs.length}}首</div>
+          <div class="songs-time"
+               v-if="songSheetDisc.songs.length!==0">{{songSheetDisc.trackUpdateTime|convertTime}}</div>
+        </div>
+
         <!-- 播放按钮 -->
-        <div class="playBtn">
+        <div class="playBtn"
+             @click="playAll">
           <i class="iconfont icon-bofang"></i>
         </div>
       </div>
       <!-- 歌曲列表 -->
-      <songs-list :songsList="songSheetDisc.songs"></songs-list>
+      <songs-list :songsList="songSheetDisc.songs"
+                  @select="handleSelect"></songs-list>
+      <div class="songs-list-null"
+           v-if="songSheetDisc.songs.length===0">暂无相关资源</div>
     </section>
 
   </div>
 </template>
 <script>
+import 'common/js/convert.js'
 import SongsList from '@/components/home/song/SongList'
 import { mapGetters, mapActions } from 'vuex'
 export default {
@@ -45,26 +55,33 @@ export default {
   computed: {
     ...mapGetters(['songSheetDisc'])
   },
+  mounted () {
+    this.getSongSheetById(this.id)
+  },
   methods: {
-    ...mapActions(['getSongSheetById', 'getSingerAlbumDetail']),
+    ...mapActions(['getSongSheetById', 'getSingerAlbumDetail', 'playMusic', 'setSelectPlay']),
     // 返回上一个路由
     routerBack () {
       this.$router.back()
+    },
+    // 选择歌曲
+    handleSelect (item, index) {
+      this.playMusic({
+        list: this.songSheetDisc.songs,
+        index,
+        song: item
+      })
+    },
+    // 播放所有
+    playAll () {
+      this.setSelectPlay({
+        index: 0,
+        list: this.songSheetDisc.songs
+      })
     }
   },
   components: {
     SongsList
-  },
-  beforeRouteEnter: (to, from, next) => {
-    if (from.path === '/singerInfo') { // 说明从歌手页面传来
-      next(vm => {
-        vm.getSingerAlbumDetail(vm.id)
-      })
-    } else {
-      next(vm => {
-        vm.getSongSheetById(vm.id)
-      })
-    }
   }
 }
 </script>
@@ -79,7 +96,8 @@ export default {
 
 .song-sheet-desc-container {
   background: $color-common-background;
-  min-height :100vh;
+  min-height: 100vh;
+
   .songs-img {
     position: relative;
     width: 100%;
@@ -109,9 +127,18 @@ export default {
         no-wrap2();
       }
 
-      .songs-num {
-        font-size: $font-size-smaller;
+      .songs-nt {
+        display: flex;
+        justify-content: space-between;
         color: $color-common-b;
+
+        .songs-num {
+          font-size: $font-size-smaller;
+        }
+
+        .songs-time {
+          font-size: $font-size-smaller-x;
+        }
       }
 
       .playBtn {
@@ -134,6 +161,13 @@ export default {
           font-size: 0.8rem;
         }
       }
+    }
+
+    .songs-list-null {
+      height: 1rem;
+      font-size: $font-size-smaller;
+      text-align: center;
+      color: $color-common-b;
     }
   }
 }

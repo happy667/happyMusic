@@ -3,11 +3,13 @@ export default class Singer {
     id,
     picUrl,
     songs,
-    name
+    name,
+    trackUpdateTime
   }) {
     this.id = id
     this.name = name
     this.songs = songs
     this.picUrl = picUrl
+    this.trackUpdateTime = trackUpdateTime
   }
 }

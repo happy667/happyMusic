@@ -14,6 +14,8 @@ const SearchResult = () => import('../components/home/search/SearchResult')
 const Player = () => import('../components/common/Player')
 const SongComment = () => import('../components/home/song/SongComment')
 const SingerInfo = () => import('../components/home/singer/SingerInfo')
+const Album = () => import('../components/home/singer/album/Album')
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -115,6 +117,13 @@ const routes = [
     path: '/singerInfo/:id',
     name: 'singerInfo',
     component: SingerInfo,
+    props: true
+  },
+  // 歌手专辑详情页
+  {
+    path: '/album/:id',
+    name: 'album',
+    component: Album,
     props: true
   }
 ]

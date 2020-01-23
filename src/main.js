@@ -24,6 +24,8 @@ Vue.use(animate)
 // 使用懒加载
 Vue.use(VueLazyLoad, {
   loading: require('@/assets/images/lazyLoad.png')
+}, {
+  preLoad: 1.5
 })
 new Vue({
   router,

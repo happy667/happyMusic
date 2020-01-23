@@ -8,7 +8,7 @@
                    @click-left="routerBack" />
     </van-sticky>
     <!-- 歌手简介 -->
-    <singer-synopsis :singer="singerDesc" />
+    <singer-synopsis :singer="singer" />
     <!--歌手信息-->
     <div class="singer-info">
       <van-tabs title-active-color="#FD4979"
@@ -69,8 +69,19 @@ export default {
       }
     })
   },
+  computed: {
+    ...mapState(['singer', 'singerCurrentIndex']),
+    currentIndex: {
+      get () {
+        return this.singerCurrentIndex
+      },
+      set (index) {
+        this.setSingerCurrentIndex(index)
+      }
+    }
+  },
   methods: {
-    ...mapMutations(['setSingerCurrentIndex']),
+    ...mapMutations(['setSingerCurrentIndex', 'setSinger']),
     routerBack () {
       this.$router.back()
     },
@@ -104,7 +115,8 @@ export default {
           aliaName: res.artist.alias[0],
           picUrl: res.artist.picUrl
         })
-        this.singerDesc = singer
+        // 设置歌手
+        this.setSinger(singer)
         this.singerSong = songList
       }
     },
@@ -130,17 +142,7 @@ export default {
     }
 
   },
-  computed: {
-    ...mapState(['singer', 'singerCurrentIndex']),
-    currentIndex: {
-      get () {
-        return this.singerCurrentIndex
-      },
-      set (index) {
-        this.setSingerCurrentIndex(index)
-      }
-    }
-  },
+
   components: {
     SingerSynopsis,
     SingerSong,
@@ -154,7 +156,7 @@ export default {
 
 .singer-info-container>>>.van-loading {
   // 减去头部标题高度、歌手图片高度、标签页高度
-  height: calc(100vh - (1.22667rem + 6rem + 1.18rem));
+  height: calc(100vh - (1.22667rem + 6rem + 1.18rem+0.4rem));
 }
 
 .singer-info-container {
