@@ -41,6 +41,7 @@ export default new Vuex.Store({
     simiMVList: [], // 相似mv
     searchKeywords: '', // 搜索关键词
     searchCurrentIndex: 0, // 搜索页当前索引
+    singer: {}, // 歌手
     playing: false, // 播放状态
     playList: [], // 播放列表
     playerFullScreen: false, // 是否展开播放
@@ -142,6 +143,10 @@ export default new Vuex.Store({
     // 设置搜索页当前索引
     setSearchCurrentIndex(state, index) {
       state.searchCurrentIndex = index
+    },
+    // 设置歌手
+    setSinger(state, singer) {
+      state.singer = singer
     },
     // 设置播放状态
     setPlaying(state, playing) {
@@ -252,7 +257,8 @@ export default new Vuex.Store({
           id: res.playlist.id,
           picUrl: res.playlist.coverImgUrl || res.playlist.backgroundCoverUrl,
           songs: songList,
-          name: res.playlist.name
+          name: res.playlist.name,
+          trackUpdateTime: res.playlist.trackUpdateTime
         }))
       }
     },
@@ -387,7 +393,7 @@ export default new Vuex.Store({
       }
     },
     // 选择音乐播放播放
-    selectPlay({
+    setSelectPlay({
       commit,
       state
     }, {
@@ -406,6 +412,23 @@ export default new Vuex.Store({
         data: res
       } = await songApi.checkMusic(id)
       return res
+    },
+    // 播放歌曲
+    playMusic(context, params) {
+      // 检查音乐是否可用
+      this.dispatch('checkMusic', params.song.id).then(res => {
+        if (res.success) {
+          // 设置当前播放歌曲
+          this.dispatch('setSelectPlay', {
+            list: params.list,
+            index: params.index
+          })
+        }
+      }).catch((res) => {
+        // 提示
+        console.log(res.response + '132465')
+        Vue.$toast(res.message)
+      })
     }
 
   },

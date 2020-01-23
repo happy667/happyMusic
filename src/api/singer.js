@@ -28,6 +28,13 @@ export default {
       url
     })
   },
+  // 获取歌手专辑详情
+  getAlbumInfo(id) {
+    const url = `/album?id=${id}`
+    return request({
+      url
+    })
+  },
   // 获取歌手详情
   getSingerDetail(id) {
     const url = `/artist/desc?id=${id}`

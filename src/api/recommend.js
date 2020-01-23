@@ -16,7 +16,7 @@ export default {
   },
   // 推荐新音乐
   getRecommendNewSong() {
-    const url = '/personalized/newsong?limit=4'
+    const url = '/personalized/newsong'
     return request({
       url
     })

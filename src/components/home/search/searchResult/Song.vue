@@ -10,7 +10,8 @@
                 :finished="finished"
                 finished-text="没有更多了"
                 @load="handlePullingUp">
-        <song-list :songsList="song.songList"></song-list>
+        <song-list @select="handleSelect"
+                   :songsList="song.songList"></song-list>
       </van-list>
     </template>
     <template v-if="song.isNull">
@@ -24,7 +25,7 @@
 import SongList from '@/components/home/song/SongList'
 import searchApi from '@/api/search.js'
 import { ERR_OK } from '@/api/config.js'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import Song from '@/assets/common/js/song.js'
 
 export default {
@@ -50,6 +51,7 @@ export default {
     this.getSearchSong()
   },
   methods: {
+    ...mapActions(['playMusic']),
     // 查询单曲
     async getSearchSong () {
       // 显示加载logo
@@ -71,7 +73,8 @@ export default {
         let songList = []
         res.result.songs.map((item) => { // 循环数组对象对每个数据进行处理 返回需要得数据
           let singers = item.artists.map(item => item.name).join('/')
-          songList.push(new Song({ id: item.id, name: item.name, singers }))
+          let singersId = item.artists.map(item => item.id).join(',')
+          songList.push(new Song({ id: item.id, name: item.name, singers, singersId }))
         })
         let list = this.song.songList.concat(songList)
         this.song.songList = list
@@ -94,6 +97,14 @@ export default {
       } else {
         this.loading = false
       }
+    },
+    // 选择歌曲
+    handleSelect (item, index) {
+      this.playMusic({
+        list: this.song.songList,
+        index,
+        song: item
+      })
     }
   },
 

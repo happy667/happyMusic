@@ -35,8 +35,7 @@ export default {
   methods: {
     // 选择歌单进入歌单详情
     selectItem (item) {
-      console.log(item)
-      this.$router.push({ path: `/songSheetDisc/${item.id}` })
+      this.$router.push({ path: `/album/${item.id}` })
     }
   }
 }
@@ -45,7 +44,7 @@ export default {
 @import '~common/stylus/variable';
 
 .singer-album-container {
-  padding: 0.4rem;
+  padding: 0.4rem 0.4rem 0 0.4rem;
 
   .singer-album-wrapper {
     .singer-album-list {

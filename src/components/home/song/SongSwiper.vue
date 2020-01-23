@@ -4,8 +4,9 @@
     <div class="swiper-container sw-song">
       <div class="swiper-wrapper">
         <div class="swiper-slide"
-             v-for="item in recommendNewSong"
-             :key="item.id">
+             v-for="(item,index) in recommendNewSong"
+             :key="item.id"
+             @click="handleSelect(item,index)">
           <song-item :song="item"></song-item>
         </div>
       </div>
@@ -44,6 +45,9 @@ export default {
           }
         })
       }, 0)
+    },
+    handleSelect (item, index) {
+      this.$emit('select', item, index)
     }
   },
   mounted () {

@@ -4,6 +4,7 @@
     <div class="swiper-container sw-song-sheet">
       <div class="swiper-wrapper">
         <div class="swiper-slide"
+             @click="selectItem(item)"
              v-for="item in recommendNewSongSheet"
              :key="item.id">
           <song-sheet-swiper-item :song-sheet="item"></song-sheet-swiper-item>
@@ -15,16 +16,19 @@
 <script>
 import Swiper from 'swiper'
 import SongSheetSwiperItem from './SongSheetSwiperItem'
+import { mapActions, mapMutations } from 'vuex'
 export default {
   props: {
     recommendNewSongSheet: Array
   },
   methods: {
+
+    ...mapActions(['getSongSheet']),
+    ...mapMutations(['setRank']),
     // 初始化轮播图组件
     initSwiper () {
       // eslint-disable-next-line no-unused-vars
       var mySwiper = new Swiper('.sw-song-sheet', {
-
         slidesPerView: 'auto',
         slidesPerGroup: 1,
         resistanceRatio: 0, // 解决左滑留白问题
@@ -42,6 +46,12 @@ export default {
           }
         }
       })
+    },
+
+    // 选择歌单进入歌单详情
+    selectItem (item) {
+      this.setRank(false)// 不需要排行
+      this.$router.push({ path: `/songSheetDisc/${item.id}` })
     }
   },
   mounted () {

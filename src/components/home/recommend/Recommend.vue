@@ -14,7 +14,8 @@
         <recommend-swiper :banners="banners"></recommend-swiper>
 
         <!-- 推荐新音乐 -->
-        <song-swiper :recommendNewSong="recommendNewSong">
+        <song-swiper :recommendNewSong="recommendNewSong"
+                     @select="handleSelect">
           <template>
             <song-sheet-title title="新歌推送"></song-sheet-title>
           </template>
@@ -62,7 +63,7 @@ export default {
     ...mapState(['recommendNewSong', 'recommendNewSongSheet'])
   },
   methods: {
-    ...mapActions(['getSongSheet', 'getRecommendSongSheet', 'getRecommendNewSong', 'getRecommendNewSongSheet']),
+    ...mapActions(['getSongSheet', 'getRecommendSongSheet', 'getRecommendNewSong', 'getRecommendNewSongSheet', 'playMusic']),
     ...mapMutations(['clearSongSheet']),
     // 获取轮播图数据
     async getBanner () {
@@ -85,6 +86,13 @@ export default {
         this.getRecommendNewSong()
         this.getRecommendNewSongSheet()
       }, 500)
+    },
+    handleSelect (item, index) {
+      this.playMusic({
+        list: this.recommendNewSong,
+        index,
+        song: item
+      })
     }
   },
   mounted () {
