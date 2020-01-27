@@ -1,7 +1,4 @@
 import axios from 'axios'
-import * as Message from 'autoprefixer' // 路由配置文件
-
-const ENV = process.env.NODE_ENV
 
 // 创建axios实例
 const service = axios.create({
@@ -19,17 +16,11 @@ service.interceptors.response.use(
       switch (response.status) {
         case 200:
           break
-
-        default:
-          Message.error(response.data.data.msg ? response.data.data.msg : '返回状态非200')
       }
       return response
-    } else {
-      Message.error('响应成功，但是响应信息不存在！')
     }
   },
   error => {
-    Message.error(ENV === 'development' ? error.message : '请求错误！')
     return Promise.reject(error.response.data) // 返回接口返回的错误信息
   })
 

@@ -7,7 +7,7 @@
              v-for="(item,index) in recommendNewSong"
              :key="item.id"
              @click="handleSelect(item,index)">
-          <song-item :song="item"></song-item>
+          <song-item :showImage="true" :song="item"></song-item>
         </div>
       </div>
     </div>

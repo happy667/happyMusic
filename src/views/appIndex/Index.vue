@@ -51,7 +51,6 @@ export default {
       width: 9rem;
       height: 8rem;
       text-align: center;
-      margin-bottom: 2rem;
 
       img {
         width: 100%;
@@ -61,7 +60,7 @@ export default {
 
     .option {
       display: flex;
-      height: 9rem;
+      height: 8rem;
       flex-direction: column;
       justify-content: space-evenly;
       align-items: center;

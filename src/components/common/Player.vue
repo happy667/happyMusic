@@ -7,8 +7,9 @@
       <FullScreenPlay v-show="playerFullScreen"></FullScreenPlay>
     </transition>
     <!-- 迷你播放器 -->
-    <mini-play v-show="!playerFullScreen">
-    </mini-play>
+      <mini-play v-show="!playerFullScreen">
+      </mini-play>
+
   </div>
 </template>
 <script>
@@ -43,7 +44,7 @@ export default {
 @import '~common/stylus/variable';
 
 .play-container {
-  position: absolute;
+  position: relative;
   left: 0;
   top: 0;
   right: 0;

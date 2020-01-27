@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 const Login = () => import('../views/appIndex/Login')
 const Index = () => import('../views/appIndex/Index')
 const Register = () => import('../views/appIndex/Register')
+const FindPassword = () => import('../views/appIndex/FindPassword')
 const AppIndex = () => import('../views/AppIndex')
 const Home = () => import('../views/Home')
 const SongSheetSquare = () => import('../components/home/songSheet/SongSheetSquare')
@@ -52,6 +53,11 @@ const routes = [
         path: 'register',
         name: 'register',
         component: Register
+      },
+      {
+        path: 'findPassword',
+        name: 'findPassword',
+        component: FindPassword
       }
     ]
   },

@@ -116,7 +116,7 @@
       <div class="play-source"
            @click="selectSinger(videoParams.artist)">
         <div class="play-source-img">
-          <music-img :avatar="this.videoParams.artist.img1v1Url"></music-img>
+          <music-img :avatar="this.videoParams.avatarUrl"></music-img>
         </div>
         <div class="play-source-author">
           {{videoParams.artistName}}

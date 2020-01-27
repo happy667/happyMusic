@@ -17,7 +17,11 @@ import {
   Loading,
   Toast,
   Dialog,
-  Lazyload
+  Lazyload,
+  Field,
+  CellGroup,
+  Button,
+  CountDown
 } from 'vant'
 Vue.use(Tab)
 Vue.use(Tabs)
@@ -37,4 +41,9 @@ Vue.use(Loading)
 Vue.use(Toast)
 Vue.use(Dialog)
 Vue.use(Lazyload)
+Vue.use(Field)
+Vue.use(CellGroup)
+Vue.use(Button)
+Vue.use(CountDown)
 Vue.prototype.$Dialog = Dialog
+Vue.prototype.$toast = Toast

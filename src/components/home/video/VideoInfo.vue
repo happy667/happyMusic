@@ -9,23 +9,17 @@
     <div class="video">
       <video-component :videoParams="selectVideo"></video-component>
     </div>
-    <!-- 相关mv -->
 
     <div class="content">
-      <div class="related-mv">
-        <van-loading class="load"
-                     size="1rem"
-                     color="#FD4979"
-                     v-if="simiMVList.length===0" />
+      <!-- 相关mv -->
+      <div class="related-mv"
+           v-if="simiMVList.length!==0">
         <p>相关MV</p>
-        <template v-if="simiMVList.length!==0">
           <mv-list :list="simiMVList"></mv-list>
-        </template>
       </div>
+      <!-- 评论列表 -->
       <div class="comment">
         <div class="comment-title">精彩评论{{commentTotal}}</div>
-        <!-- 评论列表 -->
-
         <van-list v-model="loading"
                   :immediate-check='false'
                   :finished="finished"
@@ -35,12 +29,9 @@
             <comment-list :commentList="commentObj.comments"></comment-list>
           </template>
           <template v-else>
-            <div class="comment-list">
-              还没有小伙伴发表评论哦~
-            </div>
+            <no-result text="还没有小伙伴发表评论哦~"></no-result>
           </template>
         </van-list>
-
       </div>
     </div>
   </div>
@@ -49,6 +40,7 @@
 import VideoComponent from './Video'
 import CommentList from '@/components/home/comment/CommentList'
 import MvList from '@/components/common/mv/MvList'
+import NoResult from '@/components/common/NoResult'
 import { mapState, mapActions } from 'vuex'
 export default {
   data () {
@@ -96,7 +88,8 @@ export default {
   components: {
     VideoComponent,
     CommentList,
-    MvList
+    MvList,
+    NoResult
   }
 }
 </script>
@@ -119,14 +112,6 @@ export default {
         font-weight: bold;
         height: 1rem;
         line-height: 1rem;
-      }
-
-      .comment-list {
-        width: 100%;
-        height: 1rem;
-        color: $color-common-b;
-        font-size: $font-size-smaller;
-        text-align: center;
       }
     }
 

@@ -14,14 +14,13 @@
       </van-list>
     </template>
     <template v-if="songSheet.isNull">
-      <div class="songSheet-list-null">
-        暂无相关歌单
-      </div>
+       <no-result text="暂无相关歌单"></no-result>
     </template>
   </div>
 </template>
 <script>
 import SongSheetList from '@/components/home/songSheet/SongSheetList'
+import NoResult from '@/components/common/NoResult'
 import searchApi from '@/api/search.js'
 import { ERR_OK } from '@/api/config.js'
 import { mapState } from 'vuex'
@@ -94,7 +93,8 @@ export default {
   },
 
   components: {
-    SongSheetList
+    SongSheetList,
+    NoResult
   }
 }
 </script>

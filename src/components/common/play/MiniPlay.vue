@@ -97,10 +97,10 @@ export default {
 
          .song-info {
            flex: 1;
-           width: 4rem;
            margin-right: 0.5rem;
 
            .song-name {
+             width: 4rem;
              height: 0.6rem;
              line-height: 0.6rem;
              font-size: $font-size-smaller;
@@ -109,7 +109,7 @@ export default {
            }
 
            .singer {
-             flex: 1;
+             width: 4rem;
              height: 0.5rem;
              line-height: 0.5rem;
              font-size: $font-size-smaller-x;

@@ -6,7 +6,7 @@
          v-if="index">{{index}}</div>
     <!-- 歌曲图片 -->
     <div class="song-img"
-         v-if="song.picUrl">
+         v-if="showImage">
       <img v-lazy="song.picUrl"
            :key="song.picUrl" />
     </div>
@@ -33,6 +33,10 @@ export default {
   props: {
     song: Object,
     index: Number,
+    showImage: {
+      type: Boolean,
+      default: () => false
+    },
     top: {
       type: Boolean,
       default: () => false
@@ -77,18 +81,17 @@ export default {
 
   .song-desc {
     font-size: $font-size-smaller;
+    max-width: 6rem;
 
     .song-name {
       line-height: 0.8rem;
       margin-bottom: 0.1rem;
       font-weight: 500;
-      max-width: 4rem;
       no-wrap();
     }
 
     .sg-info {
       color: #777;
-      max-width: 4rem;
       no-wrap();
     }
   }
