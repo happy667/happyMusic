@@ -63,7 +63,7 @@ export default {
     ...mapState(['recommendNewSong', 'recommendNewSongSheet'])
   },
   methods: {
-    ...mapActions(['getSongSheet', 'getRecommendSongSheet', 'getRecommendNewSong', 'getRecommendNewSongSheet', 'playMusic']),
+    ...mapActions(['getLoginUser', 'getSongSheet', 'getRecommendSongSheet', 'getRecommendNewSong', 'getRecommendNewSongSheet', 'playMusic']),
     ...mapMutations(['clearSongSheet']),
     // 获取轮播图数据
     async getBanner () {
@@ -96,6 +96,8 @@ export default {
     }
   },
   mounted () {
+    // 获取登录状态
+    this.getLoginUser()
     // 获取轮播图数据
     this.getBanner()
     // 获取推荐歌单
@@ -107,6 +109,7 @@ export default {
     // 获取新碟上线
     this.getRecommendNewSongSheet()
   },
+
   components: {
     recommendSwiper,
     SongSheetList,

@@ -44,7 +44,8 @@ export default {
 @import '~common/stylus/variable';
 
 .singer-album-container {
-  padding: 0.4rem 0.4rem 0 0.4rem;
+  padding: 0.4rem;
+  min-height: calc(100vh - (1.22667rem + 6rem + 1.18rem + 0.4rem));
 
   .singer-album-wrapper {
     .singer-album-list {

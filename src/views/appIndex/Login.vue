@@ -44,6 +44,7 @@ import {
   ERR_OK
 } from '@/api/config.js'
 import { checkIsNull, checkPhone, checkPassword } from 'common/js/valid.js'
+import { mapActions } from 'vuex'
 export default {
   data () {
     return {
@@ -63,6 +64,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['getLoginUser']),
     // 显示隐藏密码
     handleShowPwd () {
       this.showPassword = !this.showPassword
@@ -97,6 +99,7 @@ export default {
         // 验证成功执行登录操作
         loginApi.login(this.loginForm).then(res => {
           if (res.data.code === ERR_OK) { // 登录成功
+            this.getLoginUser()
             this.$router.push('/home')
           } else {
             this.$toast(res.data.message)

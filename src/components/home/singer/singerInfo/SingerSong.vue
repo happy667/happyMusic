@@ -60,6 +60,7 @@ export default {
 
 .singer-song-container {
   padding-top: 0.4rem;
+  min-height: calc(100vh - (1.22667rem + 6rem + 1.18rem + 0.4rem));
 
   .play {
     display: flex;

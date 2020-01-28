@@ -18,10 +18,9 @@
           <div class="top">
             <div class="left-img">
               <div class="album-image">
-                <img :src="albumObj.album.picUrl" />
+                <img v-lazy="albumObj.album.picUrl" />
               </div>
-              <div class="
-                   public-time">{{albumObj.album.publishTime|convertTime}}</div>
+              <div class="public-time">{{albumObj.album.publishTime|convertTime}}</div>
             </div>
             <div class="right-info">
               <div class="album-name">{{albumObj.album.name}}</div>

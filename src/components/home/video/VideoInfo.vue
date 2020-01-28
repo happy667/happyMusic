@@ -6,89 +6,147 @@
                    left-arrow
                    @click-left="routerBack" />
     </van-sticky>
-    <div class="video">
-      <video-component :videoParams="selectVideo"></video-component>
-    </div>
-
-    <div class="content">
-      <!-- 相关mv -->
-      <div class="related-mv"
-           v-if="simiMVList.length!==0">
-        <p>相关MV</p>
-          <mv-list :list="simiMVList"></mv-list>
+    <!-- 正在加载 -->
+    <template v-if="!video">
+      <van-loading size="24px"
+                   color="#FD4979"
+                   vertical>加载中...</van-loading>
+    </template>
+    <template v-else>
+      <div class="video">
+        <video-component :videoParams="video"
+                         :moreInfo="true"></video-component>
       </div>
-      <!-- 评论列表 -->
-      <div class="comment">
-        <div class="comment-title">精彩评论{{commentTotal}}</div>
-        <van-list v-model="loading"
-                  :immediate-check='false'
-                  :finished="finished"
-                  :finished-text="commentObj.total===0?'':'没有更多了'"
-                  @load="handlePullingUp">
-          <template v-if="commentObj.comments.length!==0">
-            <comment-list :commentList="commentObj.comments"></comment-list>
-          </template>
-          <template v-else>
-            <no-result text="还没有小伙伴发表评论哦~"></no-result>
-          </template>
-        </van-list>
+      <div class="content">
+        <!-- 相关mv -->
+        <div class="related-mv"
+             v-if="simiMVList">
+          <p>相关视频</p>
+          <video-list :list="simiMVList"></video-list>
+        </div>
+        <!-- 评论列表 -->
+        <div class="comment"
+             v-if="commentList">
+          <div class="comment-title">精彩评论{{commentText}}</div>
+          <van-list v-model="loading"
+                    :immediate-check='false'
+                    :finished="finished"
+                    :finished-text="commentCount===0?'':'没有更多了'"
+                    @load="handlePullingUp">
+            <template v-if="commentList.length!==0">
+              <comment-list :commentList="commentList"></comment-list>
+            </template>
+            <template v-else>
+              <no-result text="还没有小伙伴发表评论哦~"></no-result>
+            </template>
+          </van-list>
+        </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 <script>
 import VideoComponent from './Video'
 import CommentList from '@/components/home/comment/CommentList'
-import MvList from '@/components/common/mv/MvList'
+import VideoList from '@/components/common/mv/MvList'
 import NoResult from '@/components/common/NoResult'
-import { mapState, mapActions } from 'vuex'
+import videoApi from '@/api/video.js'
+import SingerApi from '@/api/singer.js'
+import VideoDetail from '@/assets/common/js/videoDetail.js'
+import {
+  ERR_OK
+} from '@/api/config.js'
 export default {
+  props: {
+    id: String
+  },
   data () {
     return {
-      loading: false,
-      finished: false
+      loading: false, // 加载中
+      finished: false, // 加载完所有数据
+      video: null, // 视频
+      simiMVList: null, // 相似mv列表
+      commentList: null, // 评论列表
+      commentCount: 0// 评论数量
+    }
+  },
+  computed: {
+    commentText () {
+      return this.commentCount === 0 ? '' : this.commentCount
     }
   },
   created () {
-    this.$nextTick(() => {
-      this.getSimiMV()
-      this.getVideoComment()
+    this.$nextTick(async () => {
+      await this.getVideoDetail(this.id)
+      await this.getSimiMV(this.id)
+      await this.getVideoComment(this.id)
     })
   },
-  computed: {
-    ...mapState(['selectVideo', 'commentObj', 'simiMVList']),
-    commentTotal () {
-      return this.commentObj.total === 0 ? '' : this.commentObj.total
-    }
-  },
   methods: {
-    ...mapActions(['getVideoComment', 'getSimiMV']),
     // 返回上一个路由
     routerBack () {
-      this.$router.back()
+      this.$router.push('/')
+    },
+    // 获取视频详情
+    async getVideoDetail (id) {
+      const { data: res } = await videoApi.getVideoDetail(id)
+      if (res.code === ERR_OK) {
+        const data = res.data
+        // 获取歌手信息
+        const { data: res2 } = await SingerApi.getSinger(data.artistId)
+        if (res2.code === ERR_OK) {
+          let video = new VideoDetail({
+            id: data.id,
+            coverUrl: data.cover,
+            name: data.name,
+            playCount: data.playCount,
+            artist: { id: res2.artist.id, name: res2.artist.name, avatarUrl: res2.artist.picUrl },
+            url: data.brs[240],
+            publishTime: data.publishTime,
+            desc: data.desc
+          })
+          this.commentCount = data.commentCount
+          this.video = video
+        }
+        console.log(this.video)
+      }
+    },
+    // 获取相似mv
+    async getSimiMV (id) {
+      const {
+        data: res
+      } = await videoApi.getSimiMV(id)
+      if (res.code === ERR_OK) {
+        this.simiMVList = res.mvs
+      }
+    },
+    // 获取该mv评论
+    async getVideoComment (id) {
+      let offset = this.commentList ? this.commentList.length : 0
+      let list = this.commentList ? this.commentList : []
+      const {
+        data: res
+      } = await videoApi.getVideoComment(id, offset)
+      if (res.code === ERR_OK) {
+        this.commentList = list.concat(res.comments)
+        console.log(this.commentList)
+      }
     },
     // 上拉加载
     handlePullingUp () {
       setTimeout(async () => {
-        await this.getVideoComment()
-        if (this.commentObj.comments.length >= this.commentObj.total) {
+        await this.getVideoComment(this.id)
+        if (this.commentList.length >= this.commentCount) {
           this.finished = true
         }
         this.loading = false
       }, 500)
     }
   },
-  beforeRouteEnter: (to, from, next) => {
-    next(vm => {
-      if (!vm.selectVideo.id) {
-        vm.$router.push('/home')
-      }
-    })
-  },
   components: {
     VideoComponent,
     CommentList,
-    MvList,
+    VideoList,
     NoResult
   }
 }
@@ -99,6 +157,7 @@ export default {
 .videoInfo-container {
   background: $color-common-background;
   width: 100%;
+  min-height: 100vh;
 
   .content {
     width: 100%;

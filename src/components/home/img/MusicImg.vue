@@ -14,6 +14,7 @@ export default {
 .avatar-wrapper {
   width: 1rem;
   height: 1rem;
+  border-radius: 50%;
 
   img {
     display: block;

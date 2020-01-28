@@ -14,11 +14,11 @@
         </p>
       </div>
       <div class="singer-introduction"
-          v-for="item in singerDetail.introduction"
-          :key="item.ti">
+           v-for="item in singerDetail.introduction"
+           :key="item.ti">
         <h2 class="title">{{item.ti}}</h2>
         <p class="context"
-          v-html="item.txt"></p>
+           v-html="item.txt"></p>
       </div>
     </template>
   </div>
@@ -42,7 +42,10 @@ export default {
 <style lang="stylus" scoped>
 .singer-detail-container {
   @import '~common/stylus/variable';
-  padding: 0.4rem 0.4rem 0 0.4rem;
+
+  padding: 0.4rem;
+  min-height: calc(100vh - (1.22667rem + 6rem + 1.18rem + 0.4rem));
+
   .title {
     margin-bottom: 0.2rem;
     font-size: $font-size-smaller;
