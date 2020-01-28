@@ -6,7 +6,8 @@
           v-for="(item,index) in songsList"
           @click="selectItem(item,index)"
           :key="item.id">
-        <song-item :song="item"
+        <song-item :showImage="showImage"
+                   :song="item"
                    :top="index<3&&rank"
                    :index="index+1"></song-item>
       </li>
@@ -19,7 +20,11 @@ import { mapState, mapGetters } from 'vuex'
 export default {
   props: {
     songsList: Array,
-    currentIndex: Number
+    currentIndex: Number,
+    showImage: {
+      type: Boolean,
+      default: () => false
+    }
   },
   computed: {
     ...mapState(['rank']),

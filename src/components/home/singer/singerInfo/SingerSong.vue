@@ -18,6 +18,7 @@
       </div>
       <!-- 歌曲列表 -->
       <song-list @select="handleSelect"
+                 :showImage="true"
                  :currentIndex="currentPlayIndex"
                  :songsList="singerSong" />
     </template>
@@ -43,6 +44,7 @@ export default {
     ...mapActions(['setSelectPlay', 'playMusic']),
     // 选择歌曲
     handleSelect (item, index) {
+      if (this.currentPlayIndex === index) return
       this.playMusic({
         list: this.singerSong,
         index,

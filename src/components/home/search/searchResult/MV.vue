@@ -16,14 +16,13 @@
       </van-list>
     </template>
     <template v-if="mv.isNull">
-      <div class="mv-list-null">
-        暂无相关MV
-      </div>
+      <no-result text="暂无相关MV"></no-result>
     </template>
-  </div>
+</div>
 </template>
 <script>
 import MvList from '@/components/common/mv/MvList'
+import NoResult from '@/components/common/NoResult'
 import searchApi from '@/api/search.js'
 import { ERR_OK } from '@/api/config.js'
 import { mapState, mapActions } from 'vuex'
@@ -106,7 +105,8 @@ export default {
   },
 
   components: {
-    MvList
+    MvList,
+    NoResult
   }
 }
 </script>
@@ -117,14 +117,5 @@ export default {
   padding: 0.25rem 0.4rem 0;
   min-height: calc(100vh - (1.8rem + 1.22667rem + 1.18rem)) !important;
   box-sizing: border-box;
-
-  .mv-list-null {
-    width: 100%;
-    height: 1rem;
-    line-height: 1rem;
-    color: $color-common-b;
-    font-size: $font-size-smaller;
-    text-align: center;
-  }
 }
 </style>

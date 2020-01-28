@@ -3,7 +3,7 @@
   <div class="videoList-container"
        v-cloak>
     <!-- 正在加载 -->
-    <van-loading v-if="this.videoList&&this.videoList.length === 0"
+    <van-loading v-if="videoList.length===0"
                  size="24px"
                  color="#FD4979"
                  vertical>加载中...</van-loading>
@@ -12,13 +12,12 @@
             :pullUp="pullUp"
             @pullingUpLoad="handlePullingUp">
       <div class="video-list">
-        <template v-if="this.videoList&&this.videoList.length!==0">
+        <template v-if="videoList.length!==0">
           <template v-for="item in videoList">
-            <template v-if="item.artist&&item.videoUrl">
-              <video-item :videoParams="item"
-                          :key="item.id"></video-item>
-            </template>
+            <video-item :videoParams="item"
+                        :key="item.id"></video-item>
           </template>
+
           <van-loading v-if="loadMore"
                        size="24px"
                        color="#FD4979"
@@ -32,7 +31,11 @@
 <script>
 import VideoItem from './Video'
 import Scroll from '@/components/common/Scroll'
-import { mapActions, mapState } from 'vuex'
+import videoApi from '@/api/video.js'
+import {
+  ERR_OK
+} from '@/api/config.js'
+import { mapState, mapMutations } from 'vuex'
 export default {
   data () {
     return {
@@ -51,10 +54,11 @@ export default {
     })
   },
   computed: {
-    ...mapState(['videoList'])
+    ...mapState(['videoList', 'videoOffset'])
   },
   methods: {
-    ...mapActions(['getVideoList']),
+    ...mapMutations(['setVideoOffset', 'setVideoList']),
+    // 上拉加载
     async handlePullingUp () {
       clearTimeout(this.loadTimer)
       this.loadMore = true
@@ -65,6 +69,42 @@ export default {
           this.loadMore = false
         })
       }, 500)
+    },
+    // 获取推荐视频
+    getVideoList (context) {
+      // 每次获取视频前设置偏移量
+      const videoListLen = this.videoList.length
+      this.setVideoOffset(videoListLen)
+      const offset = this.videoOffset
+      console.log(offset)
+      videoApi.getRecommendVideo(offset).then(res => {
+        console.log(res)
+        if (res.data.code === ERR_OK) {
+          let videoList = res.data.data
+          // 获取视频详情
+          // videoList.forEach(async (item) => {
+          //   const {
+          //     data: res
+          //   } = await videoApi.getVideoDetail(item.id)
+          //   if (res.code === ERR_OK) {
+          //     console.log(res)
+          //     item.avatarUrl = res.data.avatarUrl
+          //   }
+          // })
+          // 获取视频播放路径
+          videoList.forEach(async (item) => {
+            const {
+              data: res
+            } = await videoApi.getRecommendVideoUrl(item.id)
+            if (res.code === ERR_OK) {
+              console.log(res.data.url)
+              item.videoUrl = res.data.url
+            }
+          })
+          console.log(111)
+          this.setVideoList(videoList)
+        }
+      })
     }
   },
   components: {
@@ -81,7 +121,6 @@ export default {
 }
 
 .videoList-container {
-
   .video-list {
     width: 100%;
     padding: 0.5rem;

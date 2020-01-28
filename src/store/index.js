@@ -7,11 +7,11 @@ import singerApi from '@/api/singer.js'
 import videoApi from '@/api/video.js'
 import songApi from '@/api/song.js'
 import {
-  playMode
-} from '@/assets/common/js/config.js'
-import {
   ERR_OK
 } from '@/api/config.js'
+import {
+  playMode
+} from '@/assets/common/js/config.js'
 import Song from '@/assets/common/js/song.js'
 Vue.use(Vuex)
 
@@ -278,7 +278,7 @@ export default new Vuex.Store({
       for (let title in rankingListIds) {
         let rankingObj = {
           title,
-          'rankingList': []
+          rankingList: []
         }
         // 遍历标题下所有榜单
         for (let i = 0; i < rankingListIds[title].length; i++) {
@@ -290,8 +290,9 @@ export default new Vuex.Store({
           }
         }
         rankingList.push(rankingObj)
+        console.log(rankingList)
+        context.commit('setRankingList', rankingList)
       }
-      context.commit('setRankingList', rankingList)
     },
     // 根据id获取歌手专辑详情
     async getSingerAlbumDetail(context, id) {
@@ -310,56 +311,54 @@ export default new Vuex.Store({
       }
     },
     // 获取视频mv
-    async getVideoList(context) {
-      // 每次获取视频判断
-      const videoListLen = this.state.videoList.length
-      context.commit('setVideoOffset', videoListLen)
-      const offset = this.state.videoOffset
-      let videoList = await this.dispatch('getRecommendVideo', offset)
-      // 使用settimeout异步的机制给videoList赋值
-      await setTimeout(() => {
-        context.commit('setVideoList', videoList)
-      }, 20)
-    },
-    // 获取推荐视频
-    async getRecommendVideo(context, offset) {
-      const {
-        data: res
-      } = await videoApi.getRecommendVideo(offset)
-      if (res.code === ERR_OK) {
-        let videoList = res.data
-        // 获取视频url
-        videoList = await this.dispatch('getVideoUrl', videoList)
-        // 获取歌手头像
-        videoList = await this.dispatch('getSingerAvatar', videoList)
-        return videoList
-      }
-    },
+    // getVideoList(context) {
+    //   // 每次获取视频前设置偏移量
+    //   const videoListLen = this.state.videoList.length
+    //   context.commit('setVideoOffset', videoListLen)
+    //   const offset = this.state.videoOffset
+    //   videoApi.getRecommendVideo(offset).then(res => {
+    //     console.log(res)
+    //     if (res.data.code === ERR_OK) {
+    //       let videoList = res.data.data
+    //       // 获取视频详情
+    //       videoList.forEach(async (item) => {
+    //         const {
+    //           data: res
+    //         } = await videoApi.getVideoDetail(item.id)
+    //         if (res.code === ERR_OK) {
+    //           console.log(res)
+    //           videoList.avatarUrl = res.data.avatarUrl
+    //         }
+    //       })
+    //       context.commit('setVideoList', videoList)
+    //     }
+    //   })
+    // },
     // 获取视频url
-    async getVideoUrl(context, videoList) {
-      videoList.forEach(async (item) => {
-        const {
-          data: res
-        } = await videoApi.getRecommendVideoUrl(item.id)
-        if (res.code === ERR_OK) {
-          item.videoUrl = res.data.url
-        }
-      })
-      return videoList
-    },
-    // 获取歌手头像
+    // async getVideoUrl(context) {
+    //   videoList.forEach(async (item) => {
+    //     const {
+    //       data: res
+    //     } = await videoApi.getRecommendVideoUrl(item.id)
+    //     if (res.code === ERR_OK) {
+    //       item.videoUrl = res.data.url
+    //     }
+    //   })
+    //   return videoList
+    // },
+    // 获取视频详情
     // 因为接口没有直接获取用户头像的所以借用获取歌手单曲来获取歌手头像
-    async getSingerAvatar(context, videoList) {
-      videoList.forEach(async (item) => {
-        const {
-          data: res2
-        } = await singerApi.getSingerSong(item.artistId)
-        if (res2.code === ERR_OK) {
-          item.artist = res2.artist
-        }
-      })
-      return videoList
-    },
+    // async getSingerAvatar(context, videoList) {
+    //   videoList.forEach(async (item) => {
+    //     const {
+    //       data: res2
+    //     } = await singerApi.getSingerSong(item.artistId)
+    //     if (res2.code === ERR_OK) {
+    //       item.artist = res2.artist
+    //     }
+    //   })
+    //   return videoList
+    // },
     // 获取该mv评论
     async getVideoComment(context) {
       const {
@@ -401,7 +400,6 @@ export default new Vuex.Store({
       index
     }) {
       commit('setPlaying', true)
-      commit('setPlayerFullScreen', true)
       commit('setPlayList', list)
       commit('setSequenceList', list)
       commit('setCurrentPlayIndex', index)

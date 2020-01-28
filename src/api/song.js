@@ -13,5 +13,12 @@ export default {
     return request({
       url
     })
+  },
+  // 获取歌曲详情
+  getSongDetail(ids) {
+    const url = `/song/detail?ids=${ids}`
+    return request({
+      url
+    })
   }
 }

@@ -1,12 +1,10 @@
-/* eslint-disable vue/valid-v-for */
 <template>
   <div class="ranking-container">
     <!-- loading -->
-    <van-loading v-show="this.rankingList.length === 0"
+    <van-loading v-if="!this.rankingList[0]"
                  size="24px"
                  color="#FD4979"
                  vertical>加载中...</van-loading>
-
     <div class="ranking-list-wrapper"
          v-if="this.rankingList.length!==0 ">
       <template v-for="item in rankingList">
@@ -20,7 +18,6 @@
                            :key="rankingObj.id"
                            :rankingObj="rankingObj"></official-list>
           </div>
-
         </template>
         <!-- 推荐榜 -->
         <template v-else-if="item.title==='recommend'">

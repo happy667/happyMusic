@@ -20,14 +20,13 @@
       </van-list>
     </template>
     <template v-if="singer.isNull">
-      <div class="singer-list-null">
-        暂无相关歌手
-      </div>
+      <no-result text="暂无相关歌手"></no-result>
     </template>
   </div>
 </template>
 <script>
 import SingerItem from '@/components/home/singer/SingerItem'
+import NoResult from '@/components/common/NoResult'
 import Singer from '@/assets/common/js/singer.js'
 import searchApi from '@/api/search.js'
 import { ERR_OK } from '@/api/config.js'
@@ -112,7 +111,8 @@ export default {
   },
 
   components: {
-    SingerItem
+    SingerItem,
+    NoResult
   }
 }
 </script>
@@ -123,14 +123,5 @@ export default {
   padding: 0 0.4rem;
   min-height: calc(100vh - (1.8rem + 1.22667rem + 1.18rem)) !important;
   box-sizing: border-box;
-
-  .singer-list-null {
-    width: 100%;
-    height: 1rem;
-    line-height: 1rem;
-    color: $color-common-b;
-    font-size: $font-size-smaller;
-    text-align: center;
-  }
 }
 </style>

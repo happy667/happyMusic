@@ -1,40 +1,28 @@
 <template>
-  <div class="register-container">
+  <div class="find-password-container">
     <div class="container">
       <!-- logo -->
       <div class="logo">
         <img src="@/assets/images/Logo.png" />
       </div>
-      <!-- 注册表单 -->
-      <div class="register-form">
+      <!-- 表单 -->
+      <div class="find-password-form">
         <van-cell-group>
-          <van-field v-model="registerForm.nikeName"
-                     required
-                     type="tel"
-                     label="用户名"
-                     placeholder="请输入用户名"
-                     maxlength="16" />
-          <van-field v-model="registerForm.phone"
+          <van-field v-model="updateForm.phone"
                      required
                      type="tel"
                      label="手机号"
                      placeholder="请输入手机号"
                      maxlength="11" />
-          <van-field v-model="password1"
+          <van-field v-model="updateForm.password"
                      required
-                     label="密码"
+                     label="新密码"
                      maxlength="16"
                      :type="pwdType"
                      :right-icon="pwdIcon"
                      @click-right-icon="handleShowPwd"
                      placeholder="请输入密码" />
-          <van-field v-model="password2"
-                     required
-                     label="确认密码"
-                     maxlength="16"
-                     type="password"
-                     placeholder="请输入确认密码" />
-          <van-field v-model="registerForm.captcha"
+          <van-field v-model="updateForm.captcha"
                      required
                      center
                      clearable
@@ -51,12 +39,12 @@
           </van-field>
         </van-cell-group>
 
-        <!-- 注册 -->
-        <div class="registerBtn"
-             @click="handleRegister">注册</div>
+        <!-- 修改 -->
+        <div class="updateBtn"
+             @click="handleUpdate">修改</div>
         <!-- 去登陆 -->
         <div class="other-wrapper">
-          <span>已经有账号了?</span>
+          <span>找到账号了?</span>
           <router-link to="/appIndex/login">去登陆</router-link>
         </div>
       </div>
@@ -64,7 +52,7 @@
   </div>
 </template>
 <script>
-import { checkIsNull, checkPhone, checkPassword, compare } from 'common/js/valid.js'
+import { checkIsNull, checkPhone, checkPassword } from 'common/js/valid.js'
 import registerApi from '@/api/register.js'
 import {
   ERR_OK
@@ -72,14 +60,11 @@ import {
 export default {
   data () {
     return {
-      registerForm: {
-        nikeName: '', // 用户名
+      updateForm: {
         phone: '', // 手机号
         password: '', // 密码
         captcha: ''// 验证码
       },
-      password1: '', // 输入密码
-      password2: '', // 输入确认密码
       showPassword: false, // 显示密码
       isDisabled: false, // 是否禁用按钮
       time: 2 * 60 * 1000, // 倒计时
@@ -113,94 +98,73 @@ export default {
     },
     // 表单验证
     validForm () {
-      // 用户名
-      if (checkIsNull(this.registerForm.nikeName)) {
-        this.$toast('用户名不能为空')
-        return false
-      }
       // 手机号
-      if (checkIsNull(this.registerForm.phone)) {
+      if (checkIsNull(this.updateForm.phone)) {
         this.$toast('手机号不能为空')
         return false
       }
       // 密码
-      if (checkIsNull(this.password1)) {
+      if (checkIsNull(this.updateForm.password)) {
         this.$toast('密码不能为空')
         return false
       }
-      // 确认密码
-      if (checkIsNull(this.password2)) {
-        this.$toast('确认密码不能为空')
-        return false
-      }
       // 验证码
-      if (checkIsNull(this.registerForm.captcha)) {
+      if (checkIsNull(this.updateForm.captcha)) {
         this.$toast('验证码不能为空')
         return false
       }
       // 验证手机号
-      if (!checkPhone(this.registerForm.phone)) {
+      if (!checkPhone(this.updateForm.phone)) {
         this.$toast('手机号格式有误')
         return false
       }
       // 验证密码
-      if (!checkPassword(this.password1)) {
+      if (!checkPassword(this.updateForm.password)) {
         this.$toast('密码格式输入有误, 密码必须由字母、数字组成,密码长度为6 - 16位')
         return false
       }
-      // 比较二次密码
-      if (!compare(this.password1, this.password2)) {
-        this.$toast('两次密码输入不一致')
-        return false
-      }
-      this.registerForm.password = this.password1
       return true
     },
     // 重置表单
     resetForm () {
-      this.registerForm = {
-        nikeName: '', // 用户名
+      this.updateForm = {
         phone: '', // 手机号
         password: '', // 密码
-        captcha: ''// 验证码
+        captcha: ''// 验证码不能为空
       }
-      this.password1 = '' // 输入密码
-      this.password2 = '' // 输入确认密码
     },
-    // 注册
-    handleRegister () {
+    // 修改
+    handleUpdate () {
       if (this.validForm()) { // 验证用户输入
         // 检查手机号是否已经注册
-        registerApi.checkRegister(this.registerForm.phone).then(res => {
+        registerApi.checkRegister(this.updateForm.phone).then(res => {
+          console.log(res.data)
           if (res.data.code === ERR_OK) {
-            if (res.data.exist !== 1) { // 不存在
+            if (res.data.exist === 1) { // 存在
               // 检查验证码是否输入正确
-              registerApi.checkSms(this.registerForm.phone, this.registerForm.captcha).then(res => {
+              registerApi.checkSms(this.updateForm.phone, this.updateForm.captcha).then(res => {
+                console.log(res)
                 if (res.data.code === ERR_OK) {
-                  // 注册
-                  registerApi.register(this.registerForm).then(res => {
+                  // 修改
+                  registerApi.register(this.updateForm).then(res => {
                     console.log(res)
                     if (res.data.code === ERR_OK) {
                       this.$Dialog.alert({
-                        message: '注册成功，快去登陆吧',
+                        message: '密码修改成功，快去登陆吧',
                         confirmButtonColor: '#FD4979',
                         width: '265px'
                       }).then(() => {
                         this.$router.push('/appIndex/login')
                       })
-                      // 清空表单
-                      this.resetForm()
                     }
                   })
-                } else {
-                  this.$toast(res.data.message)
                 }
-              }).catch(res => {
-                this.$toast('验证码错误,请发送验证码至您的手机')
+              }).catch(error => {
+                this.$toast(error.message)
               })
             } else {
               this.$Dialog.alert({
-                message: '该手机号已经注册',
+                message: '该手机号尚未注册',
                 confirmButtonColor: '#FD4979',
                 width: '265px'
               })
@@ -217,12 +181,12 @@ export default {
     },
     // 发送验证码
     handleSendSms () {
-      if (checkIsNull(this.registerForm.phone)) { // 验证手机号是否输入
+      if (checkIsNull(this.updateForm.phone)) { // 验证手机号是否输入
         this.$toast('手机号不能为空')
-      } else if (!checkPhone(this.registerForm.phone)) { // 验证手机号格式
+      } else if (!checkPhone(this.updateForm.phone)) { // 验证手机号格式
         this.$toast('手机号格式有误')
       } else { // 发送验证码
-        registerApi.sendSms(this.registerForm.phone).then(res => {
+        registerApi.sendSms(this.updateForm.phone).then(res => {
           if (res.data.code === ERR_OK) {
             this.isDisabled = true
             this.$toast('验证码已发送至您的手机,请注意查收')
@@ -232,8 +196,8 @@ export default {
               this.sendText = '发送验证码'
             }, this.time)
           }
-        }).catch(() => {
-          this.$toast('验证码发送失败')
+        }).catch(error => {
+          this.$toast(error.message)
         })
       }
     }
@@ -243,7 +207,7 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.register-container {
+.find-password-container {
   width: 100%;
   height: 100vh;
 
@@ -270,16 +234,16 @@ export default {
       }
     }
 
-    .register-form>>>.van-cell {
+    .find-password-form>>>.van-cell {
       margin-bottom: 0.35rem;
     }
 
-    .register-form {
+    .find-password-form {
       display: flex;
       flex-direction: column;
       padding: 0.4rem 0.5rem;
 
-      .registerBtn {
+      .updateBtn {
         margin-bottom: 0.45rem;
         padding: 0.5rem 0;
         width: 100%;

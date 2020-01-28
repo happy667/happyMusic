@@ -37,9 +37,10 @@
       </div>
       <!-- 歌曲列表 -->
       <songs-list :songsList="songSheetDisc.songs"
+                  :showImage="true"
                   @select="handleSelect"></songs-list>
-      <div class="songs-list-null"
-           v-if="songSheetDisc.songs.length===0">暂无相关资源</div>
+      <no-result v-if="songSheetDisc.songs.length===0"
+                 text="暂无相关资源"></no-result>
     </section>
 
   </div>
@@ -66,6 +67,7 @@ export default {
     },
     // 选择歌曲
     handleSelect (item, index) {
+      if (this.currentPlayIndex === index) return
       this.playMusic({
         list: this.songSheetDisc.songs,
         index,
@@ -103,6 +105,7 @@ export default {
     width: 100%;
     height: 0;
     padding-top: 100%;
+    background: $color-common-b;
 
     img {
       position: absolute;
@@ -161,13 +164,6 @@ export default {
           font-size: 0.8rem;
         }
       }
-    }
-
-    .songs-list-null {
-      height: 1rem;
-      font-size: $font-size-smaller;
-      text-align: center;
-      color: $color-common-b;
     }
   }
 }

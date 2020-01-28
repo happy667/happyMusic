@@ -15,15 +15,15 @@
       </van-list>
     </template>
     <template v-if="song.isNull">
-      <div class="song-list-null">
-        暂无相关歌曲
-      </div>
+      <no-result text="暂无相关歌曲"></no-result>
     </template>
   </div>
 </template>
 <script>
 import SongList from '@/components/home/song/SongList'
+import NoResult from '@/components/common/NoResult'
 import searchApi from '@/api/search.js'
+import songApi from '@/api/song.js'
 import { ERR_OK } from '@/api/config.js'
 import { mapState, mapActions } from 'vuex'
 import Song from '@/assets/common/js/song.js'
@@ -41,7 +41,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['searchKeywords', 'searchCurrentIndex'])
+    ...mapState(['searchKeywords', 'searchCurrentIndex', 'currentPlayIndex'])
   },
   mounted () {
     if (this.searchKeywords.trim().length === 0) {
@@ -69,7 +69,6 @@ export default {
           this.song.songCount = res.result.songCount
         }
         // 将每次查询的歌曲追加到song.songList中
-        // 因为可能存在重复数据，所以需要去重处理
         let songList = []
         res.result.songs.map((item) => { // 循环数组对象对每个数据进行处理 返回需要得数据
           let singers = item.artists.map(item => item.name).join('/')
@@ -99,17 +98,25 @@ export default {
       }
     },
     // 选择歌曲
-    handleSelect (item, index) {
-      this.playMusic({
-        list: this.song.songList,
-        index,
-        song: item
-      })
+    async handleSelect (item, index) {
+      if (this.currentPlayIndex === index) return
+      // 获取歌曲详情
+      const { data: res } = await songApi.getSongDetail(item.id)
+      if (res.code === ERR_OK) {
+        console.log(res)
+        item.picUrl = res.songs[0].al.picUrl
+        this.playMusic({
+          list: this.song.songList,
+          index,
+          song: item
+        })
+      }
     }
   },
 
   components: {
-    SongList
+    SongList,
+    NoResult
   }
 }
 </script>

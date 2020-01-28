@@ -23,7 +23,7 @@ const options = {
       leave: ['home']
     },
     'search/searchResult': {
-      enter: ['videoInfo', 'songSheetDisc', 'singerInfo'],
+      enter: ['videoInfo', 'songSheetDisc', 'singerInfo', 'search/searchResult'],
       leave: ['search/searchPage']
     },
     'videoInfo': {
