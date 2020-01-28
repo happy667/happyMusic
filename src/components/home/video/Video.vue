@@ -8,7 +8,7 @@
                    size="1rem"
                    color="#FD4979"
                    v-show="videoLoad" />
-      <video :src="videoParams.videoUrl"
+      <video :src="videoParams.url"
              preload='metadata'
              ref="video"
              muted
@@ -33,7 +33,7 @@
                key="btn"
                v-show="isClickScreen">
             <van-icon @click.stop="handleTogglePlay"
-                      :name="icon" />
+                      :name="playIcon" />
           </div>
         </transition-group>
       </template>
@@ -42,7 +42,7 @@
              key="btn"
              v-show="isClickScreen">
           <van-icon @click.stop="handleTogglePlay"
-                    :name="icon" />
+                    :name="playIcon" />
         </div>
       </template>
       <div class="play-controller"
@@ -107,19 +107,41 @@
         </div>
       </div>
     </div>
-    <!-- 视频描述 -->
-    <div class="play-info">
-      <!-- 视频标题 -->
-      <div class="play-title"
-           @click="goToVideoInfo">{{videoParams.name}}</div>
+    <!-- 视频信息 -->
+    <div class="video-info">
+
+      <div class="info-top"
+           @click="goToVideoInfo">
+        <!-- 视频标题 -->
+        <div class="title">
+          <div class="name">{{videoParams.name}}</div>
+          <div class="right-icon"
+               @click="handleToggleInfo"
+               v-if="moreInfo">
+            <van-icon :name="rightIcon" />
+          </div>
+        </div>
+        <!-- 视频描述 -->
+        <div class="video-desc"
+             v-show="showMoreInfo">
+          <div class="top">
+            <div class="video-num">{{videoParams.playCount}} 次观看</div>
+            <div class="video-time">{{videoParams.publishTime}} 发布</div>
+          </div>
+          <div class="bottom">
+            <div class="video-desc">{{videoParams.desc}}</div>
+          </div>
+        </div>
+      </div>
+
       <!-- 视频出处 -->
-      <div class="play-source"
+      <div class="info-bottom"
            @click="selectSinger(videoParams.artist)">
         <div class="play-source-img">
-          <music-img :avatar="this.videoParams.avatarUrl"></music-img>
+          <music-img :avatar="this.videoParams.artist.avatarUrl"></music-img>
         </div>
         <div class="play-source-author">
-          {{videoParams.artistName}}
+          {{videoParams.artist.name}}
         </div>
       </div>
     </div>
@@ -134,6 +156,10 @@ export default {
     videoParams: {
       type: Object,
       default: () => { }
+    },
+    moreInfo: {
+      type: Boolean,
+      default: () => false
     }
   },
   data () {
@@ -144,7 +170,8 @@ export default {
       isFullScreen: false, // 是否全屏
       isClickScreen: false, // 是否点击了播放器
       currenTime: 0, // 当前播放时长
-      videoLoad: true// video是否加载
+      videoLoad: true, // video是否加载
+      showMoreInfo: false // 是否显示更多信息
     }
   },
   mounted () {
@@ -165,8 +192,11 @@ export default {
   },
   computed: {
     ...mapState(['oldVideo']),
-    icon () {
+    playIcon () {
       return this.isPlay ? 'pause-circle-o' : 'play-circle-o'
+    },
+    rightIcon () {
+      return this.showMoreInfo ? 'arrow-up' : 'arrow-down'
     }
   },
   watch: {
@@ -181,9 +211,8 @@ export default {
     // 跳转到mv详情页
     goToVideoInfo () {
       // 因为该组件用到了多个地方，但是在mv详情页不需要做跳转，所以需要判断当前路由地址
-      if (this.$route.path !== '/videoInfo') {
-        this.setSelectVideo(this.videoParams)
-        this.$router.push('/videoInfo')
+      if (this.$route.path !== `/videoInfo/${this.videoParams.id}`) {
+        this.$router.push(`/videoInfo/${this.videoParams.id}`)
       }
     },
     // 更新时间
@@ -276,6 +305,9 @@ export default {
     selectSinger (item) {
       this.setSingerCurrentIndex(0)
       this.$router.push(`/singerInfo/${item.id}`)
+    },
+    handleToggleInfo () {
+      this.showMoreInfo = !this.showMoreInfo
     }
     // 视频宽高设置为手机宽高
     // videoFullScreen () {
@@ -298,10 +330,9 @@ export default {
 .video-container {
   margin-bottom: 0.5rem;
   width: 100%;
-  height: 8rem;
   box-shadow: 0 0.05rem 1rem rgba(0, 0, 0, 0.1);
-  border-radius: 0 0 0.3rem 0.3rem;
   touch-action: none;
+  border-radius: 0 0 0.3rem 0.3rem;
 
   .player {
     position: relative;
@@ -316,7 +347,7 @@ export default {
       line-height: 5rem;
       z-index: 99;
       text-align: center;
-      background: $color-common-b;
+      background: #e3e3e3;
     }
 
     video {
@@ -388,18 +419,45 @@ export default {
     }
   }
 
-  .play-info {
-    .play-title {
+  .video-info {
+    .info-top {
       padding: 0.1rem 0.2rem;
-      margin-bottom: 0.2rem;
-      line-height: 1rem;
-      font-size: $font-size-smaller;
-      no-wrap();
       border-bottom: 0.02rem solid #efefef;
+
+      .title {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        line-height: 1rem;
+
+        .name {
+          font-size: $font-size-smaller;
+          no-wrap();
+        }
+      }
+
+      .right-icon {
+        width: 1rem;
+        text-align: center;
+      }
     }
 
-    .play-source {
-      padding: 0.1rem 0.2rem;
+    .video-desc {
+      color: $color-common-b;
+
+      .top {
+        display: flex;
+        justify-content: space-between;
+        line-height: 0.6rem;
+      }
+
+      .bottom {
+        line-height: 0.5rem;
+      }
+    }
+
+    .info-bottom {
+      padding: 0.2rem;
       display: flex;
       align-items: center;
 

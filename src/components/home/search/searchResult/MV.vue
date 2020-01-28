@@ -25,7 +25,7 @@ import MvList from '@/components/common/mv/MvList'
 import NoResult from '@/components/common/NoResult'
 import searchApi from '@/api/search.js'
 import { ERR_OK } from '@/api/config.js'
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 export default {
   data () {
     return {
@@ -53,7 +53,6 @@ export default {
     this.getSearchMV()
   },
   methods: {
-    ...mapActions(['getVideoUrl', 'getSingerAvatar']),
     // 查询MV
     async getSearchMV () {
       // 显示加载logo
@@ -67,19 +66,7 @@ export default {
           this.mv.isNull = true
           return
         }
-        // 还需要获取头像和播放地址
-        let videoList = res.result.mvs
-        // 获取视频url
-        videoList = await this.getVideoUrl(videoList)
-        // 获取歌手头像
-        videoList = await this.getSingerAvatar(videoList)
-        if (this.mv.mvCount === 0) {
-          this.mv.mvCount = res.result.mvCount
-        }
-        // 因为可能存在重复数据，所以需要去重处理
-        let list = this.mv.mvList.concat(videoList)
-        const map = new Map()
-        list = list.filter(item => !map.has(item.id) && map.set(item.id, 1))
+        let list = this.mv.mvList.concat(res.result.mvs)
         // 将每次查询的mv追加到mv.mvList中
         this.mv.mvList = list
         // 关闭加载logo

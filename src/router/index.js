@@ -85,25 +85,26 @@ const routes = [
     path: '/search',
     name: 'search',
     component: Search,
-    redirect: '/search/searchPage',
+    redirect: 'searchPage',
     children: [
       {
         path: '/search/searchPage',
-        name: 'search/searchPage',
+        name: 'searchPage',
         component: SearchBox
       },
       {
         path: '/search/searchResult',
-        name: 'search/searchResult',
+        name: 'searchResult',
         component: SearchResult
       }
     ]
   },
   // mv详情页
   {
-    path: '/videoInfo',
+    path: '/videoInfo/:id',
     name: 'videoInfo',
-    component: VideoInfo
+    component: VideoInfo,
+    props: true
   },
   // 播放页面
   {

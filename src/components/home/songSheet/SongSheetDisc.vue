@@ -105,7 +105,7 @@ export default {
     width: 100%;
     height: 0;
     padding-top: 100%;
-    background: $color-common-b;
+    background: #e4e4e4;
 
     img {
       position: absolute;

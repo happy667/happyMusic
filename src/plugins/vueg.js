@@ -10,24 +10,27 @@ const options = {
   sameDepthDisable: false, // url深度相同时禁用动画，默认为false
   map: {
     'home': {
-      enter: ['songSheetDisc', 'SongSheetSquare', 'search/searchPage', 'videoInfo', 'play', 'songComment', 'singerInfo']
+      enter: ['songSheetDisc', 'SongSheetSquare', 'searchPage', 'videoInfo', 'play', 'songComment', 'singerInfo']
     },
     'songSheetDisc': {
-      leave: ['home', 'search/searchResult', 'singerInfo']
+      leave: ['home', 'searchResult', 'singerInfo']
     },
     'SongSheetSquare': {
       leave: ['home']
     },
-    'search/searchPage': {
-      enter: ['search/searchResult'],
+    'searchPage': {
+      enter: ['searchResult'],
       leave: ['home']
     },
-    'search/searchResult': {
-      enter: ['videoInfo', 'songSheetDisc', 'singerInfo', 'search/searchResult'],
-      leave: ['search/searchPage']
+    'searchResult': {
+      enter: ['videoInfo', 'songSheetDisc', 'singerInfo', 'searchResult'],
+      leave: ['searchPage']
     },
     'videoInfo': {
-      leave: ['home', 'search/searchResult']
+      leave: ['home', 'searchResult']
+    },
+    'videoList': {
+      enter: ['login']
     },
     'play': {
       leave: ['home']
@@ -37,7 +40,7 @@ const options = {
     },
     'singerInfo': {
       enter: ['songSheetDisc'],
-      leave: ['home', 'search/searchResult']
+      leave: ['home', 'searchResult']
     }
   },
   // 默认为[]，name对应路由的name,以实现类似app中点击tab页面水平转场效果，如tab[1]到tab[0]，会使用backAnim动画，tab[1]到tab[2]，会使用forwardAnim动画

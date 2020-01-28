@@ -25,6 +25,10 @@ export default {
 @import '~common/stylus/variable';
 
 .comment-list-container>>>.comment-item-container {
+  &:first-child {
+    padding-top: 0;
+  }
+
   &:last-child {
     border-bottom: none;
   }

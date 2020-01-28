@@ -4,8 +4,8 @@ import SongSheetDetail from '@/assets/common/js/songSheetDetail.js'
 import recommendApi from '@/api/recommend.js'
 import rankingApi from '@/api/ranking.js'
 import singerApi from '@/api/singer.js'
-import videoApi from '@/api/video.js'
 import songApi from '@/api/song.js'
+import loginApi from '@/api/login.js'
 import {
   ERR_OK
 } from '@/api/config.js'
@@ -17,6 +17,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    user: null, // 登录的用户
     homeCurrentIndex: 0,
     singerCurrentIndex: 0,
     rank: false, // 是否为排行
@@ -29,16 +30,8 @@ export default new Vuex.Store({
     stop: false, // 是否停止滚动
     isScroll: false, // 是否是滚动状态
     videoList: [], // mv列表
-    videoOffset: 0, // mv列表偏移量
-    selectVideo: {}, // 选择的mv
+    selectVideo: {}, // 选择的mv                                     //暂时没用到
     oldVideo: {}, // 上一次的video
-    videoCommentOffset: 0, // mv评论偏移量
-    commentObj: {
-      isMusician: false,
-      comments: [],
-      total: 0
-    }, // 评论列表
-    simiMVList: [], // 相似mv
     searchKeywords: '', // 搜索关键词
     searchCurrentIndex: 0, // 搜索页当前索引
     singer: {}, // 歌手
@@ -50,6 +43,10 @@ export default new Vuex.Store({
     currentPlayIndex: -1 // 当前播放索引
   },
   mutations: {
+    // 设置登录用户
+    setLoginUser(state, user) {
+      state.user = user
+    },
     // 设置当前索引
     setHomeCurrentIndex(state, index) {
       state.homeCurrentIndex = index
@@ -100,41 +97,13 @@ export default new Vuex.Store({
     setRankingList(state, rankingList) {
       state.rankingList = rankingList
     },
-    // 设置video列表偏移量
-    setVideoOffset(state, offset) {
-      state.videoOffset = offset
-    },
     // 设置video列表
     setVideoList(state, list) {
       state.videoList = state.videoList.concat(list)
     },
-    // 设置选择的video
-    setSelectVideo(state, video) {
-      // 重置state中的评论
-      state.videoCommentOffset = 0
-      state.commentObj = {
-        isMusician: false,
-        comments: [],
-        total: 0
-      } // 评论列表
-      state.selectVideo = video
-    },
     // 设置上次播放的video
     setOldVideo(state, video) {
-      console.log(video)
       state.oldVideo = video
-    },
-    // 设置评论列表偏移量
-    setVideoCommentOffset(state, offset) {
-      state.videoCommentOffset = offset
-    },
-    // 设置评论对象
-    setCommentObj(state, commentObj) {
-      state.commentObj = commentObj
-    },
-    // 设置相似mv
-    setSimiMVList(state, list) {
-      state.simiMVList = list
     },
     // 设置搜索关键词
     setSearchKeywords(state, keywords) {
@@ -174,6 +143,16 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    // 获取登录用户
+    async getLoginUser(context) {
+      const {
+        data: res
+      } = await loginApi.loginStatus()
+      if (res.code === ERR_OK) {
+        context.commit('setLoginUser', res.profile)
+        return true
+      }
+    },
     // 获取推荐歌单
     async getRecommendSongSheet(context, limit) {
       console.log(limit)
@@ -308,87 +287,6 @@ export default new Vuex.Store({
           songs: res.songs,
           name: res.album.name
         }))
-      }
-    },
-    // 获取视频mv
-    // getVideoList(context) {
-    //   // 每次获取视频前设置偏移量
-    //   const videoListLen = this.state.videoList.length
-    //   context.commit('setVideoOffset', videoListLen)
-    //   const offset = this.state.videoOffset
-    //   videoApi.getRecommendVideo(offset).then(res => {
-    //     console.log(res)
-    //     if (res.data.code === ERR_OK) {
-    //       let videoList = res.data.data
-    //       // 获取视频详情
-    //       videoList.forEach(async (item) => {
-    //         const {
-    //           data: res
-    //         } = await videoApi.getVideoDetail(item.id)
-    //         if (res.code === ERR_OK) {
-    //           console.log(res)
-    //           videoList.avatarUrl = res.data.avatarUrl
-    //         }
-    //       })
-    //       context.commit('setVideoList', videoList)
-    //     }
-    //   })
-    // },
-    // 获取视频url
-    // async getVideoUrl(context) {
-    //   videoList.forEach(async (item) => {
-    //     const {
-    //       data: res
-    //     } = await videoApi.getRecommendVideoUrl(item.id)
-    //     if (res.code === ERR_OK) {
-    //       item.videoUrl = res.data.url
-    //     }
-    //   })
-    //   return videoList
-    // },
-    // 获取视频详情
-    // 因为接口没有直接获取用户头像的所以借用获取歌手单曲来获取歌手头像
-    // async getSingerAvatar(context, videoList) {
-    //   videoList.forEach(async (item) => {
-    //     const {
-    //       data: res2
-    //     } = await singerApi.getSingerSong(item.artistId)
-    //     if (res2.code === ERR_OK) {
-    //       item.artist = res2.artist
-    //     }
-    //   })
-    //   return videoList
-    // },
-    // 获取该mv评论
-    async getVideoComment(context) {
-      const {
-        data: res
-      } = await videoApi.getVideoComment(this.state.selectVideo.id, this.state.videoCommentOffset)
-      if (res.code === ERR_OK) {
-        let comments = this.state.commentObj.comments.concat(res.comments)
-        const commentObj = {
-          comments,
-          total: res.total
-        }
-        context.commit('setCommentObj', commentObj)
-        context.commit('setVideoCommentOffset', this.state.commentObj.comments.length)
-      }
-    },
-    // 获取相似mv
-    async getSimiMV(context) {
-      const {
-        data: res
-      } = await videoApi.getSimiMV(this.state.selectVideo.id)
-      if (res.code === ERR_OK) {
-        let videoList = res.mvs
-        // 获取视频url
-        await this.dispatch('getVideoUrl', videoList)
-        // 获取歌手头像
-        await this.dispatch('getSingerAvatar', videoList)
-        // 使用settimeout异步的机制给videoList赋值
-        await setTimeout(() => {
-          context.commit('setSimiMVList', videoList)
-        }, 20)
       }
     },
     // 选择音乐播放播放

@@ -42,6 +42,12 @@ export default {
       url
     })
   },
+  getSinger(id) {
+    const url = `/artists?id=${id}`
+    return request({
+      url
+    })
+  },
   // 获取相似歌手
   getSimilarSinger(id) {
     const url = `/simi/artist?id=${id}`

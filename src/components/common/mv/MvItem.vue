@@ -3,7 +3,7 @@
        @click="goToVideoInfo">
     <!-- mv 图片 -->
     <div class="mv-img">
-      <img :src="mv.cover" />
+      <img v-lazy="mv.cover" />
       <!-- 播放次数 -->
       <div class="play-num">
         <i class="iconfont icon-bofang"></i>
@@ -26,7 +26,6 @@
 </template>
 <script>
 import 'common/js/convert.js'
-import { mapMutations } from 'vuex'
 export default {
   props: {
     mv: {
@@ -35,15 +34,11 @@ export default {
   },
   inject: ['reload'],
   methods: {
-    ...mapMutations(['setSelectVideo']),
     goToVideoInfo () {
-      this.setSelectVideo(this.mv)
-      if (this.$route.path === '/videoInfo') {
-        this.reload()
-      } else {
-        this.$router.push('/videoInfo')
-      }
+      this.reload()
+      this.$router.push(`/videoInfo/${this.mv.id}`)
     }
+
   }
 }
 </script>
@@ -58,10 +53,17 @@ export default {
   .mv-img {
     position: relative;
     margin-right: 0.4rem;
-    width: 3rem;
-    height: 1.8rem;
+    height: 0;
+    width: 3.2rem;
+    padding-bottom: 1.5rem;
+    background: $color-common-b;
 
     img {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
       display: block;
       width: 100%;
       height: 100%;
@@ -80,7 +82,7 @@ export default {
     flex: 1;
 
     .mv-title {
-      width :6rem;
+      width: 6rem;
       margin-bottom: 0.2rem;
       line-height: 0.5rem;
       font-weight: bold;
@@ -90,6 +92,7 @@ export default {
     .bottom {
       display: flex;
       color: #999;
+      line-height: 0.5rem;
 
       .mv-time {
         margin-right: 0.3rem;

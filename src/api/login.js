@@ -7,5 +7,12 @@ export default {
       phone: form.phone,
       password: form.password
     })
+  },
+  // 获取登录状态
+  loginStatus() {
+    const url = `login/status?timestamp=${new Date().getTime()}`
+    return request({
+      url
+    })
   }
 }
