@@ -4,7 +4,7 @@
     <div class="fixed">
       <!-- 左侧图片 -->
       <div class="left">
-        <img :src="currentSong.picUrl">
+        <img v-lazy="currentSong.picUrl">
       </div>
       <div class="right">
         <div class="top">
