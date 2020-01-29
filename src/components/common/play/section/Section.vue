@@ -1,17 +1,25 @@
 <template>
   <section class="section-container">
-    <div class="song-img">
-      <img :src="currentSong.picUrl">
+    <div class="song-img"
+         ref="img">
+      <img v-lazy="currentSong.picUrl">
       <div class="img"></div>
     </div>
 
   </section>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 export default {
   computed: {
+    ...mapState(['playing']),
     ...mapGetters(['currentSong'])
+  },
+  watch: {
+    playing () {
+      const img = this.$refs.img
+      this.playing ? img.style.webkitAnimationPlayState = 'running' : img.style.webkitAnimationPlayState = 'paused'
+    }
   }
 }
 </script>
@@ -27,8 +35,8 @@ export default {
 
   .song-img {
     position: relative;
-    width: 4.3rem;
-    height: 4.3rem;
+    width: 6.4rem;
+    height: 6.4rem;
     border-radius: 50%;
     animation: turn 10s linear infinite;
     padding: 1.3rem;

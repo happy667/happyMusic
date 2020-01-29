@@ -9,35 +9,49 @@
       <i class="iconfont icon-shangyishoushangyige"></i>
     </div>
     <!-- 播放暂停 -->
-    <div class="play icon">
-      <i class="iconfont icon-zanting"></i>
+    <div class="play icon"
+         @click="handleTogglePlaying">
+      <van-icon :name="playIcon" />
     </div>
     <!--下一曲-->
     <div class="next icon">
       <i class="iconfont icon-xiayigexiayishou"></i>
     </div>
     <!-- 歌曲列表 -->
-    <div class="play-list icon">
+    <div class="play-list icon"
+         @click="handlePlayList">
       <i class="iconfont icon-bofangliebiao"></i>
     </div>
 
   </div>
 </template>
 <script>
+import { mapState, mapMutations } from 'vuex'
 
 export default {
   data () {
     return {
-      showPlayList: false// 显示隐藏播放列表
+      songReady: false
+    }
+  },
+  computed: {
+    ...mapState(['audio', 'playing']),
+    playIcon () {
+      return this.playing ? 'pause' : 'play'
+    }
+  },
+  methods: {
+    ...mapMutations(['setPlaying', 'setTogglePlayList']),
+    // 切换播放暂停
+    handleTogglePlaying () {
+      this.setPlaying(!this.playing)
+      console.log(this.audio)
+    },
+    // 查看歌曲列表
+    handlePlayList () {
+      this.setTogglePlayList(true)
     }
   }
-  // methods: {
-  //   // 查看歌曲列表
-  //   handlePlayList () {
-  //     // 显示播放列表
-  //     this.showPlayList = true
-  //   }
-  // }
 
 }
 </script>
@@ -67,7 +81,7 @@ export default {
     border-radius: 50%;
 
     i {
-      font-size: 1rem;
+      font-size: 0.8rem;
       color: #fff;
     }
   }

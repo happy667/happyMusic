@@ -85,7 +85,7 @@ import Song from '@/assets/common/js/song.js'
 import {
   ERR_OK
 } from '@/api/config.js'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   props: {
     id: String
@@ -96,21 +96,36 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters(['currentSong'])
+  },
   mounted () {
     // 获取专辑详情
     this.getAlbumInfo(this.id)
   },
   methods: {
-    ...mapActions(['setSelectPlay', 'playMusic']),
+    ...mapActions(['setSelectPlay', 'checkMusic']),
     routerBack () {
       this.$router.back()
     },
     // 选择歌曲
     handleSelect (item, index) {
-      this.playMusic({
-        list: this.albumObj.songs,
-        index,
-        song: item
+      if (this.currentSong.id === item.id) return
+      this.playMusic(item, this.albumObj.songs, index)
+    },
+    playMusic (song, list, index) {
+      // 检查音乐是否可用
+      this.checkMusic(song.id).then(res => {
+        if (res.success) {
+          // 设置当前播放歌曲
+          this.setSelectPlay({
+            list,
+            index
+          })
+        }
+      }).catch((res) => {
+        // 提示
+        this.$toast(res.message)
       })
     },
     // 获取专辑详情

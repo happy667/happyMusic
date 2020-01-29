@@ -40,7 +40,9 @@ export default new Vuex.Store({
     playerFullScreen: false, // 是否展开播放
     sequenceList: [], // 顺序播放列表
     playMode: playMode.sequence, // 播放模式
-    currentPlayIndex: -1 // 当前播放索引
+    currentPlayIndex: -1, // 当前播放索引
+    audio: null, // 音频对象
+    togglePlayList: false // 显示隐藏播放列表
   },
   mutations: {
     // 设置登录用户
@@ -58,7 +60,6 @@ export default new Vuex.Store({
     // 设置rank
     setRank(state, rank) {
       state.rank = rank
-      console.log(state.rank)
     },
     // 设置歌手信息页当前索引
     setSingerCurrentIndex(state, index) {
@@ -75,7 +76,6 @@ export default new Vuex.Store({
     // 设置推荐新音乐
     setRecommendNewSong(state, songList) {
       state.recommendNewSong = songList
-      // console.log(state.recommendNewSong)
     },
     // 设置推荐新碟歌单
     setRecommendNewSongSheet(state, songSheet) {
@@ -140,6 +140,12 @@ export default new Vuex.Store({
     // 设置当前播放索引
     setCurrentPlayIndex(state, index) {
       state.currentPlayIndex = index
+    },
+    setAudio(state, audio) {
+      state.audio = audio
+    },
+    setTogglePlayList(state, togglePlayList) {
+      state.togglePlayList = togglePlayList
     }
   },
   actions: {
@@ -155,7 +161,6 @@ export default new Vuex.Store({
     },
     // 获取推荐歌单
     async getRecommendSongSheet(context, limit) {
-      console.log(limit)
       const {
         data: res
       } = await recommendApi.getRecommendSongSheet(limit)
@@ -308,23 +313,6 @@ export default new Vuex.Store({
         data: res
       } = await songApi.checkMusic(id)
       return res
-    },
-    // 播放歌曲
-    playMusic(context, params) {
-      // 检查音乐是否可用
-      this.dispatch('checkMusic', params.song.id).then(res => {
-        if (res.success) {
-          // 设置当前播放歌曲
-          this.dispatch('setSelectPlay', {
-            list: params.list,
-            index: params.index
-          })
-        }
-      }).catch((res) => {
-        // 提示
-        console.log(res.response + '132465')
-        Vue.$toast(res.message)
-      })
     }
 
   },

@@ -25,7 +25,7 @@ import NoResult from '@/components/common/NoResult'
 import searchApi from '@/api/search.js'
 import songApi from '@/api/song.js'
 import { ERR_OK } from '@/api/config.js'
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters, mapMutations } from 'vuex'
 import Song from '@/assets/common/js/song.js'
 
 export default {
@@ -41,7 +41,8 @@ export default {
     }
   },
   computed: {
-    ...mapState(['searchKeywords', 'searchCurrentIndex', 'currentPlayIndex'])
+    ...mapState(['searchKeywords', 'searchCurrentIndex', 'currentPlayIndex']),
+    ...mapGetters(['currentSong'])
   },
   mounted () {
     if (this.searchKeywords.trim().length === 0) {
@@ -51,7 +52,8 @@ export default {
     this.getSearchSong()
   },
   methods: {
-    ...mapActions(['playMusic']),
+    ...mapMutations(['set']),
+    ...mapActions(['setSelectPlay', 'checkMusic']),
     // 查询单曲
     async getSearchSong () {
       // 显示加载logo
@@ -99,18 +101,28 @@ export default {
     },
     // 选择歌曲
     async handleSelect (item, index) {
-      if (this.currentPlayIndex === index) return
+      if (this.currentSong.id === item.id) return
       // 获取歌曲详情
       const { data: res } = await songApi.getSongDetail(item.id)
       if (res.code === ERR_OK) {
-        console.log(res)
         item.picUrl = res.songs[0].al.picUrl
-        this.playMusic({
-          list: this.song.songList,
-          index,
-          song: item
-        })
+        this.playMusic(item, this.song.songList, index)
       }
+    },
+    playMusic (song, list, index) {
+      // 检查音乐是否可用
+      this.checkMusic(song.id).then(res => {
+        if (res.success) {
+          // 设置当前播放歌曲
+          this.setSelectPlay({
+            list,
+            index
+          })
+        }
+      }).catch((res) => {
+        // 提示
+        this.$toast(res.message)
+      })
     }
   },
 
