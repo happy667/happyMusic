@@ -1,10 +1,11 @@
 <template>
   <div class="mini-play-container"
-       @click="handleClick">
+       @click="handleShowFullPlay">
     <div class="fixed">
       <!-- 左侧图片 -->
       <div class="left">
-        <img v-lazy="currentSong.picUrl">
+        <img :src="currentSong.picUrl"
+             ref="img">
       </div>
       <div class="right">
         <div class="top">
@@ -18,8 +19,9 @@
             <div class="prev icon">
               <i class="iconfont icon-shangyishoushangyige"></i>
             </div>
-            <div class="play icon">
-              <i class="iconfont icon-bofang"></i>
+            <div class="play icon"
+                 @click.stop="handleTogglePlaying">
+              <van-icon :name="playIcon" />
             </div>
             <div class="next icon">
               <i class="iconfont icon-xiayigexiayishou"></i>
@@ -40,15 +42,31 @@
   </div>
 </template>
 <script>
-import { mapMutations, mapGetters } from 'vuex'
+import { mapMutations, mapGetters, mapState } from 'vuex'
 export default {
   computed: {
-    ...mapGetters(['currentSong'])
+    ...mapGetters(['currentSong']),
+    ...mapState(['playing', 'audio']),
+    playIcon () {
+      return this.playing ? 'pause' : 'play'
+    }
+  },
+  watch: {
+    playing () {
+      const img = this.$refs.img
+      this.playing ? img.style.webkitAnimationPlayState = 'running' : img.style.webkitAnimationPlayState = 'paused'
+    }
   },
   methods: {
-    ...mapMutations(['setPlayerFullScreen']),
-    handleClick () {
-      this.setPlayerFullScreen(true)
+    ...mapMutations(['setPlayerFullScreen', 'setPlaying']),
+    handleShowFullPlay (e) {
+      if (e.target.className !== 'player-controller') {
+        this.setPlayerFullScreen(true)
+      }
+    },
+    // 切换播放暂停
+    handleTogglePlaying () {
+      this.setPlaying(!this.playing)
     }
   }
 }
@@ -120,12 +138,18 @@ export default {
 
          .player-controller {
            flex: 1;
-           width: 3.25rem;
            display: flex;
            justify-content: space-between;
            align-items: center;
+           z-index: 99;
 
            .icon {
+             display: flex;
+             justify-content: center;
+             align-items: center;
+             width: 1rem;
+             height: 1rem;
+
              i {
                color: $color-common;
                font-size: 0.65rem;

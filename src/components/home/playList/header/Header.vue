@@ -6,7 +6,7 @@
         <i class="iconfont icon-xunhuanbofang"></i>
       </div>
       <div class="type-name">随机播放</div>
-      <div class="list-num">(304首)</div>
+      <div class="list-num">({{playList.length}}首)</div>
     </div>
     <div class="right">
       <div class="play-type icon">
@@ -16,8 +16,11 @@
   </header>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
-
+  computed: {
+    ...mapState(['playList'])
+  }
 }
 </script>
 <style lang="stylus" scoped>

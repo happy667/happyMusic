@@ -26,7 +26,7 @@
 </template>
 <script>
 import SongList from '@/components/home/song/SongList'
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 export default {
   props: {
     singerSong: {
@@ -38,17 +38,29 @@ export default {
     SongList
   },
   computed: {
-    ...mapState(['currentPlayIndex'])
+    ...mapState(['currentPlayIndex']),
+    ...mapGetters(['currentSong'])
   },
   methods: {
-    ...mapActions(['setSelectPlay', 'playMusic']),
+    ...mapActions(['setSelectPlay', 'checkMusic']),
     // 选择歌曲
     handleSelect (item, index) {
-      if (this.currentPlayIndex === index) return
-      this.playMusic({
-        list: this.singerSong,
-        index,
-        song: item
+      if (this.currentSong.id === item.id) return
+      this.playMusic(item, this.singerSong, index)
+    },
+    playMusic (song, list, index) {
+      // 检查音乐是否可用
+      this.checkMusic(song.id).then(res => {
+        if (res.success) {
+          // 设置当前播放歌曲
+          this.setSelectPlay({
+            list,
+            index
+          })
+        }
+      }).catch((res) => {
+        // 提示
+        this.$toast(res.message)
       })
     }
 

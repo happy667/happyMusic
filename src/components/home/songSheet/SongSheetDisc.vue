@@ -54,24 +54,35 @@ export default {
     id: String
   },
   computed: {
-    ...mapGetters(['songSheetDisc'])
+    ...mapGetters(['songSheetDisc', 'currentSong'])
   },
   mounted () {
     this.getSongSheetById(this.id)
   },
   methods: {
-    ...mapActions(['getSongSheetById', 'getSingerAlbumDetail', 'playMusic', 'setSelectPlay']),
+    ...mapActions(['getSongSheetById', 'getSingerAlbumDetail', 'setSelectPlay', 'checkMusic']),
     // 返回上一个路由
     routerBack () {
       this.$router.back()
     },
     // 选择歌曲
     handleSelect (item, index) {
-      if (this.currentPlayIndex === index) return
-      this.playMusic({
-        list: this.songSheetDisc.songs,
-        index,
-        song: item
+      if (this.currentSong.id === item.id) return
+      this.playMusic(item, this.songSheetDisc.songs, index)
+    },
+    playMusic (song, list, index) {
+      // 检查音乐是否可用
+      this.checkMusic(song.id).then(res => {
+        if (res.success) {
+          // 设置当前播放歌曲
+          this.setSelectPlay({
+            list,
+            index
+          })
+        }
+      }).catch((res) => {
+        // 提示
+        this.$toast(res.message)
       })
     },
     // 播放所有
