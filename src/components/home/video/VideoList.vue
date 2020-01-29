@@ -17,6 +17,7 @@
             <video-item :videoParams="item"
                         :key="item.id"></video-item>
           </template>
+
           <van-loading v-if="loadMore"
                        size="24px"
                        color="#FD4979"
@@ -55,7 +56,7 @@ export default {
     })
   },
   computed: {
-    ...mapState(['videoList'])
+    ...mapState(['videoList', 'videoOffset'])
   },
   methods: {
     ...mapMutations(['setVideoList']),
