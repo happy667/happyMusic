@@ -5,7 +5,7 @@
       <!-- 左侧图片 -->
       <div class="left">
         <img :src="currentSong.picUrl"
-             ref="img">
+             :class="cdCls">
       </div>
       <div class="right">
         <div class="top">
@@ -16,14 +16,16 @@
           </div>
           <!-- 按钮区域 -->
           <div class="player-controller">
-            <div class="prev icon">
+            <div class="prev icon"
+                 @click.stop="prev">
               <i class="iconfont icon-shangyishoushangyige"></i>
             </div>
             <div class="play icon"
                  @click.stop="handleTogglePlaying">
               <van-icon :name="playIcon" />
             </div>
-            <div class="next icon">
+            <div class="next icon"
+                 @click.stop="next">
               <i class="iconfont icon-xiayigexiayishou"></i>
             </div>
           </div>
@@ -42,23 +44,21 @@
   </div>
 </template>
 <script>
+import 'common/js/utils.js'
 import { mapMutations, mapGetters, mapState } from 'vuex'
 export default {
   computed: {
     ...mapGetters(['currentSong']),
-    ...mapState(['playing', 'audio']),
+    ...mapState(['playing', 'audio', 'songReady', 'currentPlayIndex', 'playList']),
     playIcon () {
       return this.playing ? 'pause' : 'play'
-    }
-  },
-  watch: {
-    playing () {
-      const img = this.$refs.img
-      this.playing ? img.style.webkitAnimationPlayState = 'running' : img.style.webkitAnimationPlayState = 'paused'
+    },
+    cdCls () {
+      return this.playing ? 'play' : 'play pause'
     }
   },
   methods: {
-    ...mapMutations(['setPlayerFullScreen', 'setPlaying']),
+    ...mapMutations(['setPlayerFullScreen', 'setPlaying', 'setSongReady', 'setCurrentPlayIndex']),
     handleShowFullPlay (e) {
       if (e.target.className !== 'player-controller') {
         this.setPlayerFullScreen(true)
@@ -67,8 +67,35 @@ export default {
     // 切换播放暂停
     handleTogglePlaying () {
       this.setPlaying(!this.playing)
+    },
+    // 上一曲
+    prev () {
+      // 未加载好
+      if (!this.songReady) return
+      let index = this.currentPlayIndex - 1
+      if (index === -1) {
+        index = this.playList.length - 1
+      }
+      this.setCurrentPlayIndex(index)
+      if (!this.playing) this.handleTogglePlaying()
+      this.setSongReady(false)
+      this.utils.playMusic(this.currentSong, null, this.currentPlayIndex)
+    },
+    // 下一曲
+    next () {
+      // 未加载好
+      if (!this.songReady) return
+      let index = this.currentPlayIndex + 1
+      if (index === this.playList.length) {
+        index = 0
+      }
+      this.setCurrentPlayIndex(index)
+      if (!this.playing) this.handleTogglePlaying()
+      this.setSongReady(false)
+      this.utils.playMusic(this.currentSong, null, this.currentPlayIndex)
     }
   }
+
 }
 </script>
  <style lang="stylus" scoped>
@@ -101,7 +128,14 @@ export default {
          width: 100%;
          height: 100%;
          border-radius: 50%;
-         animation: turn 10s linear infinite;
+
+         &.play {
+           animation: rotate 10s linear infinite;
+         }
+
+         &.pause {
+           animation-play-state: paused;
+         }
        }
      }
 
@@ -176,7 +210,7 @@ export default {
    }
  }
 
- @keyframes turn {
+ @keyframes rotate {
    0% {
      transform: rotate(0deg);
    }

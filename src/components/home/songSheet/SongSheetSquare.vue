@@ -85,16 +85,17 @@ export default {
 @import '~common/stylus/variable';
 
 .song-sheet-square-container>>>.load {
-  height: calc(100vh - (1.22667rem + 1.7rem));
+  height: calc(100vh - 1.22667rem);
 }
 
 .song-sheet-square-container>>>.song-sheet-cagetory-list {
-  min-height: calc(100vh - (1.22667rem + 1.7rem));
+  min-height: calc(100vh - 1.22667rem);
 }
 
 .song-sheet-square-container {
   width: 100%;
   height: 100%;
+  background: $color-common-background;
 
   .recommend-list>>>.songs-sheet-list-container {
     width: 100%;

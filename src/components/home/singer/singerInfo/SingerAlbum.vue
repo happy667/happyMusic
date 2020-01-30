@@ -54,7 +54,7 @@ export default {
       flex-wrap: wrap;
 
       .singer-album-list-item {
-        padding: 0.2rem 0.4rem;
+        padding: 0.2rem 0.3rem;
         background: #fff;
         box-shadow: 0 0.1rem 0.8rem rgba(0, 0, 0, 0.1);
         border-radius: 0.2rem;
@@ -69,8 +69,8 @@ export default {
         }
 
         .item-img {
-          width: 1.9rem;
-          height: 1.8rem;
+          width: 2.1rem;
+          height: 2rem;
           border-radius: 0.3rem;
 
           img {

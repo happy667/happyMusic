@@ -47,43 +47,73 @@
 </template>
 <script>
 import 'common/js/convert.js'
+import 'common/js/utils.js'
+import recommendApi from '@/api/recommend.js'
+import {
+  ERR_OK
+} from '@/api/config.js'
+import Song from '@/assets/common/js/song.js'
 import SongsList from '@/components/home/song/SongList'
-import { mapGetters, mapActions } from 'vuex'
+import SongSheetDetail from '@/assets/common/js/songSheetDetail.js'
+import { mapMutations, mapGetters, mapActions } from 'vuex'
 export default {
   props: {
     id: String
   },
-  computed: {
-    ...mapGetters(['songSheetDisc', 'currentSong'])
+  data () {
+    return {
+      songSheetDisc: {}
+    }
   },
   mounted () {
     this.getSongSheetById(this.id)
   },
+  computed: {
+    ...mapGetters(['currentSong'])
+  },
   methods: {
-    ...mapActions(['getSongSheetById', 'getSingerAlbumDetail', 'setSelectPlay', 'checkMusic']),
+    ...mapMutations(['setPlayerFullScreen']),
+    ...mapActions(['setSelectPlay']),
     // 返回上一个路由
     routerBack () {
       this.$router.back()
     },
+    // 根据id获取歌单列表
+    async getSongSheetById (id) {
+      const {
+        data: res
+      } = await recommendApi.getSongSheetById(id)
+      if (res.code === ERR_OK) {
+        let songList = []
+        res.playlist.tracks.map((item) => { // 循环数组对象对每个数据进行处理 返回需要得数据
+          let singerName = item.ar.map(item => item.name).join('/')
+          let singersId = item.ar.map(item => item.id).join(',')
+          songList.push(new Song({
+            id: item.id,
+            name: item.name,
+            singers: singerName,
+            singersId,
+            picUrl: item.al.picUrl
+          }))
+        })
+        this.songSheetDisc = new SongSheetDetail({
+          id: res.playlist.id,
+          picUrl: res.playlist.coverImgUrl || res.playlist.backgroundCoverUrl,
+          songs: songList,
+          name: res.playlist.name,
+          trackUpdateTime: res.playlist.trackUpdateTime
+        })
+      }
+    },
     // 选择歌曲
     handleSelect (item, index) {
-      if (this.currentSong.id === item.id) return
-      this.playMusic(item, this.songSheetDisc.songs, index)
-    },
-    playMusic (song, list, index) {
-      // 检查音乐是否可用
-      this.checkMusic(song.id).then(res => {
-        if (res.success) {
-          // 设置当前播放歌曲
-          this.setSelectPlay({
-            list,
-            index
-          })
-        }
-      }).catch((res) => {
-        // 提示
-        this.$toast(res.message)
-      })
+      // 判断点击的是否是当前播放的歌曲
+      if (this.currentSong.id === item.id) {
+        this.setPlayerFullScreen(true)
+        return
+      }
+      // 引入vue原型上的utils
+      this.utils.playMusic(item, this.songSheetDisc.songs, index)
     },
     // 播放所有
     playAll () {

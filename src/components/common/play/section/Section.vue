@@ -1,7 +1,7 @@
 <template>
   <section class="section-container">
     <div class="song-img"
-         ref="img">
+         :class="cdCls">
       <img v-lazy="currentSong.picUrl">
       <div class="img"></div>
     </div>
@@ -13,12 +13,9 @@ import { mapGetters, mapState } from 'vuex'
 export default {
   computed: {
     ...mapState(['playing']),
-    ...mapGetters(['currentSong'])
-  },
-  watch: {
-    playing () {
-      const img = this.$refs.img
-      this.playing ? img.style.webkitAnimationPlayState = 'running' : img.style.webkitAnimationPlayState = 'paused'
+    ...mapGetters(['currentSong']),
+    cdCls () {
+      return this.playing ? 'play' : 'play pause'
     }
   }
 }
@@ -35,14 +32,21 @@ export default {
 
   .song-img {
     position: relative;
-    width: 6.4rem;
-    height: 6.4rem;
+    width: 6.2rem;
+    height: 6.2rem;
     border-radius: 50%;
-    animation: turn 10s linear infinite;
-    padding: 1.3rem;
+    padding: 1.4rem;
     background: transparent url('http://s3.music.126.net/mobile-new/img/disc-plus.png?b700b62e1971b351dcb8b8ce1c9ceea3=') center center;
     background-size: 100% 100%;
     border-radius: 50%;
+
+    &.play {
+      animation: rotate 20s linear infinite;
+    }
+
+    &.pause {
+      animation-play-state: paused;
+    }
 
     img {
       display: block;
@@ -64,7 +68,7 @@ export default {
     }
   }
 
-  @keyframes turn {
+  @keyframes rotate {
     0% {
       transform: rotate(0deg);
     }

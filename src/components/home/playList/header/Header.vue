@@ -8,7 +8,8 @@
       <div class="type-name">随机播放</div>
       <div class="list-num">({{playList.length}}首)</div>
     </div>
-    <div class="right">
+    <div class="right"
+         @click="clearPlayList">
       <div class="play-type icon">
         <i class="iconfont icon-shanchu"></i>
       </div>
@@ -16,10 +17,24 @@
   </header>
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 export default {
   computed: {
     ...mapState(['playList'])
+  },
+  methods: {
+    ...mapMutations(['setPlayList']),
+    clearPlayList () {
+      this.$Dialog.confirm({
+        message: '确定要清空播放列表?',
+        confirmButtonColor: '#FD4979',
+        width: '265px'
+      }).then(() => {
+        this.setPlayList([])
+      }).catch(() => {
+
+      })
+    }
   }
 }
 </script>

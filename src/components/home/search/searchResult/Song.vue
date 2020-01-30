@@ -20,14 +20,14 @@
   </div>
 </template>
 <script>
+import 'common/js/utils.js'
 import SongList from '@/components/home/song/SongList'
 import NoResult from '@/components/common/NoResult'
 import searchApi from '@/api/search.js'
-import songApi from '@/api/song.js'
 import { ERR_OK } from '@/api/config.js'
-import { mapState, mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapState, mapGetters, mapMutations } from 'vuex'
 import Song from '@/assets/common/js/song.js'
-
+import songApi from '@/api/song.js'
 export default {
   data () {
     return {
@@ -41,7 +41,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['searchKeywords', 'searchCurrentIndex', 'currentPlayIndex']),
+    ...mapState(['searchKeywords', 'searchCurrentIndex']),
     ...mapGetters(['currentSong'])
   },
   mounted () {
@@ -52,8 +52,7 @@ export default {
     this.getSearchSong()
   },
   methods: {
-    ...mapMutations(['set']),
-    ...mapActions(['setSelectPlay', 'checkMusic']),
+    ...mapMutations(['setPlayerFullScreen']),
     // 查询单曲
     async getSearchSong () {
       // 显示加载logo
@@ -101,28 +100,21 @@ export default {
     },
     // 选择歌曲
     async handleSelect (item, index) {
-      if (this.currentSong.id === item.id) return
+      // 判断点击的是否是当前播放的歌曲
+      if (this.currentSong.id === item.id) {
+        this.setPlayerFullScreen(true)
+        return
+      }
       // 获取歌曲详情
-      const { data: res } = await songApi.getSongDetail(item.id)
+      const {
+        data: res
+      } = await songApi.getSongDetail(item.id)
       if (res.code === ERR_OK) {
         item.picUrl = res.songs[0].al.picUrl
-        this.playMusic(item, this.song.songList, index)
+        console.log(index)
+        // 引入vue原型上的utils
+        this.utils.playMusic(item)
       }
-    },
-    playMusic (song, list, index) {
-      // 检查音乐是否可用
-      this.checkMusic(song.id).then(res => {
-        if (res.success) {
-          // 设置当前播放歌曲
-          this.setSelectPlay({
-            list,
-            index
-          })
-        }
-      }).catch((res) => {
-        // 提示
-        this.$toast(res.message)
-      })
     }
   },
 
