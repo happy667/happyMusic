@@ -90,7 +90,7 @@ export default {
     // 清空历史搜索记录
     clearLocalList () {
       this.$Dialog.confirm({
-        message: '是否清空历史搜索记录',
+        message: '确定要清空历史搜索?',
         confirmButtonColor: '#FD4979',
         width: '265px'
       }).then(() => {

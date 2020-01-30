@@ -1,10 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import SongSheetDetail from '@/assets/common/js/songSheetDetail.js'
 import recommendApi from '@/api/recommend.js'
 import rankingApi from '@/api/ranking.js'
 import singerApi from '@/api/singer.js'
-import songApi from '@/api/song.js'
 import loginApi from '@/api/login.js'
 import {
   ERR_OK
@@ -13,6 +11,7 @@ import {
   playMode
 } from '@/assets/common/js/config.js'
 import Song from '@/assets/common/js/song.js'
+import SongSheetDetail from '@/assets/common/js/songSheetDetail.js'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -23,7 +22,6 @@ export default new Vuex.Store({
     rank: false, // 是否为排行
     recommendNewSong: [], // 推荐新音乐
     recommendNewSongSheet: [], // 新碟
-    songSheetDisc: {}, // 歌单详情
     songSheetCagetory: [], // 歌单分类
     rankingList: [], // 榜单列表
     scrollIndex: 0, // 当前滑动的索引
@@ -42,7 +40,8 @@ export default new Vuex.Store({
     playMode: playMode.sequence, // 播放模式
     currentPlayIndex: -1, // 当前播放索引
     audio: null, // 音频对象
-    togglePlayList: false // 显示隐藏播放列表
+    togglePlayList: false, // 显示隐藏播放列表
+    songReady: false // 歌曲是否加载完毕
   },
   mutations: {
     // 设置登录用户
@@ -81,13 +80,9 @@ export default new Vuex.Store({
     setRecommendNewSongSheet(state, songSheet) {
       state.recommendNewSongSheet = songSheet
     },
-    // 设置歌单详情
+    // 设置歌单
     setSongSheet(state, listObj) {
       state.songSheet.push(listObj)
-    },
-    // 设置歌单详情
-    setSongSheetDisc(state, disc) {
-      state.songSheetDisc = disc
     },
     // 设置歌单分类
     setSongSheetCagetory(state, songSheetCagetory) {
@@ -141,11 +136,17 @@ export default new Vuex.Store({
     setCurrentPlayIndex(state, index) {
       state.currentPlayIndex = index
     },
+    // 设置音频
     setAudio(state, audio) {
       state.audio = audio
     },
+    // 设置切换歌曲列表
     setTogglePlayList(state, togglePlayList) {
       state.togglePlayList = togglePlayList
+    },
+    // 设置加载歌曲
+    setSongReady(state, songReady) {
+      state.songReady = songReady
     }
   },
   actions: {
@@ -217,35 +218,7 @@ export default new Vuex.Store({
         return res
       }
     },
-    // 根据id获取歌单列表
-    async getSongSheetById(context, id) {
-      // 先清空
-      context.commit('setSongSheetDisc', {})
-      const {
-        data: res
-      } = await recommendApi.getSongSheetById(id)
-      if (res.code === ERR_OK) {
-        let songList = []
-        res.playlist.tracks.map((item) => { // 循环数组对象对每个数据进行处理 返回需要得数据
-          let singerName = item.ar.map(item => item.name).join('/')
-          let singersId = item.ar.map(item => item.id).join(',')
-          songList.push(new Song({
-            id: item.id,
-            name: item.name,
-            singers: singerName,
-            singersId,
-            picUrl: item.al.picUrl
-          }))
-        })
-        context.commit('setSongSheetDisc', new SongSheetDetail({
-          id: res.playlist.id,
-          picUrl: res.playlist.coverImgUrl || res.playlist.backgroundCoverUrl,
-          songs: songList,
-          name: res.playlist.name,
-          trackUpdateTime: res.playlist.trackUpdateTime
-        }))
-      }
-    },
+
     // 获取排行榜
     async getRankingList(context) {
       // 根据id获取对应排行榜,首先根据接口将排行榜进行分类
@@ -306,22 +279,11 @@ export default new Vuex.Store({
       commit('setPlayList', list)
       commit('setSequenceList', list)
       commit('setCurrentPlayIndex', index)
-    },
-    // 检查音乐是否可用
-    async checkMusic(context, id) {
-      const {
-        data: res
-      } = await songApi.checkMusic(id)
-      return res
     }
 
   },
   modules: {},
   getters: {
-    // 获取歌单详情
-    songSheetDisc(state) {
-      return state.songSheetDisc
-    },
     // 当前歌曲
     currentSong(state) {
       return state.playList[state.currentPlayIndex] || {}

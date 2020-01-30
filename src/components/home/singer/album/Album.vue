@@ -79,13 +79,14 @@
 </template>
 <script>
 import 'common/js/convert.js'
+import 'common/js/utils.js'
 import SongsList from '@/components/home/song/SongList'
 import singerApi from '@/api/singer.js'
 import Song from '@/assets/common/js/song.js'
 import {
   ERR_OK
 } from '@/api/config.js'
-import { mapActions, mapGetters } from 'vuex'
+import { mapMutations, mapGetters } from 'vuex'
 export default {
   props: {
     id: String
@@ -104,30 +105,21 @@ export default {
     this.getAlbumInfo(this.id)
   },
   methods: {
-    ...mapActions(['setSelectPlay', 'checkMusic']),
+    ...mapMutations(['setPlayerFullScreen']),
     routerBack () {
       this.$router.back()
     },
     // 选择歌曲
     handleSelect (item, index) {
-      if (this.currentSong.id === item.id) return
-      this.playMusic(item, this.albumObj.songs, index)
+      // 判断点击的是否是当前播放的歌曲
+      if (this.currentSong.id === item.id) {
+        this.setPlayerFullScreen(true)
+        return
+      }
+      // 引入vue原型上的utils
+      this.utils.playMusic(item, this.albumObj.songs, index)
     },
-    playMusic (song, list, index) {
-      // 检查音乐是否可用
-      this.checkMusic(song.id).then(res => {
-        if (res.success) {
-          // 设置当前播放歌曲
-          this.setSelectPlay({
-            list,
-            index
-          })
-        }
-      }).catch((res) => {
-        // 提示
-        this.$toast(res.message)
-      })
-    },
+
     // 获取专辑详情
     async getAlbumInfo (id) {
       const { data: res } = await singerApi.getAlbumInfo(id)

@@ -6,7 +6,7 @@
                  color="#FD4979"
                  vertical>加载中...</van-loading>
     <!-- 歌曲数量 -->
-    <template v-show="singerSong.length!==0">
+    <template v-if="singerSong.length!==0">
       <div class="play">
         <div class="play-icon">
           <van-icon name="play-circle-o" />
@@ -19,14 +19,14 @@
       <!-- 歌曲列表 -->
       <song-list @select="handleSelect"
                  :showImage="true"
-                 :currentIndex="currentPlayIndex"
                  :songsList="singerSong" />
     </template>
   </div>
 </template>
 <script>
 import SongList from '@/components/home/song/SongList'
-import { mapActions, mapGetters, mapState } from 'vuex'
+import 'common/js/utils.js'
+import { mapMutations, mapGetters } from 'vuex'
 export default {
   props: {
     singerSong: {
@@ -34,36 +34,25 @@ export default {
       default: () => []
     }
   },
-  components: {
-    SongList
-  },
+
   computed: {
-    ...mapState(['currentPlayIndex']),
     ...mapGetters(['currentSong'])
   },
   methods: {
-    ...mapActions(['setSelectPlay', 'checkMusic']),
+    ...mapMutations(['setPlayerFullScreen']),
     // 选择歌曲
     handleSelect (item, index) {
-      if (this.currentSong.id === item.id) return
-      this.playMusic(item, this.singerSong, index)
-    },
-    playMusic (song, list, index) {
-      // 检查音乐是否可用
-      this.checkMusic(song.id).then(res => {
-        if (res.success) {
-          // 设置当前播放歌曲
-          this.setSelectPlay({
-            list,
-            index
-          })
-        }
-      }).catch((res) => {
-        // 提示
-        this.$toast(res.message)
-      })
+      // 判断点击的是否是当前播放的歌曲
+      if (this.currentSong.id === item.id) {
+        this.setPlayerFullScreen(true)
+        return
+      }
+      // 引入vue原型上的utils
+      this.utils.playMusic(item, this.singerSong, index)
     }
-
+  },
+  components: {
+    SongList
   }
 }
 </script>

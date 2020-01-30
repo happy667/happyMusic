@@ -20,7 +20,6 @@ import { mapState, mapGetters } from 'vuex'
 export default {
   props: {
     songsList: Array,
-    currentIndex: Number,
     showImage: {
       type: Boolean,
       default: () => false

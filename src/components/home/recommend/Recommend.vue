@@ -46,11 +46,11 @@ import SongSwiper from '@/components/home/song/SongSwiper'
 import SongSheetSwiper from '@/components/home/songSheet/songSheetSwiper/SongSheetSwiper'
 import SongSheetTitle from '@/components/common/Title'
 import recommendApi from '@/api/recommend.js'
-
+import 'common/js/utils.js'
 import {
   ERR_OK
 } from '@/api/config.js'
-import { mapState, mapActions, mapMutations } from 'vuex'
+import { mapState, mapActions, mapGetters, mapMutations } from 'vuex'
 export default {
   data () {
     return {
@@ -60,11 +60,12 @@ export default {
     }
   },
   computed: {
-    ...mapState(['recommendNewSong', 'recommendNewSongSheet'])
+    ...mapState(['recommendNewSong', 'recommendNewSongSheet']),
+    ...mapGetters(['currentSong'])
   },
   methods: {
-    ...mapActions(['getLoginUser', 'getSongSheet', 'getRecommendSongSheet', 'getRecommendNewSong', 'getRecommendNewSongSheet', 'playMusic']),
-    ...mapMutations(['clearSongSheet']),
+    ...mapMutations(['setPlayerFullScreen']),
+    ...mapActions(['getLoginUser', 'getRecommendSongSheet', 'getRecommendNewSong', 'getRecommendNewSongSheet']),
     // 获取轮播图数据
     async getBanner () {
       const { data: res } = await recommendApi.getBanner()
@@ -88,16 +89,18 @@ export default {
       }, 500)
     },
     handleSelect (item, index) {
-      this.playMusic({
-        list: this.recommendNewSong,
-        index,
-        song: item
-      })
+      // 判断点击的是否是当前播放的歌曲
+      if (this.currentSong.id === item.id) {
+        this.setPlayerFullScreen(true)
+        return
+      }
+      // 引入vue原型上的utils
+      this.utils.playMusic(item)
     }
   },
   mounted () {
     // 获取登录状态
-    this.getLoginUser()
+    // this.getLoginUser()
     // 获取轮播图数据
     this.getBanner()
     // 获取推荐歌单
