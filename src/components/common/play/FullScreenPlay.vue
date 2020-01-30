@@ -10,10 +10,11 @@
     <div class="bg"
          v-lazy:background-image="currentSong.picUrl "></div>
     <audio ref="audio"
-           autoplay
            id="audio"
            preload="auto"
-           :src="musicUrl"></audio>
+           @canplay="ready"
+           @error="error"
+           :src="url"></audio>
     <!--歌曲列表-->
     <van-action-sheet v-model="togglePlayList">
       <play-list></play-list>
@@ -26,15 +27,19 @@ import PlaySection from './section/Section'
 import PlayFooter from './footer/Footer'
 import PlayList from '@/components/home/playList/PlayList'
 import { mapGetters, mapMutations, mapState } from 'vuex'
+import 'common/js/utils.js'
 import songApi from '@/api/song.js'
+import {
+  ERR_OK
+} from '@/api/config.js'
 export default {
   data () {
     return {
-      musicUrl: '' // 歌曲路径
+      url: ''
     }
   },
   computed: {
-    ...mapState(['playing', 'audio', 'showPlayList', 'currentPlayIndex']),
+    ...mapState(['playing', 'audio', 'showPlayList', 'playList']),
     ...mapGetters(['currentSong']),
     togglePlayList: {
       get () {
@@ -51,24 +56,33 @@ export default {
     this.setAudio(this.$refs.audio)
   },
   watch: {
-    currentSong () {
-      // 获取音乐播放路径
-      this.getMusicUrl(this.currentSong.id)
+    currentSong (newVal, oldVal) {
+      this.setPlaying(false)
+      this.getSong(this.currentSong.id)
     },
-    playing () {
+    playing (newPlaying) {
       this.$nextTick(() => {
-        this.playing ? this.audio.play() : this.audio.pause()
+        newPlaying ? this.audio.play() : this.audio.pause()
       })
     }
   },
   methods: {
-    ...mapMutations(['setAudio', 'setTogglePlayList']),
-    // 获取播放歌曲路径
-    async getMusicUrl (id) {
-      const {
-        data: res
-      } = await songApi.getMusicUrl(id)
-      this.musicUrl = res.data[0].url
+    ...mapMutations(['setAudio', 'setTogglePlayList', 'setSongReady', 'setPlaying']),
+    ready () {
+      this.setSongReady(true)
+    },
+    error () {
+      this.setSongReady(true)
+    },
+    async getSong (id) {
+      // 获取音乐播放路径
+      const { data: res } = await songApi.getMusicUrl(id)
+      if (res.code === ERR_OK) {
+        this.url = res.data[0].url
+        this.$nextTick(() => {
+          this.setPlaying(true)
+        })
+      }
     }
 
   },

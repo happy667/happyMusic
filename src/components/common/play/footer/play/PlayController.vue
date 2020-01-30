@@ -5,7 +5,8 @@
       <i class="iconfont icon-xunhuanbofang"></i>
     </div>
     <!-- 上一首 -->
-    <div class="prev icon">
+    <div class="prev icon"
+         @click="prev">
       <i class="iconfont icon-shangyishoushangyige"></i>
     </div>
     <!-- 播放暂停 -->
@@ -14,7 +15,8 @@
       <van-icon :name="playIcon" />
     </div>
     <!--下一曲-->
-    <div class="next icon">
+    <div class="next icon"
+         @click="next">
       <i class="iconfont icon-xiayigexiayishou"></i>
     </div>
     <!-- 歌曲列表 -->
@@ -26,30 +28,52 @@
   </div>
 </template>
 <script>
-import { mapState, mapMutations } from 'vuex'
-
+import { mapState, mapMutations, mapGetters } from 'vuex'
+import 'common/js/utils.js'
 export default {
-  data () {
-    return {
-      songReady: false
-    }
-  },
   computed: {
-    ...mapState(['audio', 'playing']),
+    ...mapState(['audio', 'playing', 'currentPlayIndex', 'playList', 'songReady']),
+    ...mapGetters(['currentSong']),
     playIcon () {
       return this.playing ? 'pause' : 'play'
     }
   },
   methods: {
-    ...mapMutations(['setPlaying', 'setTogglePlayList']),
+    ...mapMutations(['setPlaying', 'setTogglePlayList', 'setCurrentPlayIndex', 'setSongReady']),
     // 切换播放暂停
     handleTogglePlaying () {
+      console.log(this.playing)
       this.setPlaying(!this.playing)
-      console.log(this.audio)
     },
     // 查看歌曲列表
     handlePlayList () {
       this.setTogglePlayList(true)
+    },
+    // 上一曲
+    prev () {
+      // 未加载好
+      if (!this.songReady) return
+      let index = this.currentPlayIndex - 1
+      if (index === -1) {
+        index = this.playList.length - 1
+      }
+      this.setCurrentPlayIndex(index)
+      if (!this.playing) this.handleTogglePlaying()
+      this.setSongReady(false)
+      this.utils.playMusic(this.currentSong, null, this.currentPlayIndex)
+    },
+    // 下一曲
+    next () {
+      // 未加载好
+      if (!this.songReady) return
+      let index = this.currentPlayIndex + 1
+      if (index === this.playList.length) {
+        index = 0
+      }
+      this.setCurrentPlayIndex(index)
+      if (!this.playing) this.handleTogglePlaying()
+      this.setSongReady(false)
+      this.utils.playMusic(this.currentSong, null, this.currentPlayIndex)
     }
   }
 

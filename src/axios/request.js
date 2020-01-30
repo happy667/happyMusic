@@ -21,7 +21,7 @@ service.interceptors.response.use(
     }
   },
   error => {
-    return Promise.reject(error.response.data) // 返回接口返回的错误信息
+    return Promise.reject(error.response) // 返回接口返回的错误信息
   })
 
 export default service

@@ -29,11 +29,11 @@
   </section>
 </template>
 <script>
-import songApi from '@/api/song.js'
-import { ERR_OK } from '@/api/config.js'
-import { mapGetters, mapMutations, mapActions } from 'vuex'
+import 'common/js/utils.js'
+import { mapGetters, mapMutations, mapState } from 'vuex'
 export default {
   computed: {
+    ...mapState(['currentPlayIndex']),
     ...mapGetters(['currentSong']),
     playList: {
       get () {
@@ -41,55 +41,42 @@ export default {
       },
       set (list) {
         this.$nextTick(() => {
-          console.log(this.currentSong)
           this.$store.commit('setPlayList', list)
         })
       }
     }
   },
+  watch: {
+    playList (newList) {
+      // 如果播放列表为空就隐藏
+      if (newList.length === 0) this.setTogglePlayList(false)
+    }
+  },
   methods: {
-    ...mapMutations(['setCurrentPlayIndex']),
-    ...mapActions(['checkMusic', 'setSelectPlay']),
+    ...mapMutations(['setCurrentPlayIndex', 'setPlayerFullScreen', 'setTogglePlayList']),
     // 选择歌曲
     selectItem (e, item, index) {
       if (e.target.className !== 'right delete') {
-        if (!item.picUrl) this.getSongDetail(item)
-        if (this.currentPlayIndex === index) return
-        this.playMusic(item, this.playList, index)
+        // 引入vue原型上的utils
+        this.utils.playMusic(item, null, index)
       }
     },
-    async getSongDetail (item) {
-      // 获取歌曲详情
-      const { data: res } = await songApi.getSongDetail(item.id)
-      if (res.code === ERR_OK) {
-        item.picUrl = res.songs[0].al.picUrl
-      }
-    },
-    // 播放歌曲
-    playMusic (song, list, index) {
-      // 检查音乐是否可用
-      this.checkMusic(song.id).then(res => {
-        if (res.success) {
-          // 设置当前播放歌曲
-          this.setSelectPlay({
-            list,
-            index
-          })
-        }
-      }).catch((res) => {
-        // 提示
-        this.$toast(res.message)
-      })
-    },
+
     // 移除歌曲
     handleDelete (index) {
-      console.log(index)
-      this.playList.splice(index, 1)
-      console.log(this.playList, index)
       // 如果删除的是当前的歌曲就播放下一首
       if (index === this.currentPlayIndex) {
-        this.setCurrentPlayIndex(this.currentPlayIndex++)
+        let list = this.playList
+        list.splice(index, 1)
+        this.playList = list
+        if (index >= this.playList.length - 1) {
+          console.log(11111)
+          index = 0
+        }
+      } else {
+        index++
       }
+      this.setCurrentPlayIndex(index)
     }
   }
 }
