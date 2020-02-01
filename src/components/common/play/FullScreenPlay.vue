@@ -9,12 +9,6 @@
     <!-- 背景 -->
     <div class="bg"
          v-lazy:background-image="currentSong.picUrl "></div>
-    <audio ref="audio"
-           id="audio"
-           preload="auto"
-           @canplay="ready"
-           @error="error"
-           :src="url"></audio>
     <!--歌曲列表-->
     <van-action-sheet v-model="togglePlayList">
       <play-list></play-list>
@@ -26,20 +20,10 @@ import PlayHeader from './header/Header'
 import PlaySection from './section/Section'
 import PlayFooter from './footer/Footer'
 import PlayList from '@/components/home/playList/PlayList'
-import { mapGetters, mapMutations, mapState } from 'vuex'
-import 'common/js/utils.js'
-import songApi from '@/api/song.js'
-import {
-  ERR_OK
-} from '@/api/config.js'
+import { mapGetters } from 'vuex'
+
 export default {
-  data () {
-    return {
-      url: ''
-    }
-  },
   computed: {
-    ...mapState(['playing', 'audio', 'showPlayList', 'playList']),
     ...mapGetters(['currentSong']),
     togglePlayList: {
       get () {
@@ -49,43 +33,8 @@ export default {
         this.$store.commit('setTogglePlayList', newVal)
       }
     }
+  },
 
-  },
-  mounted () {
-    // 设置音频对象
-    this.setAudio(this.$refs.audio)
-  },
-  watch: {
-    currentSong (newVal, oldVal) {
-      this.setPlaying(false)
-      this.getSong(this.currentSong.id)
-    },
-    playing (newPlaying) {
-      this.$nextTick(() => {
-        newPlaying ? this.audio.play() : this.audio.pause()
-      })
-    }
-  },
-  methods: {
-    ...mapMutations(['setAudio', 'setTogglePlayList', 'setSongReady', 'setPlaying']),
-    ready () {
-      this.setSongReady(true)
-    },
-    error () {
-      this.setSongReady(true)
-    },
-    async getSong (id) {
-      // 获取音乐播放路径
-      const { data: res } = await songApi.getMusicUrl(id)
-      if (res.code === ERR_OK) {
-        this.url = res.data[0].url
-        this.$nextTick(() => {
-          this.setPlaying(true)
-        })
-      }
-    }
-
-  },
   components: {
     PlayHeader,
     PlaySection,
@@ -96,6 +45,16 @@ export default {
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
+
+.full-screen-play-container>>>.van-slider__button {
+  width: 0.25rem;
+  height: 0.25rem;
+  background: $color-common;
+}
+
+.full-screen-play-container>>>.van-slider {
+  background-color: #fff;
+}
 
 .full-screen-play-container {
   position: fixed;

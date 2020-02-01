@@ -22,7 +22,8 @@ import {
   CellGroup,
   Button,
   CountDown,
-  ActionSheet
+  ActionSheet,
+  Circle
 } from 'vant'
 Vue.use(Tab)
 Vue.use(Tabs)
@@ -47,5 +48,6 @@ Vue.use(CellGroup)
 Vue.use(Button)
 Vue.use(CountDown)
 Vue.use(ActionSheet)
+Vue.use(Circle)
 Vue.prototype.$Dialog = Dialog
 Vue.prototype.$toast = Toast

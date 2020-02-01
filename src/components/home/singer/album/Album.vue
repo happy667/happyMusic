@@ -72,8 +72,8 @@
                   @select="handleSelect"></songs-list>
 
     </section>
-    <div class="play-list-null"
-         v-if="albumObj.songs&&albumObj.songs.length===0">暂无相关资源</div>
+    <no-result v-if="albumObj.songs&&albumObj.songs.length===0"
+               text="暂无相关资源"></no-result>
   </div>
 
 </template>
@@ -83,6 +83,7 @@ import 'common/js/utils.js'
 import SongsList from '@/components/home/song/SongList'
 import singerApi from '@/api/singer.js'
 import Song from '@/assets/common/js/song.js'
+import NoResult from '@/components/common/NoResult'
 import {
   ERR_OK
 } from '@/api/config.js'
@@ -137,7 +138,8 @@ export default {
     }
   },
   components: {
-    SongsList
+    SongsList,
+    NoResult
   }
 }
 </script>
@@ -271,13 +273,6 @@ export default {
         line-height: 0.8rem;
       }
     }
-  }
-
-  .play-list-null {
-    height: 1rem;
-    font-size: $font-size-smaller;
-    text-align: center;
-    color: $color-common-b;
   }
 }
 </style>

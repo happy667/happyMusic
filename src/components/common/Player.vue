@@ -7,19 +7,43 @@
       <FullScreenPlay v-show="playerFullScreen"></FullScreenPlay>
     </transition>
     <!-- 迷你播放器 -->
-      <mini-play v-show="!playerFullScreen">
-      </mini-play>
-
+    <mini-play v-show="!playerFullScreen">
+    </mini-play>
+    <div class="audio">
+      <audio ref="audio"
+             id="audio"
+             preload="auto"
+             @canplay="ready"
+             @error="error"
+             @timeupdate="handleUpdateTime"
+             :src="url"></audio>
+    </div>
   </div>
 </template>
 <script>
+import 'common/js/utils.js'
+import songApi from '@/api/song.js'
+import {
+  ERR_OK
+} from '@/api/config.js'
 import FullScreenPlay from './play/FullScreenPlay'
 import MiniPlay from './play/MiniPlay'
-import { mapState } from 'vuex'
+import { mapState, mapGetters, mapMutations } from 'vuex'
 export default {
   data () {
     return {
-      showPlayList: false// 显示隐藏播放列表
+      url: '', // 播放路径
+      playerParams: {// 播放器参数
+        currentTime: 0,
+        duration: 1,
+        width: 0
+      }
+    }
+  },
+  // 依赖注入传值
+  provide () {
+    return {
+      playerParams: this.playerParams
     }
   },
   watch: {
@@ -29,10 +53,69 @@ export default {
       } else {
         this.$refs.play.style.position = 'relative'
       }
+    },
+    currentSong (newVal, oldVal) {
+      this.setPlaying(false)
+      this.getSong(this.currentSong.id)
+    },
+    playing (newPlaying) {
+      this.$nextTick(() => {
+        newPlaying ? this.audio.play() : this.audio.pause()
+      })
     }
   },
   computed: {
-    ...mapState(['playerFullScreen', 'playList'])
+    ...mapState(['playerFullScreen', 'playing', 'audio', 'playList']),
+    ...mapGetters(['currentSong']),
+    togglePlayList: {
+      get () {
+        return this.$store.state.togglePlayList
+      },
+      set (newVal) {
+        this.$store.commit('setTogglePlayList', newVal)
+      }
+    }
+
+  },
+  mounted () {
+    // 设置音频对象
+    this.setAudio(this.$refs.audio)
+  },
+  methods: {
+    ...mapMutations(['setAudio', 'setTogglePlayList', 'setSongReady', 'setPlaying', 'setCurrentPlayIndex', 'setPlayList']),
+    ready () {
+      this.playerParams.duration = this.audio.duration
+      this.setSongReady(true)
+    },
+    error () {
+      this.setSongReady(true)
+    },
+    async getSong (id) {
+      // 获取音乐播放路径
+      const { data: res } = await songApi.getMusicUrl(id)
+      if (res.code === ERR_OK) {
+        this.url = res.data[0].url
+        if (!this.url) { // 判断是否为空
+          // 移除歌曲
+          let list = this.playList
+          const listIndex = this.playList.findIndex(item => item.id === id)
+          list.splice(listIndex, 1)
+          this.setPlayList(list)
+          this.$toast('该歌曲暂时不能播放,自动移除该歌曲')
+        } else {
+          this.$nextTick(() => {
+            this.setPlaying(true)
+          })
+        }
+      }
+    },
+    handleUpdateTime (e) {
+      // 更新当前播放时间
+      this.playerParams.currentTime = e.target.currentTime
+      // 更新滚动条
+      this.playerParams.width = (this.playerParams.currentTime / this.playerParams.duration) * 100
+    }
+
   },
   components: {
     FullScreenPlay,

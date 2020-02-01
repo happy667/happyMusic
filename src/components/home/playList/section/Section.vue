@@ -57,6 +57,7 @@ export default {
     // 选择歌曲
     selectItem (e, item, index) {
       if (e.target.className !== 'right delete') {
+        console.log(11111)
         // 引入vue原型上的utils
         this.utils.playMusic(item, null, index)
       }
