@@ -3,21 +3,29 @@
     <!-- 进度条 -->
     <div class="progress">
       <van-slider active-color="#FD4979"
-                  v-model="value" />
+                  @input="handleSlideChange"
+                  v-model="playerParams.width" />
 
     </div>
     <!-- 播放时长 -->
     <div class="play-time">
-      <div class="start-time">00:00</div>
-      <div class="end-time">03:30</div>
+      <div class="start-time">{{playerParams.currentTime|convertPlayTime}}</div>
+      <div class="end-time">{{playerParams.duration|convertPlayTime}}</div>
     </div>
   </div>
 </template>
 <script>
+import 'common/js/convert.js'
+import { mapState } from 'vuex'
 export default {
-  data () {
-    return {
-      value: 30
+  inject: ['playerParams'],
+  computed: {
+    ...mapState(['audio'])
+  },
+  methods: {
+    // 滑动进度条
+    handleSlideChange () {
+      this.audio.currentTime = this.playerParams.width * this.playerParams.duration / 100
     }
   }
 }
@@ -35,7 +43,7 @@ export default {
     height: 1.3rem;
     line-height: 1.3rem;
 
-    .start-time {
+    .start-time, .end-time {
       color: #81898f;
     }
   }

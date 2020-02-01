@@ -95,7 +95,7 @@ export default {
         return
       }
       // 引入vue原型上的utils
-      this.utils.playMusic(item)
+      this.utils.playMusic(item, this.recommendNewSong, index)
     }
   },
   mounted () {
