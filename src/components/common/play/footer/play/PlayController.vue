@@ -53,11 +53,10 @@ export default {
     prev () {
       // 未加载好
       if (!this.songReady) return
-      let index = this.currentPlayIndex - 1
-      if (index === -1) {
-        index = this.playList.length - 1
-      }
+      // 限制播放索引
+      let index = this.utils.limitCutIndex(this.currentPlayIndex, this.playList.length - 1)
       this.setCurrentPlayIndex(index)
+
       if (!this.playing) this.handleTogglePlaying()
       this.setSongReady(false)
       this.utils.playMusic(this.currentSong, null, this.currentPlayIndex)
@@ -66,10 +65,8 @@ export default {
     next () {
       // 未加载好
       if (!this.songReady) return
-      let index = this.currentPlayIndex + 1
-      if (index === this.playList.length) {
-        index = 0
-      }
+      // 限制当前播放索引
+      let index = this.utils.limitAddIndex(this.currentPlayIndex, this.playList.length)
       this.setCurrentPlayIndex(index)
       if (!this.playing) this.handleTogglePlaying()
       this.setSongReady(false)

@@ -55,6 +55,7 @@ import {
 import Song from '@/assets/common/js/song.js'
 import SongsList from '@/components/home/song/SongList'
 import SongSheetDetail from '@/assets/common/js/songSheetDetail.js'
+import NoResult from '@/components/common/NoResult'
 import { mapMutations, mapGetters, mapActions } from 'vuex'
 export default {
   props: {
@@ -124,7 +125,8 @@ export default {
     }
   },
   components: {
-    SongsList
+    SongsList,
+    NoResult
   }
 }
 </script>

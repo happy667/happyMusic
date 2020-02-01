@@ -33,10 +33,13 @@
         <div class="bottom">
           <!-- 进度条 -->
           <div class="progress">
-            <van-progress :show-pivot="false"
-                          color="#FD4979"
-                          stroke-width="2"
-                          :percentage="50" />
+            <van-slider active-color="#FD4979"
+                        @input="handleSlideChange"
+                        v-model="playerParams.width">
+              <div slot="button"
+                   v-show="false">
+              </div>
+            </van-slider>
           </div>
         </div>
       </div>
@@ -47,6 +50,7 @@
 import 'common/js/utils.js'
 import { mapMutations, mapGetters, mapState } from 'vuex'
 export default {
+  inject: ['playerParams'],
   computed: {
     ...mapGetters(['currentSong']),
     ...mapState(['playing', 'audio', 'songReady', 'currentPlayIndex', 'playList']),
@@ -72,10 +76,8 @@ export default {
     prev () {
       // 未加载好
       if (!this.songReady) return
-      let index = this.currentPlayIndex - 1
-      if (index === -1) {
-        index = this.playList.length - 1
-      }
+      // 限制播放索引
+      let index = this.utils.limitCutIndex(this.currentPlayIndex, this.playList.length - 1)
       this.setCurrentPlayIndex(index)
       if (!this.playing) this.handleTogglePlaying()
       this.setSongReady(false)
@@ -85,14 +87,16 @@ export default {
     next () {
       // 未加载好
       if (!this.songReady) return
-      let index = this.currentPlayIndex + 1
-      if (index === this.playList.length) {
-        index = 0
-      }
+      // 限制播放索引
+      let index = this.utils.limitAddIndex(this.currentPlayIndex, this.playList.length)
       this.setCurrentPlayIndex(index)
       if (!this.playing) this.handleTogglePlaying()
       this.setSongReady(false)
       this.utils.playMusic(this.currentSong, null, this.currentPlayIndex)
+    },
+    // 滑动进度条
+    handleSlideChange () {
+      this.audio.currentTime = this.playerParams.width * this.playerParams.duration / 100
     }
   }
 
