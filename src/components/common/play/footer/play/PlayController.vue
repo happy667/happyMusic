@@ -1,8 +1,10 @@
 <template>
   <div class="play-controller-container">
     <!-- 播放类型 -->
-    <div class="play-type icon">
-      <i class="iconfont icon-xunhuanbofang"></i>
+    <div class="play-type icon"
+         @click="changeMode">
+      <i class="iconfont"
+         :class="playModeIcon"></i>
     </div>
     <!-- 上一首 -->
     <div class="prev icon"
@@ -29,17 +31,23 @@
 </template>
 <script>
 import { mapState, mapMutations, mapGetters } from 'vuex'
+import {
+  playMode
+} from '@/assets/common/js/config.js'
 import 'common/js/utils.js'
 export default {
   computed: {
-    ...mapState(['audio', 'playing', 'currentPlayIndex', 'playList', 'songReady']),
+    ...mapState(['audio', 'playing', 'currentPlayIndex', 'playList', 'songReady', 'playMode', 'sequenceList']),
     ...mapGetters(['currentSong']),
     playIcon () {
       return this.playing ? 'pause' : 'play'
+    },
+    playModeIcon () {
+      return this.playMode === playMode.sequence ? 'icon-xunhuanbofang' : this.playMode === playMode.loop ? 'icon-danquxunhuan' : 'icon-suijibofang'
     }
   },
   methods: {
-    ...mapMutations(['setPlaying', 'setTogglePlayList', 'setCurrentPlayIndex', 'setSongReady']),
+    ...mapMutations(['setPlaying', 'setTogglePlayList', 'setCurrentPlayIndex', 'setSongReady', 'setPlayMode', 'setPlayList']),
     // 切换播放暂停
     handleTogglePlaying () {
       console.log(this.playing)
@@ -71,6 +79,25 @@ export default {
       if (!this.playing) this.handleTogglePlaying()
       this.setSongReady(false)
       this.utils.playMusic(this.currentSong, null, this.currentPlayIndex)
+    },
+    // 切换播放类型
+    changeMode () {
+      const mode = (this.playMode + 1) % 3
+      this.setPlayMode(mode)
+      let list = null
+      if (mode === playMode.random) { // 随机播放
+        list = this.utils.randomList(this.sequenceList)
+      } else {
+        list = this.sequenceList
+      }
+      this.resetCurrentIndex(list)
+      this.setPlayList(list)
+      this.$toast(this.playMode === playMode.sequence ? '列表循环' : this.playMode === playMode.loop ? '单曲循环' : '随机播放')
+    },
+    // 重置当前索引
+    resetCurrentIndex (list) {
+      let index = list.findIndex(item => item.id === this.currentSong.id)
+      this.setCurrentPlayIndex(index)
     }
   }
 

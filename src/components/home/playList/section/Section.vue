@@ -1,7 +1,8 @@
 <template>
   <section class="section-container">
     <!-- 播放列表 -->
-    <ul class="play-list">
+    <ul class="play-list"
+        ref="list">
       <li class="play-list-item"
           @click.stop="selectItem($event,item,index)"
           :class="item.id===currentSong.id ? 'active':''"
@@ -33,15 +34,15 @@ import 'common/js/utils.js'
 import { mapGetters, mapMutations, mapState } from 'vuex'
 export default {
   computed: {
-    ...mapState(['currentPlayIndex']),
+    ...mapState(['currentPlayIndex', 'togglePlayList']),
     ...mapGetters(['currentSong']),
     playList: {
       get () {
-        return this.$store.state.playList
+        return this.$store.state.sequenceList
       },
       set (list) {
         this.$nextTick(() => {
-          this.$store.commit('setPlayList', list)
+          this.$store.commit('setSequenceList', list)
         })
       }
     }
@@ -50,10 +51,37 @@ export default {
     playList (newList) {
       // 如果播放列表为空就隐藏
       if (newList.length === 0) this.setTogglePlayList(false)
+      if (this.togglePlayList) this.scrollList()
+    },
+    togglePlayList: {
+      immediate: true,
+      handler (newVal) {
+        if (newVal) {
+          this.$nextTick(() => { // 获取更新后的dom,防止报错
+            this.scrollList()
+          })
+        }
+      }
+
     }
   },
   methods: {
     ...mapMutations(['setCurrentPlayIndex', 'setPlayerFullScreen', 'setTogglePlayList']),
+    // 移动元素
+    scrollList () {
+      // 获取当前播放的歌曲节点
+      const list = this.$refs.list
+      // 首先查找当前播放歌曲在播放列表中的索引
+      const index = this.playList.findIndex(item => item.id === this.currentSong.id)
+      // 再找到当前索引的节点
+      const element = list.childNodes[index]
+      // 这里减去4个歌曲节点高度是因为保持每次移动位置在元素中间
+      let top = element.offsetTop - (element.offsetHeight * 4)
+      // 如果大于0就移动
+      if (top > 0) {
+        list.scrollTo(0, top)
+      }
+    },
     // 选择歌曲
     selectItem (e, item, index) {
       if (e.target.className !== 'right delete') {
@@ -71,11 +99,10 @@ export default {
         list.splice(index, 1)
         this.playList = list
         if (index >= this.playList.length - 1) {
-          console.log(11111)
           index = 0
+        } else {
+          index++
         }
-      } else {
-        index++
       }
       this.setCurrentPlayIndex(index)
     }

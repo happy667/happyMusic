@@ -20,5 +20,12 @@ export default {
     return request({
       url
     })
+  },
+  // 获取歌曲评论
+  getSongComment(id, offset = 0) {
+    let url = `comment/music?id=${id}&offset=${offset}`
+    return request({
+      url
+    })
   }
 }

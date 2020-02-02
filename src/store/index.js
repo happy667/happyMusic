@@ -12,6 +12,7 @@ import {
 } from '@/assets/common/js/config.js'
 import Song from '@/assets/common/js/song.js'
 import SongSheetDetail from '@/assets/common/js/songSheetDetail.js'
+import utils from '@/assets/common/js/utils.js'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -275,9 +276,11 @@ export default new Vuex.Store({
       list,
       index
     }) {
+      let sequenceList = utils.utils.copyList(list)
+      console.log(sequenceList)
       commit('setPlaying', true)
       commit('setPlayList', list)
-      commit('setSequenceList', list)
+      commit('setSequenceList', sequenceList)
       commit('setCurrentPlayIndex', index)
     }
 

@@ -1,12 +1,14 @@
 <template>
   <header class="header">
     <!-- 左侧播放类型 -->
-    <div class="left">
+    <div class="left"
+         @click="changeMode">
       <div class="play-type icon">
-        <i class="iconfont icon-xunhuanbofang"></i>
+        <i class="iconfont"
+           :class="playModeIcon"></i>
       </div>
-      <div class="type-name">随机播放</div>
-      <div class="list-num">({{playList.length}}首)</div>
+      <div class="type-name">{{playModeText}}</div>
+      <div class="list-num">({{sequenceList.length}}首)</div>
     </div>
     <div class="right"
          @click="clearPlayList">
@@ -17,23 +19,51 @@
   </header>
 </template>
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapGetters } from 'vuex'
+import {
+  playMode
+} from '@/assets/common/js/config.js'
 export default {
   computed: {
-    ...mapState(['playList'])
+    ...mapState(['playMode', 'sequenceList']),
+    ...mapGetters(['currentSong']),
+    playModeIcon () {
+      return this.playMode === playMode.sequence ? 'icon-xunhuanbofang' : this.playMode === playMode.loop ? 'icon-danquxunhuan' : 'icon-suijibofang'
+    },
+    playModeText () {
+      return this.playMode === playMode.sequence ? '列表循环' : this.playMode === playMode.loop ? '单曲循环' : '随机播放'
+    }
   },
   methods: {
-    ...mapMutations(['setPlayList']),
+    ...mapMutations(['setSequenceList', 'setPlayMode', 'setCurrentPlayIndex', 'setPlayList']),
     clearPlayList () {
       this.$Dialog.confirm({
         message: '确定要清空播放列表?',
         confirmButtonColor: '#FD4979',
         width: '265px'
       }).then(() => {
-        this.setPlayList([])
+        this.setSequenceList([])
       }).catch(() => {
 
       })
+    },
+    // 切换播放类型
+    changeMode () {
+      const mode = (this.playMode + 1) % 3
+      this.setPlayMode(mode)
+      let list = null
+      if (mode === playMode.random) { // 随机播放
+        list = this.utils.randomList(this.sequenceList)
+      } else {
+        list = this.sequenceList
+      }
+      this.resetCurrentIndex(list)
+      this.setPlayList(list)
+    },
+    // 重置当前索引
+    resetCurrentIndex (list) {
+      let index = list.findIndex(item => item.id === this.currentSong.id)
+      this.setCurrentPlayIndex(index)
     }
   }
 }
@@ -47,11 +77,11 @@ export default {
   box-sizing: border-box;
   display: flex;
   justify-content: space-between;
-  font-size: $font-size-smaller;
+  font-size: $font-size-smaller-x;
   border-bottom: 0.02rem solid #efefef;
 
   i {
-    font-size: $font-size-small;
+    font-size: $font-size-small-x;
   }
 
   .left {
@@ -60,7 +90,7 @@ export default {
     display: flex;
 
     .icon {
-      margin-right: 0.3rem;
+      margin-right: 0.1rem;
     }
   }
 
