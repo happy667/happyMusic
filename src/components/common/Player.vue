@@ -4,7 +4,8 @@
        v-show="playList.length>0">
     <!-- 全屏播放器 -->
     <transition enter-active-class="animated fadeInUp faster">
-      <FullScreenPlay v-show="playerFullScreen"></FullScreenPlay>
+      <FullScreenPlay ref="FullScreenPlay"
+                      v-show="playerFullScreen"></FullScreenPlay>
     </transition>
     <!-- 迷你播放器 -->
     <mini-play v-show="!playerFullScreen">
@@ -16,6 +17,7 @@
              @canplay="ready"
              @error="error"
              @timeupdate="handleUpdateTime"
+             @ended="handleEnd"
              :src="url"></audio>
     </div>
   </div>
@@ -28,6 +30,9 @@ import {
 } from '@/api/config.js'
 import FullScreenPlay from './play/FullScreenPlay'
 import MiniPlay from './play/MiniPlay'
+import {
+  playMode
+} from '@/assets/common/js/config.js'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 export default {
   data () {
@@ -54,7 +59,13 @@ export default {
         this.$refs.play.style.position = 'relative'
       }
     },
-    currentSong (newVal, oldVal) {
+    currentSong (newSong, oldSong) {
+      if (!newSong.id) {
+        return
+      }
+      if (newSong.id === oldSong.id) {
+        return
+      }
       this.setPlaying(false)
       this.getSong(this.currentSong.id)
     },
@@ -65,7 +76,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['playerFullScreen', 'playing', 'audio', 'playList']),
+    ...mapState(['playerFullScreen', 'playing', 'audio', 'playList', 'playMode', 'sequenceList']),
     ...mapGetters(['currentSong']),
     togglePlayList: {
       get () {
@@ -82,7 +93,7 @@ export default {
     this.setAudio(this.$refs.audio)
   },
   methods: {
-    ...mapMutations(['setAudio', 'setTogglePlayList', 'setSongReady', 'setPlaying', 'setCurrentPlayIndex', 'setPlayList']),
+    ...mapMutations(['setAudio', 'setTogglePlayList', 'setSongReady', 'setPlaying', 'setCurrentPlayIndex', 'setSequenceList']),
     ready () {
       this.playerParams.duration = this.audio.duration
       this.setSongReady(true)
@@ -97,11 +108,13 @@ export default {
         this.url = res.data[0].url
         if (!this.url) { // 判断是否为空
           // 移除歌曲
-          let list = this.playList
-          const listIndex = this.playList.findIndex(item => item.id === id)
+          let list = this.sequenceList
+          const listIndex = this.sequenceList.findIndex(item => item.id === id)
           list.splice(listIndex, 1)
-          this.setPlayList(list)
+          this.setSequenceList(list)
           this.$toast('该歌曲暂时不能播放,自动移除该歌曲')
+          this.setSongReady(true)
+          this.next()
         } else {
           this.$nextTick(() => {
             this.setPlaying(true)
@@ -114,6 +127,24 @@ export default {
       this.playerParams.currentTime = e.target.currentTime
       // 更新滚动条
       this.playerParams.width = (this.playerParams.currentTime / this.playerParams.duration) * 100
+    },
+    // 播放结束
+    handleEnd () {
+      // 如果是单曲循环
+      if (this.playMode === playMode.loop) {
+        this.loop()
+      } else {
+        this.next()
+      }
+    },
+    // 循环播放
+    loop () {
+      this.audio.currentTime = 0// 重新播放
+      this.$refs.audio.play()
+      this.setPlaying(true)
+    },
+    next () {
+      this.$refs.FullScreenPlay.$refs.playFooter.$refs.playController.next()
     }
 
   },

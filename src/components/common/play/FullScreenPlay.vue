@@ -5,7 +5,7 @@
     <!-- 内容区域 -->
     <play-section></play-section>
     <!-- 页面底部 -->
-    <play-footer></play-footer>
+    <play-footer ref="playFooter"></play-footer>
     <!-- 背景 -->
     <div class="bg"
          v-lazy:background-image="currentSong.picUrl "></div>
@@ -77,7 +77,7 @@ export default {
     background-size: 100% 100%;
     filter: blur(10px);
     z-index: -1;
-    opacity: 0.3;
+    opacity: 0.4;
     background: $color-common-b;
   }
 }
