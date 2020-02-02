@@ -57,6 +57,24 @@ const utils = {
       index = length
     }
     return index
+  },
+  randomList(list) {
+    let arr = []
+    for (let i = 0; i < list.length; i++) {
+      arr.push(list[i])
+    }
+    arr.sort(() => Math.random() - 0.5)
+    return arr
+  },
+  copyList(list) {
+    let newList = []
+    for (let i in list) {
+      newList.push(list[i])
+    }
+    return newList
   }
+}
+export default {
+  utils
 }
 Vue.prototype.utils = utils

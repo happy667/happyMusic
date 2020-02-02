@@ -114,9 +114,10 @@ const routes = [
   },
   // 歌曲评论列表
   {
-    path: '/songComment',
+    path: '/songComment/:id',
     name: 'songComment',
-    component: SongComment
+    component: SongComment,
+    props: true
 
   },
   // 歌手信息页

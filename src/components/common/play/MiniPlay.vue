@@ -126,6 +126,8 @@ export default {
        margin-right: 0.25rem;
        width: 1.2rem;
        height: 1.2rem;
+       background-color: #e4e4e4;
+       border-radius: 50%;
 
        img {
          display: block;
