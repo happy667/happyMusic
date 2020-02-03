@@ -3,9 +3,9 @@
     <!-- 头部导航栏 -->
     <play-header></play-header>
     <!-- 内容区域 -->
-    <play-section></play-section>
+    <play-section ref="playSection"></play-section>
     <!-- 页面底部 -->
-    <play-footer ref="playFooter"></play-footer>
+    <play-footer v-on="$listeners"></play-footer>
     <!-- 背景 -->
     <div class="bg"
          v-lazy:background-image="currentSong.picUrl "></div>
@@ -75,9 +75,9 @@ export default {
     background-position: center center;
     background-repeat: no-repeat;
     background-size: 100% 100%;
-    filter: blur(10px);
+    filter: blur(20px);
     z-index: -1;
-    opacity: 0.4;
+    opacity: 0.5;
     background: $color-common-b;
   }
 }

@@ -26,19 +26,16 @@
          @click="handlePlayList">
       <i class="iconfont icon-bofangliebiao"></i>
     </div>
-
   </div>
 </template>
 <script>
-import { mapState, mapMutations, mapGetters } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import {
   playMode
 } from '@/assets/common/js/config.js'
-import 'common/js/utils.js'
 export default {
   computed: {
-    ...mapState(['audio', 'playing', 'currentPlayIndex', 'playList', 'songReady', 'playMode', 'sequenceList']),
-    ...mapGetters(['currentSong']),
+    ...mapState(['playing', 'playMode']),
     playIcon () {
       return this.playing ? 'pause' : 'play'
     },
@@ -47,57 +44,26 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setPlaying', 'setTogglePlayList', 'setCurrentPlayIndex', 'setSongReady', 'setPlayMode', 'setPlayList']),
+    ...mapMutations(['setTogglePlayList']),
     // 切换播放暂停
     handleTogglePlaying () {
-      console.log(this.playing)
-      this.setPlaying(!this.playing)
+      this.$parent.$parent.$parent.handleTogglePlaying()
+    },
+    // 上一曲
+    prev () {
+      this.$parent.$parent.$parent.prev()
+    },
+    // 下一曲
+    next () {
+      this.$parent.$parent.$parent.next()
+    },
+    // 切换播放类型
+    changeMode () {
+      this.$parent.$parent.$parent.changeMode()
     },
     // 查看歌曲列表
     handlePlayList () {
       this.setTogglePlayList(true)
-    },
-    // 上一曲
-    prev () {
-      // 未加载好
-      if (!this.songReady) return
-      // 限制播放索引
-      let index = this.utils.limitCutIndex(this.currentPlayIndex, this.playList.length - 1)
-      this.setCurrentPlayIndex(index)
-
-      if (!this.playing) this.handleTogglePlaying()
-      this.setSongReady(false)
-      this.utils.playMusic(this.currentSong, null, this.currentPlayIndex)
-    },
-    // 下一曲
-    next () {
-      // 未加载好
-      if (!this.songReady) return
-      // 限制当前播放索引
-      let index = this.utils.limitAddIndex(this.currentPlayIndex, this.playList.length)
-      this.setCurrentPlayIndex(index)
-      if (!this.playing) this.handleTogglePlaying()
-      this.setSongReady(false)
-      this.utils.playMusic(this.currentSong, null, this.currentPlayIndex)
-    },
-    // 切换播放类型
-    changeMode () {
-      const mode = (this.playMode + 1) % 3
-      this.setPlayMode(mode)
-      let list = null
-      if (mode === playMode.random) { // 随机播放
-        list = this.utils.randomList(this.sequenceList)
-      } else {
-        list = this.sequenceList
-      }
-      this.resetCurrentIndex(list)
-      this.setPlayList(list)
-      this.$toast(this.playMode === playMode.sequence ? '列表循环' : this.playMode === playMode.loop ? '单曲循环' : '随机播放')
-    },
-    // 重置当前索引
-    resetCurrentIndex (list) {
-      let index = list.findIndex(item => item.id === this.currentSong.id)
-      this.setCurrentPlayIndex(index)
     }
   }
 

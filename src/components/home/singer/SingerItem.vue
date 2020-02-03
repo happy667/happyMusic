@@ -26,8 +26,7 @@ export default {
     ...mapMutations(['setSingerCurrentIndex']),
     // 选择歌手
     selectItem (item) {
-      this.setSingerCurrentIndex(0)
-      this.$router.push(`/singerInfo/${item.id}`)
+      this.$emit('select', item)
     }
   }
 
@@ -37,7 +36,7 @@ export default {
 @import '~common/stylus/variable';
 
 .singer-list-item-container {
-  padding: 0.25rem 0;
+  padding: 0.25rem 0.4rem;
 
   .singer-list-item {
     display: flex;

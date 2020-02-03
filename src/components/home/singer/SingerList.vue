@@ -16,7 +16,8 @@
             :listenScroll="listenScroll"
             :scrollEnd="scrollEnd"
             :probeType="probeType">
-      <div class="singer-list-wrapper" :style="paddingBottom">
+      <div class="singer-list-wrapper"
+           :style="paddingBottom">
         <ul class="singer-list"
             v-if="this.singerList.length !== 0">
           <li class="singer-list-item"
@@ -27,7 +28,8 @@
             <ul>
               <li v-for="item in group.items"
                   :key="item.id">
-                <singer-item :singer="item"></singer-item>
+                <singer-item :singer="item"
+                             @select="handleSelect"></singer-item>
               </li>
             </ul>
           </li>
@@ -168,6 +170,10 @@ export default {
       }
       this.scrollY = -this.listHeight[index]
       this.$refs.singerList.scrollToElement(this.$refs.listGroup[index], 0)
+    },
+    // 选择歌手
+    handleSelect (item) {
+      this.$router.push(`/singerInfo/${item.id}`)
     }
   },
   components: {
@@ -210,7 +216,6 @@ export default {
   .singer-list {
     .singer-list-item {
       ul {
-        padding: 0 0.5rem;
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;

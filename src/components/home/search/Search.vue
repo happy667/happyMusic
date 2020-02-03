@@ -119,7 +119,7 @@ export default {
     },
     // 选择搜索名称
     selectItem (item) {
-      this.setSearchKeywords(item)
+      this.setSearchKeywords(item.name)
       this.showSearchList = false
       // 重置标签页到第一个
       this.setSearchCurrentIndex(0)

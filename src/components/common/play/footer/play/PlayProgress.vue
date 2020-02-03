@@ -3,7 +3,7 @@
     <!-- 进度条 -->
     <div class="progress">
       <van-slider active-color="#FD4979"
-                  @input="handleSlideChange"
+                  @change="handleSlideChange"
                   v-model="playerParams.width" />
 
     </div>
@@ -20,12 +20,15 @@ import { mapState } from 'vuex'
 export default {
   inject: ['playerParams'],
   computed: {
-    ...mapState(['audio'])
+    ...mapState(['audio', 'currentLyric'])
   },
   methods: {
     // 滑动进度条
     handleSlideChange () {
       this.audio.currentTime = this.playerParams.width * this.playerParams.duration / 100
+      if (this.currentLyric) {
+        this.currentLyric.seek(this.audio.currentTime * 1000)
+      }
     }
   }
 }
@@ -34,14 +37,13 @@ export default {
 .play-progress-container {
   .progress {
     width: 100%;
-    margin-top: 0.6rem;
   }
 
   .play-time {
     display: flex;
     justify-content: space-between;
-    height: 1.3rem;
-    line-height: 1.3rem;
+    height: 1rem;
+    line-height: 1rem;
 
     .start-time, .end-time {
       color: #81898f;

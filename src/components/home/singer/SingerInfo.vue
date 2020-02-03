@@ -61,6 +61,7 @@ export default {
   created () {
     // 根据歌手id获取歌手单曲
     this.handleTabsChange(this.currentIndex)
+    this.setSingerCurrentIndex(0)
   },
   beforeRouteEnter: (to, from, next) => {
     next(vm => {
@@ -105,9 +106,17 @@ export default {
         let songList = []
         res.hotSongs.map((item) => { // 循环数组对象对每个数据进行处理 返回需要得数据
           let singers = item.ar.map(item => item.name).join('/')
-          let singersId = item.ar.map(item => item.id).join(',')
-          songList.push(new Song({ id: item.id, name: item.name, singers, singersId, picUrl: item.al.picUrl }))
+          let singersList = []
+          // 处理歌手
+          item.ar.forEach(item => {
+            singersList.push(new Singer({
+              id: item.id,
+              name: item.name
+            }))
+          })
+          songList.push(new Song({ id: item.id, name: item.name, singers, singersList, picUrl: item.al.picUrl }))
         })
+        console.log(songList)
         let singer = new Singer({
           id: res.artist.id,
           name: res.artist.name,
@@ -156,7 +165,7 @@ export default {
 
 .singer-info-container>>>.van-loading {
   // 减去头部标题高度、歌手图片高度、标签页高度
-  height: calc(100vh - (1.22667rem + 6rem + 1.18rem+0.4rem));
+  height: calc(100vh - (1.22667rem + 6rem + 1.18rem + 0.4rem));
 }
 
 .singer-info-container {

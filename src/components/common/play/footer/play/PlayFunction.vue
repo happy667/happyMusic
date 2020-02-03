@@ -29,9 +29,10 @@ export default {
 @import '~common/stylus/variable';
 
 .function-container {
+  margin-top: 0.3rem;
   display: flex;
   justify-content: space-evenly;
-  align-items: center;
+  height: 1.2rem;
 
   .icon {
     i {
