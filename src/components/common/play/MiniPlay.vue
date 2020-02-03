@@ -53,7 +53,7 @@ export default {
   inject: ['playerParams'],
   computed: {
     ...mapGetters(['currentSong']),
-    ...mapState(['playing', 'audio', 'songReady', 'currentPlayIndex', 'playList']),
+    ...mapState(['playing', 'audio']),
     playIcon () {
       return this.playing ? 'pause' : 'play'
     },
@@ -62,7 +62,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setPlayerFullScreen', 'setPlaying', 'setSongReady', 'setCurrentPlayIndex']),
+    ...mapMutations(['setPlayerFullScreen']),
     handleShowFullPlay (e) {
       if (e.target.className !== 'player-controller') {
         this.setPlayerFullScreen(true)
@@ -70,29 +70,15 @@ export default {
     },
     // 切换播放暂停
     handleTogglePlaying () {
-      this.setPlaying(!this.playing)
+      this.$parent.handleTogglePlaying()
     },
     // 上一曲
     prev () {
-      // 未加载好
-      if (!this.songReady) return
-      // 限制播放索引
-      let index = this.utils.limitCutIndex(this.currentPlayIndex, this.playList.length - 1)
-      this.setCurrentPlayIndex(index)
-      if (!this.playing) this.handleTogglePlaying()
-      this.setSongReady(false)
-      this.utils.playMusic(this.currentSong, null, this.currentPlayIndex)
+      this.$parent.prev()
     },
     // 下一曲
     next () {
-      // 未加载好
-      if (!this.songReady) return
-      // 限制播放索引
-      let index = this.utils.limitAddIndex(this.currentPlayIndex, this.playList.length)
-      this.setCurrentPlayIndex(index)
-      if (!this.playing) this.handleTogglePlaying()
-      this.setSongReady(false)
-      this.utils.playMusic(this.currentSong, null, this.currentPlayIndex)
+      this.$parent.next()
     },
     // 滑动进度条
     handleSlideChange () {

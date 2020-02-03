@@ -27,5 +27,12 @@ export default {
     return request({
       url
     })
+  },
+  // 获取歌曲歌词
+  getSongLyric(id) {
+    let url = `lyric?id=${id}`
+    return request({
+      url
+    })
   }
 }

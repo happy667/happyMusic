@@ -83,6 +83,7 @@ import 'common/js/utils.js'
 import SongsList from '@/components/home/song/SongList'
 import singerApi from '@/api/singer.js'
 import Song from '@/assets/common/js/song.js'
+import Singer from '@/assets/common/js/singer.js'
 import NoResult from '@/components/common/NoResult'
 import {
   ERR_OK
@@ -128,8 +129,17 @@ export default {
         let songList = []
         res.songs.map((item) => { // 循环数组对象对每个数据进行处理 返回需要得数据
           let singers = item.ar.map(item => item.name).join('/')
-          let singersId = item.ar.map(item => item.id).join(',')
-          songList.push(new Song({ id: item.id, name: item.name, singers, singersId, picUrl: item.al.picUrl }))
+          let singersList = []
+          // 处理歌手
+          item.ar.forEach(item => {
+            singersList.push(new Singer({
+              id: item.id,
+              name: item.name,
+              avatar: item.img1v1Url,
+              picUrl: item.picUrl
+            }))
+          })
+          songList.push(new Song({ id: item.id, name: item.name, singers, singersList, picUrl: item.al.picUrl }))
         })
         this.$set(this.albumObj, 'songs', songList)
         this.$set(this.albumObj, 'commentCount', res.album.info.commentCount)

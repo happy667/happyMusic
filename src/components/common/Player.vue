@@ -5,7 +5,8 @@
     <!-- 全屏播放器 -->
     <transition enter-active-class="animated fadeInUp faster">
       <FullScreenPlay ref="FullScreenPlay"
-                      v-show="playerFullScreen"></FullScreenPlay>
+                      v-show="playerFullScreen"
+                      @prev="prev"></FullScreenPlay>
     </transition>
     <!-- 迷你播放器 -->
     <mini-play v-show="!playerFullScreen">
@@ -66,8 +67,20 @@ export default {
       if (newSong.id === oldSong.id) {
         return
       }
+      if (this.currentLyric) {
+        this.currentLyric.stop()
+        this.audio.currentTime = 0
+        this.setCurrentPlayLyric('')
+        this.setCurrentLineNum(0)
+      }
+
+      setTimeout(() => {
+        this.$refs.FullScreenPlay.$refs.playSection.getLyric(this.currentSong.id)// 获取歌词
+      }, 1000)
       this.setPlaying(false)
       this.getSong(this.currentSong.id)
+      // 默认显示歌曲封面
+      this.setPlayerShowImage(true)
     },
     playing (newPlaying) {
       this.$nextTick(() => {
@@ -76,7 +89,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['playerFullScreen', 'playing', 'audio', 'playList', 'playMode', 'sequenceList']),
+    ...mapState(['playerFullScreen', 'songReady', 'playing', 'audio', 'currentPlayIndex', 'playList', 'playMode', 'sequenceList', 'currentLyric']),
     ...mapGetters(['currentSong']),
     togglePlayList: {
       get () {
@@ -93,7 +106,7 @@ export default {
     this.setAudio(this.$refs.audio)
   },
   methods: {
-    ...mapMutations(['setAudio', 'setTogglePlayList', 'setSongReady', 'setPlaying', 'setCurrentPlayIndex', 'setSequenceList']),
+    ...mapMutations(['setAudio', 'setTogglePlayList', 'setSongReady', 'setPlaying', 'setPlayMode', 'setPlayList', 'setCurrentPlayIndex', 'setSequenceList', 'setPlayerShowImage', 'setCurrentPlayLyric', 'setCurrentLineNum']),
     ready () {
       this.playerParams.duration = this.audio.duration
       this.setSongReady(true)
@@ -101,6 +114,7 @@ export default {
     error () {
       this.setSongReady(true)
     },
+    // 获取歌曲
     async getSong (id) {
       // 获取音乐播放路径
       const { data: res } = await songApi.getMusicUrl(id)
@@ -122,6 +136,7 @@ export default {
         }
       }
     },
+    // 更新时间
     handleUpdateTime (e) {
       // 更新当前播放时间
       this.playerParams.currentTime = e.target.currentTime
@@ -130,6 +145,9 @@ export default {
     },
     // 播放结束
     handleEnd () {
+      this.$nextTick(() => {
+        this.setPlaying(false)
+      })
       // 如果是单曲循环
       if (this.playMode === playMode.loop) {
         this.loop()
@@ -140,13 +158,78 @@ export default {
     // 循环播放
     loop () {
       this.audio.currentTime = 0// 重新播放
-      this.$refs.audio.play()
-      this.setPlaying(true)
+      console.log('jsdfds')
+      if (this.currentLyric) {
+        this.currentLyric.seek(0)
+        this.setCurrentPlayLyric('')
+        this.setCurrentLineNum(0)
+      }
+      this.$nextTick(() => {
+        this.setPlaying(true)
+        this.audio.play()
+      })
     },
+    // 上一曲
+    prev () {
+      // 未加载好
+      if (!this.songReady) return
+      // 如果只有一首就循环播放当前歌曲
+      if (this.playList.length === 1) {
+        this.loop()
+        return
+      }
+      // 限制播放索引
+      let index = this.utils.limitCutIndex(this.currentPlayIndex, this.playList.length - 1)
+      this.setCurrentPlayIndex(index)
+      if (!this.playing) this.handleTogglePlaying()
+      this.setSongReady(false)
+      this.utils.playMusic(this.currentSong, null, this.currentPlayIndex)
+    },
+    // 切换播放暂停
+    handleTogglePlaying () {
+      if (!this.songReady) return
+      this.setPlaying(!this.playing)
+      if (this.currentLyric) {
+        console.log(this.currentLyric)
+        this.currentLyric.togglePlay()
+      }
+    },
+    // 下一曲
     next () {
-      this.$refs.FullScreenPlay.$refs.playFooter.$refs.playController.next()
+      // 未加载好
+      if (!this.songReady) return
+      // 如果只有一首就循环播放当前歌曲
+      if (this.playList.length === 1) {
+        console.log('进来啦')
+        this.loop()
+        return
+      }
+      // 限制当前播放索引
+      let index = this.utils.limitAddIndex(this.currentPlayIndex, this.playList.length)
+      this.setCurrentPlayIndex(index)
+      if (!this.playing) this.handleTogglePlaying()
+      this.setSongReady(false)
+      this.utils.playMusic(this.currentSong, null, this.currentPlayIndex)
+    },
+    // 切换播放类型
+    changeMode () {
+      const mode = (this.playMode + 1) % 3
+      this.setPlayMode(mode)
+      let list = null
+      if (mode === playMode.random) { // 随机播放
+        list = this.utils.randomList(this.sequenceList)
+      } else {
+        list = this.sequenceList
+      }
+      this.resetCurrentIndex(list)
+      this.setPlayList(list)
+      this.$toast(this.playMode === playMode.sequence ? '列表循环' : this.playMode === playMode.loop ? '单曲循环' : '随机播放')
+    },
+    // 重置当前索引
+    resetCurrentIndex (list) {
+      let index = list.findIndex(item => item.id === this.currentSong.id)
+      this.setCurrentPlayIndex(index)
     }
-
   },
   components: {
     FullScreenPlay,
