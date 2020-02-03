@@ -9,12 +9,37 @@
       <div class="singer"
            @click="selectSingers">{{currentSong.singers}}</div>
     </div>
+    <van-popup v-model="showSingerPopup"
+               round
+               position="bottom"
+               :get-container="getContainer">
+      <div class="singerList">
+        <singer-item :singer="item"
+                     @select="handleSelect"
+                     v-for="item in currentSong.singersList"
+                     :key="item.id"></singer-item>
+      </div>
+    </van-popup>
   </header>
+
 </template>
 <script>
+import SingerItem from '@/components/home/singer/SingerItem'
 import { mapGetters, mapMutations } from 'vuex'
+import {
+  ERR_OK
+} from '@/api/config.js'
+import SingerApi from '@/api/singer.js'
 export default {
+  data () {
+    return {
+      showSingerPopup: false// 显示歌手弹出层
+    }
+  },
   inject: ['reload'],
+  computed: {
+    ...mapGetters(['currentSong'])
+  },
   methods: {
     ...mapMutations(['setPlayerFullScreen', 'setSinger', 'setSingerCurrentIndex']),
     handleBack () {
@@ -23,27 +48,51 @@ export default {
     // 选择歌手
     selectSingers () {
       console.log(this.currentSong)
-      // if (!this.currentSong.singersId.length) { // 只有一个歌手
-      // 跳转到歌手页面
-      // 根据id查询歌手
-      console.log(this.currentSong)
+      if (this.currentSong.singersList.length === 1) { // 只有一个歌手直接跳转到歌手页面
+        this.setSingerCurrentIndex(0)
+        this.setPlayerFullScreen(false)
+        this.$router.push(`/singerInfo/${this.currentSong.singersList[0].id}`)
+      } else {
+        this.showSingerPopup = true
+        this.currentSong.singersList.forEach(async item => { // 查询该歌手图片
+          item.avatar = await this.getSingerImage(item.id)
+        })
+      }
+    },
+    // 获取歌手图片
+    async getSingerImage (id) {
+      // 获取歌手
+      const { data: res } = await SingerApi.getSingerSong(id)
+      if (res.code === ERR_OK) { // 成功获取歌手
+        return res.artist.img1v1Url
+      }
+    },
+    getContainer () {
+      return document.querySelector('.play-container')
+    },
+    // 选择歌手列表中歌手
+    handleSelect (item) {
+      if (this.$route.path !== `/singerInfo/${item.id}`) {
+        this.reload()
+        this.$router.push(`/singerInfo/${item.id}`)
+      }
       this.setSingerCurrentIndex(0)
-      this.reload()
-      this.$router.push(`/singerInfo/${this.currentSong.singersId}`)
-      // }
+      this.setPlayerFullScreen(false)
+      this.showSingerPopup = false
     }
 
   },
-  computed: {
-    ...mapGetters(['currentSong'])
+  components: {
+    SingerItem
   }
+
 }
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
 .header-container {
-  margin: 0.3rem 0.3rem 0.5rem 0.3rem;
+  margin: 0.3rem 0.3rem 0.1rem 0.3rem;
   position: relative;
   display: flex;
   font-size: $font-size-small;
@@ -78,7 +127,7 @@ export default {
     }
 
     .singer {
-      color: #777;
+      color: #e4e4e4;
     }
   }
 }

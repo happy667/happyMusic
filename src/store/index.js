@@ -11,6 +11,7 @@ import {
   playMode
 } from '@/assets/common/js/config.js'
 import Song from '@/assets/common/js/song.js'
+import Singer from '@/assets/common/js/singer.js'
 import SongSheetDetail from '@/assets/common/js/songSheetDetail.js'
 import utils from '@/assets/common/js/utils.js'
 Vue.use(Vuex)
@@ -42,7 +43,11 @@ export default new Vuex.Store({
     currentPlayIndex: -1, // 当前播放索引
     audio: null, // 音频对象
     togglePlayList: false, // 显示隐藏播放列表
-    songReady: false // 歌曲是否加载完毕
+    songReady: false, // 歌曲是否加载完毕
+    playerShowImage: true, // 显示播放器图片
+    currentLyric: null, // 设置一个歌词维护属性
+    currentLineNum: 0, // 当前高亮的歌词行
+    currentPlayLyric: '' // 当前播放的歌词
   },
   mutations: {
     // 设置登录用户
@@ -148,6 +153,22 @@ export default new Vuex.Store({
     // 设置加载歌曲
     setSongReady(state, songReady) {
       state.songReady = songReady
+    },
+    // 设置播放器页面图片显示
+    setPlayerShowImage(state, playerShowImage) {
+      state.playerShowImage = playerShowImage
+    },
+    // 设置当前歌词
+    setCurrentLyric(state, currentLyric) {
+      state.currentLyric = currentLyric
+    },
+    // 当前高亮的歌词行
+    setCurrentLineNum(state, currentLineNum) {
+      state.currentLineNum = currentLineNum
+    },
+    // 当前播放的歌词
+    setCurrentPlayLyric(state, currentPlayLyric) {
+      state.currentPlayLyric = currentPlayLyric
     }
   },
   actions: {
@@ -178,13 +199,25 @@ export default new Vuex.Store({
       } = await recommendApi.getRecommendNewSong()
       if (res.code === ERR_OK) { // 成功获取推荐新音乐
         let songList = []
+
         res.result.map((item) => { // 循环数组对象对每个数据进行处理 返回需要得数据
           let singers = item.song.artists.map(item => item.name).join('/')
+          let singersList = []
+          // 处理歌手
+          item.song.artists.forEach(item => {
+            singersList.push(new Singer({
+              id: item.id,
+              name: item.name,
+              avatar: item.img1v1Url,
+              picUrl: item.picUrl
+            }))
+          })
           songList.push(new Song({
             id: item.id,
             name: item.name,
             singers,
-            picUrl: item.picUrl
+            picUrl: item.picUrl,
+            singersList
           }))
         })
         context.commit('setRecommendNewSong', songList)

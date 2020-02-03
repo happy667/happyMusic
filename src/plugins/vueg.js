@@ -36,7 +36,7 @@ const options = {
       leave: ['home']
     },
     'songComment': {
-      leave: ['play']
+      leave: ['play', 'home']
     },
     'singerInfo': {
       enter: ['songSheetDisc'],

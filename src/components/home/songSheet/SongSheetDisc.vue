@@ -53,6 +53,7 @@ import {
   ERR_OK
 } from '@/api/config.js'
 import Song from '@/assets/common/js/song.js'
+import Singer from '@/assets/common/js/singer.js'
 import SongsList from '@/components/home/song/SongList'
 import SongSheetDetail from '@/assets/common/js/songSheetDetail.js'
 import NoResult from '@/components/common/NoResult'
@@ -88,12 +89,21 @@ export default {
         let songList = []
         res.playlist.tracks.map((item) => { // 循环数组对象对每个数据进行处理 返回需要得数据
           let singerName = item.ar.map(item => item.name).join('/')
-          let singersId = item.ar.map(item => item.id).join(',')
+          let singersList = []
+          // 处理歌手
+          item.ar.forEach(item => {
+            singersList.push(new Singer({
+              id: item.id,
+              name: item.name,
+              avatar: item.img1v1Url,
+              picUrl: item.picUrl
+            }))
+          })
           songList.push(new Song({
             id: item.id,
             name: item.name,
             singers: singerName,
-            singersId,
+            singersList,
             picUrl: item.al.picUrl
           }))
         })

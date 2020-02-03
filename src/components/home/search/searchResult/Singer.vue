@@ -14,7 +14,8 @@
           <li class="singer-list-item"
               v-for="item in singer.singerList"
               :key="item.id">
-            <singer-item :singer="item"></singer-item>
+            <singer-item :singer="item"
+                         @select="handleSelect"></singer-item>
           </li>
         </ul>
       </van-list>
@@ -107,6 +108,10 @@ export default {
       } else {
         this.loading = false
       }
+    },
+    // 选择歌手
+    handleSelect (item) {
+      this.$router.push(`/singerInfo/${item.id}`)
     }
   },
 
@@ -120,7 +125,6 @@ export default {
 @import '~common/stylus/variable';
 
 .singer-container {
-  padding: 0 0.4rem;
   min-height: calc(100vh - (1.8rem + 1.22667rem + 1.18rem)) !important;
   box-sizing: border-box;
 }

@@ -27,6 +27,7 @@ import searchApi from '@/api/search.js'
 import { ERR_OK } from '@/api/config.js'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 import Song from '@/assets/common/js/song.js'
+import Singer from '@/assets/common/js/singer.js'
 import songApi from '@/api/song.js'
 export default {
   data () {
@@ -73,10 +74,24 @@ export default {
         let songList = []
         res.result.songs.map((item) => { // 循环数组对象对每个数据进行处理 返回需要得数据
           let singers = item.artists.map(item => item.name).join('/')
-          let singersId = item.artists.map(item => item.id).join(',')
-          songList.push(new Song({ id: item.id, name: item.name, singers, singersId }))
+          let singersList = []
+          // 处理歌手
+          item.artists.forEach(item => {
+            singersList.push(new Singer({
+              id: item.id,
+              name: item.name,
+              avatar: item.img1v1Url,
+              picUrl: item.picUrl
+            }))
+          })
+          songList.push(new Song({ id: item.id, name: item.name, singers, singersList }))
         })
+        // 将每次查询的歌曲追加到song.songList中
+        // 因为可能存在重复数据，所以需要去重处理
         let list = this.song.songList.concat(songList)
+        const map = new Map()
+        list = list.filter(item => !map.has(item.id) && map.set(item.id, 1))
+
         this.song.songList = list
         // 关闭加载logo
         this.loading = false
