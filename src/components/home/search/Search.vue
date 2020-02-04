@@ -114,12 +114,16 @@ export default {
     },
     // 输入搜索内容
     handleInput () {
-      this.searchKeywords.trim().length === 0 ? this.showSearchList = false : this.showSearchList = true
-      this.getSearchAll()
+      if (this.searchKeywords.trim().length === 0) {
+        this.showSearchList = false
+      } else {
+        this.showSearchList = true
+        this.getSearchAll()
+      }
     },
     // 选择搜索名称
     selectItem (item) {
-      this.setSearchKeywords(item.name)
+      this.setSearchKeywords(item)
       this.showSearchList = false
       // 重置标签页到第一个
       this.setSearchCurrentIndex(0)

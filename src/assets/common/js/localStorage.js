@@ -1,6 +1,9 @@
 const SET_MAX_LENGTH = 10
 const LOCAL_LIST_NAME = 'localSearchList'
 export function addLocalSearch(value) {
+  if (value.trim().length === 0) {
+    return
+  }
   // 添加到本地历史搜索列表
   let arr = getItem(LOCAL_LIST_NAME)
   if (!arr) { // 如果本地中还没有该搜索列表就初始化一个数组

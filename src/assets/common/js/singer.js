@@ -4,12 +4,16 @@ export default class Singer {
     name,
     avatar,
     aliaName,
-    picUrl
+    picUrl,
+    singers,
+    singersList
   }) {
     this.id = id
     this.name = name
     this.avatar = avatar
     this.aliaName = aliaName
     this.picUrl = picUrl
+    this.singers = singers
+    this.singersList = singersList
   }
 }

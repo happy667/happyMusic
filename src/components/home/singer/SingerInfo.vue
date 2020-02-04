@@ -23,7 +23,9 @@
         </van-tab>
         <!-- 歌手专辑 -->
         <van-tab title="专辑">
-          <singer-album :singerAlbum="singerAlbum" />
+          <singer-album :singerAlbum="singerAlbum"
+                        @pullingUp="handlePullingUp"
+                        :finished="singerAlbumFinished" />
         </van-tab>
         <!-- 歌手详情 -->
         <van-tab title="详情">
@@ -54,7 +56,8 @@ export default {
       singerDesc: {},
       singerSong: [], // 歌手单曲
       singerAlbum: [], // 歌手专辑
-      singerDetail: {} // 歌手详情
+      singerDetail: {}, // 歌手详情
+      singerAlbumFinished: false // 是否加载完歌手专辑
     }
   },
 
@@ -84,7 +87,7 @@ export default {
   methods: {
     ...mapMutations(['setSingerCurrentIndex', 'setSinger']),
     routerBack () {
-      this.$router.back()
+      this.$router.push('/home')
     },
     handleTabsChange (name) {
       switch (name) {
@@ -131,10 +134,13 @@ export default {
     },
     async getSingerAlbum (id) {
       // 获取歌手专辑
-      const { data: res } = await SingerApi.getSingerAlbum(id)
+      const offset = this.singerAlbum.length
+      const { data: res } = await SingerApi.getSingerAlbum(id, offset)
       if (res.code === ERR_OK) { // 成功获取歌手单曲
-        this.singerAlbum = res.hotAlbums
-        console.log(this.singerAlbum)
+        this.singerAlbum = this.singerAlbum.concat(res.hotAlbums)
+
+        this.singerAlbumFinished = !res.more
+        console.log(this.singerAlbumFinished)
       }
     },
     async getSingerDetail (id) {
@@ -148,6 +154,12 @@ export default {
         }
         console.log(this.singerDetail)
       }
+    },
+    // 上拉加载
+    handlePullingUp () {
+      setTimeout(async () => {
+        await this.getSingerAlbum(this.id)
+      }, 500)
     }
 
   },

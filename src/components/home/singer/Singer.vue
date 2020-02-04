@@ -39,7 +39,6 @@ export default {
     }
   },
   methods: {
-    // ...mapActions(['getSingerList', 'getRecommendSingerList'])
     // 处理歌手列表数据
     handleSingerList (list) {
       let map = {
@@ -123,8 +122,6 @@ export default {
 
   },
   mounted () {
-    // this.getSingerList()
-    // this.getRecommendSingerList()
     this.getSingerList()
   },
   components: {
@@ -139,6 +136,6 @@ export default {
 .singer-container {
   position: relative;
   width: 100%;
-  height :100%;
+  height: 100%;
 }
 </style>

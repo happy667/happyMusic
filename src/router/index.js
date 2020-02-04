@@ -16,6 +16,7 @@ const Player = () => import('../components/common/Player')
 const SongComment = () => import('../components/home/song/SongComment')
 const SingerInfo = () => import('../components/home/singer/SingerInfo')
 const Album = () => import('../components/home/singer/album/Album')
+const AlbumComment = () => import('../components/home/singer/album/AlbumComment')
 
 Vue.use(VueRouter)
 
@@ -120,6 +121,14 @@ const routes = [
     props: true
 
   },
+  // 专辑评论列表
+  {
+    path: '/albumComment/:id',
+    name: 'albumComment',
+    component: AlbumComment,
+    props: true
+
+  },
   // 歌手信息页
   {
     path: '/singerInfo/:id',
@@ -129,8 +138,8 @@ const routes = [
   },
   // 歌手专辑详情页
   {
-    path: '/album/:id',
-    name: 'album',
+    path: '/singerAlbum/:id',
+    name: 'singerAlbum',
     component: Album,
     props: true
   }

@@ -29,7 +29,7 @@ import { mapGetters, mapMutations } from 'vuex'
 import {
   ERR_OK
 } from '@/api/config.js'
-import SingerApi from '@/api/singer.js'
+import singerApi from '@/api/singer.js'
 export default {
   data () {
     return {
@@ -51,6 +51,9 @@ export default {
       if (this.currentSong.singersList.length === 1) { // 只有一个歌手直接跳转到歌手页面
         this.setSingerCurrentIndex(0)
         this.setPlayerFullScreen(false)
+        if (this.$router.name === 'singerInfo') {
+          this.reload()
+        }
         this.$router.push(`/singerInfo/${this.currentSong.singersList[0].id}`)
       } else {
         this.showSingerPopup = true
@@ -62,7 +65,7 @@ export default {
     // 获取歌手图片
     async getSingerImage (id) {
       // 获取歌手
-      const { data: res } = await SingerApi.getSingerSong(id)
+      const { data: res } = await singerApi.getSingerSong(id)
       if (res.code === ERR_OK) { // 成功获取歌手
         return res.artist.img1v1Url
       }
@@ -72,10 +75,10 @@ export default {
     },
     // 选择歌手列表中歌手
     handleSelect (item) {
-      if (this.$route.path !== `/singerInfo/${item.id}`) {
+      if (this.$route.name === 'singerInfo') {
         this.reload()
-        this.$router.push(`/singerInfo/${item.id}`)
       }
+      this.$router.push(`/singerInfo/${item.id}`)
       this.setSingerCurrentIndex(0)
       this.setPlayerFullScreen(false)
       this.showSingerPopup = false

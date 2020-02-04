@@ -81,7 +81,7 @@ export default {
 
   .song-desc {
     font-size: $font-size-smaller;
-    max-width: 4rem;
+    max-width: 4.5rem;
     line-height: 0.7rem;
 
     .song-name {
