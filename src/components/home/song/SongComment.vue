@@ -15,8 +15,8 @@
     <template v-else>
       <section class="section">
         <div class="song"
-             @click="handleClick">
-          <song-item :song="currentSong"
+             @click="handleClick(song)">
+          <song-item :song="song"
                      :showImage="true"></song-item>
         </div>
 
@@ -37,8 +37,6 @@
             </template>
           </van-list>
         </div>
-        <!-- 评论列表 -->
-        <comment-list></comment-list>
       </section>
     </template>
 
@@ -48,10 +46,13 @@
 import SongItem from '@/components/home/song/SongItem'
 import CommentList from '@/components/home/comment/CommentList'
 import { mapGetters, mapMutations } from 'vuex'
+import Song from '@/assets/common/js/song.js'
+import Singer from '@/assets/common/js/singer.js'
 import songApi from '@/api/song.js'
 import {
   ERR_OK
 } from '@/api/config.js'
+import 'common/js/utils.js'
 export default {
   props: {
     id: String
@@ -61,10 +62,12 @@ export default {
       loading: false, // 加载中
       finished: false, // 加载完所有数据
       commentList: null, // 评论列表
-      commentCount: 0// 评论数量
+      commentCount: 0, // 评论数量
+      song: null // 歌曲
     }
   },
   mounted () {
+    this.getSongDetail(this.id)
     this.getSongComment(this.id)
   },
   computed: {
@@ -102,8 +105,38 @@ export default {
         this.loading = false
       }, 500)
     },
-    handleClick () {
-      this.setPlayerFullScreen(true)
+    handleClick (item) {
+      if (this.currentSong.id === item.id) { // 打开全屏播放器页面
+        this.setPlayerFullScreen(true)
+      } else {
+        this.playMusic(this.song)
+      }
+    },
+    async getSongDetail (id) {
+      // 获取歌曲详情
+      const {
+        data: res
+      } = await songApi.getSongDetail(this.id)
+      if (res.code === ERR_OK) {
+        let item = res.songs[0]
+        let singers = item.ar.map(item => item.name).join('/')
+        // 处理歌手
+        let singersList = []
+        // 处理歌手
+        item.ar.forEach(item => {
+          singersList.push(new Singer({
+            id: item.id,
+            name: item.name
+          }))
+        })
+        let song = new Song({ id: item.id, name: item.name, singers, singersList, picUrl: item.al.picUrl })
+        this.song = song
+        console.log(song)
+      }
+    },
+    playMusic (song) {
+      // 引入vue原型上的utils
+      this.utils.playMusic(song)
     }
   },
   components: {
@@ -122,8 +155,9 @@ export default {
 }
 
 .song-comment-container {
-  min-height: calc(100vh - 1.22667rem);
-  background :$color-common-background;
+  min-height: 100vh;
+  background: $color-common-background;
+
   .section {
     padding: 0.3rem 0.5rem;
 

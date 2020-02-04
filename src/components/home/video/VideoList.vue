@@ -62,24 +62,24 @@ export default {
     ...mapMutations(['setVideoList']),
     // 上拉加载
     async handlePullingUp () {
+      console.log(this.loadMore)
+      if (this.loadMore) { // 如果请求未完成就不继续请求数据
+        return
+      }
       clearTimeout(this.loadTimer)
       this.loadMore = true
       this.loadTimer = setTimeout(() => {
         this.getVideoList()
-        this.$nextTick(() => {
-          this.$refs.videoListScroll.finishPullUp()
-          this.loadMore = false
-        })
-      }, 500)
+      }, 300)
     },
     // 获取推荐视频
     async getVideoList (context) {
       const offset = this.videoList.length
-      console.log(this.videoList)
       const { data: res } = await videoApi.getRecommendVideo(offset)
       if (res.code === ERR_OK) {
         const data = res.data
         let videoList = []
+        let length = 0// 用于判断是否执行完毕
         data.forEach(async (item) => {
           // 获取歌手信息
           const { data: res2 } = await SingerApi.getSinger(item.artistId)
@@ -99,13 +99,18 @@ export default {
                 },
                 url: res3.data.url
               })
+              length++
               videoList.push(video)
+              if (length === data.length) { // 说明请求完成
+                this.loadMore = false
+                this.setVideoList(videoList)
+                this.$nextTick(() => {
+                  this.$refs.videoListScroll.finishPullUp()
+                })
+              }
             }
           }
         })
-        setTimeout(() => {
-          this.setVideoList(videoList)
-        }, 2000)
       }
     }
   },

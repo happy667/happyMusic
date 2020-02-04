@@ -7,18 +7,25 @@
                  vertical>加载中...</van-loading>
     <template v-show="singerAlbum.length!==0">
       <div class="singer-album-wrapper">
-        <ul class="singer-album-list">
-          <li class="singer-album-list-item"
-              @click="selectItem(item)"
-              v-for="item in singerAlbum"
-              :key="item.id">
-            <div class="item-img">
-              <img v-lazy="item.picUrl" />
-            </div>
-            <div class="item-name">{{item.name}}</div>
-            <div class="item-pub-time">{{item.publishTime|convertTime}}</div>
-          </li>
-        </ul>
+        <van-list v-model="loading"
+                  :finished="finished"
+                  finished-text="没有更多专辑了"
+                  :immediate-check='false'
+                  @load="handlePullingUp">
+          <ul class="singer-album-list">
+            <li class="singer-album-list-item"
+                @click="selectItem(item)"
+                v-for="item in singerAlbum"
+                :key="item.id">
+              <div class="item-img">
+                <img v-lazy="item.picUrl" />
+              </div>
+              <div class="item-name">{{item.name}}</div>
+              <div class="item-pub-time">{{item.publishTime|convertTime}}</div>
+            </li>
+          </ul>
+
+        </van-list>
       </div>
     </template>
   </div>
@@ -30,12 +37,31 @@ export default {
     singerAlbum: {
       type: Array,
       default: () => []
+    },
+    finished: {
+      type: Boolean,
+      default: () => false
+    }
+  },
+  data () {
+    return {
+      loading: false
+    }
+  },
+  watch: {
+    singerAlbum () {
+      // 没有加载完
+      this.loading = false
     }
   },
   methods: {
     // 选择歌单进入歌单详情
     selectItem (item) {
-      this.$router.push({ path: `/album/${item.id}` })
+      this.$router.push(`/singerAlbum/${item.id}`)
+    },
+    // 加载更多
+    handlePullingUp () {
+      this.$emit('pullingUp')
     }
   }
 }
@@ -43,8 +69,12 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
+.singer-album-container>>>.van-list__loading .van-loading {
+  height: 1rem;
+}
+
 .singer-album-container {
-  padding: 0.4rem;
+  padding: 0.4rem 0.4rem 0 0.4rem;
   min-height: calc(100vh - (1.22667rem + 6rem + 1.18rem + 0.4rem));
 
   .singer-album-wrapper {
@@ -59,8 +89,6 @@ export default {
         box-shadow: 0 0.1rem 0.8rem rgba(0, 0, 0, 0.1);
         border-radius: 0.2rem;
         margin-bottom: 0.3rem;
-        width: 2.7rem;
-        height: 3.2rem;
         box-sizing: border-box;
 
         /* 选择最后一排 */
@@ -69,7 +97,7 @@ export default {
         }
 
         .item-img {
-          width: 2.1rem;
+          width: 2.2rem;
           height: 2rem;
           border-radius: 0.3rem;
 
@@ -82,15 +110,16 @@ export default {
         }
 
         .item-name {
+          width: 2rem;
           no-wrap();
           height: 0.5rem;
           line-height: 0.5rem;
         }
 
         .item-pub-time {
+          color: #777;
           height: 0.5rem;
           line-height: 0.5rem;
-          color: #777;
         }
       }
     }

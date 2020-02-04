@@ -39,9 +39,17 @@ const options = {
       leave: ['play', 'home']
     },
     'singerInfo': {
-      enter: ['songSheetDisc'],
+      enter: ['songSheetDisc', 'singerAlbum', 'singerInfo'],
       leave: ['home', 'searchResult']
+    },
+    singerAlbum: {
+      enter: ['singerInfo']
+    },
+    albumComment: {
+      enter: ['singerAlbum'],
+      leave: ['singerAlbum']
     }
+
   },
   // 默认为[]，name对应路由的name,以实现类似app中点击tab页面水平转场效果，如tab[1]到tab[0]，会使用backAnim动画，tab[1]到tab[2]，会使用forwardAnim动画
   tabsDisable: false, // 值为true时，tabs间的转场没有动画，默认为false
