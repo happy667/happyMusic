@@ -1,7 +1,7 @@
 <template>
   <div class="ranking-container">
     <!-- loading -->
-    <van-loading v-if="!this.rankingList[0]"
+    <van-loading v-if="load"
                  size="24px"
                  color="#FD4979"
                  vertical>加载中...</van-loading>
@@ -44,7 +44,12 @@
           </common-list>
         </template>
       </template>
-
+      <!-- loading -->
+      <van-loading class="loadMore"
+                   v-if="loadMore"
+                   size="24px"
+                   color="#FD4979"
+                   vertical>加载中...</van-loading>
     </div>
 
   </div>
@@ -56,7 +61,13 @@ import RankingTitle from '@/components/common/Title'
 import { mapState, mapActions } from 'vuex'
 export default {
   computed: {
-    ...mapState(['rankingList'])
+    ...mapState(['rankingList']),
+    load () {
+      return !this.rankingList[0]
+    },
+    loadMore () {
+      return this.rankingList[0] & !this.rankingList[1] || !this.rankingList[2] || !this.rankingList[3]
+    }
   },
   methods: {
     ...mapActions(['getRankingList'])
@@ -81,14 +92,22 @@ export default {
   margin-bottom: 0;
 }
 
+.ranking-container>>>.loadMore {
+  height: 2rem !important;
+}
+
 .ranking-container {
   width: 100%;
   height: 100%;
   background: $color-common-background;
 
   .ranking-list-wrapper {
-    padding: 0 0.5rem 0.3rem;
+    padding: 0 0.5rem;
     box-sizing: border-box;
+
+    .list-container {
+      padding-bottom: 0.5rem;
+    }
   }
 }
 </style>

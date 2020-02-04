@@ -22,8 +22,8 @@ export default {
     })
   },
   // 获取歌手专辑
-  getSingerAlbum(id, limit = 9) {
-    const url = `/artist/album?id=${id}&limit=${limit}`
+  getSingerAlbum(id, offset, limit = 9) {
+    const url = `/artist/album?id=${id}&offset=${offset}&limit=${limit}`
     return request({
       url
     })
@@ -61,6 +61,11 @@ export default {
     return request({
       url
     })
+  },
+  getAlbumComment(id, offset = 0) {
+    const url = `/comment/album?id=${id}&offset=${offset}`
+    return request({
+      url
+    })
   }
-
 }

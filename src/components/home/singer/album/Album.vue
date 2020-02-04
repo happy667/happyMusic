@@ -24,19 +24,19 @@
             </div>
             <div class="right-info">
               <div class="album-name">{{albumObj.album.name}}</div>
-              <div class="album-singer">歌手:
-                <a href="#"
-                   v-for="item in albumObj.album.artists"
-                   :key="item.id">{{item.name}}</a>
+              <div class="album-singer"
+                   @click="selectSingers">歌手:{{albumObj.album.singers}}
+
               </div>
               <div class="func">
                 <div class="func-item">
                   <div class="icon">
-                    <i class="iconfont icon-icon-test"></i>
+                     <van-icon name="like-o" />
                   </div>
                   收藏
                 </div>
-                <div class="func-item">
+                <div class="func-item"
+                     @click="goToAlbumComment">
                   <div class="icon">
                     <van-icon name="more-o" />
                   </div>
@@ -63,19 +63,31 @@
           <van-icon name="play-circle-o" />
         </div>
         <div class="play-all"
-             @click="handleSelect(albumObj.songs[0],0)">
+             @click="playSong(albumObj.songs[0],0)">
           播放全部({{albumObj.songs.length}})
         </div>
       </div>
       <!-- 歌曲列表 -->
       <songs-list :songsList="albumObj.songs"
-                  @select="handleSelect"></songs-list>
+                  @select="playSong"></songs-list>
 
     </section>
     <no-result v-if="albumObj.songs&&albumObj.songs.length===0"
                text="暂无相关资源"></no-result>
+    <!-- 上拉提示框 -->
+    <van-popup v-model="showSingerPopup"
+               round
+               position="bottom"
+               :get-container="getContainer">
+      <div class="singerList"
+           v-if="albumObj.album&&albumObj.album.albumSingersList.length!==0">
+        <singer-item :singer="item"
+                     @select="handleSelectSinger"
+                     v-for="item in albumObj.album.albumSingersList"
+                     :key="item.id"></singer-item>
+      </div>
+    </van-popup>
   </div>
-
 </template>
 <script>
 import 'common/js/convert.js'
@@ -85,6 +97,7 @@ import singerApi from '@/api/singer.js'
 import Song from '@/assets/common/js/song.js'
 import Singer from '@/assets/common/js/singer.js'
 import NoResult from '@/components/common/NoResult'
+import SingerItem from '@/components/home/singer/SingerItem'
 import {
   ERR_OK
 } from '@/api/config.js'
@@ -95,8 +108,8 @@ export default {
   },
   data () {
     return {
-      albumObj: {// 专辑对象
-      }
+      albumObj: {}, // 专辑对象
+      showSingerPopup: false// 显示歌手弹出层
     }
   },
   computed: {
@@ -107,12 +120,12 @@ export default {
     this.getAlbumInfo(this.id)
   },
   methods: {
-    ...mapMutations(['setPlayerFullScreen']),
+    ...mapMutations(['setPlayerFullScreen', 'setSingerCurrentIndex']),
     routerBack () {
       this.$router.back()
     },
-    // 选择歌曲
-    handleSelect (item, index) {
+    // 播放歌曲
+    playSong (item, index) {
       // 判断点击的是否是当前播放的歌曲
       if (this.currentSong.id === item.id) {
         this.setPlayerFullScreen(true)
@@ -129,27 +142,75 @@ export default {
         let songList = []
         res.songs.map((item) => { // 循环数组对象对每个数据进行处理 返回需要得数据
           let singers = item.ar.map(item => item.name).join('/')
-          let singersList = []
           // 处理歌手
-          item.ar.forEach(item => {
-            singersList.push(new Singer({
-              id: item.id,
-              name: item.name,
-              avatar: item.img1v1Url,
-              picUrl: item.picUrl
-            }))
-          })
+          let singersList = this.handleSingerList(item.ar)
           songList.push(new Song({ id: item.id, name: item.name, singers, singersList, picUrl: item.al.picUrl }))
         })
+        // 处理专辑歌手名称
+        let albumSingers = res.album.artists.map(item => item.name).join('/')
+        // 处理歌手
+        let albumSingersList = this.handleSingerList(res.album.artists)
+        res.album.singers = albumSingers
+        res.album.albumSingersList = albumSingersList
         this.$set(this.albumObj, 'songs', songList)
         this.$set(this.albumObj, 'commentCount', res.album.info.commentCount)
         this.$set(this.albumObj, 'album', res.album)
       }
+    },
+    // 选择歌手
+    selectSingers () {
+      const list = this.albumObj.album.albumSingersList
+      if (list.length === 1) { // 只有一个歌手直接跳转到歌手页面
+        this.setSingerCurrentIndex(0)
+        this.$router.push(`/singerInfo/${list[0].id}`)
+      } else {
+        console.log(11111111)
+        this.showSingerPopup = true
+        list.forEach(async item => { // 查询该歌手图片
+          item.avatar = await this.getSingerImage(item.id)
+        })
+      }
+    },
+    // 获取歌手图片
+    async getSingerImage (id) {
+      // 获取歌手
+      const { data: res } = await singerApi.getSingerSong(id)
+      if (res.code === ERR_OK) { // 成功获取歌手
+        return res.artist.img1v1Url
+      }
+    },
+    // 获取容器
+    getContainer () {
+      return document.querySelector('.album-container')
+    },
+    // 选择歌手列表中歌手
+    handleSelectSinger (item) {
+      this.setSingerCurrentIndex(0)
+      this.showSingerPopup = false
+      this.$router.push(`/singerInfo/${item.id}`)
+    },
+    // 处理歌手列表
+    handleSingerList (list) {
+      let newList = []
+      list.forEach(item => {
+        newList.push(new Singer({
+          id: item.id,
+          name: item.name,
+          avatar: item.img1v1Url,
+          picUrl: item.picUrl
+        }))
+      })
+      return newList
+    },
+    // 跳转到专辑评论列表
+    goToAlbumComment () {
+      this.$router.push(`/albumComment/${this.id}`)
     }
   },
   components: {
     SongsList,
-    NoResult
+    NoResult,
+    SingerItem
   }
 }
 </script>
@@ -164,7 +225,7 @@ export default {
     position: relative;
     height: 0;
     background-image: linear-gradient(160deg, #c4c4c4 60%, #fff 100%);
-    padding-bottom: 3.2rem;
+    padding-bottom: 3.1rem;
 
     .album-info {
       position: absolute;
@@ -182,8 +243,8 @@ export default {
           margin-right: 0.5rem;
 
           .album-image {
-            width: 2.3rem;
-            height: 2.3rem;
+            width: 2.2rem;
+            height: 2.2rem;
             border-radius: 0.3rem;
 
             img {
@@ -210,13 +271,15 @@ export default {
           no-wrap();
 
           .album-name {
-            padding-top: 0.1rem;
+            height:0.75rem;
+            line-height :0.75rem;
             font-size: $font-size-smaller;
+            font-weight :bold;
           }
 
           .album-singer {
-            height: 1.1rem;
-            line-height: 1.1rem;
+            height: 0.75rem;
+            line-height: 0.75rem;
 
             a {
               color: #fff;
