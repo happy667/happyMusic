@@ -94,7 +94,7 @@ export default {
 
 .song-sheet-square-container {
   width: 100%;
-  height: 100%;
+  min-height : 100vh;
   background: $color-common-background;
 
   .recommend-list>>>.songs-sheet-list-container {

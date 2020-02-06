@@ -11,5 +11,6 @@ export default class Song {
     this.singers = singers
     this.picUrl = picUrl
     this.singersList = singersList
+    this.isLike = false
   }
 }

@@ -239,7 +239,9 @@ export default {
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
-
+.play-container>>>.singerList{
+  max-height:6rem;
+}
 .play-container {
   position: relative;
   left: 0;

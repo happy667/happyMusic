@@ -31,7 +31,7 @@
               <div class="func">
                 <div class="func-item">
                   <div class="icon">
-                     <van-icon name="like-o" />
+                    <van-icon name="like-o" />
                   </div>
                   收藏
                 </div>
@@ -217,6 +217,10 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
+.album-container>>>.singerList {
+  max-height: 6rem;
+}
+
 .album-container {
   background: $color-common-background;
   min-height: 100vh;
@@ -271,10 +275,10 @@ export default {
           no-wrap();
 
           .album-name {
-            height:0.75rem;
-            line-height :0.75rem;
+            height: 0.75rem;
+            line-height: 0.75rem;
             font-size: $font-size-smaller;
-            font-weight :bold;
+            font-weight: bold;
           }
 
           .album-singer {

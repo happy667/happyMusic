@@ -75,9 +75,10 @@ export default {
     background-position: center center;
     background-repeat: no-repeat;
     background-size: 100% 100%;
+    background-attachment: fixed;
     filter: blur(20px);
     z-index: -1;
-    opacity: 0.5;
+    opacity: 0.4;
     background: $color-common-b;
   }
 }

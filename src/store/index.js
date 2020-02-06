@@ -4,6 +4,7 @@ import recommendApi from '@/api/recommend.js'
 import rankingApi from '@/api/ranking.js'
 import singerApi from '@/api/singer.js'
 import loginApi from '@/api/login.js'
+import userApi from '@/api/user.js'
 import {
   ERR_OK
 } from '@/api/config.js'
@@ -47,7 +48,8 @@ export default new Vuex.Store({
     playerShowImage: true, // 显示播放器图片
     currentLyric: null, // 设置一个歌词维护属性
     currentLineNum: 0, // 当前高亮的歌词行
-    currentPlayLyric: '' // 当前播放的歌词
+    currentPlayLyric: '', // 当前播放的歌词
+    userLikeList: null // 用户喜欢列表
   },
   mutations: {
     // 设置登录用户
@@ -169,6 +171,10 @@ export default new Vuex.Store({
     // 当前播放的歌词
     setCurrentPlayLyric(state, currentPlayLyric) {
       state.currentPlayLyric = currentPlayLyric
+    },
+    // 设置用户喜欢列表
+    setUserLikeList(state, userLikeList) {
+      state.userLikeList = userLikeList
     }
   },
   actions: {
@@ -179,7 +185,8 @@ export default new Vuex.Store({
       } = await loginApi.loginStatus()
       if (res.code === ERR_OK) {
         context.commit('setLoginUser', res.profile)
-        return true
+        console.log(this.state.user)
+        this.dispatch('getUserLikeList', this.state.user.userId)
       }
     },
     // 获取推荐歌单
@@ -188,7 +195,6 @@ export default new Vuex.Store({
         data: res
       } = await recommendApi.getRecommendSongSheet(limit)
       if (res.code === ERR_OK) { // 成功获取推荐歌单
-        // console.log(res)
         return res.result
       }
     },
@@ -281,7 +287,6 @@ export default new Vuex.Store({
           }
         }
         rankingList.push(rankingObj)
-        console.log(rankingList)
         context.commit('setRankingList', rankingList)
       }
     },
@@ -299,6 +304,15 @@ export default new Vuex.Store({
           songs: res.songs,
           name: res.album.name
         }))
+      }
+    },
+    // 获取用户喜欢列表
+    async getUserLikeList(context, id) {
+      const {
+        data: res
+      } = await userApi.getUserLikeList(id)
+      if (res.code === ERR_OK) {
+        this.commit('setUserLikeList', res.ids)
       }
     },
     // 选择音乐播放播放

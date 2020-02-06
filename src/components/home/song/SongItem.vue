@@ -17,18 +17,20 @@
       <div class="sg-info">{{song.singers}}</div>
     </div>
     <!-- 选中前 -->
-    <div class="love ">
-      <i class="iconfont icon-icon-test"></i>
+    <div class="love "
+         @click.stop="selectItemLove">
+      <i class="iconfont"
+         :class="loveIcon"></i>
     </div>
-    <!--  选中后-->
-    <!-- <div class="love active">
-          <i class="iconfont icon-aixin"></i>
-        </div> -->
   </div>
 </template>
 
 <script>
-
+import userApi from '@/api/user.js'
+import {
+  ERR_OK
+} from '@/api/config.js'
+import { mapState } from 'vuex'
 export default {
   props: {
     song: Object,
@@ -40,6 +42,62 @@ export default {
     top: {
       type: Boolean,
       default: () => false
+    }
+  },
+  computed: {
+    ...mapState(['user', 'userLikeList']),
+    loveIcon () {
+      return this.song.isLike ? 'icon-aixin' : 'icon-icon-test'
+    }
+  },
+  watch: {
+    userLikeList () {
+      this.updateSong(this.song)
+    }
+  },
+  mounted () {
+    if (this.userLikeList) {
+      this.updateSong(this.song)
+    }
+  },
+  methods: {
+    // 选中歌曲喜欢
+    selectItemLove () {
+      let song = this.song
+      // 判断是否登录
+      if (!this.user) { // 弹窗提示去登录
+        this.alertConfirm()
+      } else { // 添加或取消喜欢音乐
+        this.likeMusic(song)
+      }
+    },
+    // 更新歌曲状态
+    updateSong (song) {
+      let newItem = this.userLikeList.find(id => id === song.id)
+      if (newItem) { // 说明用户已添加该歌曲到喜欢列表中
+        // 修改song中的isLike属性
+        song.isLike = true
+      }
+    },
+    alertConfirm () {
+      this.$Dialog.confirm({
+        message: '请登陆后再操作!',
+        confirmButtonColor: '#FD4979',
+        confirmText: '去登陆',
+        width: '265px'
+      }).then(() => {
+        this.$router.push({ name: 'login' })
+        return true
+      })
+    },
+    // 喜欢音乐
+    async likeMusic (song) {
+      let like = !song.isLike
+      console.log(like)
+      const { data: res } = await userApi.likeMusic(song.id, like)
+      if (res.code === ERR_OK) {
+        this.song.isLike = like
+      }
     }
   }
 }

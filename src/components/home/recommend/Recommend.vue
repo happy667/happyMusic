@@ -65,7 +65,7 @@ export default {
   },
   methods: {
     ...mapMutations(['setPlayerFullScreen']),
-    ...mapActions(['getLoginUser', 'getRecommendSongSheet', 'getRecommendNewSong', 'getRecommendNewSongSheet']),
+    ...mapActions(['getRecommendSongSheet', 'getRecommendNewSong', 'getRecommendNewSongSheet']),
     // 获取轮播图数据
     async getBanner () {
       const { data: res } = await recommendApi.getBanner()
@@ -97,10 +97,9 @@ export default {
       // 引入vue原型上的utils
       this.utils.playMusic(item, this.recommendNewSong, index)
     }
+
   },
   mounted () {
-    // 获取登录状态
-    // this.getLoginUser()
     // 获取轮播图数据
     this.getBanner()
     // 获取推荐歌单

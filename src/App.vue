@@ -9,7 +9,7 @@
 
 <script>
 import Player from '@/components/common/Player'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   provide () {
     return {
@@ -21,6 +21,10 @@ export default {
       isRouterAlive: true
     }
   },
+  mounted () {
+    // 获取登录状态
+    this.getLoginUser()
+  },
   computed: {
     ...mapGetters(['currentSong']),
     paddingBottom () {
@@ -28,6 +32,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['getLoginUser']),
     reload () {
       this.isRouterAlive = false
       this.$nextTick(() => {
@@ -42,6 +47,6 @@ export default {
 </script>
 <style lang="stylus" scoped>
 #app {
- box-shadow :none;
+  box-shadow: none;
 }
 </style>
