@@ -17,6 +17,7 @@ const SongComment = () => import('../components/home/song/SongComment')
 const SingerInfo = () => import('../components/home/singer/SingerInfo')
 const Album = () => import('../components/home/singer/album/Album')
 const AlbumComment = () => import('../components/home/singer/album/AlbumComment')
+const User = () => import('../views/User')
 
 Vue.use(VueRouter)
 
@@ -142,6 +143,12 @@ const routes = [
     name: 'singerAlbum',
     component: Album,
     props: true
+  },
+  // 我的主页
+  {
+    path: '/user',
+    name: 'user',
+    component: User
   }
 ]
 

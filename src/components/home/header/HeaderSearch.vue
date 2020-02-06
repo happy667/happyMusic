@@ -1,7 +1,8 @@
 <template>
   <div class="header-search-container">
     <!-- logo -->
-    <div class="logo">
+    <div class="logo"
+         @click="goToMyHome">
       <img src="@/assets/images/Logo.png">
     </div>
     <!-- 搜索框 -->
@@ -26,6 +27,9 @@ export default {
       // 清空搜索内容
       this.setSearchKeywords('')
       this.$router.push('/search/searchPage')
+    },
+    goToMyHome () {
+      this.$router.push('/user')
     }
   }
 }
@@ -35,24 +39,22 @@ export default {
 
 .header-search-container {
   width: 100%;
-  height: 1.7rem;
+  height: 1.4rem;
   display: flex;
-  padding: 0.2rem 0.2rem 0 0.8rem;
+  padding: 0.2rem 0.4rem 0 0.4rem;
   box-sizing: border-box;
   background: $color-common-background;
 
   .logo {
+    width :0.8rem;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     flex-direction: column;
-    align-items: center;
-    width: 0.6rem;
+    align-items: flex-end;
     box-sizing: border-box;
     text-align: center;
-    margin-right: 0.1rem;
-
     img {
-      width: 100%;
+      width: 0.6rem;
     }
   }
 
