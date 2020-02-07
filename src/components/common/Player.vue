@@ -73,10 +73,11 @@ export default {
         this.setCurrentPlayLyric('')
         this.setCurrentLineNum(0)
       }
-
-      setTimeout(() => {
+      clearTimeout(this.timer)
+      this.timer = setTimeout(() => {
         this.$refs.FullScreenPlay.$refs.playSection.getLyric(this.currentSong.id)// 获取歌词
       }, 1000)
+
       this.setPlaying(false)
       this.getSong(this.currentSong.id)
       // 默认显示歌曲封面
@@ -158,7 +159,6 @@ export default {
     // 循环播放
     loop () {
       this.audio.currentTime = 0// 重新播放
-      console.log('jsdfds')
       if (this.currentLyric) {
         this.currentLyric.seek(0)
         this.setCurrentPlayLyric('')
@@ -239,9 +239,11 @@ export default {
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
-.play-container>>>.singerList{
-  max-height:6rem;
+
+.play-container>>>.singerList {
+  max-height: 6rem;
 }
+
 .play-container {
   position: relative;
   left: 0;

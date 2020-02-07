@@ -18,7 +18,7 @@
       <div class="lyric"
            v-show="!playerShowImage">
         <scroll ref="lyricList"
-                v-if="!nolyric">
+                v-if="!nolyric||currentLyric">
           <div class="lyric-list-container">
             <ul class="lyric-list">
               <li ref="lyricLine"
@@ -72,8 +72,11 @@ export default {
           // } else if (res.lrc.lyric) {
           //   this.setCurrentLyric(new Lyric(res.lrc.lyric, this.handleLyric))
           // }
-          this.setCurrentLyric(new Lyric(res.lrc.lyric, this.handleLyric))
-          this.nolyric = res.nolyric
+          if (res.nolyric) {
+            this.nolyric = res.nolyric
+          } else {
+            this.setCurrentLyric(new Lyric(res.lrc.lyric, this.handleLyric))
+          }
           console.log(this.currentLyric)
           if (this.playing) { // 如果是播放状态
             this.currentLyric.play()
@@ -87,8 +90,8 @@ export default {
     // 处理歌词
     handleLyric ({ lineNum, txt }) {
       this.setCurrentLineNum(lineNum)
-      if (lineNum > 4) {
-        let lineEl = this.$refs.lyricLine[lineNum - 4]// 滚动到元素
+      if (lineNum > 5) {
+        let lineEl = this.$refs.lyricLine[lineNum - 5]// 滚动到元素
         this.$refs.lyricList.scrollToElement(lineEl, 1000)
       } else {
         this.$refs.lyricList.scrollTo(0, 0, 1000)// 滚动到顶部

@@ -39,7 +39,7 @@ export default {
 
 .header-search-container {
   width: 100%;
-  height: 1.4rem;
+  height: 1.7rem;
   display: flex;
   padding: 0.2rem 0.4rem 0 0.4rem;
   box-sizing: border-box;
@@ -48,7 +48,7 @@ export default {
   .logo {
     width :0.8rem;
     display: flex;
-    justify-content: flex-end;
+    justify-content:center;
     flex-direction: column;
     align-items: flex-end;
     box-sizing: border-box;

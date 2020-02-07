@@ -2,10 +2,15 @@
   <div class="recommend-swiper-container">
     <van-swipe :autoplay="3000"
                indicator-color="white">
-      <van-swipe-item @click="selectItem(item)"
+      <van-swipe-item @click.stop="selectItem(item)"
                       v-for="(item,index) in banners"
                       :key="index">
-        <img :src="item.imageUrl">
+        <div class="image">
+          <img :src="item.imageUrl">
+          <div class="title"
+               :style="{backgroundColor:item.titleColor}">{{item.typeTitle}}</div>
+        </div>
+
       </van-swipe-item>
     </van-swipe>
   </div>
@@ -96,10 +101,26 @@ export default {
       box-sizing: border-box;
       border-radius: 0.3rem;
 
-      img {
+      .image {
+        position: relative;
         width: 100%;
         height: 100%;
-        border-radius: 0.3rem;
+
+        img {
+          display: block;
+          width: 100%;
+          height: 100%;
+          border-radius: 0.2rem;
+        }
+
+        .title {
+          position: absolute;
+          right: 0;
+          bottom: 0;
+          padding: 0.1rem 0.15rem;
+          color: #fff;
+          border-radius: 0.2rem 0 0.2rem 0;
+        }
       }
     }
   }
