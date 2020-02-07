@@ -14,6 +14,7 @@
     <!-- 歌单分类 -->
     <template v-if="this.songSheetCagetory.length!==0&&this.recommendSongSheet.length!==0">
       <van-tabs v-model="currentIndex"
+                @change="handleChange"
                 title-active-color="#FD4979"
                 color="#FD4979"
                 animated
@@ -22,15 +23,21 @@
         <van-tab title="推荐">
           <div class="recommend-list">
             <swiper-list :list="swiperList"></swiper-list>
-            <song-sheet-list :list="songSheetList"></song-sheet-list>
+            <song-sheet-list :list="newRecommendSongSheet"></song-sheet-list>
           </div>
         </van-tab>
-        <van-tab v-for="item in songSheetCagetory"
+        <van-tab v-for="(item,index) in songSheetCagetory"
                  :key="item.id"
                  :title="item.playlistTag.name">
+
           <div class="song-sheet-cagetory-list">
-            <song-sheet-list :list="songSheetList"
-                             :title="item.playlistTag.name"></song-sheet-list>
+            <van-loading v-if="!songSheetCagetoryList[index+1]"
+                         size="24px"
+                         color="#FD4979"
+                         class="load"
+                         vertical>加载中...</van-loading>
+            <song-sheet-list v-else
+                             :list="songSheetCagetoryList[index+1]"></song-sheet-list>
           </div>
         </van-tab>
       </van-tabs>
@@ -38,31 +45,67 @@
   </div>
 </template>
 <script>
-import { mapActions, mapState } from 'vuex'
 import SongSheetList from './SongSheetList'
 import SwiperList from './SongSheetSquare/SongSheetSquareSwiper'
+import recommendApi from '@/api/recommend.js'
+import {
+  ERR_OK
+} from '@/api/config.js'
 export default {
   data () {
     return {
       currentIndex: 0, // 当前索引
-      recommendSongSheet: []// 推荐歌单列表
+      recommendSongSheet: [], // 推荐歌单列表
+      songSheetCagetory: [], // 歌单分类
+      songSheetCagetoryList: {}// 歌单分类列表
     }
   },
   computed: {
-    ...mapState(['songSheetCagetory']),
     swiperList () {
       return this.recommendSongSheet.slice(0, 3)
     },
-    songSheetList () {
+    newRecommendSongSheet () {
       return this.recommendSongSheet.slice(3)
     }
   },
   methods: {
-    ...mapActions(['getSongSheetCatList', 'getRecommendSongSheet']),
-
     // 返回上一个路由
     routerBack () {
       this.$router.back()
+    },
+    // 获取歌单分类
+    async getSongSheetCatList () {
+      const {
+        data: res
+      } = await recommendApi.getSongSheetCatList()
+      if (res.code === ERR_OK) { // 成功获取歌单分类
+        this.songSheetCagetory = res.tags
+      }
+    },
+    // 根据参数获取歌单
+    async getSongSheet (tag) {
+      const {
+        data: res
+      } = await recommendApi.getSongSheet(tag)
+      if (res.code === ERR_OK) { // 成功获取歌单数据
+        return res
+      }
+    },
+    // 获取推荐歌单
+    async getRecommendSongSheet () {
+      const {
+        data: res
+      } = await recommendApi.getRecommendSongSheet()
+      if (res.code === ERR_OK) { // 成功获取推荐歌单
+        this.recommendSongSheet = res.result
+      }
+    },
+    handleChange (name, title) {
+      if (!this.songSheetCagetoryList[name]) { // 说明还没有该分类的歌单
+        this.getSongSheet(title).then(res => {
+          this.$set(this.songSheetCagetoryList, name, res.playlists)
+        })
+      }
     }
   },
   components: {
@@ -70,31 +113,24 @@ export default {
     SongSheetList
   },
   mounted () {
-    this.$nextTick(() => {
-      // 获取分类列表
-      this.getSongSheetCatList()
-      // 获取推荐列表
-      this.getRecommendSongSheet().then((res) => {
-        this.recommendSongSheet = res
-      })
-    })
+    // 获取分类列表
+    this.getSongSheetCatList()
+    // 获取推荐列表
+    this.getRecommendSongSheet()
   }
+
 }
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.song-sheet-square-container>>>.load {
-  height: calc(100vh - 1.22667rem);
-}
-
 .song-sheet-square-container>>>.song-sheet-cagetory-list {
-  min-height: calc(100vh - 1.22667rem);
+  min-height: calc(100vh - (1.22667rem + 1.18rem + 0.5rem));
 }
 
 .song-sheet-square-container {
   width: 100%;
-  min-height : 100vh;
+  min-height: 100vh;
   background: $color-common-background;
 
   .recommend-list>>>.songs-sheet-list-container {

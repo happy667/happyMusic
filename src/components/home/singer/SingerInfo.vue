@@ -53,6 +53,7 @@ export default {
   },
   data () {
     return {
+      singer: {}, // 歌手
       singerDesc: {},
       singerSong: [], // 歌手单曲
       singerAlbum: [], // 歌手专辑
@@ -74,7 +75,7 @@ export default {
     })
   },
   computed: {
-    ...mapState(['singer', 'singerCurrentIndex']),
+    ...mapState(['singerCurrentIndex']),
     currentIndex: {
       get () {
         return this.singerCurrentIndex
@@ -85,7 +86,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setSingerCurrentIndex', 'setSinger']),
+    ...mapMutations(['setSingerCurrentIndex']),
     routerBack () {
       this.$router.push('/home')
     },
@@ -128,7 +129,7 @@ export default {
           picUrl: res.artist.picUrl
         })
         // 设置歌手
-        this.setSinger(singer)
+        this.singer = singer
         this.singerSong = songList
       }
     },

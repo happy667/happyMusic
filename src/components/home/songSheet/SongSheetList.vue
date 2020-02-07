@@ -1,50 +1,31 @@
 <template>
   <div class="songs-sheet-list-container">
-
     <slot></slot>
-    <van-loading v-if="this.songSongList.length===0&&!this.msg"
-                 size="24px"
-                 color="#FD4979"
-                 class="load"
-                 vertical>加载中...</van-loading>
-    <div v-if="this.msg"
-         class="songs-sheet-list-zw">
-      暂时还没有相关歌单哦~
-    </div>
-    <template v-if="this.songSongList.length!==0">
+
+    <template v-if="list.length!==0">
       <ul class="songs-sheet-list">
         <li @click="selectItem(item)"
             class="songs-sheet-list-item"
-            v-for="item in songSongList"
+            v-for="item in list"
             :key="item.id">
           <song-sheet-item :song-sheet="item"></song-sheet-item>
         </li>
       </ul>
     </template>
+    <template v-else>
+      <no-result text="暂无相关歌单"></no-result>
+    </template>
   </div>
 </template>
 <script>
-
+import NoResult from '@/components/common/NoResult'
 import SongSheetItem from './SongSheetItem'
-import { mapActions, mapMutations } from 'vuex'
+import { mapMutations } from 'vuex'
 export default {
   props: {
-    title: String, // 标题
-    list: Array// 列表
-  },
-  data () {
-    return {
-      newList: [], // 新查询的列表
-      msg: ''// 查询数据响应的信息
-    }
-  },
-  computed: {
-    songSongList () {
-      return this.title ? this.newList : this.list
-    }
+    list: Array // 列表
   },
   methods: {
-    ...mapActions(['getSongSheet']),
     ...mapMutations(['setRank']),
     // 选择歌单进入歌单详情
     selectItem (item) {
@@ -52,22 +33,10 @@ export default {
       this.$router.push(`/songSheetDisc/${item.id}`)
     }
   },
-  mounted () {
-    if (this.title) {
-      console.log(this.title)
-      // 根据名称获取列表
-      this.getSongSheet({ tag: this.title }).then((res) => {
-        if (res.msg) {
-          this.msg = res.msg
-        } else {
-          this.newList = res.playlists
-        }
-      })
-    }
-  },
 
   components: {
-    SongSheetItem
+    SongSheetItem,
+    NoResult
   }
 }
 </script>
@@ -87,15 +56,6 @@ export default {
       width: 46%;
       margin-bottom: 0.6rem;
     }
-  }
-
-  .songs-sheet-list-zw {
-    width: 100%;
-    height: 1rem;
-    line-height: 1rem;
-    color: $color-common-b;
-    font-size: $font-size-smaller;
-    text-align: center;
   }
 }
 </style>

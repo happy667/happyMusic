@@ -136,7 +136,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setScrollIndex', 'setStop', 'setIsScroll', 'setSinger']),
+    ...mapMutations(['setScrollIndex', 'setStop', 'setIsScroll']),
     // 计算歌手列表元素高度
     caleHeight () {
       let height = 0
