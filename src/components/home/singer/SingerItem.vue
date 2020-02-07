@@ -48,6 +48,8 @@ export default {
     }
 
     .singer-name {
+      height: 0.7rem;
+      line-height: 0.7rem;
       font-size: $font-size-smaller;
     }
   }

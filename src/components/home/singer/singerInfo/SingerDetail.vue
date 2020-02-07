@@ -43,7 +43,7 @@ export default {
 .singer-detail-container {
   @import '~common/stylus/variable';
 
-  padding: 0.4rem;
+  padding: 0 0.4rem 0.4rem 0.4rem;
   min-height: calc(100vh - (1.22667rem + 6rem + 1.18rem + 0.4rem));
 
   .title {

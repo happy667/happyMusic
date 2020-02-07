@@ -19,7 +19,7 @@
                 swipeable>
         <!-- 歌手单曲 -->
         <van-tab title="歌曲">
-          <singer-song :singerSong="singerSong" />
+          <singer-song :list="singerSong" />
         </van-tab>
         <!-- 歌手专辑 -->
         <van-tab title="专辑">
@@ -141,7 +141,6 @@ export default {
         this.singerAlbum = this.singerAlbum.concat(res.hotAlbums)
 
         this.singerAlbumFinished = !res.more
-        console.log(this.singerAlbumFinished)
       }
     },
     async getSingerDetail (id) {
@@ -179,6 +178,10 @@ export default {
 .singer-info-container>>>.van-loading {
   // 减去头部标题高度、歌手图片高度、标签页高度
   height: calc(100vh - (1.22667rem + 6rem + 1.18rem + 0.4rem));
+}
+
+.singer-info-container>>>.van-tabs__wrap {
+  margin-bottom: 0.4rem;
 }
 
 .singer-info-container {

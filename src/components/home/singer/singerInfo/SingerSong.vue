@@ -1,37 +1,41 @@
 <template>
   <div class="singer-song-container">
     <!-- loading -->
-    <van-loading v-if="singerSong.length===0"
+    <van-loading v-if="!list"
                  size="24px"
                  color="#FD4979"
                  vertical>加载中...</van-loading>
     <!-- 歌曲数量 -->
-    <template v-if="singerSong.length!==0">
+    <template v-if="list&&list.length!==0">
       <div class="play">
         <div class="play-icon">
           <van-icon name="play-circle-o" />
         </div>
         <div class="play-all"
-             @click="handleSelect(singerSong[0],0)">
-          播放全部({{singerSong.length}})
+             @click="handleSelect(list[0],0)">
+          播放全部({{list.length}})
         </div>
       </div>
       <!-- 歌曲列表 -->
       <song-list @select="handleSelect"
                  :showImage="true"
-                 :songsList="singerSong" />
+                 :songsList="list" />
+    </template>
+    <template v-if="list&&list.length===0">
+      <no-result text="暂无相关歌曲"></no-result>
     </template>
   </div>
 </template>
 <script>
+import NoResult from '@/components/common/NoResult'
 import SongList from '@/components/home/song/SongList'
 import 'common/js/utils.js'
 import { mapMutations, mapGetters } from 'vuex'
 export default {
   props: {
-    singerSong: {
+    list: {
       type: Array,
-      default: () => []
+      default: () => null
     }
   },
 
@@ -48,11 +52,12 @@ export default {
         return
       }
       // 引入vue原型上的utils
-      this.utils.playMusic(item, this.singerSong, index)
+      this.utils.playMusic(item, this.list, index)
     }
   },
   components: {
-    SongList
+    SongList,
+    NoResult
   }
 }
 </script>
@@ -60,7 +65,6 @@ export default {
 @import '~common/stylus/variable';
 
 .singer-song-container {
-  padding-top: 0.4rem;
   min-height: calc(100vh - (1.22667rem + 6rem + 1.18rem + 0.4rem));
 
   .play {

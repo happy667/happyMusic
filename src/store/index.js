@@ -37,8 +37,8 @@ export default new Vuex.Store({
     currentLyric: null, // 设置一个歌词维护属性
     currentLineNum: 0, // 当前高亮的歌词行
     currentPlayLyric: '', // 当前播放的歌词
-    userLikeList: null // 用户喜欢列表
-
+    userLikeList: null, // 用户喜欢列表
+    removeLikeSong: null // 移除的喜欢歌曲
   },
   mutations: {
     // 设置登录用户
@@ -140,6 +140,10 @@ export default new Vuex.Store({
     // 设置用户喜欢列表
     setUserLikeList(state, userLikeList) {
       state.userLikeList = userLikeList
+    },
+    // 设置移除的喜欢歌曲
+    setRemoveLikeSong(state, song) {
+      state.removeLikeSong = song
     }
   },
   actions: {

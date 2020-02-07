@@ -24,24 +24,30 @@
     </header>
     <section>
       <div class="my-list">
-        <div class="my-follow my-list-item">
-          <div class="left-image">
-            <van-icon name="star" />
+        <router-link to="/user/myFollow">
+          <div class="my-follow my-list-item">
+            <div class="left-image">
+              <van-icon name="star" />
+            </div>
+            <div class="title">我的关注</div>
           </div>
-          <div class="title">我的关注</div>
-        </div>
-        <div class="my-like my-list-item">
-          <div class="left-image">
-            <van-icon name="like" />
+        </router-link>
+        <router-link to="/user/myLike">
+          <div class="my-like my-list-item">
+            <div class="left-image">
+              <van-icon name="like" />
+            </div>
+            <div class="title">我的最爱</div>
           </div>
-          <div class="title">我的最爱</div>
-        </div>
-        <div class="old-play-list my-list-item">
-          <div class="left-image">
-            <van-icon name="clock" />
+        </router-link>
+        <router-link to="/user/playRanking">
+          <div class="play-music-ranking my-list-item">
+            <div class="left-image">
+              <van-icon name="medal" />
+            </div>
+            <div class="title">听歌排行</div>
           </div>
-          <div class="title">历史播放</div>
-        </div>
+        </router-link>
         <div class="my-recommend my-list-item">
           <div class="left-image">
             <van-icon name="gem" />
@@ -145,6 +151,7 @@ export default {
         margin-bottom: 0.3rem;
         box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.1);
         border-radius: 0.1rem;
+        color: $color-common-x;
 
         .left-image {
           display: flex;

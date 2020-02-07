@@ -31,10 +31,6 @@ export default {
   },
 
   methods: {
-    // 跳转到mv详情页
-    goToVideoInfo () {
-      this.$router.push('/videoInfo')
-    },
     // 选择歌曲
     selectItem (song, index) {
       this.$emit('select', song, index)

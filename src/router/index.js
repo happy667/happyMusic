@@ -18,7 +18,9 @@ const SingerInfo = () => import('../components/home/singer/SingerInfo')
 const Album = () => import('../components/home/singer/album/Album')
 const AlbumComment = () => import('../components/home/singer/album/AlbumComment')
 const User = () => import('../views/User')
-
+const MyFollow = () => import('../components/user/MyFollow')
+const MyLike = () => import('../components/user/MyLike')
+const PlayRanking = () => import('../components/user/PlayRanking')
 Vue.use(VueRouter)
 
 const routes = [
@@ -149,7 +151,26 @@ const routes = [
     path: '/user',
     name: 'user',
     component: User
+  },
+  // 我的关注
+  {
+    path: '/user/myFollow',
+    name: 'myFollow',
+    component: MyFollow
+  },
+  // 我的最爱
+  {
+    path: '/user/myLike',
+    name: 'myLike',
+    component: MyLike
+  },
+  // 听歌排行
+  {
+    path: '/user/playRanking',
+    name: 'playRanking',
+    component: PlayRanking
   }
+
 ]
 
 const router = new VueRouter({

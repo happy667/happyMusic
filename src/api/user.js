@@ -13,6 +13,20 @@ export default {
     return request({
       url
     })
+  },
+  // 获取用户关注的歌手
+  getUserFollowSinger() {
+    const url = `/artist/sublist`
+    return request({
+      url
+    })
+  },
+  // 获取用户播放记录
+  getUserPlayRecord(uid) {
+    const url = `/user/record?uid=${uid}&type=1`
+    return request({
+      url
+    })
   }
 
 }

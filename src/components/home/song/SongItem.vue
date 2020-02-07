@@ -16,8 +16,16 @@
       <!-- 歌手名称-专辑名称 -->
       <div class="sg-info">{{song.singers}}</div>
     </div>
-    <!-- 选中前 -->
-    <div class="love "
+
+    <div v-if="showPlayCount"
+         class="play-count">
+      <div class="icon">
+        <van-icon name="play-circle-o" />
+      </div>
+      <div class="count">{{song.playCount}}</div>
+    </div>
+    <div v-else
+         class="love"
          @click.stop="selectItemLove">
       <i class="iconfont"
          :class="loveIcon"></i>
@@ -30,7 +38,7 @@ import userApi from '@/api/user.js'
 import {
   ERR_OK
 } from '@/api/config.js'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 export default {
   props: {
     song: Object,
@@ -53,20 +61,39 @@ export default {
   watch: {
     userLikeList () {
       this.updateSong(this.song)
+    },
+    song: {
+      handler () {
+        if (!this.song.isLike) { // 说明是取消喜欢
+          this.setRemoveLikeSong(this.song)
+        }
+      },
+      deep: true
+    }
+
+  },
+  inject: {
+    showPlayCount: {
+      type: Boolean,
+      default: () => false
     }
   },
+
   mounted () {
     if (this.userLikeList) {
       this.updateSong(this.song)
     }
   },
   methods: {
+    ...mapMutations(['setRemoveLikeSong']),
     // 选中歌曲喜欢
     selectItemLove () {
       let song = this.song
       // 判断是否登录
       if (!this.user) { // 弹窗提示去登录
-        this.alertConfirm()
+        this.alertConfirm({ message: '您还没有登录哦', confirmButtonText: '去登陆' }).then(() => {
+          this.$router.push({ name: 'login' })
+        })
       } else { // 添加或取消喜欢音乐
         this.likeMusic(song)
       }
@@ -76,27 +103,33 @@ export default {
       let newItem = this.userLikeList.find(id => id === song.id)
       if (newItem) { // 说明用户已添加该歌曲到喜欢列表中
         // 修改song中的isLike属性
-        song.isLike = true
+        this.$set(this.song, 'isLike', true)
       }
     },
-    alertConfirm () {
-      this.$Dialog.confirm({
-        message: '请登陆后再操作!',
+    alertConfirm ({ message, confirmButtonText = '确认' }) {
+      return this.$Dialog.confirm({
+        message,
         confirmButtonColor: '#FD4979',
-        confirmText: '去登陆',
+        confirmButtonText,
         width: '265px'
-      }).then(() => {
-        this.$router.push({ name: 'login' })
-        return true
       })
     },
     // 喜欢音乐
     async likeMusic (song) {
+      console.log(1111)
       let like = !song.isLike
-      console.log(like)
-      const { data: res } = await userApi.likeMusic(song.id, like)
-      if (res.code === ERR_OK) {
-        this.song.isLike = like
+      if (!like) { // 取消喜欢就询问
+        this.alertConfirm({ message: '确定要取消喜欢该歌曲吗', confirmButtonText: '取消' }).then(async () => {
+          const { data: res } = await userApi.likeMusic(song.id, like)
+          if (res.code === ERR_OK) {
+            this.song.isLike = like
+          }
+        })
+      } else {
+        const { data: res } = await userApi.likeMusic(song.id, like)
+        if (res.code === ERR_OK) {
+          this.$set(this.song, 'isLike', like)
+        }
       }
     }
   }
@@ -153,7 +186,7 @@ export default {
     }
   }
 
-  .love {
+  .love, .play-count {
     position: absolute;
     top: 50%;
     right: 0.6rem;
@@ -161,12 +194,25 @@ export default {
     height: 1rem;
     margin-top: -0.5rem;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
 
     i {
-      color: $color-common;
       font-size: 0.55rem;
+    }
+  }
+
+  .love {
+    i {
+      color: $color-common;
+    }
+  }
+
+  .play-count {
+    color: $color-common-b;
+
+    i {
+      margin-right: 0.1rem;
     }
   }
 }
