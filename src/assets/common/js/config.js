@@ -6,5 +6,6 @@ export const playMode = {
 export const targetType = {
   song: 1, // 歌曲
   video: 1004, // 视频
-  album: 10 // 专辑
+  album: 10, // 专辑
+  songSheet: 1000 // 歌单
 }

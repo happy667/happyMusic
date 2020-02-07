@@ -49,13 +49,15 @@ export default {
             // 引入vue原型上的utils
             this.utils.playMusic(res)
           })
-
           break
         case targetType.video:// 视频
           this.$router.push(`/videoInfo/${id}`)
           break
         case targetType.album:// 专辑
           this.$router.push(`/singerAlbum/${id}`)
+          break
+        case targetType.songSheet:// 歌单
+          this.$router.push(`/songSheetDisc/${id}`)
           break
       }
     },

@@ -49,7 +49,7 @@ export default {
     // 选择歌单进入歌单详情
     selectItem (item) {
       this.setRank(false)// 不需要排行
-      this.$router.push({ path: `/songSheetDisc/${item.id}` })
+      this.$router.push(`/songSheetDisc/${item.id}`)
     }
   },
   mounted () {
