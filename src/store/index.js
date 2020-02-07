@@ -23,6 +23,7 @@ export default new Vuex.Store({
     homeCurrentIndex: 0,
     singerCurrentIndex: 0,
     rank: false, // 是否为排行
+    recommendSongSheet: [], // 推荐页歌单列表
     recommendNewSong: [], // 推荐新音乐
     recommendNewSongSheet: [], // 新碟
     songSheetCagetory: [], // 歌单分类
@@ -50,6 +51,7 @@ export default new Vuex.Store({
     currentLineNum: 0, // 当前高亮的歌词行
     currentPlayLyric: '', // 当前播放的歌词
     userLikeList: null // 用户喜欢列表
+
   },
   mutations: {
     // 设置登录用户
@@ -88,9 +90,9 @@ export default new Vuex.Store({
     setRecommendNewSongSheet(state, songSheet) {
       state.recommendNewSongSheet = songSheet
     },
-    // 设置歌单
-    setSongSheet(state, listObj) {
-      state.songSheet.push(listObj)
+    // 设置歌单列表
+    setRecommendSongSheet(state, listObj) {
+      state.recommendSongSheet = listObj
     },
     // 设置歌单分类
     setSongSheetCagetory(state, songSheetCagetory) {
@@ -195,7 +197,7 @@ export default new Vuex.Store({
         data: res
       } = await recommendApi.getRecommendSongSheet(limit)
       if (res.code === ERR_OK) { // 成功获取推荐歌单
-        return res.result
+        context.commit('setRecommendSongSheet', res.result)
       }
     },
     // 获取推荐新音乐
