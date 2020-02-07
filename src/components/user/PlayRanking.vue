@@ -6,7 +6,8 @@
                    left-arrow
                    @click-left="routerBack" />
     </van-sticky>
-    <song-list :list="songList" />
+    <song-list :list="songList"
+               :loading="loading" />
   </div>
 </template>
 <script>
@@ -22,7 +23,8 @@ import { mapState } from 'vuex'
 export default {
   data () {
     return {
-      songList: null// 歌曲列表
+      songList: null, // 歌曲列表
+      loading: false
     }
   },
   computed: {
@@ -44,6 +46,7 @@ export default {
       this.$router.back()
     },
     async getUserPlayRecord (id) {
+      this.loading = true
       const {
         data: res
       } = await userApi.getUserPlayRecord(id)
@@ -62,6 +65,7 @@ export default {
           songList.push(new Song({ id: item.song.id, name: item.song.name, singers, singersList, picUrl: item.song.al.picUrl, playCount: item.playCount }))
         })
         this.songList = songList
+        this.loading = false
       }
     }
   },

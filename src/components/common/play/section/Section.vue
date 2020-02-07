@@ -74,6 +74,7 @@ export default {
           // }
           if (res.nolyric) {
             this.nolyric = res.nolyric
+            this.setCurrentLyric(null)
           } else {
             this.setCurrentLyric(new Lyric(res.lrc.lyric, this.handleLyric))
           }

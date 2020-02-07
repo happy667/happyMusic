@@ -1,7 +1,7 @@
 <template>
   <div class="singer-song-container">
     <!-- loading -->
-    <van-loading v-if="!list"
+    <van-loading v-if="loading"
                  size="24px"
                  color="#FD4979"
                  vertical>加载中...</van-loading>
@@ -36,6 +36,10 @@ export default {
     list: {
       type: Array,
       default: () => null
+    },
+    loading: {
+      type: Boolean,
+      default: () => false
     }
   },
 

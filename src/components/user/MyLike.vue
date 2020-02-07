@@ -6,7 +6,8 @@
                    left-arrow
                    @click-left="routerBack" />
     </van-sticky>
-    <song-list :list="songList" />
+    <song-list :list="songList"
+               :loading="loading" />
   </div>
 </template>
 <script>
@@ -22,7 +23,8 @@ import { mapState, mapActions } from 'vuex'
 export default {
   data () {
     return {
-      songList: null// 歌曲列表
+      songList: null, // 歌曲列表
+      loading: false
     }
   },
   computed: {
@@ -53,8 +55,10 @@ export default {
     },
     // 获取歌曲详情
     async getSongDetail () {
+      this.loading = true
       if (this.userLikeList.length === 0) {
         this.songList = []
+        this.loading = false
         return
       }
       let ids = this.userLikeList.join(',')
@@ -76,13 +80,12 @@ export default {
           songList.push(new Song({ id: item.id, name: item.name, singers, singersList, picUrl: item.al.picUrl }))
         })
         this.songList = songList
+        this.loading = false
       }
     },
     // 选择歌手
     selectItem (item) {
       this.$router.push(`/singerInfo/${item.id}`)
-    },
-    handleChange () {
     }
   },
   async mounted () {

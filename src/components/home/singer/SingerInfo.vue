@@ -19,7 +19,8 @@
                 swipeable>
         <!-- 歌手单曲 -->
         <van-tab title="歌曲">
-          <singer-song :list="singerSong" />
+          <singer-song :list="singerSong"
+                       :loading="loading" />
         </van-tab>
         <!-- 歌手专辑 -->
         <van-tab title="专辑">
@@ -58,7 +59,8 @@ export default {
       singerSong: [], // 歌手单曲
       singerAlbum: [], // 歌手专辑
       singerDetail: {}, // 歌手详情
-      singerAlbumFinished: false // 是否加载完歌手专辑
+      singerAlbumFinished: false, // 是否加载完歌手专辑
+      loading: false
     }
   },
 
@@ -104,6 +106,7 @@ export default {
       }
     },
     async getSingerSong (id) {
+      this.loading = true
       // 获取歌手单曲
       const { data: res } = await SingerApi.getSingerSong(id)
       if (res.code === ERR_OK) { // 成功获取歌手单曲
@@ -131,6 +134,7 @@ export default {
         // 设置歌手
         this.singer = singer
         this.singerSong = songList
+        this.loading = false
       }
     },
     async getSingerAlbum (id) {
