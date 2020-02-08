@@ -2,9 +2,11 @@
   <div class="song-sheet-swiper-item-container">
     <div class="song-sheet-swiper-item">
       <div class="song-img">
-        <img :src="songSheet.picUrl">
-        <div class="play-icon">
-          <van-icon name="play-circle-o" />
+        <div class="image">
+          <img :src="songSheet.picUrl">
+          <div class="play-icon">
+            <van-icon name="play-circle-o" />
+          </div>
         </div>
       </div>
       <div class="song-desc">{{songSheet.name}}</div>
@@ -34,19 +36,23 @@ export default {
     border-radius: 0.3rem;
 
     .song-img {
-      position: relative;
       width: 100%;
-      padding: 0 0.17rem;
       height: 2rem;
-      box-sizing: border-box;
+      padding: 0 0.17rem;
       border-radius: 0.3rem;
       margin-bottom: 0.2rem;
+      box-sizing: border-box;
 
-      img {
-        display: block;
-        width: 100%;
-        height: 100%;
-        border-radius: 0.3rem;
+      .image {
+        position: relative;
+        background: #f4f4f4;
+
+        img {
+          display: block;
+          width: 100%;
+          height: 100%;
+          border-radius: 0.3rem;
+        }
       }
 
       .play-icon {

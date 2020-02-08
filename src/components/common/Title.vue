@@ -31,6 +31,7 @@ export default {
   height: 1.1rem;
   line-height: 1.1rem;
   font-family: $font-common-title;
+  background: $color-common-background;
 
   .songs-title {
     height: 1.1rem;

@@ -1,21 +1,25 @@
 <template>
   <div class="recommend-swiper-container">
-    <van-swipe :autoplay="3000"
-               indicator-color="white">
-      <van-swipe-item @click.stop="selectItem(item)"
-                      v-for="(item,index) in banners"
-                      :key="index">
-        <div class="image">
-          <img :src="item.imageUrl">
-          <div class="title"
-               :style="{backgroundColor:item.titleColor}">{{item.typeTitle}}</div>
+    <div class="swiper-container sw-banner">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide"
+             @click="selectItem(item)"
+             v-for="item in banners"
+             :key="item.id">
+          <div class="image">
+            <img :src="item.imageUrl">
+            <div class="title"
+                 :style="{backgroundColor:item.titleColor}">{{item.typeTitle}}</div>
+          </div>
         </div>
-
-      </van-swipe-item>
-    </van-swipe>
+      </div>
+      <div class="swiper-pagination"></div>
+    </div>
   </div>
+
 </template>
 <script>
+import Swiper from 'swiper'
 import Song from '@/assets/common/js/song.js'
 import Singer from '@/assets/common/js/singer.js'
 import songApi from '@/api/song.js'
@@ -33,10 +37,10 @@ export default {
       type: Array
     }
   },
-  data () {
-    return {
-
-    }
+  mounted () {
+    this.$nextTick(() => {
+      this.initSwiper()
+    })
   },
   methods: {
     selectItem (item) {
@@ -81,50 +85,83 @@ export default {
         let song = new Song({ id: item.id, name: item.name, singers, singersList, picUrl: item.al.picUrl })
         return Promise.resolve(song)
       }
+    },
+    // 初始化轮播图组件
+    initSwiper () {
+      // 通过settimeout 解决数据还没有完全加载的时候就已经渲染swiper，导致loop失效。
+      setTimeout(() => {
+        // eslint-disable-next-line no-unused-vars
+        var mySwiper = new Swiper('.sw-banner', {
+          pagination: {
+            el: '.swiper-pagination'
+          },
+          loop: true,
+          on: {
+            touchStart (e) {
+              e.stopPropagation()
+            },
+            touchEnd (e) {
+              e.stopPropagation()
+            }
+          }
+        })
+      }, 0)
     }
   }
 }
 </script>
 <style lang="stylus" scoped>
+@import '~common/stylus/variable';
+
+.recommend-swiper-container>>>.swiper-pagination-bullet-active {
+  background: $color-common;
+}
+
 .recommend-swiper-container {
   width: 100%;
-  padding: 0.2rem 0.4rem;
+  padding: 0.2rem 0;
   box-sizing: border-box;
   border-radius: 0.3rem;
 
-  .van-swipe {
-    width: 100%;
-    border-radius: 0.3rem;
-
-    .van-swipe-item {
-      padding: 0.1rem;
+  .swiper-container {
+    .swiper-wrapper {
       width: 100%;
-      height: 4.2rem !important;
-      box-sizing: border-box;
       border-radius: 0.3rem;
 
-      .image {
-        position: relative;
-        width: 100%;
-        height: 100%;
+      .swiper-slide {
+        padding: 0 0.3rem;
+        height: 4.2rem ;
+        box-sizing: border-box;
+        border-radius: 0.3rem;
 
-        img {
-          display: block;
+        .image {
+          position: relative;
           width: 100%;
           height: 100%;
-          border-radius: 0.2rem;
-        }
 
-        .title {
-          position: absolute;
-          right: 0;
-          bottom: 0;
-          padding: 0.1rem 0.15rem;
-          color: #fff;
-          border-radius: 0.2rem 0 0.2rem 0;
+          img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            border-radius: 0.2rem;
+          }
+
+          .title {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            padding: 0.1rem 0.15rem;
+            color: #fff;
+            border-radius: 0.2rem 0 0.2rem 0;
+          }
         }
       }
     }
   }
+}
+
+.my-bullet-active {
+  background: #ff6600;
+  opacity: 1;
 }
 </style>

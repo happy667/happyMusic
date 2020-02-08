@@ -1,6 +1,5 @@
 <template>
-  <div id="app"
-       :style="paddingBottom">
+  <div id="app">
     <router-view v-transition
                  v-if="isRouterAlive"></router-view>
     <player></player>
@@ -9,7 +8,7 @@
 
 <script>
 import Player from '@/components/common/Player'
-import { mapGetters, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 export default {
   provide () {
     return {
@@ -24,12 +23,6 @@ export default {
   mounted () {
     // 获取登录状态
     this.getLoginUser()
-  },
-  computed: {
-    ...mapGetters(['currentSong']),
-    paddingBottom () {
-      return Object.keys(this.currentSong).length === 0 ? '' : { paddingBottom: '1.8rem' }
-    }
   },
   methods: {
     ...mapActions(['getLoginUser']),

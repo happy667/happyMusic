@@ -1,9 +1,7 @@
 <template>
   <div class="header-container">
     <!-- 搜索框 -->
-    <van-sticky>
-      <header-search></header-search>
-    </van-sticky>
+    <header-search></header-search>
   </div>
 </template>
 <script>
@@ -15,3 +13,12 @@ export default {
   }
 }
 </script>
+<style lang="stylus" scoped>
+.header-container {
+  position: sticky;
+  left: 0;
+  top: 0;
+  z-index: 99;
+  box-shadow: 0 -1px #fff;
+}
+</style>

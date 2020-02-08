@@ -96,6 +96,7 @@ export default {
  }
 
  .mini-play-container {
+   padding-bottom :1.8rem;
    .fixed {
      position: fixed;
      width: 100%;

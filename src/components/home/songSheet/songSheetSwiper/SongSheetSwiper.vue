@@ -65,8 +65,13 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
+@import '~common/stylus/variable';
+
 .song-sheet-swiper-container {
+  min-height: 5rem;
+
   .swiper-container {
+
     .swiper-wrapper {
       width: 100%;
       padding: 0 0.4rem 0.5rem;

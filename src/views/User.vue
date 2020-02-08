@@ -29,7 +29,9 @@
             <div class="left-image">
               <van-icon name="star" />
             </div>
-            <div class="title">我的关注</div>
+            <div class="right-info">
+              <div class="title">我的关注</div>
+            </div>
           </div>
         </router-link>
         <router-link to="/user/myLike">
@@ -37,7 +39,11 @@
             <div class="left-image">
               <van-icon name="like" />
             </div>
-            <div class="title">我的最爱</div>
+            <div class="right-info">
+              <div class="title">我的最爱</div>
+              <div class="num">{{myLikeCount}}</div>
+            </div>
+
           </div>
         </router-link>
         <router-link to="/user/playRanking">
@@ -45,14 +51,18 @@
             <div class="left-image">
               <van-icon name="medal" />
             </div>
-            <div class="title">听歌排行</div>
+            <div class="right-info">
+              <div class="title">听歌排行</div>
+            </div>
           </div>
         </router-link>
         <div class="my-recommend my-list-item">
           <div class="left-image">
             <van-icon name="gem" />
           </div>
-          <div class="title">为您推荐</div>
+          <div class="right-info">
+            <div class="title">为您推荐</div>
+          </div>
         </div>
       </div>
       <div class="my-song-sheet-list">
@@ -66,11 +76,14 @@
 import { mapState } from 'vuex'
 export default {
   computed: {
-    ...mapState(['user']),
+    ...mapState(['user', 'userLikeList']),
     backgroundImage () {
       return {
         backgroundImage: `url(http://p1.music.126.net/WLTBvNL_l9ZKlslFwaCM9Q==/109951163792144631.jpg)`
       }
+    },
+    myLikeCount () {
+      return this.userLikeList ? this.userLikeList.length + '首' : ''
     }
   },
   methods: {
@@ -163,9 +176,19 @@ export default {
           color: $color-common;
         }
 
-        .title {
-          height: 100%;
-          line-height: 1.7rem;
+        .right-info {
+          display: flex;
+          justify-content: center;
+          flex-direction: column;
+
+          .title {
+            height: 0.7rem;
+            line-height: 0.7rem;
+          }
+
+          .num {
+            color: $color-common-b;
+          }
         }
       }
     }

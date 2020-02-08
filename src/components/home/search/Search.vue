@@ -40,7 +40,7 @@
 import searchApi from '@/api/search.js'
 import { ERR_OK } from '@/api/config.js'
 import { addLocalSearch } from '@/assets/common/js/localStorage.js'
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapGetters } from 'vuex'
 export default {
   data () {
     return {
@@ -57,6 +57,10 @@ export default {
   },
   computed: {
     ...mapState(['searchKeywords']),
+    ...mapGetters(['currentSong']),
+    paddingBottom () {
+      return Object.keys(this.currentSong).length === 0 ? '' : { paddingBottom: '1.8rem' }
+    },
     // 搜索框的值
     searchVal: {
       get () {

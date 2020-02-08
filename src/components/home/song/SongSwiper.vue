@@ -7,7 +7,8 @@
              v-for="(item,index) in recommendNewSong"
              :key="item.id"
              @click="handleSelect(item,index)">
-          <song-item :showImage="true" :song="item"></song-item>
+          <song-item :showImage="true"
+                     :song="item"></song-item>
         </div>
       </div>
     </div>
@@ -15,7 +16,6 @@
 </template>
 <script>
 import Swiper from 'swiper'
-// import SongImgItem from './SongImgItem'
 import SongItem from './SongItem'
 export default {
   props: {
@@ -65,7 +65,7 @@ export default {
 .song-swiper-container>>>.swiper-container .swiper-wrapper .swiper-slide .songs-list-item-containter {
   border-radius: 0.2rem;
   padding: 0.2rem;
-  box-shadow: 0 0.1rem 0.8rem rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0.1rem 0.35rem rgba(0, 0, 0, 0.1);
 }
 
 .song-swiper-container {
@@ -74,7 +74,7 @@ export default {
       .swiper-slide {
         width: 100%;
         box-sizing: border-box;
-        padding: 0.45rem 0.4rem;
+        padding: 0.3rem 0.4rem;
       }
     }
   }
