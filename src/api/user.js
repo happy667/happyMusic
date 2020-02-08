@@ -41,6 +41,13 @@ export default {
     return request({
       url
     })
+  },
+  // 获取用户信息 , 歌单，收藏，mv, dj 数量
+  getUserCount() {
+    const url = `/user/subcount`
+    return request({
+      url
+    })
   }
 
 }

@@ -31,6 +31,7 @@
             </div>
             <div class="right-info">
               <div class="title">我的关注</div>
+              <div class="num">{{followCount}}</div>
             </div>
           </div>
         </router-link>
@@ -73,8 +74,17 @@
   </div>
 </template>
 <script>
+import userApi from '@/api/user.js'
+import {
+  ERR_OK
+} from '@/api/config.js'
 import { mapState } from 'vuex'
 export default {
+  data () {
+    return {
+      userCount: null
+    }
+  },
   computed: {
     ...mapState(['user', 'userLikeList']),
     backgroundImage () {
@@ -84,12 +94,26 @@ export default {
     },
     myLikeCount () {
       return this.userLikeList ? this.userLikeList.length + '首' : ''
+    },
+    followCount () {
+      return this.userCount ? this.userCount.artistCount + '个关注' : ''
     }
+  },
+  mounted () {
+    this.getUserCount()
   },
   methods: {
     // 返回上一个路由
     routerBack () {
       this.$router.back()
+    },
+    async getUserCount () {
+      const {
+        data: res
+      } = await userApi.getUserCount()
+      if (res.code === ERR_OK) {
+        this.userCount = res
+      }
     }
   }
 }

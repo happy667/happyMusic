@@ -29,8 +29,8 @@ export default {
     ...mapMutations(['setPlayerFullScreen']),
     // 点击评论
     handleRecommentClick () {
-      this.setPlayerFullScreen(false)
       this.$router.push(`/songComment/${this.currentSong.id}`)
+      this.setPlayerFullScreen(false)
     },
     // 选中歌曲喜欢
     selectItemLove () {
