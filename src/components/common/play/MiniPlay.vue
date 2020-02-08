@@ -47,7 +47,6 @@
   </div>
 </template>
 <script>
-import 'common/js/utils.js'
 import { mapMutations, mapGetters, mapState } from 'vuex'
 export default {
   inject: ['playerParams'],
@@ -63,10 +62,8 @@ export default {
   },
   methods: {
     ...mapMutations(['setPlayerFullScreen']),
-    handleShowFullPlay (e) {
-      if (e.target.className !== 'player-controller') {
-        this.setPlayerFullScreen(true)
-      }
+    handleShowFullPlay () {
+      this.setPlayerFullScreen(true)
     },
     // 切换播放暂停
     handleTogglePlaying () {

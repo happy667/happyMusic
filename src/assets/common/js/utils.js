@@ -8,7 +8,7 @@ const utils = {
       if (res.data.success) {
         if (list === null) { // 传入列表为空
           let list = store.state.playList
-          const listIndex = list.findIndex(item => item.id === song.id)
+          const listIndex = utils.findIndex(list, song)
           if (listIndex === -1) { // 如果不存在该歌曲就添加到歌曲列表中
             list.unshift(song)
             store.dispatch('setSelectPlay', {
@@ -58,6 +58,7 @@ const utils = {
     }
     return index
   },
+  // 打乱数据
   randomList(list) {
     let arr = []
     for (let i = 0; i < list.length; i++) {
@@ -66,12 +67,38 @@ const utils = {
     arr.sort(() => Math.random() - 0.5)
     return arr
   },
+  // 复制数据
   copyList(list) {
     let newList = []
     for (let i in list) {
       newList.push(list[i])
     }
     return newList
+  },
+  // 查找索引
+  findIndex(list, song) {
+    return list.findIndex(item => {
+      return item.id === song.id
+    })
+  },
+  removeItem(list, item) {
+    let newList = list.slice()
+    let index = utils.findIndex(list, item)
+    list.splice(index, 1)
+    newList = list
+    return newList
+  },
+  // 确认提示框
+  alertConfirm({
+    message,
+    confirmButtonText = '确认'
+  }) {
+    return Vue.prototype.$Dialog.confirm({
+      message,
+      confirmButtonColor: '#FD4979',
+      confirmButtonText,
+      width: '265px'
+    })
   }
 }
 export default {

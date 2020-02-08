@@ -44,8 +44,6 @@ import SongSheetTitle from '@/components/common/Title'
 import recommendApi from '@/api/recommend.js'
 import Song from '@/assets/common/js/song.js'
 import Singer from '@/assets/common/js/singer.js'
-
-import 'common/js/utils.js'
 import {
   ERR_OK
 } from '@/api/config.js'

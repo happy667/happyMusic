@@ -19,13 +19,13 @@
   </header>
 </template>
 <script>
-import { mapState, mapMutations, mapGetters } from 'vuex'
+import { mapState, mapMutations, mapGetters, mapActions } from 'vuex'
 import {
   playMode
 } from '@/assets/common/js/config.js'
 export default {
   computed: {
-    ...mapState(['playMode', 'sequenceList']),
+    ...mapState(['playMode', 'sequenceList', 'currentPlayIndex']),
     ...mapGetters(['currentSong']),
     playModeIcon () {
       return this.playMode === playMode.sequence ? 'icon-xunhuanbofang' : this.playMode === playMode.loop ? 'icon-danquxunhuan' : 'icon-suijibofang'
@@ -35,14 +35,15 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setSequenceList', 'setPlayMode', 'setCurrentPlayIndex', 'setPlayList']),
+    ...mapMutations(['setPlayMode', 'setCurrentPlayIndex', 'setPlayList']),
+    ...mapActions(['deleteSongList']),
     clearPlayList () {
       this.$Dialog.confirm({
         message: '确定要清空播放列表?',
         confirmButtonColor: '#FD4979',
         width: '265px'
       }).then(() => {
-        this.setSequenceList([])
+        this.deleteSongList()
       }).catch(() => {
 
       })

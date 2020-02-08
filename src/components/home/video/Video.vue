@@ -52,7 +52,7 @@
           <div class="play-count"
                v-show="isFirstPlay">
             <i class="iconfont icon-bofang"></i>
-            {{videoParams.playCount|convertPlayCount}}
+            {{videoParams.playCount|convertCount}}
           </div>
           <transition-group enter-active-class="animated fadeIn faster"
                             leave-active-class="animated fadeOut faster">
@@ -60,7 +60,7 @@
             <div class="play-time"
                  key="play-time"
                  v-show="isClickScreen">
-              {{currenTime|convertPlayTime}}/{{videoParams.duration|convertPlayTime}}
+              {{currenTime|convertTime}}/{{videoParams.duration|convertTime}}
             </div>
           </transition-group>
         </div>
@@ -69,7 +69,7 @@
           <div class="play-time"
                v-show="isFirstPlay">
             <i class="iconfont icon-shichang"></i>
-            {{videoParams.duration|convertPlayTime}}
+            {{videoParams.duration|convertTime}}
           </div>
           <template v-if="isFirstPlay">
             <div class="full"
@@ -109,8 +109,7 @@
     </div>
     <!-- 视频信息 -->
     <div class="video-info">
-
-      <div class="info-top"
+      <div class="info-top van-hairline--bottom"
            @click="goToVideoInfo">
         <!-- 视频标题 -->
         <div class="title">
@@ -207,7 +206,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setSelectVideo', 'setOldVideo', 'setSingerCurrentIndex']),
+    ...mapMutations(['setOldVideo', 'setSingerCurrentIndex']),
     // 跳转到mv详情页
     goToVideoInfo () {
       // 因为该组件用到了多个地方，但是在mv详情页不需要做跳转，所以需要判断当前路由地址
@@ -286,7 +285,7 @@ export default {
       // 暂停上一次正在播放的video
       this.pauseOldVideo(this.oldVideo)
       if (this !== this.oldVideo) {
-        this.setOldVideo(this)
+        // this.setOldVideo(this)
       }
       if (this.isFirstPlay) {
         console.log('first')
@@ -422,7 +421,6 @@ export default {
   .video-info {
     .info-top {
       padding: 0.1rem 0.2rem;
-      border-bottom: 0.02rem solid #efefef;
 
       .title {
         display: flex;

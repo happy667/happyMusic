@@ -6,7 +6,9 @@ export default class Singer {
     aliaName,
     picUrl,
     singers,
-    singersList
+    singersList,
+    followed,
+    followeds
   }) {
     this.id = id
     this.name = name
@@ -15,5 +17,7 @@ export default class Singer {
     this.picUrl = picUrl
     this.singers = singers
     this.singersList = singersList
+    this.followed = followed
+    this.followeds = followeds
   }
 }

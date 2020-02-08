@@ -2,31 +2,51 @@
   <div class="singer-list-item-container"
        @click="selectItem(singer)">
     <div class="singer-list-item">
-      <!-- 歌手头像 -->
-      <div class="singer-avatar">
-        <music-img :avatar="singer.avatar"></music-img>
+      <div class="left">
+        <!-- 歌手头像 -->
+        <div class="singer-avatar">
+          <music-img :avatar="singer.avatar"></music-img>
+        </div>
+        <!-- 歌手姓名 -->
+        <div class="singer-name">{{singer.name}}</div>
       </div>
-      <!-- 歌手姓名 -->
-      <p class="singer-name">{{singer.name}}</p>
+
+      <div class="right"
+           v-if="showFollow">
+
+        <!-- 关注 -->
+        <follow @clickFollow="handleClickFollow"
+                :followed="singer.followed"></follow>
+      </div>
     </div>
   </div>
 
 </template>
 <script>
 import MusicImg from '../img/MusicImg'
+import Follow from '@/components/common/Follow'
 import { mapMutations } from 'vuex'
 export default {
   props: {
-    singer: Object
+    singer: Object,
+    showFollow: {
+      type: Boolean,
+      default: () => false
+    }
   },
   components: {
-    MusicImg
+    MusicImg,
+    Follow
   },
   methods: {
     ...mapMutations(['setSingerCurrentIndex']),
     // 选择歌手
     selectItem (item) {
       this.$emit('select', item)
+    },
+    // 点击关注
+    handleClickFollow () {
+      this.$emit('clickFollow', this.singer)
     }
   }
 
@@ -41,16 +61,25 @@ export default {
   .singer-list-item {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     width: 100%;
 
-    .singer-avatar {
-      margin-right: 0.5rem;
+    .left {
+      display: flex;
+      align-items: center;
+
+      .singer-avatar {
+        margin-right: 0.5rem;
+      }
+
+      .singer-name {
+        height: 0.7rem;
+        line-height: 0.7rem;
+        font-size: $font-size-smaller;
+      }
     }
 
-    .singer-name {
-      height: 0.7rem;
-      line-height: 0.7rem;
-      font-size: $font-size-smaller;
+    .right {
     }
   }
 }

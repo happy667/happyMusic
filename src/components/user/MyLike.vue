@@ -33,6 +33,8 @@ export default {
   watch: {
     removeLikeSong (newSong) {
       if (!newSong.isLike) { // 从我喜欢列表中移除该歌曲
+        // 移除歌曲
+        this.utils.removeItem(this.userLikeList, newSong)
         this.removeSong(newSong)
       }
     },
@@ -46,13 +48,7 @@ export default {
     routerBack () {
       this.$router.back()
     },
-    // 移除歌曲
-    removeSong (song) {
-      let index = this.songList.findIndex(item => item.id === song.id)
-      let list = this.songList
-      list.splice(index, 1)
-      this.songList = list
-    },
+
     // 获取歌曲详情
     async getSongDetail () {
       this.loading = true

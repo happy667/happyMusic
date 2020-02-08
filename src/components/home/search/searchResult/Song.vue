@@ -20,7 +20,6 @@
   </div>
 </template>
 <script>
-import 'common/js/utils.js'
 import SongList from '@/components/home/song/SongList'
 import NoResult from '@/components/common/NoResult'
 import searchApi from '@/api/search.js'
@@ -115,6 +114,7 @@ export default {
     },
     // 选择歌曲
     async handleSelect (item, index) {
+      this.$emit('closeList')
       // 判断点击的是否是当前播放的歌曲
       if (this.currentSong.id === item.id) {
         this.setPlayerFullScreen(true)

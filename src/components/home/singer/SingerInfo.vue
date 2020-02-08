@@ -33,6 +33,7 @@
           <singer-detail :singerDetail="singerDetail" />
         </van-tab>
       </van-tabs>
+
     </div>
   </div>
 </template>
@@ -41,7 +42,8 @@ import SingerSynopsis from './singerInfo/SingerSynopsis'
 import SingerSong from './singerInfo/SingerSong'
 import SingerAlbum from './singerInfo/SingerAlbum'
 import SingerDetail from './singerInfo/SingerDetail'
-import SingerApi from '@/api/singer.js'
+import singerApi from '@/api/singer.js'
+import userApi from '@/api/user.js'
 import Song from '@/assets/common/js/song.js'
 import Singer from '@/assets/common/js/singer.js'
 import {
@@ -60,10 +62,16 @@ export default {
       singerAlbum: [], // 歌手专辑
       singerDetail: {}, // 歌手详情
       singerAlbumFinished: false, // 是否加载完歌手专辑
-      loading: false
+      loading: false,
+      accountId: null
     }
   },
-
+  watch: {
+    accountId (newId) {
+      // 获取歌手用户详情
+      this.getUserDetail(newId)
+    }
+  },
   created () {
     // 根据歌手id获取歌手单曲
     this.handleTabsChange(this.currentIndex)
@@ -90,7 +98,7 @@ export default {
   methods: {
     ...mapMutations(['setSingerCurrentIndex']),
     routerBack () {
-      this.$router.push('/home')
+      this.$router.back()
     },
     handleTabsChange (name) {
       switch (name) {
@@ -105,10 +113,10 @@ export default {
           break
       }
     },
+    // 获取歌手单曲
     async getSingerSong (id) {
       this.loading = true
-      // 获取歌手单曲
-      const { data: res } = await SingerApi.getSingerSong(id)
+      const { data: res } = await singerApi.getSingerSong(id)
       if (res.code === ERR_OK) { // 成功获取歌手单曲
         let songList = []
         res.hotSongs.map((item) => { // 循环数组对象对每个数据进行处理 返回需要得数据
@@ -123,16 +131,19 @@ export default {
           })
           songList.push(new Song({ id: item.id, name: item.name, singers, singersList, picUrl: item.al.picUrl }))
         })
-        console.log(songList)
         let singer = new Singer({
           id: res.artist.id,
           name: res.artist.name,
           avatar: res.artist.img1v1Url,
-          aliaName: res.artist.alias[0],
-          picUrl: res.artist.picUrl
+          picUrl: res.artist.picUrl,
+          followed: res.artist.followed
         })
-        // 设置歌手
+        console.log(songList)
         this.singer = singer
+        if (res.artist.accountId) {
+          this.accountId = res.artist.accountId
+        }
+
         this.singerSong = songList
         this.loading = false
       }
@@ -140,16 +151,16 @@ export default {
     async getSingerAlbum (id) {
       // 获取歌手专辑
       const offset = this.singerAlbum.length
-      const { data: res } = await SingerApi.getSingerAlbum(id, offset)
+      const { data: res } = await singerApi.getSingerAlbum(id, offset)
       if (res.code === ERR_OK) { // 成功获取歌手单曲
         this.singerAlbum = this.singerAlbum.concat(res.hotAlbums)
 
         this.singerAlbumFinished = !res.more
       }
     },
+    // 获取歌手详情
     async getSingerDetail (id) {
-      // 获取歌手详情
-      const { data: res } = await SingerApi.getSingerDetail(id)
+      const { data: res } = await singerApi.getSingerDetail(id)
       if (res.code === ERR_OK) { // 成功 获取歌手详情
         this.singerDetail = {
           briefDesc: res.briefDesc,
@@ -157,6 +168,14 @@ export default {
           topicData: res.topicData
         }
         console.log(this.singerDetail)
+      }
+    },
+    // 获取歌手用户详情
+    async getUserDetail (id) {
+      const { data: res } = await userApi.getUserDetail(id)
+      if (res.code === ERR_OK) { // 成功 获取歌手详情
+        let followeds = res.profile.followeds
+        this.$set(this.singer, 'followeds', followeds)
       }
     },
     // 上拉加载

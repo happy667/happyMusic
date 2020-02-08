@@ -24,7 +24,6 @@
   </div>
 </template>
 <script>
-import 'common/js/utils.js'
 import songApi from '@/api/song.js'
 import {
   ERR_OK
@@ -190,7 +189,6 @@ export default {
       if (!this.songReady) return
       this.setPlaying(!this.playing)
       if (this.currentLyric) {
-        console.log(this.currentLyric)
         this.currentLyric.togglePlay()
       }
     },
@@ -200,7 +198,6 @@ export default {
       if (!this.songReady) return
       // 如果只有一首就循环播放当前歌曲
       if (this.playList.length === 1) {
-        console.log('进来啦')
         this.loop()
         return
       }

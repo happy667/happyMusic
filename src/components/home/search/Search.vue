@@ -19,7 +19,7 @@
     <div class="search-list-container"
          v-show="showSearchList">
       <ul class="search-list">
-        <li class="search-list-item"
+        <li class="search-list-item van-hairline--top"
             @click="selectItem(item)"
             v-for="(item,index) in searchList"
             :key="index">
@@ -40,27 +40,17 @@
 import searchApi from '@/api/search.js'
 import { ERR_OK } from '@/api/config.js'
 import { addLocalSearch } from '@/assets/common/js/localStorage.js'
-import { mapState, mapMutations, mapGetters } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 export default {
   data () {
     return {
       searchDefault: '', // 搜索默认关键词
-      searchList: '', // 搜索列表
-      showSearchList: false// 显示搜索列表
+      searchList: '' // 搜索列表
     }
   },
   inject: ['reload'],
-  mounted () {
-    this.$nextTick(() => {
-      this.getSearchDefault()
-    })
-  },
   computed: {
-    ...mapState(['searchKeywords']),
-    ...mapGetters(['currentSong']),
-    paddingBottom () {
-      return Object.keys(this.currentSong).length === 0 ? '' : { paddingBottom: '1.8rem' }
-    },
+    ...mapState(['searchKeywords', 'showSearchList']),
     // 搜索框的值
     searchVal: {
       get () {
@@ -72,8 +62,20 @@ export default {
     }
   },
 
+  mounted () {
+    this.$nextTick(() => {
+      this.getSearchDefault()
+      // 监听页面滚动
+      window.addEventListener('scroll', this.handleScroll)
+    })
+  },
+  destroyed () {
+    // 取消监听页面滚动
+    document.removeEventListener('scroll', this.handleScroll)
+  },
+
   methods: {
-    ...mapMutations(['setSearchKeywords', 'setSearchCurrentIndex']),
+    ...mapMutations(['setSearchKeywords', 'setSearchCurrentIndex', 'setShowSearchList']),
     // 返回上一个路由
     routerBack () {
       if (this.$route.path === '/search/searchPage') {
@@ -83,6 +85,16 @@ export default {
       // 清空搜索内容
       this.setSearchKeywords('')
       this.$router.back()
+    },
+    // 关闭搜索列表
+    closeSearchList () {
+      if (this.showSearchList) {
+        this.setShowSearchList(false)
+      }
+    },
+    // 显示搜索列表
+    openSearchList () {
+      this.setShowSearchList(true)
     },
     // 获取默认关键词
     async  getSearchDefault () {
@@ -102,7 +114,7 @@ export default {
     },
     // 搜索
     async handleSearch () {
-      this.showSearchList = false
+      this.closeSearchList()
       // 重置标签页到第一个
       this.setSearchCurrentIndex(0)
       if (this.searchKeywords.trim().length === 0) {
@@ -119,16 +131,16 @@ export default {
     // 输入搜索内容
     handleInput () {
       if (this.searchKeywords.trim().length === 0) {
-        this.showSearchList = false
+        this.closeSearchList()
       } else {
-        this.showSearchList = true
+        this.openSearchList()
         this.getSearchAll()
       }
     },
     // 选择搜索名称
     selectItem (item) {
       this.setSearchKeywords(item)
-      this.showSearchList = false
+      this.closeSearchList()
       // 重置标签页到第一个
       this.setSearchCurrentIndex(0)
       // 将搜索的内容保存在本地
@@ -137,6 +149,13 @@ export default {
         this.$router.push('/search/searchResult')
       } else {
         this.reload()
+      }
+    },
+    // 监听页面滚动
+    handleScroll () {
+      let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+      if (scrollTop > 0) { // 滚动大于0的时候关闭搜索框
+        this.closeSearchList()
       }
     }
 
@@ -152,10 +171,6 @@ export default {
 
 .van-cell {
   padding: 0.2rem 0.3rem;
-}
-
-.van-search__content {
-  border: 0.03rem solid #e3e3e3;
 }
 
 .van-search {
@@ -183,7 +198,6 @@ export default {
       .search-list-item {
         display: flex;
         padding: 0 0.2rem;
-        border-top: 0.02rem solid #efefef;
         line-height: 1rem;
         height: 1rem;
         font-size: $font-size-smaller-x;

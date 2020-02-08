@@ -9,6 +9,7 @@ import 'babel-polyfill'
 import './plugins/vant.js'
 import 'vant/lib/index.css'
 import '@/assets/common/font/iconfont.css'
+import '@/assets/common/js/utils.js'
 import 'swiper/css/swiper.css'
 
 import VueLazyLoad from 'vue-lazyload'

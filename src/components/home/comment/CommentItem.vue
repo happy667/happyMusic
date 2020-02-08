@@ -1,5 +1,5 @@
 <template>
-  <div class="comment-item-container">
+  <div class="comment-item-container van-hairline--bottom">
     <!-- 评论信息 -->
     <div class="comment-header">
       <!-- 用户头像 -->
@@ -39,7 +39,6 @@ export default {
 
 .comment-item-container {
   padding: 0.35rem 0;
-  border-bottom: 0.03rem solid #efefef;
 
   .comment-header {
     display: flex;
