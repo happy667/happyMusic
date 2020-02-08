@@ -24,6 +24,7 @@ export default new Vuex.Store({
     oldVideo: {}, // 上一次的video
     searchKeywords: '', // 搜索关键词
     searchCurrentIndex: 0, // 搜索页当前索引
+    showSearchList: false, // 是否显示搜索列表
     playing: false, // 播放状态
     playList: [], // 播放列表
     playerFullScreen: false, // 是否展开播放
@@ -84,6 +85,10 @@ export default new Vuex.Store({
     // 设置搜索页当前索引
     setSearchCurrentIndex(state, index) {
       state.searchCurrentIndex = index
+    },
+    // 设置显示搜索列表
+    setShowSearchList(state, showSearchList) {
+      state.showSearchList = showSearchList
     },
     // 设置播放状态
     setPlaying(state, playing) {

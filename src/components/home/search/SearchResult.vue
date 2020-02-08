@@ -8,7 +8,7 @@
               swipeable>
       <!-- 单曲页 -->
       <van-tab title="单曲">
-        <song />
+        <song @closeList="closeSearchList" />
       </van-tab>
       <!-- 歌手页 -->
       <van-tab title="歌手">
@@ -35,7 +35,7 @@ import { mapState, mapMutations } from 'vuex'
 export default {
   name: 'searchResult',
   computed: {
-    ...mapState(['searchKeywords', 'searchCurrentIndex']),
+    ...mapState(['searchKeywords', 'searchCurrentIndex', 'showSearchList']),
     currentIndex: {
       get () {
         return this.searchCurrentIndex
@@ -46,7 +46,14 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setSearchCurrentIndex'])
+    ...mapMutations(['setSearchCurrentIndex', 'setShowSearchList']),
+    // 关闭搜索列表
+    closeSearchList () {
+      console.log(111)
+      if (this.showSearchList) {
+        this.setShowSearchList(false)
+      }
+    }
   },
   mounted () {
     if (!this.searchKeywords) {

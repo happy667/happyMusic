@@ -66,11 +66,11 @@ export default {
     }
   },
   computed: {
-    ...mapState(['searchKeywords'])
+    ...mapState(['searchKeywords', 'showSearchList'])
   },
 
   methods: {
-    ...mapMutations(['setSearchKeywords', 'setSearchCurrentIndex', 'selectSearchItem']),
+    ...mapMutations(['setSearchKeywords', 'setSearchCurrentIndex', 'selectSearchItem', 'setShowSearchList']),
     // 获取热门搜索
     async getHotSearchList () {
       const { data: res } = await searchApi.getHotSearchList()
@@ -80,6 +80,7 @@ export default {
     },
     // 选择搜索名称
     selectItem (item) {
+      this.closeSearchList()
       // 重置标签页到第一个
       this.setSearchCurrentIndex(0)
       this.setSearchKeywords(item.searchWord || item)
@@ -99,6 +100,12 @@ export default {
       }).catch(() => {
 
       })
+    },
+    // 关闭搜索列表
+    closeSearchList () {
+      if (this.showSearchList) {
+        this.setShowSearchList(false)
+      }
     }
   },
   mounted () {

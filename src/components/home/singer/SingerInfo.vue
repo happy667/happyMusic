@@ -90,7 +90,7 @@ export default {
   methods: {
     ...mapMutations(['setSingerCurrentIndex']),
     routerBack () {
-      this.$router.push('/home')
+      this.$router.back()
     },
     handleTabsChange (name) {
       switch (name) {

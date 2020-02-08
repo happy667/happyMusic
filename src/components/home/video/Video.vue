@@ -110,7 +110,7 @@
     <!-- 视频信息 -->
     <div class="video-info">
 
-      <div class="info-top"
+      <div class="info-top van-hairline--bottom"
            @click="goToVideoInfo">
         <!-- 视频标题 -->
         <div class="title">
@@ -422,7 +422,6 @@ export default {
   .video-info {
     .info-top {
       padding: 0.1rem 0.2rem;
-      border-bottom: 0.02rem solid #efefef;
 
       .title {
         display: flex;
