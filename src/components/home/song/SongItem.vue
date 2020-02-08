@@ -38,7 +38,7 @@ import userApi from '@/api/user.js'
 import {
   ERR_OK
 } from '@/api/config.js'
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapGetters } from 'vuex'
 export default {
   props: {
     song: Object,
@@ -54,6 +54,7 @@ export default {
   },
   computed: {
     ...mapState(['user', 'userLikeList']),
+    ...mapGetters(['currentSong']),
     loveIcon () {
       return this.song.isLike ? 'icon-aixin' : 'icon-icon-test'
     }
@@ -69,6 +70,12 @@ export default {
         }
       },
       deep: true
+    },
+    currentSong () {
+      if (this.song.id === this.currentSong.id) {
+        // 同步喜欢状态
+        this.song.isLike = this.currentSong.isLike
+      }
     }
 
   },
@@ -91,7 +98,7 @@ export default {
       let song = this.song
       // 判断是否登录
       if (!this.user) { // 弹窗提示去登录
-        this.alertConfirm({ message: '您还没有登录哦', confirmButtonText: '去登陆' }).then(() => {
+        this.utils.alertConfirm({ message: '您还没有登录哦', confirmButtonText: '去登陆' }).then(() => {
           this.$router.push({ name: 'login' })
         })
       } else { // 添加或取消喜欢音乐
@@ -106,23 +113,15 @@ export default {
         this.$set(this.song, 'isLike', true)
       }
     },
-    alertConfirm ({ message, confirmButtonText = '确认' }) {
-      return this.$Dialog.confirm({
-        message,
-        confirmButtonColor: '#FD4979',
-        confirmButtonText,
-        width: '265px'
-      })
-    },
+
     // 喜欢音乐
     async likeMusic (song) {
-      console.log(1111)
       let like = !song.isLike
       if (!like) { // 取消喜欢就询问
-        this.alertConfirm({ message: '确定要取消喜欢该歌曲吗', confirmButtonText: '取消' }).then(async () => {
+        this.utils.alertConfirm({ message: '确定要取消喜欢该歌曲吗', confirmButtonText: '取消' }).then(async () => {
           const { data: res } = await userApi.likeMusic(song.id, like)
           if (res.code === ERR_OK) {
-            this.song.isLike = like
+            this.$set(this.song, 'isLike', like)
           }
         })
       } else {
@@ -172,15 +171,16 @@ export default {
 
   .song-desc {
     font-size: $font-size-smaller;
-    max-width: 4.5rem;
     line-height: 0.7rem;
 
     .song-name {
+      max-width: 5rem;
       font-weight: 500;
       no-wrap();
     }
 
     .sg-info {
+      max-width: 4.5rem;
       color: #777;
       no-wrap();
     }

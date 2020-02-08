@@ -56,7 +56,7 @@ export default {
     })
   },
   computed: {
-    ...mapState(['videoList', 'videoOffset'])
+    ...mapState(['videoList'])
   },
   methods: {
     ...mapMutations(['setVideoList']),

@@ -20,7 +20,6 @@
   </div>
 </template>
 <script>
-import 'common/js/utils.js'
 import SongList from '@/components/home/song/SongList'
 import NoResult from '@/components/common/NoResult'
 import searchApi from '@/api/search.js'

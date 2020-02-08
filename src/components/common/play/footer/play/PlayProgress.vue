@@ -9,8 +9,8 @@
     </div>
     <!-- 播放时长 -->
     <div class="play-time">
-      <div class="start-time">{{playerParams.currentTime|convertPlayTime}}</div>
-      <div class="end-time">{{playerParams.duration|convertPlayTime}}</div>
+      <div class="start-time">{{playerParams.currentTime|convertTime}}</div>
+      <div class="end-time">{{playerParams.duration|convertTime}}</div>
     </div>
   </div>
 </template>

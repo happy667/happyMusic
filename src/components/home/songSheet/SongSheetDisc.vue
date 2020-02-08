@@ -26,7 +26,7 @@
         <div class="songs-nt">
           <div class="songs-num">{{songSheetDisc.songs.length}}首</div>
           <div class="songs-time"
-               v-if="songSheetDisc.songs.length!==0">{{songSheetDisc.trackUpdateTime|convertTime}}</div>
+               v-if="songSheetDisc.songs.length!==0">{{songSheetDisc.trackUpdateTime|convertDate}}</div>
         </div>
 
         <!-- 播放按钮 -->
@@ -47,7 +47,6 @@
 </template>
 <script>
 import 'common/js/convert.js'
-import 'common/js/utils.js'
 import recommendApi from '@/api/recommend.js'
 import {
   ERR_OK

@@ -52,7 +52,6 @@ import songApi from '@/api/song.js'
 import {
   ERR_OK
 } from '@/api/config.js'
-import 'common/js/utils.js'
 export default {
   props: {
     id: String

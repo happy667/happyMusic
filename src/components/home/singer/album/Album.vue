@@ -20,7 +20,7 @@
               <div class="album-image">
                 <img v-lazy="albumObj.album.picUrl" />
               </div>
-              <div class="public-time">{{albumObj.album.publishTime|convertTime}}</div>
+              <div class="public-time">{{albumObj.album.publishTime|convertDate}}</div>
             </div>
             <div class="right-info">
               <div class="album-name">{{albumObj.album.name}}</div>
@@ -91,7 +91,6 @@
 </template>
 <script>
 import 'common/js/convert.js'
-import 'common/js/utils.js'
 import SongsList from '@/components/home/song/SongList'
 import singerApi from '@/api/singer.js'
 import Song from '@/assets/common/js/song.js'

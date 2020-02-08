@@ -7,7 +7,7 @@
     <div class="songs-desc">{{songSheet.name}}</div>
     <div class="songs-playCount"
          v-if="songSheet.playCount">
-      <i class="iconfont icon-bofang"></i>{{songSheet.playCount|convertPlayCount}}
+      <i class="iconfont icon-bofang"></i>{{songSheet.playCount|convertCount}}
     </div>
   </div>
 </template>

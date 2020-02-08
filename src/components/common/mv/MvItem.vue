@@ -7,7 +7,7 @@
       <!-- 播放次数 -->
       <div class="play-num">
         <i class="iconfont icon-bofang"></i>
-        {{mv.playCount|convertPlayCount}}
+        {{mv.playCount|convertCount}}
       </div>
     </div>
     <!-- mv信息 -->
@@ -16,7 +16,7 @@
       <div class="mv-title">{{mv.name}}</div>
       <div class="bottom">
         <!-- 时间 -->
-        <div class="mv-time">{{mv.duration/1000|convertPlayTime}}</div>
+        <div class="mv-time">{{mv.duration/1000|convertTime}}</div>
         <!-- 来源 -->
         <div class="mv-source">{{mv.artistName}}</div>
       </div>

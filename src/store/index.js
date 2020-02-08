@@ -8,7 +8,7 @@ import {
 import {
   playMode
 } from '@/assets/common/js/config.js'
-import utils from '@/assets/common/js/utils.js'
+import util from '@/assets/common/js/utils.js'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -159,8 +159,7 @@ export default new Vuex.Store({
       } = await loginApi.loginStatus()
       if (res.code === ERR_OK) {
         context.commit('setLoginUser', res.profile)
-        console.log(this.state.user)
-        this.dispatch('getUserLikeList', this.state.user.userId)
+        context.dispatch('getUserLikeList', context.state.user.userId)
       }
     },
 
@@ -170,7 +169,7 @@ export default new Vuex.Store({
         data: res
       } = await userApi.getUserLikeList(id)
       if (res.code === ERR_OK) {
-        this.commit('setUserLikeList', res.ids)
+        context.commit('setUserLikeList', res.ids)
       }
     },
     // 选择音乐播放播放
@@ -181,12 +180,52 @@ export default new Vuex.Store({
       list,
       index
     }) {
-      let sequenceList = utils.utils.copyList(list)
-      console.log(sequenceList)
       commit('setPlaying', true)
       commit('setPlayList', list)
-      commit('setSequenceList', sequenceList)
+      commit('setSequenceList', list)
       commit('setCurrentPlayIndex', index)
+    },
+    // 删除歌曲列表
+    deleteSongList({
+      commit
+    }) {
+      commit('setPlaying', false)
+      commit('setPlayList', [])
+      commit('setSequenceList', [])
+      commit('setCurrentPlayIndex', -1)
+      commit('setPlayerFullScreen', false)
+    },
+    // 删除歌曲
+    deleteSong({
+      commit,
+      state
+    }, song) {
+      // 返回截取后的数据，因为是返回一个新的数组
+      let playlist = state.playList.slice()
+      let sequenceList = state.sequenceList.slice()
+      // 使用utils中的findIndex方法查找当前歌曲索引
+      let {
+        findIndex
+      } = util.utils
+      // 移除歌曲列表中的歌曲
+      let currentIndex = state.currentPlayIndex
+      let pIndex = findIndex(playlist, song)
+      // 移除随机列表中的歌曲
+      playlist.splice(pIndex, 1)
+      let sIndex = findIndex(sequenceList, song)
+      sequenceList.splice(sIndex, 1)
+      if (currentIndex === playlist.length) {
+        currentIndex--
+        commit('setCurrentPlayIndex', currentIndex)
+      }
+      commit('setPlayList', playlist)
+      commit('setSequenceList', sequenceList)
+      if (!playlist.length) {
+        commit('setPlaying', false) // 如果没有歌曲就停止播放
+        commit('setPlayerFullScreen', false)
+      } else {
+        commit('setPlaying', true)
+      }
     }
 
   },

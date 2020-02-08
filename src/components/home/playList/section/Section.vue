@@ -4,7 +4,7 @@
     <ul class="play-list"
         ref="list">
       <li class="play-list-item"
-          @click.stop="selectItem($event,item,index)"
+          @click="selectItem($event,item,index)"
           :class="item.id===currentSong.id ? 'active':''"
           v-for="(item,index) in playList"
           :key="item.id">
@@ -20,7 +20,7 @@
         </div>
 
         <div class="right delete"
-             @click.stop="handleDelete(index)">
+             @click.stop="handleDelete(item)">
           <div class="icon">
             <i class="iconfont icon-cha"></i>
           </div>
@@ -30,8 +30,7 @@
   </section>
 </template>
 <script>
-import 'common/js/utils.js'
-import { mapGetters, mapMutations, mapState } from 'vuex'
+import { mapGetters, mapMutations, mapState, mapActions } from 'vuex'
 export default {
   computed: {
     ...mapState(['currentPlayIndex', 'togglePlayList']),
@@ -50,8 +49,13 @@ export default {
   watch: {
     playList (newList) {
       // 如果播放列表为空就隐藏
-      if (newList.length === 0) this.setTogglePlayList(false)
-      if (this.togglePlayList) this.scrollList()
+      if (newList.length === 0) {
+        this.setTogglePlayList(false)
+      } else {
+        this.$nextTick(() => { // 获取更新后的dom,防止报错
+          this.scrollList()
+        })
+      }
     },
     togglePlayList: {
       immediate: true,
@@ -67,8 +71,10 @@ export default {
   },
   methods: {
     ...mapMutations(['setCurrentPlayIndex', 'setPlayerFullScreen', 'setTogglePlayList']),
+    ...mapActions(['deleteSong']),
     // 移动元素
     scrollList () {
+      if (this.playList.length === 0) return
       // 获取当前播放的歌曲节点
       const list = this.$refs.list
       // 首先查找当前播放歌曲在播放列表中的索引
@@ -84,28 +90,16 @@ export default {
     },
     // 选择歌曲
     selectItem (e, item, index) {
-      if (e.target.className !== 'right delete') {
-        console.log(11111)
-        // 引入vue原型上的utils
-        this.utils.playMusic(item, null, index)
-      }
+      // 引入vue原型上的utils
+      this.utils.playMusic(item, null, index)
     },
 
     // 移除歌曲
-    handleDelete (index) {
-      // 如果删除的是当前的歌曲就播放下一首
-      if (index === this.currentPlayIndex) {
-        let list = this.playList
-        list.splice(index, 1)
-        this.playList = list
-        if (index >= this.playList.length - 1) {
-          index = 0
-        } else {
-          index++
-        }
-      }
-      this.setCurrentPlayIndex(index)
+    handleDelete (song) {
+      // 移除该歌曲
+      this.deleteSong(song)
     }
+
   }
 }
 </script>

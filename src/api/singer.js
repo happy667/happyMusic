@@ -16,14 +16,14 @@ export default {
   },
   // 获取歌手单曲
   getSingerSong(id) {
-    const url = `/artists?id=${id}`
+    const url = `/artists?id=${id}&timestamp=${new Date().getTime()}`
     return request({
       url
     })
   },
   // 获取歌手专辑
   getSingerAlbum(id, offset, limit = 9) {
-    const url = `/artist/album?id=${id}&offset=${offset}&limit=${limit}`
+    const url = `/artist/album?id=${id}&offset=${offset}&limit=${limit}&timestamp=${new Date().getTime()}`
     return request({
       url
     })

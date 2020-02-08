@@ -78,7 +78,6 @@ export default {
           } else {
             this.setCurrentLyric(new Lyric(res.lrc.lyric, this.handleLyric))
           }
-          console.log(this.currentLyric)
           if (this.playing) { // 如果是播放状态
             this.currentLyric.play()
           }

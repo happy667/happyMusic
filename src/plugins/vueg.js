@@ -40,7 +40,7 @@ const options = {
     },
     'singerInfo': {
       enter: ['songSheetDisc', 'singerAlbum', 'singerInfo'],
-      leave: ['home', 'searchResult']
+      leave: ['home', 'searchResult', 'myFollow']
     },
     singerAlbum: {
       enter: ['singerInfo']
@@ -51,6 +51,9 @@ const options = {
     },
     user: {
       leave: ['home']
+    },
+    myFollow: {
+      enter: ['singerInfo']
     }
 
   },

@@ -21,7 +21,7 @@
                 <img v-lazy="item.picUrl" />
               </div>
               <div class="item-name">{{item.name}}</div>
-              <div class="item-pub-time">{{item.publishTime|convertTime}}</div>
+              <div class="item-pub-time">{{item.publishTime|convertDate}}</div>
             </li>
           </ul>
 

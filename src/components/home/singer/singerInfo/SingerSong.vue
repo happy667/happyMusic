@@ -29,7 +29,6 @@
 <script>
 import NoResult from '@/components/common/NoResult'
 import SongList from '@/components/home/song/SongList'
-import 'common/js/utils.js'
 import { mapMutations, mapGetters } from 'vuex'
 export default {
   props: {
