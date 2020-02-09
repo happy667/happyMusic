@@ -12,7 +12,12 @@
       <template v-if="songSheetDisc.picUrl">
         <img :src="songSheetDisc.picUrl">
       </template>
-
+      <!-- 收藏 -->
+      <div class="follow"
+           v-show="songSheetDisc.picUrl">
+        <follow @clickFollow="handleClickFollow"
+                :followed="followed"></follow>
+      </div>
     </div>
     <!-- loading -->
     <van-loading v-show="!songSheetDisc.songs"
@@ -31,7 +36,7 @@
 
         <!-- 播放按钮 -->
         <div class="playBtn"
-             @click="playAll">
+             @click="playAll(songSheetDisc.songs[0],0)">
           <i class="iconfont icon-bofang"></i>
         </div>
       </div>
@@ -48,6 +53,7 @@
 <script>
 import 'common/js/convert.js'
 import recommendApi from '@/api/recommend.js'
+import userApi from '@/api/user.js'
 import {
   ERR_OK
 } from '@/api/config.js'
@@ -56,20 +62,33 @@ import Singer from '@/assets/common/js/singer.js'
 import SongsList from '@/components/home/song/SongList'
 import SongSheetDetail from '@/assets/common/js/songSheetDetail.js'
 import NoResult from '@/components/common/NoResult'
-import { mapMutations, mapGetters, mapActions } from 'vuex'
+import Follow from '@/components/common/Follow'
+
+import { mapMutations, mapGetters, mapActions, mapState } from 'vuex'
 export default {
   props: {
     id: String
   },
   data () {
     return {
-      songSheetDisc: {}
+      songSheetDisc: {},
+      followed: false
     }
   },
   mounted () {
     this.getSongSheetById(this.id)
+    // 获取用户收藏的歌单
+    if (this.user) {
+      this.getUserSongSheet(this.user.userId)
+    }
+  },
+  watch: {
+    user () {
+      this.getUserSongSheet(this.user.userId)
+    }
   },
   computed: {
+    ...mapState(['user']),
     ...mapGetters(['currentSong'])
   },
   methods: {
@@ -125,17 +144,52 @@ export default {
       // 引入vue原型上的utils
       this.utils.playMusic(item, this.songSheetDisc.songs, index)
     },
+    // 获取用户收藏的歌单
+    async  getUserSongSheet (id) {
+      const {
+        data: res
+      } = await userApi.getUserSongSheet(id)
+      if (res.code === ERR_OK) {
+        let list = res.playlist
+        let id = parseInt(this.id)// 转换成字符串类型
+        let item = list.find(item => item.id === id)
+        this.followed = !!item
+      }
+    },
     // 播放所有
-    playAll () {
-      this.setSelectPlay({
-        index: 0,
-        list: this.songSheetDisc.songs
-      })
+    playAll (item, index) {
+      // 判断点击的是否是当前播放的歌曲
+      if (this.currentSong.id === item.id) {
+        this.setPlayerFullScreen(true)
+        return
+      }
+      // 引入vue原型上的utils
+      this.utils.playMusic(item, this.songSheetDisc.songs, index)
+    },
+    // 收藏歌单
+    async handleClickFollow () {
+      let follow = !this.followed
+      follow = follow ? 1 : 0// 1代表收藏，0代表不收藏
+      if (follow) { // 收藏
+        const { data: res } = await userApi.updateFollowSongSheet(this.id, follow)
+        if (res.code === ERR_OK) {
+          this.followed = true
+        }
+      } else {
+        this.utils.alertConfirm({ message: '确定不再收藏该歌单', confirmButtonText: '不再收藏' }).then(async () => {
+          const { data: res } = await userApi.updateFollowSongSheet(this.id, follow)
+          if (res.code === ERR_OK) {
+            this.followed = false
+            this.$toast('已不再收藏')
+          }
+        })
+      }
     }
   },
   components: {
     SongsList,
-    NoResult
+    NoResult,
+    Follow
   }
 }
 </script>
@@ -165,6 +219,13 @@ export default {
       left: 0;
       width: 100%;
       height: 100%;
+    }
+
+    .follow {
+      position: absolute;
+      bottom: 0.5rem;
+      left: 50%;
+      transform: translateX(-50%);
     }
   }
 

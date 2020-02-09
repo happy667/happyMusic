@@ -13,7 +13,7 @@ const options = {
       enter: ['songSheetDisc', 'SongSheetSquare', 'searchPage', 'videoInfo', 'play', 'songComment', 'singerInfo', 'user']
     },
     'songSheetDisc': {
-      leave: ['home', 'searchResult', 'singerInfo']
+      leave: ['home', 'searchResult', 'singerInfo', 'userRecommend']
     },
     'SongSheetSquare': {
       leave: ['home']

@@ -29,11 +29,13 @@
 
               </div>
               <div class="func">
-                <div class="func-item">
-                  <div class="icon">
-                    <van-icon name="like-o" />
+                <div class="func-item"
+                     @click="handleClickFollow">
+                  <div class="icon"
+                       :class="followCls">
+                    <van-icon :name="followIcon" />
                   </div>
-                  收藏
+                  {{followText}}
                 </div>
                 <div class="func-item"
                      @click="goToAlbumComment">
@@ -93,14 +95,16 @@
 import 'common/js/convert.js'
 import SongsList from '@/components/home/song/SongList'
 import singerApi from '@/api/singer.js'
+import userApi from '@/api/user.js'
 import Song from '@/assets/common/js/song.js'
 import Singer from '@/assets/common/js/singer.js'
 import NoResult from '@/components/common/NoResult'
 import SingerItem from '@/components/home/singer/SingerItem'
+
 import {
   ERR_OK
 } from '@/api/config.js'
-import { mapMutations, mapGetters } from 'vuex'
+import { mapMutations, mapGetters, mapState } from 'vuex'
 export default {
   props: {
     id: String
@@ -108,15 +112,35 @@ export default {
   data () {
     return {
       albumObj: {}, // 专辑对象
-      showSingerPopup: false// 显示歌手弹出层
+      showSingerPopup: false, // 显示歌手弹出层
+      followed: false
     }
   },
   computed: {
-    ...mapGetters(['currentSong'])
+    ...mapState(['user']),
+    ...mapGetters(['currentSong']),
+    followIcon () {
+      return this.followed ? 'like' : 'like-o'
+    },
+    followCls () {
+      return this.followed ? 'followed' : ''
+    },
+    followText () {
+      return this.followed ? '已收藏' : '收藏'
+    }
+  },
+  watch: {
+    user () {
+      this.getUserAlbum()
+    }
   },
   mounted () {
     // 获取专辑详情
     this.getAlbumInfo(this.id)
+    // 获取用户收藏的专辑
+    if (this.user) {
+      this.getUserAlbum()
+    }
   },
   methods: {
     ...mapMutations(['setPlayerFullScreen', 'setSingerCurrentIndex']),
@@ -156,6 +180,38 @@ export default {
         this.$set(this.albumObj, 'album', res.album)
       }
     },
+    // 获取用户收藏专辑
+    async getUserAlbum () {
+      const {
+        data: res
+      } = await userApi.getUserAlbum()
+      if (res.code === ERR_OK) {
+        console.log(res)
+        let list = res.data
+        let id = parseInt(this.id)// 转换成整数类型
+        let item = list.find(item => item.id === id)
+        this.followed = !!item
+      }
+    },
+    // 收藏专辑
+    async handleClickFollow () {
+      let follow = !this.followed
+      follow = follow ? 1 : 0// 1代表收藏，0代表不收藏
+      if (follow) { // 收藏
+        const { data: res } = await userApi.updateFollowAlbum(this.id, follow)
+        if (res.code === ERR_OK) {
+          this.followed = true
+        }
+      } else {
+        this.utils.alertConfirm({ message: '确定不再收藏该专辑', confirmButtonText: '不再收藏' }).then(async () => {
+          const { data: res } = await userApi.updateFollowAlbum(this.id, follow)
+          if (res.code === ERR_OK) {
+            this.followed = false
+            this.$toast('已不再收藏')
+          }
+        })
+      }
+    },
     // 选择歌手
     selectSingers () {
       const list = this.albumObj.album.albumSingersList
@@ -163,7 +219,6 @@ export default {
         this.setSingerCurrentIndex(0)
         this.$router.push(`/singerInfo/${list[0].id}`)
       } else {
-        console.log(11111111)
         this.showSingerPopup = true
         list.forEach(async item => { // 查询该歌手图片
           item.avatar = await this.getSingerImage(item.id)
@@ -303,6 +358,10 @@ export default {
 
               .icon {
                 margin-right: 0.05rem;
+
+                &.followed {
+                  color: $color-common;
+                }
               }
             }
 

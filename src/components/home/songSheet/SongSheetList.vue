@@ -2,7 +2,7 @@
   <div class="songs-sheet-list-container">
     <slot></slot>
 
-    <template v-if="list.length!==0">
+    <template v-if="list&&list.length!==0">
       <ul class="songs-sheet-list">
         <li @click="selectItem(item)"
             class="songs-sheet-list-item"
@@ -12,7 +12,7 @@
         </li>
       </ul>
     </template>
-    <template v-else>
+    <template v-if="list&&list.length===0">
       <no-result text="暂无相关歌单"></no-result>
     </template>
   </div>

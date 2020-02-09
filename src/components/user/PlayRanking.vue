@@ -13,7 +13,7 @@
               @change="handleChange"
               swipeable>
       <van-tab title="最近一周">
-        <song-list :list="weekendSongList"
+        <song-list  :list="weekendSongList"
                    :loading="loading" />
       </van-tab>
       <van-tab title="所有时间">

@@ -23,7 +23,7 @@ export default {
       return this.followed ? 'followed' : ''
     },
     text () {
-      return this.followed ? '已关注' : '关注'
+      return this.followed ? '已收藏' : '收藏'
     },
     icon () {
       return this.followed ? 'success' : 'plus'
@@ -43,9 +43,9 @@ export default {
 .follow-container {
   display: flex;
   align-items: center;
-  padding: 0.15rem 0.2rem;
+  padding: 0.2rem 0.3rem;
   border-radius: 0.5rem;
-  font-size: $font-size-smaller;
+  font-size: $font-size-smaller-x;
   background: $color-common;
   color: #fff;
 
@@ -55,7 +55,7 @@ export default {
 
   &.followed {
     background: #e3e3e3;
-    opacity :0.9;
+    opacity: 0.9;
   }
 }
 </style>

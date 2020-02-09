@@ -72,10 +72,10 @@ export default {
       this.getUserDetail(newId)
     }
   },
-  created () {
+  mounted () {
+    this.setSingerCurrentIndex(0)
     // 根据歌手id获取歌手单曲
     this.handleTabsChange(this.currentIndex)
-    this.setSingerCurrentIndex(0)
   },
   beforeRouteEnter: (to, from, next) => {
     next(vm => {

@@ -2,7 +2,7 @@
   <div class="my-follow-container">
     <!-- 头部导航栏 -->
     <van-sticky>
-      <van-nav-bar title="我的关注"
+      <van-nav-bar title="我的收藏"
                    left-arrow
                    @click-left="routerBack" />
     </van-sticky>
@@ -21,7 +21,7 @@
                    :key="item.id"></singer-item>
     </div>
     <no-result v-if="singerSubList&&singerSubList.length===0"
-               text="还没有关注的歌手"></no-result>
+               text="还没有收藏的歌手"></no-result>
   </div>
 </template>
 <script>
@@ -45,7 +45,7 @@ export default {
     ...mapState(['user'])
   },
   mounted () {
-    // 获取用户关注的歌手
+    // 获取用户收藏的歌手
     this.getSingerSubList()
   },
   methods: {
@@ -53,7 +53,7 @@ export default {
     routerBack () {
       this.$router.back()
     },
-    // 获取用户关注的歌手
+    // 获取用户收藏的歌手
     async getSingerSubList () {
       this.loading = true
       const {
@@ -81,13 +81,13 @@ export default {
     },
     handleClickFollow (singer) {
       let follow = !singer.followed
-      follow = follow ? 1 : 0// 1代表关注，0代表不关注
-      this.utils.alertConfirm({ message: '确定不再关注该用户', confirmButtonText: '不再关注' }).then(async () => {
+      follow = follow ? 1 : 0// 1代表收藏，0代表不收藏
+      this.utils.alertConfirm({ message: '确定不再收藏该用户', confirmButtonText: '不再收藏' }).then(async () => {
         const { data: res } = await userApi.updateFollow(singer.id, follow)
         if (res.code === ERR_OK) { // 这里返回响应状态码是201
           // 移除该歌手
           this.utils.removeItem(this.singerSubList, singer)
-          this.$toast('已不再关注')
+          this.$toast('已不再收藏')
         }
       })
     }

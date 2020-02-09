@@ -6,8 +6,8 @@
     </div>
     <div class="songs-desc">{{songSheet.name}}</div>
     <div class="songs-playCount"
-         v-if="songSheet.playCount">
-      <i class="iconfont icon-bofang"></i>{{songSheet.playCount|convertCount}}
+         v-if="playCount">
+      <i class="iconfont icon-bofang"></i>{{playCount|convertCount}}
     </div>
   </div>
 </template>
@@ -20,6 +20,9 @@ export default {
   computed: {
     picUrl () {
       return this.songSheet.picUrl ? this.songSheet.picUrl : this.songSheet.coverImgUrl
+    },
+    playCount () {
+      return this.songSheet.playCount ? this.songSheet.playCount : this.songSheet.playcount
     }
   }
 }

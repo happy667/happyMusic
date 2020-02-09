@@ -39,7 +39,8 @@ export default new Vuex.Store({
     currentLineNum: 0, // 当前高亮的歌词行
     currentPlayLyric: '', // 当前播放的歌词
     userLikeList: null, // 用户喜欢列表
-    removeLikeSong: null // 移除的喜欢歌曲
+    removeLikeSong: null, // 移除的喜欢歌曲
+    userRecommendIndex: 0 // 用户每日推荐页当前索引
   },
   mutations: {
     // 设置登录用户
@@ -50,6 +51,7 @@ export default new Vuex.Store({
     setHomeCurrentIndex(state, index) {
       state.homeCurrentIndex = index
     },
+
     // 设置字母表滚动索引
     setScrollIndex(state, index) {
       state.scrollIndex = index
@@ -149,6 +151,10 @@ export default new Vuex.Store({
     // 设置移除的喜欢歌曲
     setRemoveLikeSong(state, song) {
       state.removeLikeSong = song
+    },
+    // 设置用户每日推荐页当前索引
+    setUserRecommendIndex(state, index) {
+      state.userRecommendIndex = index
     }
   },
   actions: {

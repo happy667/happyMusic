@@ -21,6 +21,8 @@ const User = () => import('../views/User')
 const MyFollow = () => import('../components/user/MyFollow')
 const MyLike = () => import('../components/user/MyLike')
 const PlayRanking = () => import('../components/user/PlayRanking')
+const UserRecommend = () => import('../components/user/Recommend')
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -169,6 +171,12 @@ const routes = [
     path: '/user/playRanking',
     name: 'playRanking',
     component: PlayRanking
+  },
+  // 用户推荐
+  {
+    path: '/user/recommend',
+    name: 'userRecommend',
+    component: UserRecommend
   }
 
 ]

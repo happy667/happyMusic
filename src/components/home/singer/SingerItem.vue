@@ -14,7 +14,7 @@
       <div class="right"
            v-if="showFollow">
 
-        <!-- 关注 -->
+        <!-- 收藏 -->
         <follow @clickFollow="handleClickFollow"
                 :followed="singer.followed"></follow>
       </div>
@@ -44,7 +44,7 @@ export default {
     selectItem (item) {
       this.$emit('select', item)
     },
-    // 点击关注
+    // 点击收藏
     handleClickFollow () {
       this.$emit('clickFollow', this.singer)
     }
@@ -77,9 +77,6 @@ export default {
         line-height: 0.7rem;
         font-size: $font-size-smaller;
       }
-    }
-
-    .right {
     }
   }
 }

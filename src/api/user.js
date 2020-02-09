@@ -48,6 +48,48 @@ export default {
     return request({
       url
     })
+  },
+  // 获取用户每日推荐歌曲
+  getUserRecommendSong() {
+    const url = `/recommend/songs`
+    return request({
+      url
+    })
+  },
+  // 获取用户每日推荐歌单
+  getUserRecommendSongSheet() {
+    const url = `/recommend/resource`
+    return request({
+      url
+    })
+  },
+  // 获取用户收藏的歌单
+  getUserSongSheet(uid) {
+    const url = `/user/playlist?uid=${uid}&timestamp=${new Date().getTime()}`
+    return request({
+      url
+    })
+  },
+  // 收藏/取消关注歌单
+  updateFollowSongSheet(id, t) {
+    const url = `/playlist/subscribe?t=${t}&id=${id}&timestamp=${new Date().getTime()}`
+    return request({
+      url
+    })
+  },
+  // 获取用户收藏的专辑
+  getUserAlbum() {
+    const url = `/album/sublist?timestamp=${new Date().getTime()}`
+    return request({
+      url
+    })
+  },
+  // 收藏/取消关注专辑
+  updateFollowAlbum(id, t) {
+    const url = `/album/sub?t=${t}&id=${id}&timestamp=${new Date().getTime()}`
+    return request({
+      url
+    })
   }
 
 }
