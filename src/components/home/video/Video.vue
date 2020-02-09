@@ -285,7 +285,7 @@ export default {
       // 暂停上一次正在播放的video
       this.pauseOldVideo(this.oldVideo)
       if (this !== this.oldVideo) {
-        // this.setOldVideo(this)
+        this.setOldVideo(this)
       }
       if (this.isFirstPlay) {
         console.log('first')

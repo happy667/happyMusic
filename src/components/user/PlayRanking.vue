@@ -6,8 +6,22 @@
                    left-arrow
                    @click-left="routerBack" />
     </van-sticky>
-    <song-list :list="songList"
-               :loading="loading" />
+    <van-tabs title-active-color="#FD4979"
+              color="#FD4979"
+              animated
+              v-model="index"
+              @change="handleChange"
+              swipeable>
+      <van-tab title="最近一周">
+        <song-list :list="weekendSongList"
+                   :loading="loading" />
+      </van-tab>
+      <van-tab title="所有时间">
+        <song-list :list="allSongList"
+                   :loading="loading" />
+      </van-tab>
+    </van-tabs>
+
   </div>
 </template>
 <script>
@@ -23,8 +37,10 @@ import { mapState } from 'vuex'
 export default {
   data () {
     return {
-      songList: null, // 歌曲列表
-      loading: false
+      weekendSongList: null, // 最近一周
+      allSongList: null, // 所有时间
+      loading: false,
+      index: 0
     }
   },
   computed: {
@@ -36,8 +52,12 @@ export default {
     }
   },
   watch: {
-    user () {
-      this.getUserPlayRecord(this.user.userId)
+    async user () {
+      if (this.index === 0) {
+        this.weekendSongList = await this.getUserPlayRecord(this.user.userId, 1)
+      } else {
+        this.allSongList = await this.getUserPlayRecord(this.user.userId, 0)
+      }
     }
   },
   methods: {
@@ -45,14 +65,17 @@ export default {
     routerBack () {
       this.$router.back()
     },
-    async getUserPlayRecord (id) {
+    async getUserPlayRecord (id, type) {
+      console.log(type)
       this.loading = true
       const {
         data: res
-      } = await userApi.getUserPlayRecord(id)
+      } = await userApi.getUserPlayRecord(id, type)
+      let data = type === 0 ? 'allData' : 'weekData'
       if (res.code === ERR_OK) {
         let songList = []
-        res.weekData.forEach((item) => { // 循环数组对象对每个数据进行处理 返回需要得数据
+        console.log(data)
+        res[data].forEach((item) => { // 循环数组对象对每个数据进行处理 返回需要得数据
           let singers = item.song.ar.map(item => item.name).join('/')
           let singersList = []
           // 处理歌手
@@ -64,14 +87,30 @@ export default {
           })
           songList.push(new Song({ id: item.song.id, name: item.song.name, singers, singersList, picUrl: item.song.al.picUrl, playCount: item.playCount }))
         })
-        this.songList = songList
+        console.log(songList)
         this.loading = false
+        return songList
+      }
+    },
+    async handleChange (name) {
+      if (name === 0) { // 获取一周听歌排行
+        if (!this.weekendSongList) {
+          this.weekendSongList = await this.getUserPlayRecord(this.user.userId, 1)
+        }
+      } else {
+        if (!this.allSongList) {
+          this.allSongList = await this.getUserPlayRecord(this.user.userId, 0)
+        }
       }
     }
   },
-  mounted () {
+  async mounted () {
     if (this.user) {
-      this.getUserPlayRecord(this.user.userId)
+      if (this.index === 0) {
+        this.weekendSongList = await this.getUserPlayRecord(this.user.userId, 1)
+      } else {
+        this.allSongList = await this.getUserPlayRecord(this.user.userId, 0)
+      }
     }
   },
   components: {
@@ -82,8 +121,9 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.play-ranking-container>>>.singer-song-container {
+.play-ranking-container>>>.song-list-container {
   padding-top: 0.3rem;
+  min-height: calc(100vh - 1.22667rem - 1.22667rem);
 }
 
 .play-ranking-container {

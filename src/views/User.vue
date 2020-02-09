@@ -5,16 +5,21 @@
            @click="routerBack">
         <van-icon name="arrow-left" />
       </div>
-      <div class="avatar"
-           v-if="user">
-        <img :src="user.avatarUrl">
+      <div class="avatar">
+        <div class="image"
+             v-if="user">
+          <img :src="user.avatarUrl">
+        </div>
+        <div class="icon" v-else>
+          <van-icon name="user-o" />
+        </div>
       </div>
       <div class="nikeName"
            v-if="user">
         {{user.nickname}}
       </div>
       <div class="no-login"
-           v-if="!user">
+           v-else>
         <van-button plain
                     :to="{name:'login'}"
                     size="small"
@@ -144,16 +149,30 @@ export default {
       background: #f4f4f4;
       border-radius: 50%;
 
-      img {
+      .image, .icon {
         position: absolute;
         left: 0;
         top: 0;
         right: 0;
         bottom: 0;
-        display: block;
-        width: 100%;
-        height: 100%;
+
+        img {
+          display: block;
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+        }
+      }
+
+      .icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        color: $color-common;
         border-radius: 50%;
+        border: 1px solid $color-common;
+        background: #fff;
       }
     }
 

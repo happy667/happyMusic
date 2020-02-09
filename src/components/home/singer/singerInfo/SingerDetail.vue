@@ -44,8 +44,8 @@ export default {
   @import '~common/stylus/variable';
 
   padding: 0 0.4rem 0.4rem 0.4rem;
-  min-height: calc(100vh - (1.22667rem + 6rem + 1.18rem + 0.4rem));
-
+  min-height:100vh;
+  box-sizing :border-box;
   .title {
     margin-bottom: 0.2rem;
     font-size: $font-size-smaller;

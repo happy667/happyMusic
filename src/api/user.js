@@ -36,15 +36,15 @@ export default {
     })
   },
   // 获取用户播放记录
-  getUserPlayRecord(uid) {
-    const url = `/user/record?uid=${uid}&type=1`
+  getUserPlayRecord(uid, type) {
+    const url = `/user/record?uid=${uid}&type=${type}`
     return request({
       url
     })
   },
   // 获取用户信息 , 歌单，收藏，mv, dj 数量
   getUserCount() {
-    const url = `/user/subcount`
+    const url = `/user/subcount?timestamp=${new Date().getTime()}`
     return request({
       url
     })

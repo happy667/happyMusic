@@ -1,5 +1,5 @@
 <template>
-  <div class="singer-song-container">
+  <div class="song-list-container">
     <!-- loading -->
     <van-loading v-if="loading"
                  size="24px"
@@ -67,8 +67,9 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.singer-song-container {
+.song-list-container {
   min-height: calc(100vh - (1.22667rem + 6rem + 1.18rem + 0.4rem));
+  box-sizing: border-box;
 
   .play {
     display: flex;
