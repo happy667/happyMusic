@@ -12,7 +12,7 @@
         <img :src="singer.picUrl">
       </div>
       <div class="singer-synopsis">
-        <!-- 关注 -->
+        <!-- 收藏 -->
         <div class="left">
           <!-- 歌手名称 -->
           <div class="singer-name">
@@ -41,6 +41,7 @@ import {
   ERR_OK
 } from '@/api/config.js'
 import Follow from '@/components/common/Follow'
+import { mapState } from 'vuex'
 export default {
   props: {
     singer: Object
@@ -49,31 +50,48 @@ export default {
     Follow
   },
   computed: {
+    ...mapState(['user']),
     followeds () {
       return this.singer.followeds ? this.singer.followeds : 0
     }
   },
   methods: {
-    async handleClickFollow () {
+    // 选中歌曲喜欢
+    handleClickFollow () {
+      if (this.user) { // 说明已经登录
+        this.follow() // 收藏/取消收藏歌手
+      } else { // 弹窗提示去登录
+        this.utils.alertLogin(this.$router.currentRoute.fullPath)
+      }
+    },
+    // 收藏/取消收藏歌手
+    follow () {
       let singer = this.singer
       let follow = !singer.followed
-      follow = follow ? 1 : 0// 1代表关注，0代表不关注
+      follow = follow ? 1 : 0// 1代表收藏，0代表不收藏
       if (!follow) {
-        this.utils.alertConfirm({ message: '确定不再关注该用户', confirmButtonText: '不再关注' }).then(async () => {
-          const { data: res } = await userApi.updateFollow(singer.id, follow)
-          if (res.code === ERR_OK) {
-            this.$set(singer, 'followed', false)
-            this.$toast('已不再关注')
-          }
-        })
+        this.utils.alertConfirm({ message: '确定不再收藏该歌手', confirmButtonText: '不再收藏' }).then(() => {
+          userApi.updateFollow(singer.id, follow).then(res => {
+            if (res.data.code === ERR_OK) {
+              this.$set(singer, 'followed', false)
+              this.$toast('已不再收藏')
+            }
+          }).catch(err => {
+            this.$toast(err.data.message)
+          })
+        }).catch(() => { })
       } else {
-        const { data: res } = await userApi.updateFollow(singer.id, follow)
-        if (res.code === ERR_OK) {
-          this.$set(singer, 'followed', true)
-        }
+        userApi.updateFollow(singer.id, follow).then(res => {
+          if (res.data.code === ERR_OK) {
+            this.$set(singer, 'followed', true)
+          }
+        }).catch(err => {
+          this.$toast(err.data.message)
+        })
       }
     }
   }
+
 }
 </script>
 <style lang="stylus" scoped>
@@ -122,7 +140,7 @@ export default {
         height: 0.7rem;
         line-height: 0.7rem;
         font-size: $font-size-smaller;
-        color:#d4d4d4;
+        color: #d4d4d4;
       }
     }
 

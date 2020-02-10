@@ -101,19 +101,23 @@ export default {
       }
     },
     handleChange (index) {
-      if (index === 0) { // 推荐歌曲
-        if (!this.recommendSongList) {
-          this.getRecommendSong()
-        }
-      } else {
-        if (!this.recommendSongSheet) {
-          this.getRecommendSongSheet()
+      if (this.user) {
+        if (index === 0) { // 推荐歌曲
+          if (!this.recommendSongList) {
+            this.getRecommendSong()
+          }
+        } else {
+          if (!this.recommendSongSheet) {
+            this.getRecommendSongSheet()
+          }
         }
       }
     }
   },
   mounted () {
-    this.handleChange(this.index)
+    if (this.user) {
+      this.handleChange(this.index)
+    }
   },
   components: {
     SongList,

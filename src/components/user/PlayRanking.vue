@@ -13,7 +13,7 @@
               @change="handleChange"
               swipeable>
       <van-tab title="最近一周">
-        <song-list  :list="weekendSongList"
+        <song-list :list="weekendSongList"
                    :loading="loading" />
       </van-tab>
       <van-tab title="所有时间">
@@ -53,10 +53,12 @@ export default {
   },
   watch: {
     async user () {
-      if (this.index === 0) {
-        this.weekendSongList = await this.getUserPlayRecord(this.user.userId, 1)
-      } else {
-        this.allSongList = await this.getUserPlayRecord(this.user.userId, 0)
+      if (this.user) {
+        if (this.index === 0) {
+          this.weekendSongList = await this.getUserPlayRecord(this.user.userId, 1)
+        } else {
+          this.allSongList = await this.getUserPlayRecord(this.user.userId, 0)
+        }
       }
     }
   },

@@ -14,5 +14,12 @@ export default {
     return request({
       url
     })
+  },
+  // 退出登录
+  logout() {
+    const url = `/logout?timestamp=${new Date().getTime()}`
+    return request({
+      url
+    })
   }
 }

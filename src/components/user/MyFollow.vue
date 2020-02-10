@@ -45,8 +45,10 @@ export default {
     ...mapState(['user'])
   },
   mounted () {
-    // 获取用户收藏的歌手
-    this.getSingerSubList()
+    if (this.user) {
+      // 获取用户收藏的歌手
+      this.getSingerSubList()
+    }
   },
   methods: {
     // 返回上一个路由

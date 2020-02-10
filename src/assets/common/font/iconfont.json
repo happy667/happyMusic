@@ -34,6 +34,13 @@
       "unicode_decimal": 58979
     },
     {
+      "icon_id": "1348254",
+      "name": "退出",
+      "font_class": "tuichu",
+      "unicode": "e616",
+      "unicode_decimal": 58902
+    },
+    {
       "icon_id": "1629916",
       "name": "爱心",
       "font_class": "icon-test",

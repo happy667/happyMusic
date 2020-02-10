@@ -154,16 +154,14 @@ export default new Vuex.Store({
   },
   actions: {
     // 获取登录用户
-    async getLoginUser(context) {
-      const {
-        data: res
-      } = await loginApi.loginStatus()
-      if (res.code === ERR_OK) {
-        context.commit('setLoginUser', res.profile)
-        context.dispatch('getUserLikeList', context.state.user.userId)
-      }
+    getLoginUser() {
+      return loginApi.loginStatus()
     },
-
+    // 设置登录信息
+    setLoginInfo(context, user) {
+      context.commit('setLoginUser', user)
+      context.dispatch('getUserLikeList', user.userId)
+    },
     // 获取用户喜欢列表
     async getUserLikeList(context, id) {
       const {

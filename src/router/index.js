@@ -52,6 +52,7 @@ const routes = [
         path: 'login',
         name: 'login',
         component: Login
+
       },
 
       // 跳转到注册页面
@@ -93,11 +94,13 @@ const routes = [
     component: Search,
     redirect: 'searchPage',
     children: [
+      // 搜索页面
       {
         path: '/search/searchPage',
         name: 'searchPage',
         component: SearchBox
       },
+      // 搜索结果
       {
         path: '/search/searchResult',
         name: 'searchResult',
@@ -158,25 +161,38 @@ const routes = [
   {
     path: '/user/myFollow',
     name: 'myFollow',
-    component: MyFollow
+    component: MyFollow,
+    meta: {
+      requireLogin: true // 当前路由需要校验，不需要就不用写
+    }
   },
   // 我的最爱
   {
     path: '/user/myLike',
     name: 'myLike',
-    component: MyLike
+    component: MyLike,
+    meta: {
+      requireLogin: true // 当前路由需要校验，不需要就不用写
+    }
   },
   // 听歌排行
   {
     path: '/user/playRanking',
     name: 'playRanking',
-    component: PlayRanking
+    component: PlayRanking,
+    meta: {
+      requireLogin: true // 当前路由需要校验，不需要就不用写
+    }
+
   },
   // 用户推荐
   {
     path: '/user/recommend',
     name: 'userRecommend',
-    component: UserRecommend
+    component: UserRecommend,
+    meta: {
+      requireLogin: true // 当前路由需要校验，不需要就不用写
+    }
   }
 
 ]
@@ -192,6 +208,29 @@ const router = new VueRouter({
         y: 0
       }
     }
+  }
+
+})
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requireLogin)) { // 判断该路由是否需要登录权限
+    let utils = Vue.prototype.utils
+    if (utils.isLogin()) { // 判断是否登录
+      next()
+    } else {
+      utils.alertConfirm({ // 未登录跳转到登录页面
+        message: '您还没有登录哦',
+        confirmButtonText: '去登陆'
+      }).then(() => {
+        next({
+          name: 'login',
+          query: {
+            redirect: to.fullPath // 未登录则跳转到登陆界面，query:{ Rurl: to.fullPath}表示把当前路由信息传递过去方便登录后跳转回来；
+          }
+        })
+      }).catch(() => {})
+    }
+  } else {
+    next()
   }
 })
 export default router

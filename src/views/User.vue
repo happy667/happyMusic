@@ -30,7 +30,14 @@
                     type="info"
                     color="#fd4979">未登录</van-button>
       </div>
-
+      <div class="logout"
+           v-if="user">
+        <div class="icon">
+          <i class="iconfont icon-tuichu"></i>
+        </div>
+        <div class="text"
+             @click="logout">退出登录</div>
+      </div>
     </header>
     <section>
       <div class="my-list">
@@ -102,7 +109,7 @@
           </template>
         </div>
       </template>
-      <template v-if="!userSongSheet||!userAlbum">
+      <template v-if="load">
         <van-loading size="24px"
                      color="#FD4979"
                      class="load"
@@ -117,10 +124,11 @@ import NoResult from '@/components/common/NoResult'
 import AlbumList from '@/components/home/singer/albumList/AlbumList'
 import SongSheetMiniList from '@/components/home/songSheet/songSheetMini/SongSheetMiniList'
 import userApi from '@/api/user.js'
+import loginApi from '@/api/login.js'
 import {
   ERR_OK
 } from '@/api/config.js'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 export default {
   data () {
     return {
@@ -148,27 +156,47 @@ export default {
     },
     albumCount () {
       return this.userAlbum ? this.userAlbum.length : 0
+    },
+    load () {
+      if (this.user) { // 判断是否登录
+        if (!this.userSongSheet || !this.userAlbum) { // 判断是否加载完收藏专辑和歌单
+          return true
+        } else {
+          return false
+        }
+      } else {
+        return false
+      }
     }
   },
   watch: {
     user () {
-      // 获取用户收藏的歌单
-      this.getUserSongSheet(this.user.userId)
+      if (this.user) {
+        // 获取用户专辑歌单数量
+        this.getUserCount()
+        // 获取用户专辑
+        this.getUserAlbum()
+        // 获取用户收藏的歌单
+        this.getUserSongSheet(this.user.userId)
+      }
     }
   },
   mounted () {
-    this.getUserCount()
-    // 获取用户专辑
-    this.getUserAlbum()
     if (this.user) {
+      // 获取用户专辑歌单数量
+      this.getUserCount()
+      // 获取用户专辑
+      this.getUserAlbum()
       // 获取用户收藏的歌单
       this.getUserSongSheet(this.user.userId)
     }
   },
+  inject: ['reload'],
   methods: {
+    ...mapMutations(['setLoginUser', 'setUserLikeList']),
     // 返回上一个路由
     routerBack () {
-      this.$router.back()
+      this.$router.push('/home')
     },
     // 选择专辑进入专辑详情
     selectItem (item) {
@@ -200,6 +228,19 @@ export default {
       if (res.code === ERR_OK) {
         this.userAlbum = res.data
       }
+    },
+    // 退出登录
+    logout () {
+      this.utils.alertConfirm({ message: '确定要退出登录吗', confirmButtonText: '退出' }).then(() => {
+        loginApi.logout().then(res => {
+          if (res.data.code === ERR_OK) {
+            // 清空用户所有信息
+            this.setLoginUser(null)
+            this.setUserLikeList(null)
+            this.reload()// 刷新页面
+          }
+        })
+      }).catch(() => { })
     }
   },
   components: {
@@ -266,6 +307,26 @@ export default {
       color: #fff;
       font-weight: bold;
       font-size: $font-size-large;
+    }
+
+    .logout {
+      position: absolute;
+      right: 0.2rem;
+      top: 0.25rem;
+      height: 1rem;
+      line-height: 1rem;
+      color: #fff;
+      display: flex;
+
+      .icon {
+        .iconfont {
+          font-size: $font-size-small;
+        }
+      }
+
+      .text {
+        font-size: $font-size-smaller;
+      }
     }
 
     .back {

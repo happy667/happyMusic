@@ -84,7 +84,9 @@ export default {
   },
   watch: {
     user () {
-      this.getUserSongSheet(this.user.userId)
+      if (this.user) {
+        this.getUserSongSheet(this.user.userId)
+      }
     }
   },
   computed: {
@@ -167,22 +169,36 @@ export default {
       this.utils.playMusic(item, this.songSheetDisc.songs, index)
     },
     // 收藏歌单
-    async handleClickFollow () {
+    handleClickFollow () {
+      if (this.user) { // 说明已经登录
+        this.follow()
+      } else {
+        this.utils.alertLogin(this.$router.currentRoute.fullPath)
+      }
+    },
+
+    async follow () {
       let follow = !this.followed
       follow = follow ? 1 : 0// 1代表收藏，0代表不收藏
       if (follow) { // 收藏
-        const { data: res } = await userApi.updateFollowSongSheet(this.id, follow)
-        if (res.code === ERR_OK) {
-          this.followed = true
-        }
+        userApi.updateFollowSongSheet(this.id, follow).then(res => {
+          if (res.data.code === ERR_OK) {
+            this.followed = true
+          }
+        }).catch(err => {
+          this.$toast(err.data.message)
+        })
       } else {
         this.utils.alertConfirm({ message: '确定不再收藏该歌单', confirmButtonText: '不再收藏' }).then(async () => {
-          const { data: res } = await userApi.updateFollowSongSheet(this.id, follow)
-          if (res.code === ERR_OK) {
-            this.followed = false
-            this.$toast('已不再收藏')
-          }
-        })
+          userApi.updateFollowSongSheet(this.id, follow).then(res => {
+            if (res.data.code === ERR_OK) {
+              this.followed = false
+              this.$toast('已不再收藏')
+            }
+          }).catch(err => {
+            this.$toast(err.data.message)
+          })
+        }).catch(() => { })
       }
     }
   },

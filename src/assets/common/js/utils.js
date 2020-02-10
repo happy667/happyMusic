@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import router from '@/router/index.js'
 import store from '@/store/index.js'
 import songApi from '@/api/song.js'
 const utils = {
@@ -99,6 +100,29 @@ const utils = {
       confirmButtonText,
       width: '265px'
     })
+  },
+  isLogin() {
+    if (store.state.user) {
+      return true
+    } else {
+      return false
+    }
+  },
+  // 弹出跳转登录页面对话框
+  alertLogin(redirectPath) {
+    utils.alertConfirm({ // 未登录跳转到登录页面
+      message: '您还没有登录哦',
+      confirmButtonText: '去登陆'
+    }).then(() => {
+      // 未登录则跳转到登陆界面
+      console.dir(router)
+      router.push({
+        name: 'login',
+        query: {
+          redirect: redirectPath
+        }
+      })
+    }).catch(() => {})
   }
 }
 export default {

@@ -21,11 +21,15 @@ export default {
     }
   },
   mounted () {
-    // 获取登录状态
-    this.getLoginUser()
+    if (!this.user) {
+      // 获取登录状态
+      this.getLoginUser().then(res => {
+        this.setLoginInfo(res.data.profile)
+      }).catch(() => { })
+    }
   },
   methods: {
-    ...mapActions(['getLoginUser']),
+    ...mapActions(['getLoginUser', 'setLoginInfo']),
     reload () {
       this.isRouterAlive = false
       this.$nextTick(() => {

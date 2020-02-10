@@ -193,8 +193,16 @@ export default {
         this.followed = !!item
       }
     },
-    // 收藏专辑
-    async handleClickFollow () {
+
+    handleClickFollow () {
+      if (this.user) { // 说明已经登录
+        this.follow() // 收藏/取消收藏专辑
+      } else { // 弹窗提示去登录
+        this.utils.alertLogin(this.$router.currentRoute.fullPath)
+      }
+    },
+    // 收藏/取消收藏专辑
+    follow () {
       let follow = !this.followed
       follow = follow ? 1 : 0// 1代表收藏，0代表不收藏
       if (follow) { // 收藏
@@ -215,7 +223,7 @@ export default {
           }).catch(err => {
             this.$toast(err.data.message)
           })
-        }).catch()
+        }).catch(() => { })
       }
     },
     // 选择歌手

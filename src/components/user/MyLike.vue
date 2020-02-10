@@ -33,7 +33,9 @@ export default {
   },
   watch: {
     userLikeList () {
-      this.getSongDetail()
+      if (this.user) {
+        this.getSongDetail()
+      }
     }
   },
   methods: {
@@ -44,7 +46,6 @@ export default {
     },
     handleNoLike (song) {
       // 移除歌曲
-      console.log(123)
       this.utils.removeItem(this.songList, song)
     },
     // 获取歌曲详情

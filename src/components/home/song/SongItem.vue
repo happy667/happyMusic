@@ -87,13 +87,10 @@ export default {
     // 选中歌曲喜欢
     selectItemLove () {
       let song = this.song
-      // 判断是否登录
-      if (!this.user) { // 弹窗提示去登录
-        this.utils.alertConfirm({ message: '您还没有登录哦', confirmButtonText: '去登陆' }).then(() => {
-          this.$router.push({ name: 'login' })
-        })
-      } else { // 添加或取消喜欢音乐
-        this.likeMusic(song)
+      if (this.user) { // 说明已经登录
+        this.likeMusic(song)// 添加或取消喜欢音乐
+      } else { // 弹窗提示去登录
+        this.utils.alertLogin(this.$router.currentRoute.fullPath)
       }
     },
     // 更新歌曲状态
@@ -105,7 +102,6 @@ export default {
       }
     },
 
-    // 喜欢音乐
     likeMusic (song) {
       let like = !song.isLike
       if (like) { // 喜欢
@@ -126,9 +122,10 @@ export default {
           }).catch(err => {
             this.$toast(err.data.message)
           })
-        }).catch()
+        }).catch(() => { })
       }
     }
+
   }
 }
 </script>
