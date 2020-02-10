@@ -5,6 +5,7 @@
            @click="routerBack">
         <van-icon name="arrow-left" />
       </div>
+      <!-- 头像 -->
       <div class="avatar">
         <div class="image"
              v-if="user">
@@ -15,10 +16,12 @@
           <van-icon name="user-o" />
         </div>
       </div>
+      <!-- 昵称 -->
       <div class="nikeName"
            v-if="user">
         {{user.nickname}}
       </div>
+
       <div class="no-login"
            v-else>
         <van-button plain
@@ -27,6 +30,7 @@
                     type="info"
                     color="#fd4979">未登录</van-button>
       </div>
+
     </header>
     <section>
       <div class="my-list">
@@ -98,7 +102,7 @@
           </template>
         </div>
       </template>
-      <template v-if="!userSongSheet&&!userAlbum">
+      <template v-if="!userSongSheet||!userAlbum">
         <van-loading size="24px"
                      color="#FD4979"
                      class="load"

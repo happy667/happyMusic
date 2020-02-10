@@ -17,7 +17,8 @@
         </div>
       </div>
       <!-- 歌曲列表 -->
-      <song-list @select="handleSelect"
+      <song-list @noLike="handleNoLike"
+                 @select="handleSelect"
                  :showImage="true"
                  :songsList="list" />
     </template>
@@ -56,6 +57,9 @@ export default {
       }
       // 引入vue原型上的utils
       this.utils.playMusic(item, this.list, index)
+    },
+    handleNoLike (song) {
+      this.$emit('noLike', song)
     }
   },
   components: {

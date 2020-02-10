@@ -49,6 +49,7 @@ export default {
     width: 1.8rem;
     padding-bottom: 1.5rem;
     background: $color-common-b;
+    border-radius: 0.2rem;
 
     img {
       position: absolute;
@@ -59,7 +60,7 @@ export default {
       display: block;
       width: 100%;
       height: 100%;
-      border-radius: 0.1rem;
+      border-radius: 0.2rem;
     }
 
     .play-num {
@@ -72,19 +73,23 @@ export default {
 
   .info {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 
     .title {
-      width: 6rem;
-      margin-bottom: 0.2rem;
       line-height: 0.5rem;
       font-weight: bold;
       no-wrap2();
     }
 
     .bottom {
+      max-width: 6rem;
       display: flex;
       color: #999;
-      line-height: 0.5rem;
+      height: 0.6rem;
+      line-height: 0.6rem;
+      no-wrap();
 
       .number {
         margin-right: 0.3rem;

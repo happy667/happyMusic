@@ -6,7 +6,8 @@
           v-for="(item,index) in songsList"
           @click="selectItem(item,index)"
           :key="item.id">
-        <song-item :showImage="showImage"
+        <song-item @noLike="handleNoLike"
+                   :showImage="showImage"
                    :song="item"
                    :top="index<3&&rank"
                    :index="index+1"></song-item>
@@ -34,6 +35,9 @@ export default {
     // 选择歌曲
     selectItem (song, index) {
       this.$emit('select', song, index)
+    },
+    handleNoLike (song) {
+      this.$emit('noLike', song)
     }
   },
   components: {

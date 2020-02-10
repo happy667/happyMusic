@@ -6,7 +6,8 @@
                    left-arrow
                    @click-left="routerBack" />
     </van-sticky>
-    <song-list :list="songList"
+    <song-list @noLike="handleNoLike"
+               :list="songList"
                :loading="loading" />
   </div>
 </template>
@@ -28,16 +29,9 @@ export default {
     }
   },
   computed: {
-    ...mapState(['user', 'userLikeList', 'removeLikeSong'])
+    ...mapState(['user', 'userLikeList'])
   },
   watch: {
-    removeLikeSong (newSong) {
-      if (!newSong.isLike) { // 从我喜欢列表中移除该歌曲
-        // 移除歌曲
-        this.utils.removeItem(this.userLikeList, newSong)
-        this.removeSong(newSong)
-      }
-    },
     userLikeList () {
       this.getSongDetail()
     }
@@ -48,7 +42,11 @@ export default {
     routerBack () {
       this.$router.back()
     },
-
+    handleNoLike (song) {
+      // 移除歌曲
+      console.log(123)
+      this.utils.removeItem(this.songList, song)
+    },
     // 获取歌曲详情
     async getSongDetail () {
       this.loading = true
@@ -73,7 +71,8 @@ export default {
               name: item.name
             }))
           })
-          songList.push(new Song({ id: item.id, name: item.name, singers, singersList, picUrl: item.al.picUrl }))
+          let song = new Song({ id: item.id, name: item.name, singers, singersList, picUrl: item.al.picUrl })
+          songList.push(song)
         })
         this.songList = songList
         this.loading = false

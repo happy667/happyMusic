@@ -198,18 +198,24 @@ export default {
       let follow = !this.followed
       follow = follow ? 1 : 0// 1代表收藏，0代表不收藏
       if (follow) { // 收藏
-        const { data: res } = await userApi.updateFollowAlbum(this.id, follow)
-        if (res.code === ERR_OK) {
-          this.followed = true
-        }
+        userApi.updateFollowAlbum(this.id, follow).then(res => {
+          if (res.data.code === ERR_OK) {
+            this.followed = true
+          }
+        }).catch(err => {
+          this.$toast(err.data.message)
+        })
       } else {
         this.utils.alertConfirm({ message: '确定不再收藏该专辑', confirmButtonText: '不再收藏' }).then(async () => {
-          const { data: res } = await userApi.updateFollowAlbum(this.id, follow)
-          if (res.code === ERR_OK) {
-            this.followed = false
-            this.$toast('已不再收藏')
-          }
-        })
+          userApi.updateFollowAlbum(this.id, follow).then(res => {
+            if (res.data.code === ERR_OK) {
+              this.followed = false
+              this.$toast('已不再收藏')
+            }
+          }).catch(err => {
+            this.$toast(err.data.message)
+          })
+        }).catch()
       }
     },
     // 选择歌手

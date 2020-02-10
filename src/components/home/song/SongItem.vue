@@ -38,7 +38,7 @@ import userApi from '@/api/user.js'
 import {
   ERR_OK
 } from '@/api/config.js'
-import { mapState, mapMutations, mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 export default {
   props: {
     song: Object,
@@ -63,18 +63,10 @@ export default {
     userLikeList () {
       this.updateSong(this.song)
     },
-    song: {
-      handler () {
-        if (!this.song.isLike) { // 说明是取消喜欢
-          this.setRemoveLikeSong(this.song)
-        }
-      },
-      deep: true
-    },
     currentSong () {
       if (this.song.id === this.currentSong.id) {
         // 同步喜欢状态
-        this.song.isLike = this.currentSong.isLike
+        this.$set(this.song, 'isLike', this.currentSong.isLike)
       }
     }
 
@@ -92,7 +84,6 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setRemoveLikeSong']),
     // 选中歌曲喜欢
     selectItemLove () {
       let song = this.song
@@ -115,20 +106,27 @@ export default {
     },
 
     // 喜欢音乐
-    async likeMusic (song) {
+    likeMusic (song) {
       let like = !song.isLike
-      if (!like) { // 取消喜欢就询问
-        this.utils.alertConfirm({ message: '确定要取消喜欢该歌曲吗', confirmButtonText: '取消' }).then(async () => {
-          const { data: res } = await userApi.likeMusic(song.id, like)
-          if (res.code === ERR_OK) {
+      if (like) { // 喜欢
+        userApi.likeMusic(song.id, like).then(res => {
+          if (res.data.code === ERR_OK) {
             this.$set(this.song, 'isLike', like)
           }
+        }).catch(err => {
+          this.$toast(err.data.message)
         })
       } else {
-        const { data: res } = await userApi.likeMusic(song.id, like)
-        if (res.code === ERR_OK) {
-          this.$set(this.song, 'isLike', like)
-        }
+        this.utils.alertConfirm({ message: '确定要取消喜欢该歌曲吗', confirmButtonText: '取消' }).then(async () => {
+          userApi.likeMusic(song.id, like).then(res => {
+            if (res.data.code === ERR_OK) {
+              this.$set(this.song, 'isLike', like)
+              this.$emit('noLike', this.song)// 派发取消喜欢事件
+            }
+          }).catch(err => {
+            this.$toast(err.data.message)
+          })
+        }).catch()
       }
     }
   }

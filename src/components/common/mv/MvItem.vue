@@ -54,8 +54,8 @@ export default {
     position: relative;
     margin-right: 0.4rem;
     height: 0;
-    width: 3.2rem;
-    padding-bottom: 1.5rem;
+    width: 2.9rem;
+    padding-bottom: 1.7rem;
     background: $color-common-b;
 
     img {
@@ -80,19 +80,23 @@ export default {
 
   .mv-info {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 
     .mv-title {
-      width: 6rem;
-      margin-bottom: 0.2rem;
       line-height: 0.5rem;
       font-weight: bold;
       no-wrap2();
     }
 
     .bottom {
+      max-width: 6rem;
       display: flex;
       color: #999;
-      line-height: 0.5rem;
+      height: 0.6rem;
+      line-height: 0.6rem;
+      no-wrap();
 
       .mv-time {
         margin-right: 0.3rem;

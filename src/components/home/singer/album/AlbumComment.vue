@@ -38,30 +38,35 @@
         </div>
 
         <!-- 评论列表 -->
-        <div class="comment"
-             v-if="commentList">
-          <div class="comment-title">精彩评论{{commentText}}</div>
-          <van-list v-model="loading"
-                    :immediate-check='false'
-                    :finished="finished"
-                    :finished-text="commentCount===0?'':'没有更多了'"
-                    @load="handlePullingUp">
-            <template v-if="commentList.length!==0">
-              <comment-list :commentList="commentList"></comment-list>
-            </template>
-            <template v-else>
-              <no-result text="还没有小伙伴发表评论哦~"></no-result>
-            </template>
-          </van-list>
-        </div>
-        <!-- 评论列表 -->
-        <comment-list></comment-list>
+        <template v-if="commentLike">
+          <div class="comment">
+            <div class="comment-title">精彩评论{{commentText}}</div>
+            <van-list v-model="loading"
+                      :immediate-check='false'
+                      :finished="finished"
+                      :finished-text="commentCount===0?'':'没有更多了'"
+                      @load="handlePullingUp">
+              <template v-if="commentList.length!==0">
+                <comment-list :commentList="commentList"></comment-list>
+              </template>
+              <template v-else>
+                <no-result text="暂无评论"></no-result>
+              </template>
+            </van-list>
+          </div>
+        </template>
+        <template v-else>
+          <van-loading size="24px"
+                       color="#FD4979"
+                       vertical>加载中...</van-loading>
+        </template>
       </section>
     </template>
 
   </div>
 </template>
 <script>
+import NoResult from '@/components/common/NoResult'
 import CommentList from '@/components/home/comment/CommentList'
 import singerApi from '@/api/singer.js'
 import {
@@ -141,7 +146,8 @@ export default {
     }
   },
   components: {
-    CommentList
+    CommentList,
+    NoResult
   }
 }
 </script>
@@ -225,10 +231,10 @@ export default {
           }
 
           .icon {
-            display :flex;
-            align-items :center;
+            display: flex;
+            align-items: center;
             font-size: 1rem;
-            color:$color-common-b;
+            color: $color-common-b;
           }
         }
       }
