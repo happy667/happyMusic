@@ -6,13 +6,18 @@ import {
   ERR_OK
 } from '@/api/config.js'
 import {
-  playMode
+  playMode,
+  USER_TOKEN
 } from '@/assets/common/js/config.js'
+import {
+  getItem
+} from 'common/js/localStorage.js'
 import util from '@/assets/common/js/utils.js'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    token: getItem(USER_TOKEN), // token
     user: null, // 登录的用户
     homeCurrentIndex: 0,
     singerCurrentIndex: 0,
@@ -150,17 +155,22 @@ export default new Vuex.Store({
     // 设置用户每日推荐页当前索引
     setUserRecommendIndex(state, index) {
       state.userRecommendIndex = index
+    },
+    // 设置token
+    setToken(state, token) {
+      state.token = token
     }
   },
   actions: {
-    // 获取登录用户
-    getLoginUser() {
-      return loginApi.loginStatus()
-    },
-    // 设置登录信息
-    setLoginInfo(context, user) {
-      context.commit('setLoginUser', user)
-      context.dispatch('getUserLikeList', user.userId)
+    // 获取登录用户信息
+    getLoginUserInfo(context) {
+      loginApi.loginStatus().then(res => {
+        if (res.data.code === ERR_OK) {
+          let user = res.data.profile
+          context.commit('setLoginUser', user)
+          context.dispatch('getUserLikeList', user.userId)
+        }
+      }).catch(err => console.log(err.data))
     },
     // 获取用户喜欢列表
     async getUserLikeList(context, id) {

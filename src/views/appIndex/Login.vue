@@ -39,12 +39,20 @@
   </div>
 </template>
 <script>
-import loginApi from '@/api/login.js'
+
 import {
   ERR_OK
 } from '@/api/config.js'
+import {
+  setItem
+} from 'common/js/localStorage.js'
+import {
+  USER_TOKEN
+} from '@/assets/common/js/config.js'
+import loginApi from '@/api/login.js'
 import { checkIsNull, checkPhone, checkPassword } from 'common/js/valid.js'
-import { mapActions } from 'vuex'
+import { mapMutations } from 'vuex'
+
 export default {
   data () {
     return {
@@ -60,11 +68,11 @@ export default {
       return this.showPassword ? 'text' : 'password'
     },
     pwdIcon () {
-      return this.showPassword ? 'closed-eye' : 'eye-o'
+      return this.showPassword ? 'eye-o' : 'closed-eye'
     }
   },
   methods: {
-    ...mapActions(['getLoginUser', 'setLoginInfo']),
+    ...mapMutations(['setLoginUser', 'setToken']),
     // 显示隐藏密码
     handleShowPwd () {
       this.showPassword = !this.showPassword
@@ -103,21 +111,24 @@ export default {
         // 验证成功执行登录操作
         loginApi.login(this.loginForm).then(res => {
           if (res.data.code === ERR_OK) { // 登录成功
-            this.getLoginUser().then(res => {
-              this.setLoginInfo(res.data.profile)
-              if (this.$router.currentRoute.query.redirect) { // 跳回到原来页面
-                // 使用replace是为了不保留登录页面历史记录
-                this.$router.replace(this.$router.currentRoute.query.redirect)
-              } else {
-                this.$router.replace('/home')
-              }
-              this.$router.go(-1)// 这里执行go是为了解决需要返回两次才能回退上一个页面的问题
-              this.$toast.clear()
-            })
+            // 保存token信息
+            setItem(USER_TOKEN, res.data.token)
+            this.setToken(res.data.token)
+            this.setLoginUser(res.data.profile)
+
+            if (this.$router.currentRoute.query.redirect) { // 跳回到原来页面
+              // 使用replace是为了不保留登录页面历史记录
+              this.$router.replace(this.$router.currentRoute.query.redirect)
+            } else {
+              this.$router.replace('/home')
+            }
+            this.$router.go(-1)// 这里执行go是为了解决需要返回两次才能回退上一个页面的问题
+            this.$toast.clear()
           } else {
             this.$toast(res.data.message)
           }
         }).catch(error => {
+          console.log(111111)
           this.$toast(error.message)
         })
       }

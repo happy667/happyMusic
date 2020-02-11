@@ -28,10 +28,14 @@ export function getLocalList() {
   return JSON.parse(window.localStorage.getItem(LOCAL_LIST_NAME))
 }
 // 获取本地存储搜索列表
-function getItem(item) {
+export function getItem(item) {
   return JSON.parse(window.localStorage.getItem(item))
 }
 // 设置本地存储搜索列表
-function setItem(item, value) {
+export function setItem(item, value) {
   window.localStorage.setItem(item, JSON.stringify(value))
+}
+// 清空本地存储某一项
+export function clearItem(value) {
+  window.localStorage.removeItem(value)
 }

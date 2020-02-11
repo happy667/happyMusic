@@ -61,7 +61,9 @@ export default {
   },
   watch: {
     userLikeList () {
-      this.updateSong(this.song)
+      if (this.userLikeList) {
+        this.updateSong(this.song)
+      }
     },
     currentSong () {
       if (this.song.id === this.currentSong.id) {

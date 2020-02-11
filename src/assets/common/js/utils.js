@@ -102,7 +102,7 @@ const utils = {
     })
   },
   isLogin() {
-    if (store.state.user) {
+    if (store.state.token) {
       return true
     } else {
       return false

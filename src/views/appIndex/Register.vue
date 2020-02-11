@@ -91,7 +91,7 @@ export default {
       return this.showPassword ? 'text' : 'password'
     },
     pwdIcon () {
-      return this.showPassword ? 'closed-eye' : 'eye-o'
+      return this.showPassword ? 'eye-o' : 'closed-eye'
     }
   },
   watch: {

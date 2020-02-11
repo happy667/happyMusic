@@ -128,6 +128,8 @@ import loginApi from '@/api/login.js'
 import {
   ERR_OK
 } from '@/api/config.js'
+import { USER_TOKEN } from 'common/js/config.js'
+import { clearItem } from 'common/js/localStorage.js'
 import { mapState, mapMutations } from 'vuex'
 export default {
   data () {
@@ -193,7 +195,7 @@ export default {
   },
   inject: ['reload'],
   methods: {
-    ...mapMutations(['setLoginUser', 'setUserLikeList']),
+    ...mapMutations(['setLoginUser', 'setUserLikeList', 'setToken']),
     // 返回上一个路由
     routerBack () {
       this.$router.push('/home')
@@ -235,8 +237,10 @@ export default {
         loginApi.logout().then(res => {
           if (res.data.code === ERR_OK) {
             // 清空用户所有信息
+            clearItem(USER_TOKEN)
             this.setLoginUser(null)
             this.setUserLikeList(null)
+            this.setToken(null)
             this.reload()// 刷新页面
           }
         })

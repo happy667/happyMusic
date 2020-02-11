@@ -214,6 +214,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requireLogin)) { // 判断该路由是否需要登录权限
     let utils = Vue.prototype.utils
+    console.log(utils.isLogin())
     if (utils.isLogin()) { // 判断是否登录
       next()
     } else {
@@ -227,7 +228,13 @@ router.beforeEach((to, from, next) => {
             redirect: to.fullPath // 未登录则跳转到登陆界面，query:{ Rurl: to.fullPath}表示把当前路由信息传递过去方便登录后跳转回来；
           }
         })
-      }).catch(() => {})
+      }).catch(() => {
+        if (from.name !== 'user') {
+          next({
+            name: 'user'
+          }) // 回到个人主页
+        }
+      })
     }
   } else {
     next()

@@ -131,7 +131,9 @@ export default {
   },
   watch: {
     user () {
-      this.getUserAlbum()
+      if (this.user) {
+        this.getUserAlbum()
+      }
     }
   },
   mounted () {

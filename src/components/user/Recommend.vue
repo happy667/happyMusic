@@ -49,13 +49,20 @@ export default {
     }
   },
   computed: {
-    ...mapState(['userRecommendIndex']),
+    ...mapState(['userRecommendIndex', 'user']),
     index: {
       get () {
         return this.userRecommendIndex
       },
       set (index) {
         this.setUserRecommendIndex(index)
+      }
+    }
+  },
+  watch: {
+    user () {
+      if (this.user) {
+        this.handleChange(this.index)
       }
     }
   },

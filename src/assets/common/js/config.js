@@ -9,3 +9,4 @@ export const targetType = {
   album: 10, // 专辑
   songSheet: 1000 // 歌单
 }
+export const USER_TOKEN = 'token'

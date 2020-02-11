@@ -33,9 +33,7 @@ export default {
   },
   watch: {
     userLikeList () {
-      if (this.user) {
-        this.getSongDetail()
-      }
+      this.getSongDetail()
     }
   },
   methods: {
@@ -84,9 +82,9 @@ export default {
       this.$router.push(`/singerInfo/${item.id}`)
     }
   },
-  async mounted () {
+  mounted () {
     if (this.user) {
-      await this.getUserLikeList(this.user.userId)
+      this.getUserLikeList(this.user.userId)
     }
   },
   components: {
