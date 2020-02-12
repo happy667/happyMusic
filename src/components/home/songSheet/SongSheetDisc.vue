@@ -89,12 +89,17 @@ export default {
       }
     }
   },
+  destroyed () {
+    if (this.rank) {
+      this.setRank(false)
+    }
+  },
   computed: {
-    ...mapState(['user']),
+    ...mapState(['user', 'rank']),
     ...mapGetters(['currentSong'])
   },
   methods: {
-    ...mapMutations(['setPlayerFullScreen']),
+    ...mapMutations(['setPlayerFullScreen', 'setRank']),
     ...mapActions(['setSelectPlay']),
     // 返回上一个路由
     routerBack () {
@@ -177,7 +182,7 @@ export default {
       }
     },
 
-    async follow () {
+    follow () {
       let follow = !this.followed
       follow = follow ? 1 : 0// 1代表收藏，0代表不收藏
       if (follow) { // 收藏

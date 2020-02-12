@@ -42,26 +42,30 @@ export default {
       }
     },
     alertConfirm () {
-      this.$Dialog.confirm({
-        message: '请登陆后再操作!',
-        confirmButtonColor: '#FD4979',
-        confirmText: '去登陆',
-        width: '265px'
+      this.utils.alertConfirm({ // 未登录跳转到登录页面
+        message: '您还没有登录哦',
+        confirmButtonText: '去登陆'
       }).then(() => {
-        this.$router.push({ name: 'login' })
-        return true
-      })
+        // 未登录则跳转到登陆界面
+        this.setPlayerFullScreen(false)
+        if (this.$route.name !== 'login') {
+          this.$router.push({
+            name: 'login'
+          })
+        }
+      }).catch(() => { })
     },
     // 喜欢音乐
-    async likeMusic (song) {
+    likeMusic (song) {
       let like = !song.isLike
-      console.log(like)
-      const { data: res } = await userApi.likeMusic(song.id, like)
-      if (res.code === ERR_OK) {
-        this.currentSong.isLike = like
-      }
+      userApi.likeMusic(song.id, like).then(res => {
+        if (res.data.code === ERR_OK) {
+          this.currentSong.isLike = like
+        }
+      }).catch(err => {
+        this.$toast(err.data.message)
+      })
     }
-
   }
 }
 </script>

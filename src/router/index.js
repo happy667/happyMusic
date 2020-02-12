@@ -1,27 +1,31 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-const Login = () => import('../views/appIndex/Login')
-const Index = () => import('../views/appIndex/Index')
-const Register = () => import('../views/appIndex/Register')
-const FindPassword = () => import('../views/appIndex/FindPassword')
-const AppIndex = () => import('../views/AppIndex')
+const Login = () => import(/* webpackChunkName:"login_index_register_findPassword_appIndex" */ '../views/appIndex/Login')
+const Index = () => import(/* webpackChunkName:"login_index_register_findPassword_appIndex" */ '../views/appIndex/Index')
+const Register = () => import(/* webpackChunkName:"login_index_register_findPassword_appIndex" */ '../views/appIndex/Register')
+const FindPassword = () => import(/* webpackChunkName:"login_index_register_findPassword_appIndex" */ '../views/appIndex/FindPassword')
+const AppIndex = () => import(/* webpackChunkName:"login_index_register_findPassword_appIndex" */ '../views/AppIndex')
+
 const Home = () => import('../views/Home')
 const SongSheetSquare = () => import('../components/home/songSheet/SongSheetSquare')
 const SongSheetDisc = () => import('../components/home/songSheet/SongSheetDisc')
 const VideoInfo = () => import('../components/home/video/VideoInfo')
-const Search = () => import('../components/home/search/Search')
-const SearchBox = () => import('../components/home/search/SearchBox')
-const SearchResult = () => import('../components/home/search/SearchResult')
+
+const Search = () => import(/* webpackChunkName:"search_searchBox_searchResult" */ '../components/home/search/Search')
+const SearchBox = () => import(/* webpackChunkName:"search_searchBox_searchResult" */ '../components/home/search/SearchBox')
+const SearchResult = () => import(/* webpackChunkName:"search_searchBox_searchResult" */ '../components/home/search/SearchResult')
+
 const Player = () => import('../components/common/Player')
 const SongComment = () => import('../components/home/song/SongComment')
 const SingerInfo = () => import('../components/home/singer/SingerInfo')
 const Album = () => import('../components/home/singer/album/Album')
 const AlbumComment = () => import('../components/home/singer/album/AlbumComment')
-const User = () => import('../views/User')
-const MyFollow = () => import('../components/user/MyFollow')
-const MyLike = () => import('../components/user/MyLike')
-const PlayRanking = () => import('../components/user/PlayRanking')
-const UserRecommend = () => import('../components/user/Recommend')
+
+const User = () => import(/* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend" */ '../views/User')
+const MyFollow = () => import(/* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend" */'../components/user/MyFollow')
+const MyLike = () => import(/* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend" */'../components/user/MyLike')
+const PlayRanking = () => import(/* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend" */'../components/user/PlayRanking')
+const UserRecommend = () => import(/* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend" */'../components/user/Recommend')
 
 Vue.use(VueRouter)
 

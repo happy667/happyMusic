@@ -52,14 +52,8 @@ export default {
     }
   },
   watch: {
-    async user () {
-      if (this.user) {
-        if (this.index === 0) {
-          this.weekendSongList = await this.getUserPlayRecord(this.user.userId, 1)
-        } else {
-          this.allSongList = await this.getUserPlayRecord(this.user.userId, 0)
-        }
-      }
+    user () {
+      this.handleChange(this.index)
     }
   },
   methods: {
@@ -68,7 +62,6 @@ export default {
       this.$router.back()
     },
     async getUserPlayRecord (id, type) {
-      console.log(type)
       this.loading = true
       const {
         data: res
@@ -89,31 +82,26 @@ export default {
           })
           songList.push(new Song({ id: item.song.id, name: item.song.name, singers, singersList, picUrl: item.song.al.picUrl, playCount: item.playCount }))
         })
-        console.log(songList)
         this.loading = false
-        return songList
+        // return songList
       }
     },
     async handleChange (name) {
-      if (name === 0) { // 获取一周听歌排行
-        if (!this.weekendSongList) {
-          this.weekendSongList = await this.getUserPlayRecord(this.user.userId, 1)
-        }
-      } else {
-        if (!this.allSongList) {
-          this.allSongList = await this.getUserPlayRecord(this.user.userId, 0)
+      if (this.user) {
+        if (name === 0) { // 获取一周听歌排行
+          if (!this.weekendSongList) {
+            this.weekendSongList = await this.getUserPlayRecord(this.user.userId, 1)
+          }
+        } else {
+          if (!this.allSongList) {
+            this.allSongList = await this.getUserPlayRecord(this.user.userId, 0)
+          }
         }
       }
     }
   },
-  async mounted () {
-    if (this.user) {
-      if (this.index === 0) {
-        this.weekendSongList = await this.getUserPlayRecord(this.user.userId, 1)
-      } else {
-        this.allSongList = await this.getUserPlayRecord(this.user.userId, 0)
-      }
-    }
+  mounted () {
+    this.handleChange(this.index)
   },
   components: {
     SongList

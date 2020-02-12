@@ -8,6 +8,7 @@
 
     </div>
     <!-- 播放时长 -->
+
     <div class="play-time">
       <div class="start-time">{{playerParams.currentTime|convertTime}}</div>
       <div class="end-time">{{playerParams.duration|convertTime}}</div>

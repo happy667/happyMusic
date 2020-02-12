@@ -40,9 +40,10 @@ const options = {
     },
     'singerInfo': {
       enter: ['songSheetDisc', 'singerAlbum', 'singerInfo'],
-      leave: ['home', 'searchResult', 'myFollow']
+      leave: ['home', 'searchResult', 'myFollow', 'videoInfo', 'singerAlbum', 'songSheetDisc']
     },
     singerAlbum: {
+      leave: ['albumComment'],
       enter: ['singerInfo']
     },
     albumComment: {

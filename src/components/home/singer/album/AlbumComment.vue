@@ -38,7 +38,7 @@
         </div>
 
         <!-- 评论列表 -->
-        <template v-if="commentLike">
+        <template v-if="commentList">
           <div class="comment">
             <div class="comment-title">精彩评论{{commentText}}</div>
             <van-list v-model="loading"

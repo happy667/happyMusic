@@ -72,7 +72,7 @@ export default {
 @import '~common/stylus/variable';
 
 .song-list-container {
-  min-height: calc(100vh - (1.22667rem + 6rem + 1.18rem + 0.4rem));
+  min-height: calc(100vh - (1.22667rem + 7.4rem + 1.18rem + 0.4rem));
   box-sizing: border-box;
 
   .play {

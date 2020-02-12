@@ -50,6 +50,14 @@ export default {
       this.getSingerSubList()
     }
   },
+  watch: {
+    user () {
+      if (this.user) {
+        // 获取用户收藏的歌手
+        this.getSingerSubList()
+      }
+    }
+  },
   methods: {
     // 返回上一个路由
     routerBack () {
@@ -84,14 +92,18 @@ export default {
     handleClickFollow (singer) {
       let follow = !singer.followed
       follow = follow ? 1 : 0// 1代表收藏，0代表不收藏
-      this.utils.alertConfirm({ message: '确定不再收藏该用户', confirmButtonText: '不再收藏' }).then(async () => {
-        const { data: res } = await userApi.updateFollow(singer.id, follow)
-        if (res.code === ERR_OK) { // 这里返回响应状态码是201
-          // 移除该歌手
-          this.utils.removeItem(this.singerSubList, singer)
-          this.$toast('已不再收藏')
-        }
-      })
+
+      this.utils.alertConfirm({ message: '确定不再收藏该歌手', confirmButtonText: '不再收藏' }).then(() => {
+        userApi.updateFollow(singer.id, follow).then(res => {
+          if (res.data.code === ERR_OK) {
+            // 移除该歌手
+            this.utils.removeItem(this.singerSubList, singer)
+            this.$toast('已不再收藏')
+          }
+        }).catch(err => {
+          this.$toast(err.data.message)
+        })
+      }).catch(() => { })
     }
   },
   components: {

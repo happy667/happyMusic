@@ -73,7 +73,6 @@ export default {
     }
   },
   mounted () {
-    this.setSingerCurrentIndex(0)
     // 根据歌手id获取歌手单曲
     this.handleTabsChange(this.currentIndex)
   },
