@@ -1,8 +1,12 @@
 <template>
-  <div class="song-sheet-desc-container">
+  <div class="song-sheet-desc-container"
+       @touchstart="handleTouchStart"
+       @touchmove="handleTouchMove"
+       @touchend="handleTouchEnd">
     <!-- 头部导航栏 -->
     <van-sticky>
       <van-nav-bar title="歌单列表"
+                   ref="navBar"
                    left-arrow
                    @click-left="routerBack" />
     </van-sticky>
@@ -42,12 +46,15 @@
       </div>
       <!-- 歌曲列表 -->
       <songs-list :songsList="songSheetDisc.songs"
+                  ref="songList"
                   :showImage="true"
                   @select="handleSelect"></songs-list>
       <no-result v-if="songSheetDisc.songs.length===0"
                  text="暂无相关资源"></no-result>
     </section>
-
+    <!-- 定位 -->
+    <position v-show="isShowPosition"
+              @click="handlePosition"></position>
   </div>
 </template>
 <script>
@@ -63,7 +70,7 @@ import SongsList from '@/components/home/song/SongList'
 import SongSheetDetail from '@/assets/common/js/songSheetDetail.js'
 import NoResult from '@/components/common/NoResult'
 import Follow from '@/components/common/Follow'
-
+import Position from '@/components/common/Position'
 import { mapMutations, mapGetters, mapActions, mapState } from 'vuex'
 export default {
   props: {
@@ -72,7 +79,8 @@ export default {
   data () {
     return {
       songSheetDisc: {},
-      followed: false
+      followed: false,
+      showPosition: false
     }
   },
   mounted () {
@@ -96,7 +104,14 @@ export default {
   },
   computed: {
     ...mapState(['user', 'rank']),
-    ...mapGetters(['currentSong'])
+    ...mapGetters(['currentSong']),
+    // 是否显示定位
+    isShowPosition () {
+      if (!this.songSheetDisc.songs) return
+      // 判断当前歌曲列表是否有正在播放的歌曲（-1表示没有)
+      let index = this.utils.findIndex(this.songSheetDisc.songs, this.currentSong)
+      return this.showPosition && index !== -1
+    }
   },
   methods: {
     ...mapMutations(['setPlayerFullScreen', 'setRank']),
@@ -205,12 +220,35 @@ export default {
           })
         }).catch(() => { })
       }
+    },
+    handlePosition () {
+      // 说明有歌曲在播放
+      if (this.currentSong) {
+        let listNode = this.$refs.songList.$refs.list
+        let song = this.currentSong
+        let otherHeight = this.$refs.navBar.offsetHeight
+        let list = this.songSheetDisc.songs
+        this.utils.positionSong({ listNode, list, song, otherHeight })
+        this.$toast('已定位到当前歌曲')
+      }
+    },
+    handleTouchStart () {
+      clearTimeout(this.timer)
+    },
+    handleTouchMove () {
+      this.showPosition = true
+    },
+    handleTouchEnd () {
+      this.timer = setTimeout(() => {
+        this.showPosition = false
+      }, 5000)
     }
   },
   components: {
     SongsList,
     NoResult,
-    Follow
+    Follow,
+    Position
   }
 }
 </script>

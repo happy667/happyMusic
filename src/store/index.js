@@ -44,7 +44,8 @@ export default new Vuex.Store({
     currentLineNum: 0, // 当前高亮的歌词行
     currentPlayLyric: '', // 当前播放的歌词
     userLikeList: null, // 用户喜欢列表
-    userRecommendIndex: 0 // 用户每日推荐页当前索引
+    userRecommendIndex: 0, // 用户每日推荐页当前索引
+    singer: null // 歌手
   },
   mutations: {
     // 设置登录用户
@@ -63,6 +64,10 @@ export default new Vuex.Store({
     // 设置rank
     setRank(state, rank) {
       state.rank = rank
+    },
+    // 设置歌手
+    setSinger(state, singer) {
+      state.singer = singer
     },
     // 设置歌手信息页当前索引
     setSingerCurrentIndex(state, index) {

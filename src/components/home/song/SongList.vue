@@ -1,6 +1,7 @@
 <template>
-  <div class="songs-list-containter">
-    <ul class="songs-list">
+  <div class="songs-list-containter" >
+    <ul class="songs-list"
+        ref="list">
       <li class="songs-list-item"
           :class="currentSong.id === item.id ? 'active' : ''"
           v-for="(item,index) in songsList"
@@ -13,6 +14,7 @@
                    :index="index+1"></song-item>
       </li>
     </ul>
+
   </div>
 </template>
 <script>

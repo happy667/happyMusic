@@ -49,7 +49,6 @@ export default {
     ...mapMutations(['setSearchCurrentIndex', 'setShowSearchList']),
     // 关闭搜索列表
     closeSearchList () {
-      console.log(111)
       if (this.showSearchList) {
         this.setShowSearchList(false)
       }

@@ -6,7 +6,7 @@
                  color="#FD4979"
                  vertical>加载中...</van-loading>
     <!-- 歌曲数量 -->
-    <template v-if="list&&list.length!==0">
+    <template v-else-if="list&&list.length!==0">
       <div class="play">
         <div class="play-icon">
           <van-icon name="play-circle-o" />
@@ -19,10 +19,12 @@
       <!-- 歌曲列表 -->
       <song-list @noLike="handleNoLike"
                  @select="handleSelect"
+                 ref="songList"
                  :showImage="true"
                  :songsList="list" />
+
     </template>
-    <template v-if="list&&list.length===0">
+    <template v-else-if="list&&list.length===0">
       <no-result text="暂无相关歌曲"></no-result>
     </template>
   </div>
@@ -30,6 +32,7 @@
 <script>
 import NoResult from '@/components/common/NoResult'
 import SongList from '@/components/home/song/SongList'
+
 import { mapMutations, mapGetters } from 'vuex'
 export default {
   props: {
@@ -65,6 +68,7 @@ export default {
   components: {
     SongList,
     NoResult
+
   }
 }
 </script>

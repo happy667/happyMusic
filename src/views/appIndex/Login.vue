@@ -12,13 +12,16 @@
           <van-field v-model="loginForm.phone"
                      type="tel"
                      label="手机号"
+                     :error-message="phoneErrMsg"
                      placeholder="请输入手机号"
                      maxlength="11" />
           <van-field v-model="loginForm.password"
+                     size="large"
                      label="密码"
                      maxlength="16"
                      :type="pwdType"
                      :right-icon="pwdIcon"
+                     :error-message="pwdErrMsg"
                      @click-right-icon="handleShowPwd"
                      placeholder="请输入密码" />
         </van-cell-group>
@@ -32,7 +35,7 @@
         <!-- 去注册 -->
         <div class="other-wrapper">
           <span>还没有账号?</span>
-          <router-link to="/appIndex/register">去注册</router-link>
+          <router-link to="/appIndex/register" replace>去注册</router-link>
         </div>
       </div>
     </div>
@@ -60,7 +63,9 @@ export default {
         phone: '',
         password: ''
       },
-      showPassword: false // 显示密码
+      showPassword: false, // 显示密码
+      phoneErrMsg: '', // 手机号错误提示
+      pwdErrMsg: ''// 密码错误提示
     }
   },
   computed: {
@@ -91,14 +96,17 @@ export default {
       }
       // 验证手机号
       if (!checkPhone(this.loginForm.phone)) {
-        this.$toast('手机号格式有误')
+        this.phoneErrMsg = '手机号格式有误, 请输入正确的手机号'
         return false
       }
       // 验证密码
       if (!checkPassword(this.loginForm.password)) {
-        this.$toast('密码格式输入有误, 密码必须由字母、数字组成,密码长度为6 - 16位')
+        this.pwdErrMsg = '密码格式有误, 必须由6-16位字母、数字组成'
         return false
       }
+      // 清空错误提示
+      this.phoneErrMsg = ''
+      this.pwdErrMsg = ''
       return true
     },
     // 登录
@@ -119,16 +127,16 @@ export default {
             if (this.$router.currentRoute.query.redirect) { // 跳回到原来页面
               // 使用replace是为了不保留登录页面历史记录
               this.$router.replace(this.$router.currentRoute.query.redirect)
+              this.$router.go(-1)// 这里执行go是为了解决需要返回两次才能回退上一个页面的问题
             } else {
               this.$router.replace('/home')
             }
-            this.$router.go(-1)// 这里执行go是为了解决需要返回两次才能回退上一个页面的问题
+
             this.$toast.clear()
           } else {
             this.$toast(res.data.message)
           }
         }).catch(error => {
-          console.log(111111)
           this.$toast(error.message)
         })
       }
@@ -184,7 +192,7 @@ export default {
         font-size: $font-size-small;
         border-radius: 1rem;
         background: $color-common;
-        box-shadow: 0 0.4rem 1.2rem #F4B3C5;
+        box-shadow: 0 0.15rem 0.4rem #F4B3C5;
         text-align: center;
       }
     }

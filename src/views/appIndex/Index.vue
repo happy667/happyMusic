@@ -73,7 +73,7 @@ export default {
         font-size: $font-size-small;
         border-radius: 1rem;
         background: $color-common;
-        box-shadow: 0 0.4rem 1.2rem #F4B3C5;
+        box-shadow: 0 0.15rem 0.4rem #F4B3C5;
       }
 
       p {

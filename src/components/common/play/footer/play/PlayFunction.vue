@@ -60,7 +60,9 @@ export default {
       let like = !song.isLike
       userApi.likeMusic(song.id, like).then(res => {
         if (res.data.code === ERR_OK) {
-          this.currentSong.isLike = like
+          console.log(like)
+          // 同步喜欢状态
+          this.$set(this.currentSong, 'isLike', like)
         }
       }).catch(err => {
         this.$toast(err.data.message)

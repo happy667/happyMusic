@@ -86,6 +86,8 @@ export default {
       // 如果大于0就移动
       if (top > 0) {
         list.scrollTo(0, top)
+      } else { // 回到最顶的位置
+        list.scrollTo(0, 0)
       }
     },
     // 选择歌曲

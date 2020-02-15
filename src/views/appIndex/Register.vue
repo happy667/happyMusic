@@ -12,6 +12,7 @@
                      required
                      type="tel"
                      label="用户名"
+                     :error-message="phoneErrMsg"
                      placeholder="请输入用户名"
                      maxlength="16" />
           <van-field v-model="registerForm.phone"
@@ -24,6 +25,7 @@
                      required
                      label="密码"
                      maxlength="16"
+                     :error-message="pwdErrMsg1"
                      :type="pwdType"
                      :right-icon="pwdIcon"
                      @click-right-icon="handleShowPwd"
@@ -31,6 +33,7 @@
           <van-field v-model="password2"
                      required
                      label="确认密码"
+                     :error-message="pwdErrMsg2"
                      maxlength="16"
                      type="password"
                      placeholder="请输入确认密码" />
@@ -57,7 +60,7 @@
         <!-- 去登陆 -->
         <div class="other-wrapper">
           <span>已经有账号了?</span>
-          <router-link to="/appIndex/login">去登陆</router-link>
+          <router-link to="/appIndex/login" replace>去登陆</router-link>
         </div>
       </div>
     </div>
@@ -83,7 +86,10 @@ export default {
       showPassword: false, // 显示密码
       isDisabled: false, // 是否禁用按钮
       time: 2 * 60 * 1000, // 倒计时
-      sendText: '发送验证码'
+      sendText: '发送验证码',
+      phoneErrMsg: '', // 手机号错误提示
+      pwdErrMsg1: '', // 密码错误提示
+      pwdErrMsg2: ''// 确认密码错误提示
     }
   },
   computed: {
@@ -140,20 +146,23 @@ export default {
       }
       // 验证手机号
       if (!checkPhone(this.registerForm.phone)) {
-        this.$toast('手机号格式有误')
+        this.phoneErrMsg = '手机号格式有误, 请输入正确的手机号'
         return false
       }
       // 验证密码
       if (!checkPassword(this.password1)) {
-        this.$toast('密码格式输入有误, 密码必须由字母、数字组成,密码长度为6 - 16位')
+        this.pwdErrMsg1 = '密码格式有误, 必须由6-16位字母、数字组成'
         return false
       }
       // 比较二次密码
       if (!compare(this.password1, this.password2)) {
-        this.$toast('两次密码输入不一致')
+        this.pwdErrMsg2 = '两次密码输入不一致'
         return false
       }
-      this.registerForm.password = this.password1
+      // 清空错误提示
+      this.phoneErrMsg = ''
+      this.pwdErrMsg1 = ''
+      this.pwdErrMsg2 = ''
       return true
     },
     // 重置表单
@@ -170,6 +179,7 @@ export default {
     // 注册
     handleRegister () {
       if (this.validForm()) { // 验证用户输入
+        this.registerForm.password = this.password1
         // 检查手机号是否已经注册
         registerApi.checkRegister(this.registerForm.phone).then(res => {
           if (res.data.code === ERR_OK) {
@@ -287,7 +297,7 @@ export default {
         font-size: $font-size-small;
         border-radius: 1rem;
         background: $color-common;
-        box-shadow: 0 0.4rem 1.2rem #F4B3C5;
+        box-shadow: 0 0.15rem 0.4rem #F4B3C5;
         text-align: center;
       }
     }

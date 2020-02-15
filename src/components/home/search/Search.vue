@@ -3,6 +3,7 @@
     <!-- 头部导航 -->
     <van-sticky>
       <van-nav-bar title="搜索"
+      ref="navBar"
                    left-arrow
                    @click-left="routerBack" />
     </van-sticky>

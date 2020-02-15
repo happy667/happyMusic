@@ -47,14 +47,13 @@ export default {
     },
     // 选择歌手
     selectSingers () {
-      console.log(this.currentSong)
       if (this.currentSong.singersList.length === 1) { // 只有一个歌手直接跳转到歌手页面
-        this.setSingerCurrentIndex(0)
-        this.setPlayerFullScreen(false)
-        if (this.$router.name === 'singerInfo') {
-          this.reload()
+        let currentPath = `/singerInfo/${this.currentSong.singersList[0].id}`
+        if (this.$route.path !== currentPath) { // 如果当前歌手详情页就是所选歌手直接隐藏全屏播放器
+          this.setSingerCurrentIndex(0)
+          this.$router.push(`/singerInfo/${this.currentSong.singersList[0].id}`)
         }
-        this.$router.push(`/singerInfo/${this.currentSong.singersList[0].id}`)
+        this.setPlayerFullScreen(false)
       } else {
         this.showSingerPopup = true
         this.currentSong.singersList.forEach(async item => { // 查询该歌手图片
@@ -130,7 +129,7 @@ export default {
     }
 
     .singer {
-      color: #e4e4e4;
+      color: $color-common-x;
     }
   }
 }

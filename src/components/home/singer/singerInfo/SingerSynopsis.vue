@@ -1,12 +1,7 @@
 <template>
   <!-- 歌手简介 -->
   <div class="singer-synopsis-container">
-    <!-- loading -->
-    <van-loading v-if="!singer"
-                 size="24px"
-                 color="#FD4979"
-                 vertical>加载中...</van-loading>
-    <template v-show="singer">
+    <template v-if="singer">
       <!-- 歌手图片 -->
       <div class="singer-img">
         <img :src="singer.picUrl">
@@ -98,22 +93,23 @@ export default {
 @import '~common/stylus/variable';
 
 .singer-synopsis-container {
-  width: 100%;
   position: relative;
+  width: 100%;
+  height: 0;
+  padding-top: 7.4rem;
+  background: #b0b0b0;
+  overflow: hidden;
 
   .singer-img {
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    height: 0;
-    padding-top: 7.4rem;
-    background: #b0b0b0;
-    overflow: hidden;
+    height: 7.4rem;
 
     img {
-      position: absolute;
-      top: 0;
-      left: 0;
       width: 100%;
+      height: 100%;
       display: block;
     }
   }

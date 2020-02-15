@@ -22,10 +22,10 @@ const Album = () => import('../components/home/singer/album/Album')
 const AlbumComment = () => import('../components/home/singer/album/AlbumComment')
 
 const User = () => import(/* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend" */ '../views/User')
-const MyFollow = () => import(/* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend" */'../components/user/MyFollow')
-const MyLike = () => import(/* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend" */'../components/user/MyLike')
-const PlayRanking = () => import(/* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend" */'../components/user/PlayRanking')
-const UserRecommend = () => import(/* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend" */'../components/user/Recommend')
+const MyFollow = () => import(/* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend" */ '../components/user/MyFollow')
+const MyLike = () => import(/* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend" */ '../components/user/MyLike')
+const PlayRanking = () => import(/* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend" */ '../components/user/PlayRanking')
+const UserRecommend = () => import(/* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend" */ '../components/user/Recommend')
 
 Vue.use(VueRouter)
 
@@ -216,7 +216,10 @@ const router = new VueRouter({
 
 })
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requireLogin)) { // 判断该路由是否需要登录权限
+  console.log(from)
+  if (!from.path) { // 说明没有上一个路由
+    next('/') // 回到首页
+  } else if (to.matched.some(record => record.meta.requireLogin)) { // 判断该路由是否需要登录权限
     let utils = Vue.prototype.utils
     console.log(utils.isLogin())
     if (utils.isLogin()) { // 判断是否登录

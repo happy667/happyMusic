@@ -2,6 +2,9 @@ import Vue from 'vue'
 import router from '@/router/index.js'
 import store from '@/store/index.js'
 import songApi from '@/api/song.js'
+import {
+  getPositionTop
+} from '@/assets/common/js/dom.js'
 const utils = {
   async playMusic(song, list = null, index) {
     // 检查音乐是否可用
@@ -81,6 +84,20 @@ const utils = {
     return list.findIndex(item => {
       return item.id === song.id
     })
+  },
+  positionSong({
+    listNode,
+    list,
+    song,
+    otherHeight = 0
+  }) {
+    // 获取当前播放列表节点
+    // 再找到当前播放歌曲的索引
+    let index = utils.findIndex(list, song)
+    const element = listNode.childNodes[index]
+    // 获取元素的top值
+    let top = getPositionTop(element)
+    window.scrollTo(0, top - otherHeight) // 减去其他高度
   },
   removeItem(list, item) {
     let newList = list.slice()

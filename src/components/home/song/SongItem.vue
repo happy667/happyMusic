@@ -66,10 +66,8 @@ export default {
       }
     },
     currentSong () {
-      if (this.song.id === this.currentSong.id) {
-        // 同步喜欢状态
-        this.$set(this.song, 'isLike', this.currentSong.isLike)
-      }
+      // 同步当前播放歌曲喜欢状态
+      this.asyncCurrentLikeStatus()
     }
 
   },
@@ -84,6 +82,8 @@ export default {
     if (this.userLikeList) {
       this.updateSong(this.song)
     }
+    // 同步当前播放歌曲喜欢状态
+    this.asyncCurrentLikeStatus()
   },
   methods: {
     // 选中歌曲喜欢
@@ -93,6 +93,13 @@ export default {
         this.likeMusic(song)// 添加或取消喜欢音乐
       } else { // 弹窗提示去登录
         this.utils.alertLogin(this.$router.currentRoute.fullPath)
+      }
+    },
+    // 同步当前播放歌曲喜欢状态
+    asyncCurrentLikeStatus () {
+      if (this.song.id === this.currentSong.id) {
+        // 同步喜欢状态
+        this.$set(this.song, 'isLike', this.currentSong.isLike)
       }
     },
     // 更新歌曲状态
@@ -110,6 +117,10 @@ export default {
         userApi.likeMusic(song.id, like).then(res => {
           if (res.data.code === ERR_OK) {
             this.$set(this.song, 'isLike', like)
+            if (this.song.id === this.currentSong.id) {
+              // 同步喜欢状态
+              this.$set(this.currentSong, 'isLike', like)
+            }
           }
         }).catch(err => {
           this.$toast(err.data.message)
@@ -120,6 +131,10 @@ export default {
             if (res.data.code === ERR_OK) {
               this.$set(this.song, 'isLike', like)
               this.$emit('noLike', this.song)// 派发取消喜欢事件
+              if (this.song.id === this.currentSong.id) {
+                // 同步喜欢状态
+                this.$set(this.currentSong, 'isLike', like)
+              }
             }
           }).catch(err => {
             this.$toast(err.data.message)

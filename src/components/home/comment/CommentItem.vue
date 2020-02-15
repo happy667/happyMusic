@@ -10,7 +10,7 @@
         <!-- 用户昵称 -->
         <div class="comment-nikeName">{{comment.user.nickname}}</div>
         <!--评论时间-->
-        <div class="comment-time">{{comment.time|convertTime}}</div>
+        <div class="comment-time">{{comment.time|convertDate}}</div>
       </div>
     </div>
     <!-- 评论内容 -->
@@ -53,7 +53,7 @@ export default {
 
       .comment-nikeName {
         width: 100%;
-        font-size: $font-size-smaller;
+        font-size: $font-size-smaller-x;
         line-height: 0.7rem;
         color: #999;
         no-wrap();

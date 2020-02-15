@@ -83,6 +83,7 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    font-size: $font-size-mini;
 
     .mv-title {
       line-height: 0.5rem;

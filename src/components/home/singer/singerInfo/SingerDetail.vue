@@ -42,7 +42,7 @@ export default {
   },
   computed: {
     isLoad () {
-      return Object.keys(this.singerDetail).length === 0
+      return !this.singerDetail
     }
   },
   components: {
@@ -60,9 +60,11 @@ export default {
 
   .title {
     margin-bottom: 0.2rem;
+    height: 0.7rem;
+    line-height: 0.7rem;
     font-size: $font-size-smaller;
     font-weight: bold;
-    padding-left: 0.1rem;
+    padding-left: 0.2rem;
     border-left: 0.08rem solid $color-common;
   }
 

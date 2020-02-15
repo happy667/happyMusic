@@ -33,7 +33,7 @@ import MiniPlay from './play/MiniPlay'
 import {
   playMode
 } from '@/assets/common/js/config.js'
-import { mapState, mapGetters, mapMutations } from 'vuex'
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 export default {
   data () {
     return {
@@ -78,7 +78,7 @@ export default {
       }, 1000)
 
       this.setPlaying(false)
-      this.getSong(this.currentSong.id)
+      this.getSong(this.currentSong)
       // 默认显示歌曲封面
       this.setPlayerShowImage(true)
     },
@@ -107,6 +107,7 @@ export default {
   },
   methods: {
     ...mapMutations(['setAudio', 'setTogglePlayList', 'setSongReady', 'setPlaying', 'setPlayMode', 'setPlayList', 'setCurrentPlayIndex', 'setSequenceList', 'setPlayerShowImage', 'setCurrentPlayLyric', 'setCurrentLineNum']),
+    ...mapActions(['deleteSong']),
     ready () {
       this.playerParams.duration = this.audio.duration
       this.setSongReady(true)
@@ -115,20 +116,16 @@ export default {
       this.setSongReady(true)
     },
     // 获取歌曲
-    async getSong (id) {
+    async getSong (song) {
       // 获取音乐播放路径
-      const { data: res } = await songApi.getMusicUrl(id)
+      const { data: res } = await songApi.getMusicUrl(song.id)
       if (res.code === ERR_OK) {
         this.url = res.data[0].url
         if (!this.url) { // 判断是否为空
-          // 移除歌曲
-          let list = this.sequenceList
-          const listIndex = this.sequenceList.findIndex(item => item.id === id)
-          list.splice(listIndex, 1)
-          this.setSequenceList(list)
+          // 移除该歌曲
+          this.deleteSong(song)
           this.$toast('该歌曲暂时不能播放,自动移除该歌曲')
           this.setSongReady(true)
-          this.next()
         } else {
           this.$nextTick(() => {
             this.setPlaying(true)

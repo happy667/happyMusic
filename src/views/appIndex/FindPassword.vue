@@ -13,6 +13,7 @@
                      type="tel"
                      label="手机号"
                      placeholder="请输入手机号"
+                     :error-message="phoneErrMsg"
                      maxlength="11" />
           <van-field v-model="updateForm.password"
                      required
@@ -20,6 +21,7 @@
                      maxlength="16"
                      :type="pwdType"
                      :right-icon="pwdIcon"
+                     :error-message="pwdErrMsg"
                      @click-right-icon="handleShowPwd"
                      placeholder="请输入密码" />
           <van-field v-model="updateForm.captcha"
@@ -45,7 +47,7 @@
         <!-- 去登陆 -->
         <div class="other-wrapper">
           <span>找到账号了?</span>
-          <router-link to="/appIndex/login">去登陆</router-link>
+          <router-link to="/appIndex/login" replace>去登陆</router-link>
         </div>
       </div>
     </div>
@@ -68,7 +70,9 @@ export default {
       showPassword: false, // 显示密码
       isDisabled: false, // 是否禁用按钮
       time: 2 * 60 * 1000, // 倒计时
-      sendText: '发送验证码'
+      sendText: '发送验证码',
+      phoneErrMsg: '', // 手机号错误提示
+      pwdErrMsg: ''// 密码错误提示
     }
   },
   computed: {
@@ -115,14 +119,17 @@ export default {
       }
       // 验证手机号
       if (!checkPhone(this.updateForm.phone)) {
-        this.$toast('手机号格式有误')
+        this.phoneErrMsg = '手机号格式有误, 请输入正确的手机号'
         return false
       }
       // 验证密码
       if (!checkPassword(this.updateForm.password)) {
-        this.$toast('密码格式输入有误, 密码必须由字母、数字组成,密码长度为6 - 16位')
+        this.pwdErrMsg = '密码格式有误, 必须由6-16位字母、数字组成'
         return false
       }
+      // 清空错误提示
+      this.phoneErrMsg = ''
+      this.pwdErrMsg = ''
       return true
     },
     // 重置表单
@@ -251,7 +258,7 @@ export default {
         font-size: $font-size-small;
         border-radius: 1rem;
         background: $color-common;
-        box-shadow: 0 0.4rem 1.2rem #F4B3C5;
+        box-shadow: 0 0.15rem 0.4rem #F4B3C5;
         text-align: center;
       }
     }

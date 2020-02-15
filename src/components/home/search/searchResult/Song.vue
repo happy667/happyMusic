@@ -11,6 +11,7 @@
                 finished-text="没有更多了"
                 @load="handlePullingUp">
         <song-list @select="handleSelect"
+        ref="songList"
                    :songsList="song.songList"></song-list>
       </van-list>
     </template>

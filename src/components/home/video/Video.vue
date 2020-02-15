@@ -115,7 +115,6 @@
         <div class="title">
           <div class="name">{{videoParams.name}}</div>
           <div class="right-icon"
-               @click="handleToggleInfo"
                v-if="moreInfo">
             <van-icon :name="rightIcon" />
           </div>
@@ -207,11 +206,13 @@ export default {
   },
   methods: {
     ...mapMutations(['setOldVideo', 'setSingerCurrentIndex']),
-    // 跳转到mv详情页
+    // 跳转到video详情页
     goToVideoInfo () {
-      // 因为该组件用到了多个地方，但是在mv详情页不需要做跳转，所以需要判断当前路由地址
-      if (this.$route.path !== `/videoInfo/${this.videoParams.id}`) {
+      // 说明不是视频详情页
+      if (!this.moreInfo) {
         this.$router.push(`/videoInfo/${this.videoParams.id}`)
+      } else { // 显示更多信息
+        this.showMoreInfo = !this.showMoreInfo
       }
     },
     // 更新时间
@@ -252,7 +253,6 @@ export default {
     },
     // 点击屏幕
     handleClickScreen () {
-      console.log('屏幕')
       this.isClickScreen = !this.isClickScreen
       this.hideBtn()
     },
@@ -442,6 +442,7 @@ export default {
 
     .video-desc {
       color: $color-common-b;
+      font-size: $font-size-mini;
 
       .top {
         display: flex;
