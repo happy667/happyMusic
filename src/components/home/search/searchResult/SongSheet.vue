@@ -14,7 +14,7 @@
       </van-list>
     </template>
     <template v-if="songSheet.isNull">
-       <no-result text="暂无相关歌单"></no-result>
+      <no-result text="暂无相关歌单"></no-result>
     </template>
   </div>
 </template>
@@ -25,6 +25,7 @@ import searchApi from '@/api/search.js'
 import { ERR_OK } from '@/api/config.js'
 import { mapState } from 'vuex'
 export default {
+  name: 'searchResultSongSheet',
   data () {
     return {
       songSheet: {

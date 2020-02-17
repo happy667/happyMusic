@@ -3,7 +3,7 @@
     <div class="container">
       <!-- logo -->
       <div class="logo">
-        <img src="@/assets/images/Logo.png" />
+        <img src="@/assets/images/logo.png" />
       </div>
       <!-- 注册表单 -->
       <div class="register-form">
@@ -60,7 +60,8 @@
         <!-- 去登陆 -->
         <div class="other-wrapper">
           <span>已经有账号了?</span>
-          <router-link to="/appIndex/login" replace>去登陆</router-link>
+          <router-link to="/appIndex/login"
+                       replace>去登陆</router-link>
         </div>
       </div>
     </div>
@@ -73,6 +74,7 @@ import {
   ERR_OK
 } from '@/api/config.js'
 export default {
+  name: 'register',
   data () {
     return {
       registerForm: {
@@ -191,10 +193,8 @@ export default {
                   registerApi.register(this.registerForm).then(res => {
                     console.log(res)
                     if (res.data.code === ERR_OK) {
-                      this.$Dialog.alert({
-                        message: '注册成功，快去登陆吧',
-                        confirmButtonColor: '#FD4979',
-                        width: '265px'
+                      this.utils.alert({
+                        message: '注册成功，快去登陆吧'
                       }).then(() => {
                         this.$router.push('/appIndex/login')
                       })
@@ -209,10 +209,8 @@ export default {
                 this.$toast('验证码错误,请发送验证码至您的手机')
               })
             } else {
-              this.$Dialog.alert({
-                message: '该手机号已经注册',
-                confirmButtonColor: '#FD4979',
-                width: '265px'
+              this.utils.alert({
+                message: '该手机号已经注册'
               })
               // 清空表单
               this.resetForm()

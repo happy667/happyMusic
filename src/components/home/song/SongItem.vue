@@ -7,8 +7,8 @@
     <!-- 歌曲图片 -->
     <div class="song-img"
          v-if="showImage">
-      <img v-lazy="song.picUrl"
-           :key="song.picUrl" />
+      <img v-lazy="picUrl"
+           :key="picUrl">
     </div>
     <div class="song-desc">
       <!-- 歌曲名称 -->
@@ -38,6 +38,7 @@ import userApi from '@/api/user.js'
 import {
   ERR_OK
 } from '@/api/config.js'
+import { defaultMusicImage } from 'common/js/config.js'
 import { mapState, mapGetters } from 'vuex'
 export default {
   props: {
@@ -57,6 +58,9 @@ export default {
     ...mapGetters(['currentSong']),
     loveIcon () {
       return this.song.isLike ? 'icon-aixin' : 'icon-icon-test'
+    },
+    picUrl () {
+      return this.song.picUrl ? this.song.picUrl : defaultMusicImage
     }
   },
   watch: {
@@ -159,7 +163,7 @@ export default {
     height: 1.4rem;
     line-height: 1.4rem;
     font-size: $font-size-small;
-    color: $color-common-b;
+    color: $color-common-b2;
     text-align: center;
 
     &.rank {

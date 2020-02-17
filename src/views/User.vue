@@ -25,7 +25,7 @@
       <div class="no-login"
            v-else>
         <van-button plain
-                    :to="{name:'login'}"
+                    :to="{name:'index'}"
                     size="small"
                     type="info"
                     color="#fd4979">未登录</van-button>
@@ -132,6 +132,7 @@ import { USER_TOKEN } from 'common/js/config.js'
 import { clearItem } from 'common/js/localStorage.js'
 import { mapState, mapMutations } from 'vuex'
 export default {
+  name: 'user',
   data () {
     return {
       userCount: null,
@@ -241,6 +242,8 @@ export default {
             this.setLoginUser(null)
             this.setUserLikeList(null)
             this.setToken(null)
+            // 添加不缓存路由
+            this.$store.commit('setAddNoCacheComponents', 'user')
             this.reload()// 刷新页面
           }
         })
@@ -381,7 +384,7 @@ export default {
           }
 
           .num {
-            color: $color-common-b;
+            color: $color-common-b2;
           }
         }
       }
@@ -400,7 +403,7 @@ export default {
         }
 
         .count {
-          color: $color-common-b;
+          color: $color-common-b2;
         }
       }
     }

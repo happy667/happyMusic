@@ -18,7 +18,7 @@
           <div class="top">
             <div class="left-img">
               <div class="album-image">
-                <img v-lazy="albumObj.album.picUrl" />
+                <img v-lazy="albumObj.album.picUrl" :key="albumObj.album.picUrl" />
               </div>
               <div class="public-time">{{albumObj.album.publishTime|convertDate}}</div>
             </div>
@@ -106,6 +106,7 @@ import {
 } from '@/api/config.js'
 import { mapMutations, mapGetters, mapState } from 'vuex'
 export default {
+  name: 'singerAlbum',
   props: {
     id: String
   },
@@ -129,13 +130,6 @@ export default {
       return this.followed ? '已收藏' : '收藏'
     }
   },
-  watch: {
-    user () {
-      if (this.user) {
-        this.getUserAlbum()
-      }
-    }
-  },
   mounted () {
     // 获取专辑详情
     this.getAlbumInfo(this.id)
@@ -147,6 +141,7 @@ export default {
   methods: {
     ...mapMutations(['setPlayerFullScreen', 'setSingerCurrentIndex']),
     routerBack () {
+      this.$route.meta.isBack = true
       this.$router.back()
     },
     // 播放歌曲
@@ -274,6 +269,7 @@ export default {
     },
     // 跳转到专辑评论列表
     goToAlbumComment () {
+      this.$route.meta.isBack = false
       this.$router.push(`/albumComment/${this.id}`)
     }
   },

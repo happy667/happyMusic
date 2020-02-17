@@ -15,9 +15,9 @@ export default {
 
 .no-result-container {
   width: 100%;
-  height: 1rem;
-  line-height: 1rem;
-  color: $color-common-b;
+  height: 2rem;
+  line-height: 2rem;
+  color: $color-common-b2;
   font-size: $font-size-smaller;
   text-align: center;
 }

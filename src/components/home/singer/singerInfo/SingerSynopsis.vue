@@ -97,7 +97,7 @@ export default {
   width: 100%;
   height: 0;
   padding-top: 7.4rem;
-  background: #b0b0b0;
+  background: $color-common-b;
   overflow: hidden;
 
   .singer-img {

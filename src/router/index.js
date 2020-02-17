@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import store from '@/store/index.js'
 import VueRouter from 'vue-router'
 const Login = () => import(/* webpackChunkName:"login_index_register_findPassword_appIndex" */ '../views/appIndex/Login')
 const Index = () => import(/* webpackChunkName:"login_index_register_findPassword_appIndex" */ '../views/appIndex/Index')
@@ -35,17 +36,22 @@ const routes = [
     path: '*',
     redirect: '/home'
   },
+  // 重定向到登录页
   {
     path: '/appIndex',
-    redirect: '/appIndex/Index'
+    redirect: 'appIndex/index'
   },
-
+  {
+    path: '/index',
+    redirect: 'appIndex/index'
+  },
   // 首页
   {
     path: '/appIndex',
+    name: 'appIndex',
     component: AppIndex,
     children: [
-      // 跳转到首页
+      // 跳转到登录首页
       {
         path: 'index',
         name: 'index',
@@ -81,7 +87,7 @@ const routes = [
   // 歌单页
   {
     path: '/SongSheetSquare',
-    name: 'SongSheetSquare',
+    name: 'songSheetSquare',
     component: SongSheetSquare
   },
   // 歌单详情
@@ -89,7 +95,18 @@ const routes = [
     path: '/songSheetDisc/:id',
     name: 'songSheetDisc',
     component: SongSheetDisc,
-    props: true
+    props: true,
+    beforeEnter(to, from, next) {
+      console.log(from)
+      if (from.name === 'home' || from.name === 'searchResult') {
+        // 添加不缓存路由
+        store.commit('setAddNoCacheComponents', 'songSheetDisc')
+      } else {
+        // 移除不缓存路由
+        store.commit('setRemoveNoCacheComponents', 'songSheetDisc')
+      }
+      next()
+    }
   },
   // 搜索页
   {
@@ -97,6 +114,19 @@ const routes = [
     name: 'search',
     component: Search,
     redirect: 'searchPage',
+    beforeEnter(to, from, next) {
+      console.log(from, to)
+      if (from.name === 'home') {
+        // 添加不缓存路由
+        store.commit('setAddNoCacheComponents', 'search')
+        store.commit('setAddNoCacheComponents', 'searchPage')
+      } else {
+        // 移除不缓存路由
+        store.commit('setRemoveNoCacheComponents', 'search')
+        store.commit('setRemoveNoCacheComponents', 'searchPage')
+      }
+      next()
+    },
     children: [
       // 搜索页面
       {
@@ -108,7 +138,19 @@ const routes = [
       {
         path: '/search/searchResult',
         name: 'searchResult',
-        component: SearchResult
+        component: SearchResult,
+        beforeEnter(to, from, next) {
+          console.log(from, to)
+          if (from.name === 'searchPage') {
+            // 添加不缓存路由
+            store.commit('setAddNoCacheComponents', 'search')
+          } else {
+            // 移除不缓存路由
+            store.commit('setRemoveNoCacheComponents', 'search')
+          }
+          next()
+        }
+
       }
     ]
   },
@@ -117,13 +159,25 @@ const routes = [
     path: '/videoInfo/:id',
     name: 'videoInfo',
     component: VideoInfo,
-    props: true
+    props: true,
+    beforeEnter(to, from, next) {
+      console.log(from)
+      if (from.name === 'home' || from.name === 'searchResult' || from.name === 'videoInfo') {
+        // 添加不缓存路由
+        store.commit('setAddNoCacheComponents', 'videoInfo')
+      } else {
+        // 移除不缓存路由
+        store.commit('setRemoveNoCacheComponents', 'videoInfo')
+      }
+      next()
+    }
   },
   // 播放页面
   {
     path: '/play',
     name: 'play',
     component: Player
+
   },
   // 歌曲评论列表
   {
@@ -138,7 +192,20 @@ const routes = [
     path: '/albumComment/:id',
     name: 'albumComment',
     component: AlbumComment,
-    props: true
+    props: true,
+    meta: {
+      isBack: false
+    },
+    beforeEnter(to, from, next) {
+      if (from.name === 'singerAlbum' && !from.meta.isBack) {
+        // 添加不缓存路由
+        store.commit('setAddNoCacheComponents', 'albumComment')
+      } else {
+        // 移除不缓存路由
+        store.commit('setRemoveNoCacheComponents', 'albumComment')
+      }
+      next()
+    }
 
   },
   // 歌手信息页
@@ -146,20 +213,61 @@ const routes = [
     path: '/singerInfo/:id',
     name: 'singerInfo',
     component: SingerInfo,
-    props: true
+    props: true,
+    meta: {
+      keepAlive: false // 不需要缓存
+    },
+    beforeEnter(to, from, next) {
+      console.log(from)
+      if (from.name === 'home' || from.name === 'searchResult' || from.name === 'videoInfo') {
+        // 添加不缓存路由
+        store.commit('setAddNoCacheComponents', 'singerInfo')
+      } else {
+        // 移除不缓存路由
+        store.commit('setRemoveNoCacheComponents', 'singerInfo')
+      }
+      next()
+    }
   },
   // 歌手专辑详情页
   {
     path: '/singerAlbum/:id',
     name: 'singerAlbum',
     component: Album,
-    props: true
+    props: true,
+    meta: {
+      isBack: false
+    },
+    beforeEnter(to, from, next) {
+      console.log(from)
+      if (from.name === 'singerInfo' || from.name === 'home') {
+        // 添加不缓存路由
+        store.commit('setAddNoCacheComponents', 'singerAlbum')
+      } else if (from.name === 'albumComment' && !from.meta.isBack) {
+        // 添加不缓存路由
+        store.commit('setAddNoCacheComponents', 'singerAlbum')
+      } else {
+        // 移除不缓存路由
+        store.commit('setRemoveNoCacheComponents', 'singerAlbum')
+      }
+      next()
+    }
   },
   // 我的主页
   {
     path: '/user',
     name: 'user',
-    component: User
+    component: User,
+    beforeEnter(to, from, next) {
+      if (from.name === 'home') {
+        // 添加不缓存路由
+        store.commit('setAddNoCacheComponents', 'user')
+      } else {
+        // 移除不缓存路由
+        store.commit('setRemoveNoCacheComponents', 'user')
+      }
+      next()
+    }
   },
   // 我的关注
   {
@@ -168,6 +276,16 @@ const routes = [
     component: MyFollow,
     meta: {
       requireLogin: true // 当前路由需要校验，不需要就不用写
+    },
+    beforeEnter(to, from, next) {
+      if (from.name === 'user') {
+        // 添加不缓存路由
+        store.commit('setAddNoCacheComponents', 'myFollow')
+      } else {
+        // 移除不缓存路由
+        store.commit('setRemoveNoCacheComponents', 'myFollow')
+      }
+      next()
     }
   },
   // 我的最爱
@@ -177,6 +295,16 @@ const routes = [
     component: MyLike,
     meta: {
       requireLogin: true // 当前路由需要校验，不需要就不用写
+    },
+    beforeEnter(to, from, next) {
+      if (from.name === 'user') {
+        // 添加不缓存路由
+        store.commit('setAddNoCacheComponents', 'myLike')
+      } else {
+        // 移除不缓存路由
+        store.commit('setRemoveNoCacheComponents', 'myLike')
+      }
+      next()
     }
   },
   // 听歌排行
@@ -186,6 +314,16 @@ const routes = [
     component: PlayRanking,
     meta: {
       requireLogin: true // 当前路由需要校验，不需要就不用写
+    },
+    beforeEnter(to, from, next) {
+      if (from.name === 'user') {
+        // 添加不缓存路由
+        store.commit('setAddNoCacheComponents', 'playRanking')
+      } else {
+        // 移除不缓存路由
+        store.commit('setRemoveNoCacheComponents', 'playRanking')
+      }
+      next()
     }
 
   },
@@ -196,6 +334,16 @@ const routes = [
     component: UserRecommend,
     meta: {
       requireLogin: true // 当前路由需要校验，不需要就不用写
+    },
+    beforeEnter(to, from, next) {
+      if (from.name === 'user') {
+        // 添加不缓存路由
+        store.commit('setAddNoCacheComponents', 'userRecommend')
+      } else {
+        // 移除不缓存路由
+        store.commit('setRemoveNoCacheComponents', 'userRecommend')
+      }
+      next()
     }
   }
 
@@ -216,8 +364,7 @@ const router = new VueRouter({
 
 })
 router.beforeEach((to, from, next) => {
-  console.log(from)
-  if (!from.path) { // 说明没有上一个路由
+  if (window.history.length === 0) { // 说明没有上一个路由
     next('/') // 回到首页
   } else if (to.matched.some(record => record.meta.requireLogin)) { // 判断该路由是否需要登录权限
     let utils = Vue.prototype.utils

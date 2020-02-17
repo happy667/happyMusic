@@ -11,7 +11,7 @@
                 finished-text="没有更多了"
                 @load="handlePullingUp">
         <song-list @select="handleSelect"
-        ref="songList"
+                   ref="songList"
                    :songsList="song.songList"></song-list>
       </van-list>
     </template>
@@ -30,6 +30,7 @@ import Song from '@/assets/common/js/song.js'
 import Singer from '@/assets/common/js/singer.js'
 import songApi from '@/api/song.js'
 export default {
+  name: 'searchResultSong',
   data () {
     return {
       song: {
@@ -46,6 +47,7 @@ export default {
     ...mapGetters(['currentSong'])
   },
   mounted () {
+    console.log(2222)
     if (this.searchKeywords.trim().length === 0) {
       this.song.isNull = true
       return

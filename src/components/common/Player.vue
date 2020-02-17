@@ -55,8 +55,13 @@ export default {
     playerFullScreen () {
       if (this.playerFullScreen) {
         this.$refs.play.style.position = 'fixed'
+        // 解决打开播放器页面还能滚动滚动条的问题
+        // 思路:当打开播放器时设置body节点超出隐藏，
+        // 当关闭时再恢复
+        document.body.style.overflow = 'hidden'
       } else {
         this.$refs.play.style.position = 'relative'
+        document.body.style.overflow = ''
       }
     },
     currentSong (newSong, oldSong) {
@@ -83,13 +88,24 @@ export default {
       this.setPlayerShowImage(true)
     },
     playing (newPlaying) {
-      this.$nextTick(() => {
-        newPlaying ? this.audio.play() : this.audio.pause()
-      })
+      if (newPlaying) {
+        console.log(this.oldVideo.$data)
+        // 如果有视频播放就暂停
+        if (this.oldVideo.$data && this.oldVideo.$data.isPlay) {
+          this.oldVideo.pauseCurrentVideo()
+        }
+        this.$nextTick(() => {
+          this.audio.play()
+        })
+      } else {
+        this.$nextTick(() => {
+          this.audio.pause()
+        })
+      }
     }
   },
   computed: {
-    ...mapState(['playerFullScreen', 'songReady', 'playing', 'audio', 'currentPlayIndex', 'playList', 'playMode', 'sequenceList', 'currentLyric']),
+    ...mapState(['playerFullScreen', 'songReady', 'playing', 'audio', 'currentPlayIndex', 'playList', 'playMode', 'sequenceList', 'currentLyric', 'isPlay', 'oldVideo']),
     ...mapGetters(['currentSong']),
     togglePlayList: {
       get () {

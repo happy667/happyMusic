@@ -59,6 +59,7 @@ import {
 } from '@/api/config.js'
 import { mapState, mapMutations, mapGetters } from 'vuex'
 export default {
+  name: 'singerInfo',
   props: {
     id: String
   },
@@ -83,17 +84,18 @@ export default {
       }
     }
   },
+  // beforeRouteLeave (to, from, next) {
+  //   if (to.name === 'singerAlbum') {
+  //     // 移除不缓存路由
+  //     this.$store.commit('setRemoveNoCacheComponents', 'singerInfo')
+  //   }
+  //   next()
+  // },
   mounted () {
     // 根据歌手id获取歌手单曲
     this.handleTabsChange(this.currentIndex)
   },
-  beforeRouteEnter: (to, from, next) => {
-    next(vm => {
-      if (!vm.id) {
-        vm.$router.push('/home')
-      }
-    })
-  },
+
   computed: {
     ...mapState(['singerCurrentIndex', 'singer', 'currentPlayIndex']),
     ...mapGetters(['currentSong']),

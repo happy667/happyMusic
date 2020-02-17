@@ -3,7 +3,7 @@
     <!-- logo -->
     <div class="logo"
          @click="goToMyHome">
-      <img src="@/assets/images/Logo.png">
+      <img src="@/assets/images/logo.png">
     </div>
     <!-- 搜索框 -->
     <div class="search"
@@ -18,7 +18,6 @@
 </template>
 <script>
 import { mapMutations } from 'vuex'
-
 export default {
   methods: {
     ...mapMutations(['setSearchKeywords']),
@@ -46,15 +45,15 @@ export default {
   background: $color-common-background;
 
   .logo {
-    width :0.8rem;
+    padding-top: 10px;
     display: flex;
-    justify-content:center;
     flex-direction: column;
     align-items: flex-end;
     box-sizing: border-box;
     text-align: center;
+
     img {
-      width: 0.6rem;
+      width: 0.7rem;
     }
   }
 

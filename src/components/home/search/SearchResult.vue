@@ -54,7 +54,8 @@ export default {
       }
     }
   },
-  mounted () {
+  mouted () {
+    console.log(11111)
     if (!this.searchKeywords) {
       this.$router.push('/search/searchPage')
     }

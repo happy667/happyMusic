@@ -22,7 +22,8 @@
         <div class="related-mv"
              v-if="simiMVList">
           <p>相关视频</p>
-          <video-list :list="simiMVList"></video-list>
+          <video-list :list="simiMVList"
+                      @click="goToVideoInfo"></video-list>
         </div>
         <!-- 评论列表 -->
         <div class="comment"
@@ -57,6 +58,7 @@ import {
   ERR_OK
 } from '@/api/config.js'
 export default {
+  name: 'videoInfo',
   props: {
     id: String
   },
@@ -70,12 +72,13 @@ export default {
       commentCount: 0// 评论数量
     }
   },
+  inject: ['reload'],
   computed: {
     commentText () {
       return this.commentCount === 0 ? '' : this.commentCount
     }
   },
-  created () {
+  mounted () {
     this.$nextTick(async () => {
       await this.getVideoDetail(this.id)
       await this.getSimiMV(this.id)
@@ -141,6 +144,10 @@ export default {
         }
         this.loading = false
       }, 500)
+    },
+    goToVideoInfo (mv) {
+      this.reload()
+      this.$router.push(`/videoInfo/${mv.id}`)
     }
   },
   components: {

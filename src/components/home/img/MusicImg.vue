@@ -1,6 +1,6 @@
 <template>
   <div class="avatar-wrapper">
-    <img v-lazy="avatar" />
+    <img v-lazy="avatar" :key="avatar" />
   </div>
 </template>
 <script>

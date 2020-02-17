@@ -26,11 +26,15 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setPlayerFullScreen']),
+    ...mapMutations(['setPlayerFullScreen', 'setAddNoCacheComponents']),
     // 点击评论
     handleRecommentClick () {
-      this.$router.push(`/songComment/${this.currentSong.id}`)
+      // 添加不缓存路由
+      this.setAddNoCacheComponents('songComment')
       this.setPlayerFullScreen(false)
+      if (this.$route.path !== `/songComment/${this.currentSong.id}`) {
+        this.$router.push(`/songComment/${this.currentSong.id}`)
+      }
     },
     // 选中歌曲喜欢
     selectItemLove () {

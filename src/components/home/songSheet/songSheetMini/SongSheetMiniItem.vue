@@ -3,7 +3,8 @@
        @click="goToSongSheetInfo">
     <!--  图片 -->
     <div class="img">
-      <img v-lazy="item.coverImgUrl" />
+      <img v-lazy="item.coverImgUrl"
+           :key="item.coverImgUrl" />
     </div>
     <!-- 信息 -->
     <div class="info">

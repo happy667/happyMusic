@@ -3,7 +3,7 @@
     <!-- 头部导航 -->
     <van-sticky>
       <van-nav-bar title="搜索"
-      ref="navBar"
+                   ref="navBar"
                    left-arrow
                    @click-left="routerBack" />
     </van-sticky>
@@ -31,9 +31,7 @@
         </li>
       </ul>
     </div>
-    <template>
       <router-view></router-view>
-    </template>
 
   </div>
 </template>
@@ -43,6 +41,7 @@ import { ERR_OK } from '@/api/config.js'
 import { addLocalSearch } from '@/assets/common/js/localStorage.js'
 import { mapState, mapMutations } from 'vuex'
 export default {
+  name: 'search',
   data () {
     return {
       searchDefault: '', // 搜索默认关键词
@@ -51,7 +50,7 @@ export default {
   },
   inject: ['reload'],
   computed: {
-    ...mapState(['searchKeywords', 'showSearchList']),
+    ...mapState(['searchKeywords', 'showSearchList', 'noCacheComponents']),
     // 搜索框的值
     searchVal: {
       get () {
@@ -66,11 +65,13 @@ export default {
   mounted () {
     this.$nextTick(() => {
       this.getSearchDefault()
-      // 监听页面滚动
-      window.addEventListener('scroll', this.handleScroll)
     })
   },
-  destroyed () {
+  activated () {
+    // 监听页面滚动
+    window.addEventListener('scroll', this.handleScroll)
+  },
+  deactivated () {
     // 取消监听页面滚动
     document.removeEventListener('scroll', this.handleScroll)
   },

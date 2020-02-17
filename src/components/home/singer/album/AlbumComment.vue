@@ -22,7 +22,7 @@
             <div class="top">
               <div class="left-img">
                 <div class="album-image">
-                  <img v-lazy="album.picUrl" />
+                  <img v-lazy="album.picUrl" :key="album.picUrl" />
                 </div>
               </div>
               <div class="right-info">
@@ -73,6 +73,7 @@ import {
   ERR_OK
 } from '@/api/config.js'
 export default {
+  name: 'albumComment',
   props: {
     id: String
   },
@@ -98,9 +99,12 @@ export default {
   methods: {
     // 返回上一个路由
     routerBack () {
+      this.$route.meta.isBack = true
       this.$router.back()
     },
     goToAlbum () {
+      this.$route.meta.isBack = false
+      console.log('跳转')
       this.$router.push(`/singerAlbum/${this.id}`)
     },
     // 获取专辑详情
@@ -139,10 +143,6 @@ export default {
         }
         this.loading = false
       }, 500)
-    },
-    // 跳转到歌单详情
-    handleClick () {
-      this.$router.push(`/singerAlbum/${this.id}`)
     }
   },
   components: {

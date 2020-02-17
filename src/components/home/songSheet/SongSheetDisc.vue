@@ -14,7 +14,7 @@
     <!-- 歌单图片 -->
     <div class="songs-img">
       <template v-if="songSheetDisc.picUrl">
-        <img :src="songSheetDisc.picUrl">
+        <img v-lazy="songSheetDisc.picUrl" :key="songSheetDisc.picUrl">
       </template>
       <!-- 收藏 -->
       <div class="follow"
@@ -73,6 +73,7 @@ import Follow from '@/components/common/Follow'
 import Position from '@/components/common/Position'
 import { mapMutations, mapGetters, mapActions, mapState } from 'vuex'
 export default {
+  name: 'songSheetDisc',
   props: {
     id: String
   },
@@ -305,7 +306,7 @@ export default {
       .songs-nt {
         display: flex;
         justify-content: space-between;
-        color: $color-common-b;
+        color: $color-common-b2;
 
         .songs-num {
           font-size: $font-size-smaller;

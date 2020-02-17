@@ -25,7 +25,6 @@ export default new Vuex.Store({
     scrollIndex: 0, // 当前滑动的索引
     stop: false, // 是否停止滚动
     isScroll: false, // 是否是滚动状态
-    videoList: [], // mv列表
     oldVideo: {}, // 上一次的video
     searchKeywords: '', // 搜索关键词
     searchCurrentIndex: 0, // 搜索页当前索引
@@ -45,7 +44,8 @@ export default new Vuex.Store({
     currentPlayLyric: '', // 当前播放的歌词
     userLikeList: null, // 用户喜欢列表
     userRecommendIndex: 0, // 用户每日推荐页当前索引
-    singer: null // 歌手
+    singer: null, // 歌手
+    noCacheComponents: [] // 不缓存的组件
   },
   mutations: {
     // 设置登录用户
@@ -80,10 +80,6 @@ export default new Vuex.Store({
     // 设置歌手页是否在滚动
     setIsScroll(state, isScroll) {
       state.isScroll = isScroll
-    },
-    // 设置video列表
-    setVideoList(state, list) {
-      state.videoList = state.videoList.concat(list)
     },
     // 设置上次播放的video
     setOldVideo(state, video) {
@@ -164,7 +160,25 @@ export default new Vuex.Store({
     // 设置token
     setToken(state, token) {
       state.token = token
+    },
+    // 设置添加不缓存的路由
+    setAddNoCacheComponents(state, name) {
+      console.log(state.noCacheComponents)
+      // 判断是否已经存在该组件,不存在就添加进去
+      if (!state.noCacheComponents.includes(name)) {
+        state.noCacheComponents.push(name)
+      }
+    },
+    // 设置移除不缓存的路由
+    setRemoveNoCacheComponents(state, name) {
+      // 判断是否包含移除的路由，包含就移除该路由
+
+      let index = state.noCacheComponents.indexOf(name)
+      if (index !== -1) { // 说明存在
+        state.noCacheComponents.splice(index, 1)
+      }
     }
+
   },
   actions: {
     // 获取登录用户信息
@@ -175,7 +189,7 @@ export default new Vuex.Store({
           context.commit('setLoginUser', user)
           context.dispatch('getUserLikeList', user.userId)
         }
-      }).catch(err => console.log(err.data))
+      }).catch(err => console.log(err))
     },
     // 获取用户喜欢列表
     async getUserLikeList(context, id) {

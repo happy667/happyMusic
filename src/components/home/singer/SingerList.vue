@@ -58,6 +58,9 @@ export default {
     this.scrollEnd = true// 可以监听页面停止滚动
     this.probeType = 3// 可以监听缓冲时的滑动位置
   },
+  activated () {
+    this.$refs.singerList.refresh()
+  },
   computed: {
     ...mapState(['scrollIndex', 'stop', 'isScroll']),
     ...mapGetters(['currentSong']),

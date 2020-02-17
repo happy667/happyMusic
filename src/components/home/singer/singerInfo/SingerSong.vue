@@ -25,8 +25,9 @@
 
     </template>
     <template v-else-if="list&&list.length===0">
-      <no-result text="暂无相关歌曲"></no-result>
+      <no-result :text="noResult"></no-result>
     </template>
+
   </div>
 </template>
 <script>
@@ -43,6 +44,10 @@ export default {
     loading: {
       type: Boolean,
       default: () => false
+    },
+    noResult: {
+      type: String,
+      default: () => '暂无相关歌曲'
     }
   },
 

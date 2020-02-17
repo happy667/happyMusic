@@ -33,6 +33,7 @@ import searchApi from '@/api/search.js'
 import { ERR_OK } from '@/api/config.js'
 import { mapState } from 'vuex'
 export default {
+  name: 'searchResultSinger',
   data () {
     return {
       singer: {
@@ -47,7 +48,6 @@ export default {
   computed: {
     ...mapState(['searchKeywords', 'searchCurrentIndex'])
   },
-
   mounted () {
     if (this.searchKeywords.trim().length === 0) {
       this.singer.isNull = true

@@ -6,7 +6,7 @@
           v-for="(item,index) in rankingList"
           :key="index">
         <div class="list-item-img">
-          <img v-lazy="item.coverImgUrl" />
+          <img v-lazy="item.coverImgUrl" :key="item.coverImgUrl" />
         </div>
         <div class="list-item-title">{{item.name}}</div>
       </li>

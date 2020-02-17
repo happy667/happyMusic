@@ -53,6 +53,7 @@ import {
   ERR_OK
 } from '@/api/config.js'
 export default {
+  name: 'songComment',
   props: {
     id: String
   },
@@ -79,6 +80,9 @@ export default {
     ...mapMutations(['setPlayerFullScreen']),
     // 返回上一个路由
     routerBack () {
+      if (!this.playerFullScreen) {
+        this.setPlayerFullScreen(true)
+      }
       this.$router.back()
     },
     // 获取该mv评论

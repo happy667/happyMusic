@@ -10,3 +10,14 @@ export const targetType = {
   songSheet: 1000 // 歌单
 }
 export const USER_TOKEN = 'token'
+// 需要登录的组件
+export const needLoginComponents = [ // 存放路由name属性
+  'user',
+  'myFollow',
+  'myLike',
+  'userRecommend',
+  'playRanking'
+]
+export const defaultMusicImage = 'http://s4.music.126.net/style/web2/img/default/default_album.jpg?param=130y130'
+export const logoImage = '/assets/images/Logo.png'
+export const logoIndexImage = 'src/assets/images/logoIndex.png'

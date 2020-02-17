@@ -8,7 +8,19 @@
 <script>
 import HomeHeader from '@/components/home/Header'
 import HomeSection from '@/components/home/Section'
+import { mapState } from 'vuex'
 export default {
+  name: 'home',
+  computed: {
+    ...mapState(['oldVideo'])
+  },
+  beforeRouteLeave (to, from, next) {
+    console.log(1111)
+    if (this.oldVideo.$data && this.oldVideo.$data.isPlay) {
+      this.oldVideo.pauseCurrentVideo()
+    }
+    next()
+  },
   components: {
     HomeHeader,
     HomeSection

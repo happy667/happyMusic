@@ -40,6 +40,7 @@ import {
 import { mapState, mapMutations } from 'vuex'
 
 export default {
+  name: 'userRecommend',
   data () {
     return {
       recommendSongList: null, // 推荐歌曲

@@ -2,6 +2,7 @@
   <div class="header-navBar-container">
     <!-- 头部导航栏 -->
     <van-tabs v-model="currentIndex"
+              @change="handleChange"
               title-active-color="#FD4979"
               color="#FD4979"
               animated
@@ -30,8 +31,10 @@ import Recommend from '@/components/home/recommend/Recommend'
 import Ranking from '@/components/home/ranking/Ranking'
 import Singer from '@/components/home/singer/Singer'
 import VideoList from '@/components/home/video/VideoList'
+import { mapState } from 'vuex'
 export default {
   computed: {
+    ...mapState(['oldVideo']),
     currentIndex: {
       get () {
         return this.$store.state.homeCurrentIndex
@@ -41,6 +44,14 @@ export default {
       }
     }
 
+  },
+  methods: {
+    handleChange () {
+      if (this.currentIndex === 3) return
+      if (this.oldVideo.$data && this.oldVideo.$data.isPlay) {
+        this.oldVideo.pauseCurrentVideo()
+      }
+    }
   },
   components: {
     Recommend,

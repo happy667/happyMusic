@@ -14,11 +14,13 @@
               swipeable>
       <van-tab title="最近一周">
         <song-list :list="weekendSongList"
-                   :loading="loading" />
+                   :loading="loading"
+                   noResult="暂无听歌记录" />
       </van-tab>
       <van-tab title="所有时间">
         <song-list :list="allSongList"
-                   :loading="loading" />
+                   :loading="loading"
+                   noResult="暂无听歌记录" />
       </van-tab>
     </van-tabs>
 
@@ -35,6 +37,7 @@ import {
 import { mapState } from 'vuex'
 
 export default {
+  name: 'playRanking',
   data () {
     return {
       weekendSongList: null, // 最近一周
@@ -83,7 +86,7 @@ export default {
           songList.push(new Song({ id: item.song.id, name: item.song.name, singers, singersList, picUrl: item.song.al.picUrl, playCount: item.playCount }))
         })
         this.loading = false
-        // return songList
+        return songList
       }
     },
     async handleChange (name) {

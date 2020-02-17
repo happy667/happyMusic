@@ -17,12 +17,16 @@
         <!-- 注册 -->
         <router-link to="/appIndex/register">注册</router-link>
       </div>
+      <!-- 游客登录 -->
+      <div class="visitor-login">
+        <router-link to="/home">游客登录</router-link>
+      </div>
     </div>
   </div>
 </template>
 <script>
 export default {
-
+  name: 'index'
 }
 </script>
 <style lang="stylus" scoped>
@@ -60,7 +64,7 @@ export default {
 
     .option {
       display: flex;
-      height: 8rem;
+      height: 6.5rem;
       flex-direction: column;
       justify-content: space-evenly;
       align-items: center;
@@ -81,6 +85,13 @@ export default {
         font-weight: bolder;
         font-size: $font-size-small;
       }
+    }
+
+    .visitor-login {
+      height: 1rem;
+      line-height: 1rem;
+      text-align: center;
+      font-size: $font-size-smaller;
     }
   }
 }

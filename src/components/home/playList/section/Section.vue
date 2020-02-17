@@ -135,7 +135,7 @@ export default {
           }
 
           .singer {
-            color: $color-common-b;
+            color: $color-common-b2;
             font-size: $font-size-smaller-x;
             no-wrap();
           }

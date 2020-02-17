@@ -1,9 +1,9 @@
 <template>
   <div class="mv-list-item-container"
-       @click="goToVideoInfo">
+       @click="handleClick">
     <!-- mv 图片 -->
     <div class="mv-img">
-      <img v-lazy="mv.cover" />
+      <img v-lazy="mv.cover" :key="mv.cover"/>
       <!-- 播放次数 -->
       <div class="play-num">
         <i class="iconfont icon-bofang"></i>
@@ -32,13 +32,10 @@ export default {
       type: Object
     }
   },
-  inject: ['reload'],
   methods: {
-    goToVideoInfo () {
-      this.reload()
-      this.$router.push(`/videoInfo/${this.mv.id}`)
+    handleClick () {
+      this.$emit('click', this.mv)
     }
-
   }
 }
 </script>

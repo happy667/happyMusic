@@ -11,14 +11,15 @@
                 finished-text="没有更多了"
                 @load="handlePullingUp">
         <div class="mv-list">
-          <mv-list :list="mv.mvList"></mv-list>
+          <mv-list @click="goToVideoInfo"
+                   :list="mv.mvList"></mv-list>
         </div>
       </van-list>
     </template>
     <template v-if="mv.isNull">
       <no-result text="暂无相关MV"></no-result>
     </template>
-</div>
+  </div>
 </template>
 <script>
 import MvList from '@/components/common/mv/MvList'
@@ -27,6 +28,7 @@ import searchApi from '@/api/search.js'
 import { ERR_OK } from '@/api/config.js'
 import { mapState } from 'vuex'
 export default {
+  name: 'searchResultMV',
   data () {
     return {
       mv: {
@@ -88,6 +90,9 @@ export default {
       } else {
         this.loading = false
       }
+    },
+    goToVideoInfo (mv) {
+      this.$router.push(`/videoInfo/${mv.id}`)
     }
   },
 

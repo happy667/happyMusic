@@ -7,18 +7,15 @@
       <van-loading class="load"
                    size="1rem"
                    color="#FD4979"
-                   v-show="videoLoad" />
+                   v-if="videoLoad" />
       <video :src="videoParams.url"
              preload='metadata'
              ref="video"
              muted
              :id="videoParams.id"
-             playsinline="true"
-             x-webkit-airplay="allow"
-             x5-video-player-type='h5'
-             x5-video-orientation="portraint"
-             x5-video-player-fullscreen='true'
+             webkit-playsinline="true"
              x5-video-ignore-metadata='true'
+             @canplay="handleCanplay"
              :poster="videoParams.cover"></video>
 
       <!-- 播放按钮 -->
@@ -176,20 +173,11 @@ export default {
     // 获取播放时长时间
     this.$nextTick(() => {
       this.video = this.$refs.video
-      this.video.oncanplay = () => { // 可以播放了
-        setTimeout(() => {
-          // 修改时间
-          this.videoParams.duration = this.video.duration
-          this.videoLoad = false
-          this.$forceUpdate()// 由于获取推荐视频中触发了多个异步请求,导致页面无法随时更新，需要刷新才可以重新渲染，使用forceUpdate解决这个问题，使他可以重新渲染
-        }, 20)
-      }
-      // 更新时间
-      this.updateTime()
     })
   },
+
   computed: {
-    ...mapState(['oldVideo']),
+    ...mapState(['oldVideo', 'playing', 'audio']),
     playIcon () {
       return this.isPlay ? 'pause-circle-o' : 'play-circle-o'
     },
@@ -202,10 +190,19 @@ export default {
       if (this.currenTime === this.video.duration) { // 播放完了
         this.initVideo(this.video)
       }
+    },
+    isPlay () {
+      // 如果有歌曲播放就暂停
+      if (this.playing && this.isPlay) {
+        this.setPlaying(false)
+        this.$nextTick(() => {
+          this.audio.pause()
+        })
+      }
     }
   },
   methods: {
-    ...mapMutations(['setOldVideo', 'setSingerCurrentIndex']),
+    ...mapMutations(['setOldVideo', 'setSingerCurrentIndex', 'setPlaying']),
     // 跳转到video详情页
     goToVideoInfo () {
       // 说明不是视频详情页
@@ -214,6 +211,17 @@ export default {
       } else { // 显示更多信息
         this.showMoreInfo = !this.showMoreInfo
       }
+    },
+    // 可以播放
+    handleCanplay () {
+      setTimeout(() => {
+        // 修改时间
+        this.videoParams.duration = this.video.duration
+        this.videoLoad = false
+        this.$forceUpdate()// 由于获取推荐视频中触发了多个异步请求,导致页面无法随时更新，需要刷新才可以重新渲染，使用forceUpdate解决这个问题，使他可以重新渲染
+      }, 20)
+      // 更新时间
+      this.updateTime()
     },
     // 更新时间
     updateTime () {
@@ -238,13 +246,23 @@ export default {
     pauseOldVideo (obj) {
       if (this.oldVideo && this.oldVideo.video) {
         if (this !== this.oldVideo) {
-          if (obj.isPlay) {
-            obj.isPlay = false
-            obj.video.pause()
-          }
-          obj.isFirstPlay = true
-          obj.isClickScreen = false
+          this.pauseVideo(obj)
         }
+      }
+    },
+    // 暂停视频
+    pauseVideo (obj) {
+      if (obj.isPlay) {
+        obj.isPlay = false
+        obj.video.pause()
+      }
+      obj.isFirstPlay = true
+      obj.isClickScreen = false
+    },
+    // 暂停当前视频
+    pauseCurrentVideo () {
+      if (this.video) {
+        this.pauseVideo(this)
       }
     },
     // 滑动进度条
@@ -346,7 +364,7 @@ export default {
       line-height: 5rem;
       z-index: 99;
       text-align: center;
-      background: #e3e3e3;
+      background: $color-common-b;
     }
 
     video {
@@ -441,7 +459,7 @@ export default {
     }
 
     .video-desc {
-      color: $color-common-b;
+      color: $color-common-b2;
       font-size: $font-size-mini;
 
       .top {

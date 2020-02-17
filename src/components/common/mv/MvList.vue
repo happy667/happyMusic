@@ -2,7 +2,8 @@
   <div class="mv-list-container">
     <div class="mv-list">
       <template v-for="item in list">
-        <mv-item :mv="item"
+        <mv-item @click="handleClick"
+                 :mv="item"
                  :key="item.id"></mv-item>
       </template>
 
@@ -16,6 +17,11 @@ export default {
     list: {
       type: Array,
       default: () => []
+    }
+  },
+  methods: {
+    handleClick (mv) {
+      this.$emit('click', mv)
     }
   },
   components: {

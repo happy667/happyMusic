@@ -6,7 +6,7 @@
                  class="official-list">
       <!-- 排行列表图片 -->
       <div class="official-list-img">
-        <img v-lazy="rankingObj.coverImgUrl" />
+        <img v-lazy="rankingObj.coverImgUrl" :key="rankingObj.coverImgUrl" />
       </div>
       <!-- 歌曲排名 -->
       <ul class="official-list-info">

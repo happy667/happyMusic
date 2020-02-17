@@ -19,6 +19,7 @@
           </template>
 
           <van-loading v-if="loadMore"
+                       class="loadMore"
                        size="24px"
                        color="#FD4979"
                        vertical>加载更多...</van-loading>
@@ -36,14 +37,17 @@ import Video from '@/assets/common/js/video.js'
 import {
   ERR_OK
 } from '@/api/config.js'
-import { mapState, mapMutations } from 'vuex'
 export default {
   data () {
     return {
-      load: true, // 是否加载
-      loadMore: false
+      loadMore: false,
+      videoList: []// 视频列表
     }
   },
+  activated () {
+    this.$refs.videoListScroll.refresh()
+  },
+
   created () {
     this.pullUp = true
   },
@@ -55,14 +59,9 @@ export default {
       }
     })
   },
-  computed: {
-    ...mapState(['videoList'])
-  },
   methods: {
-    ...mapMutations(['setVideoList']),
     // 上拉加载
     async handlePullingUp () {
-      console.log(this.loadMore)
       if (this.loadMore) { // 如果请求未完成就不继续请求数据
         return
       }
@@ -103,7 +102,7 @@ export default {
               videoList.push(video)
               if (length === data.length) { // 说明请求完成
                 this.loadMore = false
-                this.setVideoList(videoList)
+                this.videoList = this.videoList.concat(videoList)
                 this.$nextTick(() => {
                   this.$refs.videoListScroll.finishPullUp()
                 })
@@ -127,17 +126,16 @@ export default {
   display: none;
 }
 
+.videoList-container>>>.loadMore {
+  height: 2rem !important;
+}
+
 .videoList-container {
   .video-list {
     width: 100%;
     padding: 0.5rem;
     box-sizing: border-box;
     position: absolute;
-  }
-
-  .no-login {
-    /* 减去搜索框、导航栏 */
-    height: calc(100vh - (1.7rem + 1.18rem));
   }
 }
 </style>

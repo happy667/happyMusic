@@ -1,7 +1,9 @@
 <template>
   <div id="app">
-    <router-view v-transition
-                 v-if="isRouterAlive"></router-view>
+    <keep-alive :exclude="noCacheComponents">
+      <router-view v-if="isRouterAlive"
+                   :key="$route.fullPath"></router-view>
+    </keep-alive>
     <player></player>
   </div>
 </template>
@@ -12,7 +14,7 @@ import {
   ERR_OK
 } from '@/api/config.js'
 import {
-  USER_TOKEN
+  USER_TOKEN, needLoginComponents
 } from '@/assets/common/js/config.js'
 import {
   getItem, clearItem
@@ -31,7 +33,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['user', 'token'])
+    ...mapState(['user', 'token', 'noCacheComponents'])
   },
   mounted () {
     if (this.token) {
@@ -76,6 +78,17 @@ export default {
           this.setLoginUser(null)
           this.setToken(null)
           this.setUserLikeList(null)
+          let name = this.$route.name
+          // 判断当前路由是否为需要登录，如果是的话就刷新页面,否则跳转到用户首页
+          if (needLoginComponents.includes(this.$route.name)) {
+            // 添加不缓存路由
+            this.$store.commit('setAddNoCacheComponents', 'user')
+            if (name === 'user') {
+              this.reload()
+            } else {
+              this.$router.replace({ name: 'user' })
+            }
+          }
         }
       })
     }
@@ -87,6 +100,7 @@ export default {
 </script>
 <style lang="stylus" scoped>
 #app {
+  width: 100%;
   box-shadow: none;
 }
 </style>

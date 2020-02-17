@@ -3,7 +3,8 @@
     <div class="song-sheet-swiper-item">
       <div class="song-img">
         <div class="image">
-          <img :src="songSheet.picUrl">
+          <img :src="songSheet.picUrl"
+               :key="songSheet.picUrl">
           <div class="play-icon">
             <van-icon name="play-circle-o" />
           </div>

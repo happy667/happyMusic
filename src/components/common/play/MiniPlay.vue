@@ -4,7 +4,7 @@
     <div class="fixed">
       <!-- 左侧图片 -->
       <div class="left">
-        <img :src="currentSong.picUrl"
+        <img v-lazy="picUrl" :key="picUrl"
              :class="cdCls">
       </div>
       <div class="right">
@@ -47,6 +47,7 @@
   </div>
 </template>
 <script>
+import { defaultMusicImage } from 'common/js/config.js'
 import { mapMutations, mapGetters, mapState } from 'vuex'
 export default {
   inject: ['playerParams'],
@@ -58,6 +59,9 @@ export default {
     },
     cdCls () {
       return this.playing ? 'play' : 'play pause'
+    },
+    picUrl () {
+      return this.currentSong.picUrl ? this.currentSong.picUrl : defaultMusicImage
     }
   },
   methods: {
@@ -93,7 +97,8 @@ export default {
  }
 
  .mini-play-container {
-   padding-bottom :1.8rem;
+   padding-bottom: 1.8rem;
+
    .fixed {
      position: fixed;
      width: 100%;

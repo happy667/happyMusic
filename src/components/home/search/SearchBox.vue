@@ -26,7 +26,7 @@
       <div class="search-list-header">
         <p class="title">热门搜索</p>
       </div>
-      <van-loading v-if="this.hotSearchList.length===0"
+      <van-loading v-if="load"
                    size="24px"
                    color="#FD4979"
                    class="load"
@@ -39,7 +39,7 @@
             v-for="(item,index) in hotSearchList"
             :key="item.searchWord">
           <div class="left"
-               :class="index<3?'top':''">
+               :class="index < 3 ? 'top' : ''">
             <div class="index">{{index+1}}</div>
             <div class="search-info">
               <div class="top">{{item.searchWord}}</div>
@@ -59,23 +59,31 @@ import { ERR_OK } from '@/api/config.js'
 import { mapState, mapMutations } from 'vuex'
 import { getLocalList, clearLocalList, addLocalSearch } from '@/assets/common/js/localStorage.js'
 export default {
+  name: 'searchPage',
   data () {
     return {
       hotSearchList: [], // 热搜列表
-      localSearchList: []// 历史搜索列表
+      localSearchList: [], // 历史搜索列表
+      load: false
     }
   },
   computed: {
     ...mapState(['searchKeywords', 'showSearchList'])
   },
-
+  mounted () {
+    // 获取热门搜索
+    this.getHotSearchList()
+    if (getLocalList()) { this.localSearchList = getLocalList() }// 如果本地存在历史记录就赋值
+  },
   methods: {
     ...mapMutations(['setSearchKeywords', 'setSearchCurrentIndex', 'selectSearchItem', 'setShowSearchList']),
     // 获取热门搜索
     async getHotSearchList () {
+      this.load = true
       const { data: res } = await searchApi.getHotSearchList()
       if (res.code === ERR_OK) {
         this.hotSearchList = res.data
+        this.load = false
       }
     },
     // 选择搜索名称
@@ -108,11 +116,8 @@ export default {
       }
     }
   },
-  mounted () {
-    this.$nextTick(() => {
-      this.getHotSearchList()
-      if (getLocalList()) { this.localSearchList = getLocalList() }// 如果本地存在历史记录就赋值
-    })
+  activated () {
+    if (getLocalList()) { this.localSearchList = getLocalList() }// 如果本地存在历史记录就赋值
   }
 }
 </script>
@@ -170,13 +175,14 @@ export default {
         display: flex;
         justify-content: space-between;
         height: 1rem;
-        color: $color-common-b;
+        color: $color-common-b2;
 
         .left {
           display: flex;
 
           &.top {
             .index {
+              font-weight: 600;
               color: $color-common;
             }
 

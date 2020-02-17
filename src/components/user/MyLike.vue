@@ -1,17 +1,26 @@
 <template>
-  <div class="my-like-container">
+  <div class="my-like-container"
+       @touchstart="handleTouchStart"
+       @touchmove="handleTouchMove"
+       @touchend="handleTouchEnd">
     <!-- 头部导航栏 -->
     <van-sticky>
       <van-nav-bar title="我的最爱"
+                   ref="navBar"
                    left-arrow
                    @click-left="routerBack" />
     </van-sticky>
     <song-list @noLike="handleNoLike"
+               ref="songList"
                :list="songList"
                :loading="loading" />
+    <!-- 定位 -->
+    <position v-show="isShowPosition"
+              @click="handlePosition"></position>
   </div>
 </template>
 <script>
+import Position from '@/components/common/Position'
 import SongList from '@/components/home/singer/singerInfo/SingerSong'
 import Singer from '@/assets/common/js/singer.js'
 import Song from '@/assets/common/js/song.js'
@@ -19,21 +28,33 @@ import songApi from '@/api/song.js'
 import {
   ERR_OK
 } from '@/api/config.js'
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 
 export default {
+  name: 'myLike',
   data () {
     return {
       songList: null, // 歌曲列表
-      loading: false
+      loading: false,
+      showPosition: false
     }
   },
   computed: {
-    ...mapState(['user', 'userLikeList'])
+    ...mapState(['user', 'userLikeList']),
+    ...mapGetters(['currentSong']),
+    // 是否显示定位
+    isShowPosition () {
+      if (!this.songList) return
+      // 判断当前歌曲列表是否有正在播放的歌曲（-1表示没有)
+      let index = this.utils.findIndex(this.songList, this.currentSong)
+      return this.showPosition && index !== -1
+    }
   },
   watch: {
     userLikeList () {
-      this.getSongDetail()
+      if (this.user) {
+        this.getSongDetail()
+      }
     }
   },
   methods: {
@@ -80,6 +101,28 @@ export default {
     // 选择歌手
     selectItem (item) {
       this.$router.push(`/singerInfo/${item.id}`)
+    },
+    handlePosition () {
+      // 说明有歌曲在播放
+      if (this.currentSong) {
+        let listNode = this.$refs.songList.$refs.songList.$refs.list
+        let song = this.currentSong
+        let otherHeight = this.$refs.navBar.offsetHeight
+        let list = this.songList
+        this.utils.positionSong({ listNode, list, song, otherHeight })
+        this.$toast('已定位到当前歌曲')
+      }
+    },
+    handleTouchStart () {
+      clearTimeout(this.timer)
+    },
+    handleTouchMove () {
+      this.showPosition = true
+    },
+    handleTouchEnd () {
+      this.timer = setTimeout(() => {
+        this.showPosition = false
+      }, 5000)
     }
   },
   mounted () {
@@ -88,7 +131,8 @@ export default {
     }
   },
   components: {
-    SongList
+    SongList,
+    Position
   }
 }
 </script>

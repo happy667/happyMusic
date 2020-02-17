@@ -6,7 +6,7 @@
       <div class="song-image">
         <div class="image"
              :class="cdCls">
-          <img v-lazy="currentSong.picUrl">
+          <img v-lazy="picUrl" :key="picUrl">
           <div class="img-linght"></div>
         </div>
       </div>
@@ -46,6 +46,7 @@ import NoResult from '@/components/common/NoResult'
 import {
   ERR_OK
 } from '@/api/config.js'
+import { defaultMusicImage } from 'common/js/config.js'
 import { mapGetters, mapState, mapMutations } from 'vuex'
 export default {
   data () {
@@ -58,6 +59,9 @@ export default {
     ...mapGetters(['currentSong']),
     cdCls () {
       return this.playing ? 'play' : 'play pause'
+    },
+    picUrl () {
+      return this.currentSong.picUrl ? this.currentSong.picUrl : defaultMusicImage
     }
   },
   methods: {

@@ -3,7 +3,7 @@
     <div class="container">
       <!-- logo -->
       <div class="logo">
-        <img src="@/assets/images/Logo.png" />
+        <img src="@/assets/images/logo.png" />
       </div>
       <!-- 表单 -->
       <div class="find-password-form">
@@ -47,7 +47,8 @@
         <!-- 去登陆 -->
         <div class="other-wrapper">
           <span>找到账号了?</span>
-          <router-link to="/appIndex/login" replace>去登陆</router-link>
+          <router-link to="/appIndex/login"
+                       replace>去登陆</router-link>
         </div>
       </div>
     </div>
@@ -60,6 +61,7 @@ import {
   ERR_OK
 } from '@/api/config.js'
 export default {
+  name: 'findPassword',
   data () {
     return {
       updateForm: {
@@ -156,29 +158,32 @@ export default {
                   registerApi.register(this.updateForm).then(res => {
                     console.log(res)
                     if (res.data.code === ERR_OK) {
-                      this.$Dialog.alert({
-                        message: '密码修改成功，快去登陆吧',
-                        confirmButtonColor: '#FD4979',
-                        width: '265px'
+                      this.utils.alert({
+                        message: '密码修改成功，快去登陆吧'
                       }).then(() => {
+                        this.resetForm()
                         this.$router.push('/appIndex/login')
                       })
                     }
                   })
                 }
               }).catch(error => {
-                this.$toast(error.message)
+                this.$toast(error.data.message)
               })
             } else {
-              this.$Dialog.alert({
-                message: '该手机号尚未注册',
-                confirmButtonColor: '#FD4979',
-                width: '265px'
+              this.utils.alert({
+                message: '该手机号尚未注册'
+              }).then(() => {
+                this.$router.push('/appIndex/login')
               })
               // 清空表单
               this.resetForm()
             }
+          } else {
+            this.$toast(res.message)
           }
+        }).catch(err => {
+          this.$toast(err.data.message)
         })
       }
     },

@@ -35,6 +35,7 @@ import {
 import { mapState } from 'vuex'
 
 export default {
+  name: 'myFollow',
   data () {
     return {
       singerSubList: null, // 歌手列表

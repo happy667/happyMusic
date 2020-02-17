@@ -1,16 +1,12 @@
 <template>
   <div class="appIndex-container">
-    <transition mode="out-in"
-                enter-active-class="animated fadeIn faster"
-                leave-active-class="animated fadeOut faster">
       <router-view></router-view>
-    </transition>
   </div>
 
 </template>
 <script>
 export default {
-
+  name: 'appIndex'
 }
 </script>
 <style lang="stylus" scoped>
@@ -21,8 +17,8 @@ export default {
   flex-direction: column;
   justify-content: center;
   width: 100%;
-  height :100vh;
+  height: 100vh;
   box-sizing: border-box;
-  background:$color-common-background;
+  background: $color-common-background;
 }
 </style>

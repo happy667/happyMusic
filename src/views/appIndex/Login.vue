@@ -4,7 +4,7 @@
     <div class="container">
       <!-- logo -->
       <div class="logo">
-        <img src="@/assets/images/Logo.png" />
+        <img src="@/assets/images/logo.png" />
       </div>
       <!-- 登录表单 -->
       <div class="login-form">
@@ -35,14 +35,14 @@
         <!-- 去注册 -->
         <div class="other-wrapper">
           <span>还没有账号?</span>
-          <router-link to="/appIndex/register" replace>去注册</router-link>
+          <router-link to="/appIndex/register"
+                       replace>去注册</router-link>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-
 import {
   ERR_OK
 } from '@/api/config.js'
@@ -57,6 +57,7 @@ import { checkIsNull, checkPhone, checkPassword } from 'common/js/valid.js'
 import { mapMutations } from 'vuex'
 
 export default {
+  name: 'login',
   data () {
     return {
       loginForm: {
@@ -81,6 +82,13 @@ export default {
     // 显示隐藏密码
     handleShowPwd () {
       this.showPassword = !this.showPassword
+    },
+    // 重置表单
+    resetForm () {
+      this.loginForm = {
+        phone: '',
+        password: ''
+      }
     },
     // 表单验证
     validForm () {
@@ -131,7 +139,7 @@ export default {
             } else {
               this.$router.replace('/home')
             }
-
+            this.resetForm()
             this.$toast.clear()
           } else {
             this.$toast(res.data.message)
