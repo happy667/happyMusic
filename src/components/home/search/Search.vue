@@ -31,7 +31,7 @@
         </li>
       </ul>
     </div>
-      <router-view></router-view>
+    <router-view></router-view>
 
   </div>
 </template>
@@ -116,6 +116,7 @@ export default {
     },
     // 搜索
     async handleSearch () {
+      console.log(123)
       this.closeSearchList()
       // 重置标签页到第一个
       this.setSearchCurrentIndex(0)

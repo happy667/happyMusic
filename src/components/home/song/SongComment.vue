@@ -45,7 +45,7 @@
 <script>
 import SongItem from '@/components/home/song/SongItem'
 import CommentList from '@/components/home/comment/CommentList'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapState, mapGetters, mapMutations } from 'vuex'
 import Song from '@/assets/common/js/song.js'
 import Singer from '@/assets/common/js/singer.js'
 import songApi from '@/api/song.js'
@@ -71,6 +71,7 @@ export default {
     this.getSongComment(this.id)
   },
   computed: {
+    ...mapState(['playerFullScreen']),
     ...mapGetters(['currentSong']),
     commentText () {
       return this.commentCount === 0 ? '' : this.commentCount
@@ -80,7 +81,7 @@ export default {
     ...mapMutations(['setPlayerFullScreen']),
     // 返回上一个路由
     routerBack () {
-      if (!this.playerFullScreen) {
+      if (!this.playerFullScreen && this.currentSong) {
         this.setPlayerFullScreen(true)
       }
       this.$router.back()

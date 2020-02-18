@@ -1,23 +1,30 @@
 <template>
-  <div class="song-sheet-swiper-item-container">
-    <div class="song-sheet-swiper-item">
-      <div class="song-img">
+  <div class="mini-swiper-item-container"
+       @click="handleClick">
+    <div class="mini-swiper-item">
+      <div class="image-wrapper">
         <div class="image">
-          <img :src="songSheet.picUrl"
-               :key="songSheet.picUrl">
-          <div class="play-icon">
+          <img :src="item.picUrl"
+               :key="item.picUrl">
+          <div class="icon">
             <van-icon name="play-circle-o" />
           </div>
         </div>
       </div>
-      <div class="song-desc">{{songSheet.name}}</div>
+      <div class="name">{{item.name}}</div>
     </div>
   </div>
 </template>
 <script>
 export default {
   props: {
-    songSheet: Object
+    item: Object
+  },
+  methods: {
+    handleClick () {
+      console.log(123)
+      this.$emit('select', this.item)
+    }
   }
 }
 </script>
@@ -25,10 +32,10 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.song-sheet-swiper-item-container {
+.mini-swiper-item-container {
   background: $color-common-background;
 
-  .song-sheet-swiper-item {
+  .mini-swiper-item {
     box-sizing: border-box;
     padding: 0.3rem 0.2rem;
     width: 2.8rem;
@@ -36,7 +43,7 @@ export default {
     box-shadow: 0 0.25rem 0.6rem rgba(0, 0, 0, 0.1);
     border-radius: 0.3rem;
 
-    .song-img {
+    .image-wrapper {
       width: 100%;
       height: 2rem;
       padding: 0 0.17rem;
@@ -56,7 +63,7 @@ export default {
         }
       }
 
-      .play-icon {
+      .icon {
         position: absolute;
         right: 0.25rem;
         bottom: 0rem;
@@ -65,7 +72,7 @@ export default {
       }
     }
 
-    .song-desc {
+    .name {
       width: 100%;
       line-height: 0.5rem;
       word-wrap: break-word;

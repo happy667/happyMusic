@@ -7,7 +7,7 @@
     <!-- 页面底部 -->
     <play-footer v-on="$listeners"></play-footer>
     <!-- 背景 -->
-    <div class="bg"
+    <div class="bg fadeIn"
          v-lazy:background-image="currentSong.picUrl "></div>
     <!--歌曲列表-->
     <van-action-sheet v-model="togglePlayList">
@@ -67,19 +67,13 @@ export default {
 
   .bg {
     position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: transparent;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    background-attachment: fixed;
-    filter: blur(20px);
+    left: -50%;
+    top: -50%;
+    width: 300%;
+    height: 300%;
     z-index: -1;
-    opacity: 0.4;
-    background: $color-common-b;
+    opacity: 0.6;
+    filter: blur(30px);
   }
 }
 </style>

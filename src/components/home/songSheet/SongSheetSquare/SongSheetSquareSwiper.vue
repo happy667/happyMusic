@@ -7,8 +7,8 @@
              :key="item.id">
           <div class="swiper-list-item"
                @click="selectItem(item)">
-            <song-sheet-swiper-item :songSheet="item"
-                                    :key="item.id"></song-sheet-swiper-item>
+            <song-Sheet-swiper-item :item="item"
+                                    :key="item.id"></song-Sheet-swiper-item>
           </div>
         </div>
       </div>
@@ -17,7 +17,7 @@
 </template>
 <script>
 import Swiper from 'swiper'
-import SongSheetSwiperItem from '../songSheetSwiper/SongSheetSwiperItem'
+import SongSheetSwiperItem from '@/components/common/miniSwiper/MiniSwiperItem'
 export default {
   props: {
     list: Array

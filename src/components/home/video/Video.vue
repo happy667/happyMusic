@@ -12,9 +12,13 @@
              preload='metadata'
              ref="video"
              muted
+             playsinline="true"
              :id="videoParams.id"
              webkit-playsinline="true"
+             x-webkit-airplay="true"
              x5-video-ignore-metadata='true'
+             x5-video-player-fullscreen=""
+             x5-video-orientation="portraint"
              @canplay="handleCanplay"
              :poster="videoParams.cover"></video>
 
@@ -362,7 +366,7 @@ export default {
       width: 100%;
       height: 5rem;
       line-height: 5rem;
-      z-index: 99;
+      z-index: 90;
       text-align: center;
       background: $color-common-b;
     }

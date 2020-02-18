@@ -1,10 +1,13 @@
 <template>
   <!-- 歌手简介 -->
   <div class="singer-synopsis-container">
+
     <template v-if="singer">
+
       <!-- 歌手图片 -->
       <div class="singer-img">
-        <img :src="singer.picUrl">
+        <img :src="singer.picUrl"
+             :key="singer.picUrl">
       </div>
       <div class="singer-synopsis">
         <!-- 收藏 -->

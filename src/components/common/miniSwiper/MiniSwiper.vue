@@ -1,13 +1,12 @@
 <template>
-  <div class="song-sheet-swiper-container">
+  <div class="mini-swiper-container">
     <slot></slot>
-    <div class="swiper-container sw-song-sheet">
+    <div class="swiper-container mini-swiper">
       <div class="swiper-wrapper">
         <div class="swiper-slide"
-             @click="selectItem(item)"
-             v-for="item in recommendNewSongSheet"
+             v-for="item in list"
              :key="item.id">
-          <song-sheet-swiper-item :song-sheet="item"></song-sheet-swiper-item>
+          <mini-swiper-item :item="item" @select="selectItem"></mini-swiper-item>
         </div>
       </div>
     </div>
@@ -15,20 +14,16 @@
 </template>
 <script>
 import Swiper from 'swiper'
-import SongSheetSwiperItem from './SongSheetSwiperItem'
-import { mapActions, mapMutations } from 'vuex'
+import MiniSwiperItem from './MiniSwiperItem'
 export default {
   props: {
-    recommendNewSongSheet: Array
+    list: Array
   },
   methods: {
-
-    ...mapActions(['getSongSheet']),
-    ...mapMutations(['setRank']),
     // 初始化轮播图组件
     initSwiper () {
       // eslint-disable-next-line no-unused-vars
-      var mySwiper = new Swiper('.sw-song-sheet', {
+      var mySwiper = new Swiper('.mini-swiper', {
         slidesPerView: 'auto',
         slidesPerGroup: 1,
         resistanceRatio: 0, // 解决左滑留白问题
@@ -48,10 +43,10 @@ export default {
       })
     },
 
-    // 选择歌单进入歌单详情
+    // 选择专辑进入专辑页面
     selectItem (item) {
-      this.setRank(false)// 不需要排行
-      this.$router.push({ path: `/songSheetDisc/${item.id}` })
+      console.log(123)
+      this.$router.push({ path: `/singerAlbum/${item.id}` })
     }
   },
   mounted () {
@@ -60,14 +55,14 @@ export default {
     })
   },
   components: {
-    SongSheetSwiperItem
+    MiniSwiperItem
   }
 }
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.song-sheet-swiper-container {
+.mini-swiper-container {
   min-height: 5rem;
 
   .swiper-container {

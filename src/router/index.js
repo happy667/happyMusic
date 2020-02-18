@@ -218,7 +218,6 @@ const routes = [
       keepAlive: false // 不需要缓存
     },
     beforeEnter(to, from, next) {
-      console.log(from)
       if (from.name === 'home' || from.name === 'searchResult' || from.name === 'videoInfo') {
         // 添加不缓存路由
         store.commit('setAddNoCacheComponents', 'singerInfo')
@@ -364,6 +363,15 @@ const router = new VueRouter({
 
 })
 router.beforeEach((to, from, next) => {
+  console.log(store.state.playerFullScreen)
+  if (store.state.playerFullScreen) {
+    if (from.name === 'songComment' || store.state.isPlayerClick) {
+      next()
+    } else {
+      store.commit('setPlayerFullScreen', false)
+      next(false)
+    }
+  }
   if (window.history.length === 0) { // 说明没有上一个路由
     next('/') // 回到首页
   } else if (to.matched.some(record => record.meta.requireLogin)) { // 判断该路由是否需要登录权限

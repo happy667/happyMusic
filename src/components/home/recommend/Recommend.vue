@@ -1,11 +1,11 @@
 <template>
   <div class="recommend-container ">
     <!-- loading -->
-    <van-loading v-if="this.banners.length === 0 || this.recommendSongSheet.length === 0 || this.recommendNewSong.length===0 || this.recommendNewSongSheet.length===0"
+    <van-loading v-if="load"
                  size="24px"
                  color="#FD4979"
                  vertical>加载中...</van-loading>
-    <template v-if="this.banners.length !== 0 && this.recommendSongSheet.length !== 0 && this.recommendNewSong.length!==0 && this.recommendNewSongSheet.length!==0">
+    <template v-if="!load">
 
       <!-- 轮播图区域 -->
       <recommend-swiper :banners="banners"></recommend-swiper>
@@ -14,24 +14,24 @@
       <song-swiper :recommendNewSong="recommendNewSong"
                    @select="handleSelect">
         <template>
-          <song-sheet-title title="新歌推送"></song-sheet-title>
+          <Title title="新歌推送"></Title>
         </template>
       </song-swiper>
       <!-- 推荐歌单区域 -->
       <song-sheet-list :list="recommendSongSheet">
         <template>
-          <song-sheet-title :isShowLoadMore="true"
-                            path='/SongSheetSquare'
-                            title="推荐歌单"></song-sheet-title>
+          <Title :isShowLoadMore="true"
+                 path='/SongSheetSquare'
+                 title="推荐歌单"></Title>
         </template>
       </song-sheet-list>
 
       <!-- 新碟上线 -->
-      <song-sheet-swiper :recommendNewSongSheet="recommendNewSongSheet">
+      <album-swiper :list="recommendNewAlbum">
         <template>
-          <song-sheet-title title="新碟上线"></song-sheet-title>
+          <Title title="新碟上线"></Title>
         </template>
-      </song-sheet-swiper>
+      </album-swiper>
     </template>
   </div>
 </template>
@@ -39,8 +39,8 @@
 import recommendSwiper from './RecommendSwiper'
 import SongSheetList from '@/components/home/songSheet/SongSheetList'
 import SongSwiper from '@/components/home/song/SongSwiper'
-import SongSheetSwiper from '@/components/home/songSheet/songSheetSwiper/SongSheetSwiper'
-import SongSheetTitle from '@/components/common/Title'
+import AlbumSwiper from '@/components/common/miniSwiper/MiniSwiper'
+import Title from '@/components/common/Title'
 import recommendApi from '@/api/recommend.js'
 import Song from '@/assets/common/js/song.js'
 import Singer from '@/assets/common/js/singer.js'
@@ -54,12 +54,15 @@ export default {
       banners: [], // 轮播图数据
       recommendSongSheet: [], // 推荐页歌单列表
       recommendNewSong: [], // 推荐新音乐
-      recommendNewSongSheet: [], // 新碟
+      recommendNewAlbum: [], // 新碟
       isLoading: false
     }
   },
   computed: {
-    ...mapGetters(['currentSong'])
+    ...mapGetters(['currentSong']),
+    load () {
+      return this.banners.length === 0 || this.recommendSongSheet.length === 0 || this.recommendNewSong.length === 0 || this.recommendNewAlbum.length === 0
+    }
   },
   methods: {
     ...mapMutations(['setPlayerFullScreen']),
@@ -121,12 +124,12 @@ export default {
       }
     },
     // 获取推荐新碟
-    async getRecommendNewSongSheet (context, params) {
+    async getRecommendNewAlbum () {
       const {
         data: res
-      } = await recommendApi.getRecommendNewSongSheet(params)
+      } = await recommendApi.getRecommendNewAlbum()
       if (res.code === ERR_OK) { // 成功获取推荐新碟
-        this.recommendNewSongSheet = res.albums
+        this.recommendNewAlbum = res.albums
       }
     }
 
@@ -139,15 +142,15 @@ export default {
     // 获取最新音乐
     this.getRecommendNewSong()
     // 获取新碟上线
-    this.getRecommendNewSongSheet()
+    this.getRecommendNewAlbum()
   },
 
   components: {
     recommendSwiper,
     SongSheetList,
-    SongSheetTitle,
     SongSwiper,
-    SongSheetSwiper
+    AlbumSwiper,
+    Title
   }
 }
 

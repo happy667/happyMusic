@@ -30,7 +30,7 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .footer-container {
-  padding: 0 0.5rem 0.6rem;
+  padding: 0 0.5rem 0.4rem;
   box-sizing: border-box;
 }
 </style>

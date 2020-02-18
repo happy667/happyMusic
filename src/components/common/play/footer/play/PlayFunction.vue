@@ -79,10 +79,9 @@ export default {
 @import '~common/stylus/variable';
 
 .function-container {
-  margin-top: 0.3rem;
   display: flex;
   justify-content: space-evenly;
-  height: 1.2rem;
+  height: 1rem;
 
   .icon {
     i {

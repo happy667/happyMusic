@@ -45,7 +45,8 @@ export default new Vuex.Store({
     userLikeList: null, // 用户喜欢列表
     userRecommendIndex: 0, // 用户每日推荐页当前索引
     singer: null, // 歌手
-    noCacheComponents: [] // 不缓存的组件
+    noCacheComponents: [], // 不缓存的组件
+    isPlayerClick: false // 是否为播放页面点击的
   },
   mutations: {
     // 设置登录用户
@@ -177,6 +178,10 @@ export default new Vuex.Store({
       if (index !== -1) { // 说明存在
         state.noCacheComponents.splice(index, 1)
       }
+    },
+    // 设置是否为播放页面点击的
+    setIsPlayerClick(state, isPlayerClick) {
+      state.isPlayerClick = isPlayerClick
     }
 
   },

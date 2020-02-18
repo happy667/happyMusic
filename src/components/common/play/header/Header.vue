@@ -41,7 +41,7 @@ export default {
     ...mapGetters(['currentSong'])
   },
   methods: {
-    ...mapMutations(['setPlayerFullScreen', 'setSinger', 'setSingerCurrentIndex']),
+    ...mapMutations(['setPlayerFullScreen', 'setSinger', 'setSingerCurrentIndex', 'setIsPlayerClick']),
     handleBack () {
       this.setPlayerFullScreen(false)
     },
@@ -53,6 +53,7 @@ export default {
           this.setSingerCurrentIndex(0)
           this.$router.push(`/singerInfo/${this.currentSong.singersList[0].id}`)
         }
+        this.setIsPlayerClick(true)
         this.setPlayerFullScreen(false)
       } else {
         this.showSingerPopup = true
@@ -74,13 +75,14 @@ export default {
     },
     // 选择歌手列表中歌手
     handleSelect (item) {
-      if (this.$route.name === 'singerInfo') {
-        this.reload()
+      console.log(this.$route.path, `/singerInfo/${item.id}`)
+      if (this.$route.path !== `/singerInfo/${item.id}`) {
+        this.setIsPlayerClick(true)
+        this.setSingerCurrentIndex(0)
+        this.$router.replace(`/singerInfo/${item.id}`)
       }
-      this.$router.push(`/singerInfo/${item.id}`)
-      this.setSingerCurrentIndex(0)
-      this.setPlayerFullScreen(false)
       this.showSingerPopup = false
+      this.setPlayerFullScreen(false)
     }
 
   },

@@ -9,8 +9,10 @@
                       @prev="prev"></FullScreenPlay>
     </transition>
     <!-- 迷你播放器 -->
-    <mini-play v-show="!playerFullScreen">
-    </mini-play>
+    <transition leave-active-class="animated fadeOut faster">
+      <mini-play v-show="!playerFullScreen">
+      </mini-play>
+    </transition>
     <div class="audio">
       <audio ref="audio"
              id="audio"

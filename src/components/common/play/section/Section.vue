@@ -6,7 +6,8 @@
       <div class="song-image">
         <div class="image"
              :class="cdCls">
-          <img v-lazy="picUrl" :key="picUrl">
+          <img v-lazy="picUrl"
+               :key="picUrl">
           <div class="img-linght"></div>
         </div>
       </div>
@@ -138,9 +139,10 @@ export default {
   .song-index {
     .song-image {
       .image {
+        margin: 0 auto;
         position: relative;
-        width: 6rem;
-        height: 6rem;
+        width: 5.1rem;
+        height: 5.1rem;
         border-radius: 50%;
         padding: 1.5rem;
         background: transparent url('http://s3.music.126.net/mobile-new/img/disc-plus.png?b700b62e1971b351dcb8b8ce1c9ceea3=') center center;
@@ -177,7 +179,6 @@ export default {
     }
 
     .current-play-lyric {
-      margin-top: 0.5rem;
       position: relative;
       padding: 0.5rem;
       height: 0;
@@ -191,8 +192,8 @@ export default {
         right: 0;
         bottom: 0;
         top: 0;
-        height: 1.1rem;
-        line-height: 1.1rem;
+        height: 1.2rem;
+        line-height: 1.2rem;
         no-wrap();
       }
     }
@@ -222,8 +223,8 @@ export default {
         font-size: $font-size-smaller-x;
 
         &.active {
-          color: #fff;
-          font-size: $font-size-smaller;
+          color: $color-common-x;
+          font-size: $font-size-small-x;
           transition: all 0.4s;
         }
       }

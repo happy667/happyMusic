@@ -43,8 +43,8 @@ export default {
   .play-time {
     display: flex;
     justify-content: space-between;
-    height: 1rem;
-    line-height: 1rem;
+    height: 0.8rem;
+    line-height: 0.8rem;
 
     .start-time, .end-time {
       color: #81898f;

@@ -97,7 +97,7 @@ export default {
   },
 
   computed: {
-    ...mapState(['singerCurrentIndex', 'singer', 'currentPlayIndex']),
+    ...mapState(['singerCurrentIndex', 'singer', 'currentPlayIndex', 'isPlayerClick']),
     ...mapGetters(['currentSong']),
     currentIndex: {
       get () {
@@ -115,9 +115,16 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setSingerCurrentIndex', 'setSinger']),
+    ...mapMutations(['setSingerCurrentIndex', 'setSinger', 'setPlayerFullScreen', 'setIsPlayerClick']),
 
     routerBack () {
+      if (this.isPlayerClick) {
+        console.log(55555)
+        this.setPlayerFullScreen(true)
+      } else {
+        this.setIsPlayerClick(false)
+      }
+
       this.$router.back()
     },
     handleTabsChange (name) {
