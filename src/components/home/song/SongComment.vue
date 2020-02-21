@@ -2,7 +2,7 @@
   <div class="song-comment-container">
     <header class="header">
       <van-sticky>
-        <van-nav-bar title="评论列表"
+        <van-nav-bar :title="$route.meta.title"
                      left-arrow
                      @click-left="routerBack" />
       </van-sticky>
@@ -159,6 +159,7 @@ export default {
 }
 
 .song-comment-container {
+  width: 100%;
   min-height: 100vh;
   background: $color-common-background;
 

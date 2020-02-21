@@ -2,7 +2,7 @@
   <div class="album-container">
     <!-- 头部导航栏 -->
     <van-sticky>
-      <van-nav-bar title="专辑详情"
+      <van-nav-bar :title="$route.meta.title"
                    left-arrow
                    @click-left="routerBack" />
     </van-sticky>
@@ -18,7 +18,8 @@
           <div class="top">
             <div class="left-img">
               <div class="album-image">
-                <img v-lazy="albumObj.album.picUrl" :key="albumObj.album.picUrl" />
+                <img v-lazy="albumObj.album.picUrl"
+                     :key="albumObj.album.picUrl" />
               </div>
               <div class="public-time">{{albumObj.album.publishTime|convertDate}}</div>
             </div>
@@ -118,7 +119,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['user']),
+    ...mapState(['user', 'isGetAlbumSingerImage']),
     ...mapGetters(['currentSong']),
     followIcon () {
       return this.followed ? 'like' : 'like-o'
@@ -137,11 +138,13 @@ export default {
     if (this.user) {
       this.getUserAlbum()
     }
+    this.setIsGetAlbumSingerImage(false)
   },
   methods: {
-    ...mapMutations(['setPlayerFullScreen', 'setSingerCurrentIndex']),
+    ...mapMutations(['setPlayerFullScreen', 'setSingerCurrentIndex', 'setIsAdvance', 'setIsGetAlbumSingerImage']),
     routerBack () {
       this.$route.meta.isBack = true
+      this.setIsAdvance(false)
       this.$router.back()
     },
     // 播放歌曲
@@ -225,15 +228,22 @@ export default {
     },
     // 选择歌手
     selectSingers () {
+      // 设置为前进页面
+      this.setIsAdvance(true)
       const list = this.albumObj.album.albumSingersList
       if (list.length === 1) { // 只有一个歌手直接跳转到歌手页面
         this.setSingerCurrentIndex(0)
         this.$router.push(`/singerInfo/${list[0].id}`)
       } else {
         this.showSingerPopup = true
-        list.forEach(async item => { // 查询该歌手图片
-          item.avatar = await this.getSingerImage(item.id)
-        })
+        if (!this.isGetAlbumSingerImage) { // 判断是否获取过歌手图片
+          list.forEach(async (item, index) => { // 查询该歌手图片
+            item.avatar = await this.getSingerImage(item.id)
+            if (index === list.length - 1) { // 如果index等于当前歌手列表长度-1就说明数据全部获取完毕
+              this.setIsGetAlbumSingerImage(true)// 设置vuex已经获取过歌手图片
+            }
+          })
+        }
       }
     },
     // 获取歌手图片
@@ -270,6 +280,8 @@ export default {
     // 跳转到专辑评论列表
     goToAlbumComment () {
       this.$route.meta.isBack = false
+      // 设置为前进页面
+      this.setIsAdvance(true)
       this.$router.push(`/albumComment/${this.id}`)
     }
   },
@@ -288,6 +300,7 @@ export default {
 }
 
 .album-container {
+  width: 100%;
   background: $color-common-background;
   min-height: 100vh;
 

@@ -2,7 +2,7 @@
   <div class="search-container">
     <!-- 头部导航 -->
     <van-sticky>
-      <van-nav-bar title="搜索"
+      <van-nav-bar :title="$route.meta.title"
                    ref="navBar"
                    left-arrow
                    @click-left="routerBack" />

@@ -42,7 +42,13 @@
                :class="index < 3 ? 'top' : ''">
             <div class="index">{{index+1}}</div>
             <div class="search-info">
-              <div class="top">{{item.searchWord}}</div>
+              <div class="top">
+                <div class="name">{{item.searchWord}}</div>
+                <div class="icon"
+                     v-if="item.iconUrl">
+                  <img :src="item.iconUrl">
+                </div>
+              </div>
               <div class="bottom">{{item.content}}</div>
             </div>
           </div>
@@ -188,7 +194,9 @@ export default {
 
             .search-info {
               .top {
-                font-weight: 600;
+                .name {
+                  font-weight: 600;
+                }
               }
             }
           }
@@ -205,8 +213,24 @@ export default {
             no-wrap();
 
             .top {
-              color: $color-common-x;
-              font-size: $font-size-smaller-x;
+              display: flex;
+
+              .name {
+                color: $color-common-x;
+                font-size: $font-size-smaller-x;
+                margin-right: 0.15rem;
+              }
+
+              .icon {
+                height: 0.5rem;
+                padding: 0.08rem 0;
+                box-sizing: border-box;
+
+                img {
+                  display: block;
+                  width: 32%;
+                }
+              }
             }
 
             .bottom {

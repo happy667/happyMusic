@@ -29,6 +29,7 @@ import {
 import {
   targetType
 } from '@/assets/common/js/config.js'
+import { mapMutations } from 'vuex'
 export default {
   props: {
     // 轮播图数据
@@ -42,6 +43,7 @@ export default {
     })
   },
   methods: {
+    ...mapMutations(['setIsAdvance']),
     selectItem (item) {
       console.log(item)
       let id = item.targetId
@@ -57,6 +59,8 @@ export default {
           this.$router.push(`/videoInfo/${id}`)
           break
         case targetType.album:// 专辑
+          // 设置为前进页面
+          this.setIsAdvance(true)
           this.$router.push(`/singerAlbum/${id}`)
           break
         case targetType.songSheet:// 歌单
@@ -129,7 +133,7 @@ export default {
 
       .swiper-slide {
         padding: 0 0.3rem;
-        height: 4.2rem ;
+        height: 4.2rem;
         box-sizing: border-box;
         border-radius: 0.3rem;
 

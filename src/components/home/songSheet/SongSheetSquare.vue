@@ -2,7 +2,7 @@
   <div class="song-sheet-square-container">
     <!-- 头部导航栏 -->
     <van-sticky>
-      <van-nav-bar title="歌单广场"
+      <van-nav-bar :title="$route.meta.title"
                    left-arrow
                    @click-left="routerBack" />
     </van-sticky>

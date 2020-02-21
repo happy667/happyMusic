@@ -5,12 +5,12 @@
        @touchend="handleTouchEnd">
     <!-- 返回 -->
     <!-- 头部导航栏 -->
-    <van-sticky>
-      <van-nav-bar :title="title"
-                   ref="navBar"
-                   left-arrow
-                   @click-left="routerBack" />
-    </van-sticky>
+    <van-nav-bar :title="$route.meta.title"
+                 ref="navBar"
+                 left-arrow
+                 fixed
+                 :z-index="99"
+                 @click-left="routerBack" />
     <!-- 歌手简介 -->
     <singer-synopsis :singer="singer" />
     <!--歌手信息-->
@@ -72,8 +72,7 @@ export default {
       singerAlbumFinished: false, // 是否加载完歌手专辑
       loading: false,
       accountId: null,
-      showPosition: false,
-      title: '歌手信息'
+      showPosition: false
     }
   },
   watch: {
@@ -95,7 +94,6 @@ export default {
     // 根据歌手id获取歌手单曲
     this.handleTabsChange(this.currentIndex)
   },
-
   computed: {
     ...mapState(['singerCurrentIndex', 'singer', 'currentPlayIndex', 'isPlayerClick']),
     ...mapGetters(['currentSong']),
@@ -115,16 +113,12 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setSingerCurrentIndex', 'setSinger', 'setPlayerFullScreen', 'setIsPlayerClick']),
+    ...mapMutations(['setSingerCurrentIndex', 'setSinger', 'setPlayerFullScreen']),
 
     routerBack () {
       if (this.isPlayerClick) {
-        console.log(55555)
         this.setPlayerFullScreen(true)
-      } else {
-        this.setIsPlayerClick(false)
       }
-
       this.$router.back()
     },
     handleTabsChange (name) {

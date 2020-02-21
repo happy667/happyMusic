@@ -82,13 +82,20 @@ const routes = [
   {
     path: '/home',
     name: 'home',
-    component: Home
+    component: Home,
+    meta: {
+      index: 0
+    } // meta对象的index用来定义当前路由的层级,由小到大,由低到高
   },
-  // 歌单页
+  // 歌单广场页
   {
     path: '/SongSheetSquare',
     name: 'songSheetSquare',
-    component: SongSheetSquare
+    component: SongSheetSquare,
+    meta: {
+      index: 1,
+      title: '歌单广场'
+    } // meta对象的index用来定义当前路由的层级,由小到大,由低到高
   },
   // 歌单详情
   {
@@ -96,6 +103,10 @@ const routes = [
     name: 'songSheetDisc',
     component: SongSheetDisc,
     props: true,
+    meta: {
+      index: 4,
+      title: '歌单详情'
+    }, // meta对象的index用来定义当前路由的层级,由小到大,由低到高
     beforeEnter(to, from, next) {
       console.log(from)
       if (from.name === 'home' || from.name === 'searchResult') {
@@ -114,6 +125,10 @@ const routes = [
     name: 'search',
     component: Search,
     redirect: 'searchPage',
+    meta: {
+      index: 1,
+      title: '搜索'
+    }, // meta对象的index用来定义当前路由的层级,由小到大,由低到高
     beforeEnter(to, from, next) {
       console.log(from, to)
       if (from.name === 'home') {
@@ -132,22 +147,32 @@ const routes = [
       {
         path: '/search/searchPage',
         name: 'searchPage',
-        component: SearchBox
+        component: SearchBox,
+        meta: {
+          index: 1,
+          title: '搜索'
+        } // meta对象的index用来定义当前路由的层级,由小到大,由低到高
       },
       // 搜索结果
       {
         path: '/search/searchResult',
         name: 'searchResult',
         component: SearchResult,
+        meta: {
+          index: 3,
+          title: '搜索结果'
+        }, // meta对象的index用来定义当前路由的层级,由小到大,由低到高
         beforeEnter(to, from, next) {
-          console.log(from, to)
-          if (from.name === 'searchPage') {
+          if (!store.state.searchKeywords) {
+            router.replace('/search/searchPage')
+          } else if (from.name === 'searchPage') {
             // 添加不缓存路由
             store.commit('setAddNoCacheComponents', 'search')
           } else {
             // 移除不缓存路由
             store.commit('setRemoveNoCacheComponents', 'search')
           }
+
           next()
         }
 
@@ -160,6 +185,10 @@ const routes = [
     name: 'videoInfo',
     component: VideoInfo,
     props: true,
+    meta: {
+      index: 4,
+      title: '视频详情'
+    }, // meta对象的index用来定义当前路由的层级,由小到大,由低到高
     beforeEnter(to, from, next) {
       console.log(from)
       if (from.name === 'home' || from.name === 'searchResult' || from.name === 'videoInfo') {
@@ -184,8 +213,11 @@ const routes = [
     path: '/songComment/:id',
     name: 'songComment',
     component: SongComment,
-    props: true
-
+    props: true,
+    meta: {
+      index: 6,
+      title: '评论列表'
+    } // meta对象的index用来定义当前路由的层级,由小到大,由低到高
   },
   // 专辑评论列表
   {
@@ -194,7 +226,8 @@ const routes = [
     component: AlbumComment,
     props: true,
     meta: {
-      isBack: false
+      isBack: false,
+      title: '评论列表'
     },
     beforeEnter(to, from, next) {
       if (from.name === 'singerAlbum' && !from.meta.isBack) {
@@ -215,10 +248,12 @@ const routes = [
     component: SingerInfo,
     props: true,
     meta: {
-      keepAlive: false // 不需要缓存
+      keepAlive: false, // 不需要缓存
+      index: 5,
+      title: '歌手详情'
     },
     beforeEnter(to, from, next) {
-      if (from.name === 'home' || from.name === 'searchResult' || from.name === 'videoInfo') {
+      if (from.name === 'home' || from.name === 'searchResult' || from.name === 'videoInfo' || from.name === 'myFollow' || store.state.isPlayerClick) {
         // 添加不缓存路由
         store.commit('setAddNoCacheComponents', 'singerInfo')
       } else {
@@ -235,7 +270,8 @@ const routes = [
     component: Album,
     props: true,
     meta: {
-      isBack: false
+      isBack: false,
+      title: '专辑详情'
     },
     beforeEnter(to, from, next) {
       console.log(from)
@@ -257,6 +293,9 @@ const routes = [
     path: '/user',
     name: 'user',
     component: User,
+    meta: {
+      index: 0
+    }, // meta对象的index用来定义当前路由的层级,由小到大,由低到高
     beforeEnter(to, from, next) {
       if (from.name === 'home') {
         // 添加不缓存路由
@@ -274,7 +313,9 @@ const routes = [
     name: 'myFollow',
     component: MyFollow,
     meta: {
-      requireLogin: true // 当前路由需要校验，不需要就不用写
+      requireLogin: true, // 当前路由需要校验，不需要就不用写
+      index: 2,
+      title: '我的关注'
     },
     beforeEnter(to, from, next) {
       if (from.name === 'user') {
@@ -293,7 +334,9 @@ const routes = [
     name: 'myLike',
     component: MyLike,
     meta: {
-      requireLogin: true // 当前路由需要校验，不需要就不用写
+      requireLogin: true, // 当前路由需要校验，不需要就不用写
+      index: 2,
+      title: '我的最爱'
     },
     beforeEnter(to, from, next) {
       if (from.name === 'user') {
@@ -312,7 +355,9 @@ const routes = [
     name: 'playRanking',
     component: PlayRanking,
     meta: {
-      requireLogin: true // 当前路由需要校验，不需要就不用写
+      requireLogin: true, // 当前路由需要校验，不需要就不用写
+      index: 2,
+      title: '听歌排行'
     },
     beforeEnter(to, from, next) {
       if (from.name === 'user') {
@@ -332,7 +377,9 @@ const routes = [
     name: 'userRecommend',
     component: UserRecommend,
     meta: {
-      requireLogin: true // 当前路由需要校验，不需要就不用写
+      requireLogin: true, // 当前路由需要校验，不需要就不用写
+      index: 2,
+      title: '每日推荐'
     },
     beforeEnter(to, from, next) {
       if (from.name === 'user') {
@@ -363,7 +410,6 @@ const router = new VueRouter({
 
 })
 router.beforeEach((to, from, next) => {
-  console.log(store.state.playerFullScreen)
   if (store.state.playerFullScreen) {
     if (from.name === 'songComment' || store.state.isPlayerClick) {
       next()
@@ -371,6 +417,7 @@ router.beforeEach((to, from, next) => {
       store.commit('setPlayerFullScreen', false)
       next(false)
     }
+    store.commit('setIsPlayerClick', false)
   }
   if (window.history.length === 0) { // 说明没有上一个路由
     next('/') // 回到首页

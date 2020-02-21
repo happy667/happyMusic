@@ -25,7 +25,7 @@
 </template>
 <script>
 import SingerItem from '@/components/home/singer/SingerItem'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapState, mapGetters, mapMutations } from 'vuex'
 import {
   ERR_OK
 } from '@/api/config.js'
@@ -38,10 +38,11 @@ export default {
   },
   inject: ['reload'],
   computed: {
+    ...mapState(['isGetSingerImage']),
     ...mapGetters(['currentSong'])
   },
   methods: {
-    ...mapMutations(['setPlayerFullScreen', 'setSinger', 'setSingerCurrentIndex', 'setIsPlayerClick']),
+    ...mapMutations(['setPlayerFullScreen', 'setSinger', 'setSingerCurrentIndex', 'setIsPlayerClick', 'setAddNoCacheComponents', 'setIsGetSingerImage', 'setIsAdvance']),
     handleBack () {
       this.setPlayerFullScreen(false)
     },
@@ -57,9 +58,14 @@ export default {
         this.setPlayerFullScreen(false)
       } else {
         this.showSingerPopup = true
-        this.currentSong.singersList.forEach(async item => { // 查询该歌手图片
-          item.avatar = await this.getSingerImage(item.id)
-        })
+        if (!this.isGetSingerImage) { // 判断是否获取过歌手图片
+          this.currentSong.singersList.forEach(async (item, index) => { // 查询该歌手图片
+            item.avatar = await this.getSingerImage(item.id)
+            if (index === this.currentSong.singersList.length - 1) { // 如果index等于当前歌手列表长度-1就说明数据全部获取完毕
+              this.setIsGetSingerImage(true)// 设置vuex已经获取过歌手图片
+            }
+          })
+        }
       }
     },
     // 获取歌手图片
@@ -75,14 +81,17 @@ export default {
     },
     // 选择歌手列表中歌手
     handleSelect (item) {
-      console.log(this.$route.path, `/singerInfo/${item.id}`)
-      if (this.$route.path !== `/singerInfo/${item.id}`) {
-        this.setIsPlayerClick(true)
-        this.setSingerCurrentIndex(0)
-        this.$router.replace(`/singerInfo/${item.id}`)
-      }
+      // 设置为前进页面
+      this.setIsAdvance(true)
+      this.setIsPlayerClick(true)
       this.showSingerPopup = false
       this.setPlayerFullScreen(false)
+      if (this.$route.path !== `/singerInfo/${item.id}`) {
+        this.setSingerCurrentIndex(0)
+        // 添加不缓存路由
+        this.setAddNoCacheComponents('singerInfo')
+        this.$router.replace(`/singerInfo/${item.id}`)
+      }
     }
 
   },

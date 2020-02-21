@@ -2,7 +2,7 @@
   <div class="play-ranking-container">
     <!-- 头部导航栏 -->
     <van-sticky>
-      <van-nav-bar title="每日推荐"
+      <van-nav-bar :title="$route.meta.title"
                    left-arrow
                    @click-left="routerBack" />
     </van-sticky>

@@ -46,7 +46,10 @@ export default new Vuex.Store({
     userRecommendIndex: 0, // 用户每日推荐页当前索引
     singer: null, // 歌手
     noCacheComponents: [], // 不缓存的组件
-    isPlayerClick: false // 是否为播放页面点击的
+    isPlayerClick: false, // 是否为播放页面点击的
+    isGetSingerImage: false, // 是否获取歌手图片
+    isAdvance: false, // 跳转的是否为前进页面
+    isGetAlbumSingerImage: false // 是否获取专辑歌手图片
   },
   mutations: {
     // 设置登录用户
@@ -182,6 +185,18 @@ export default new Vuex.Store({
     // 设置是否为播放页面点击的
     setIsPlayerClick(state, isPlayerClick) {
       state.isPlayerClick = isPlayerClick
+    },
+    // 设置是否获取歌手图片（播放器页面点击歌手获取）
+    setIsGetSingerImage(state, isGetSingerImage) {
+      state.isGetSingerImage = isGetSingerImage
+    },
+    // 设置跳转的是否为前进页面
+    setIsAdvance(state, isAdvance) {
+      state.isAdvance = isAdvance
+    },
+    // 设置是否获取歌手图片（专辑详情点击歌手获取）
+    setIsGetAlbumSingerImage(state, isGetAlbumSingerImage) {
+      state.isGetAlbumSingerImage = isGetAlbumSingerImage
     }
 
   },

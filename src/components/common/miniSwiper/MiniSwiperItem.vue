@@ -16,13 +16,13 @@
   </div>
 </template>
 <script>
+
 export default {
   props: {
     item: Object
   },
   methods: {
     handleClick () {
-      console.log(123)
       this.$emit('select', this.item)
     }
   }

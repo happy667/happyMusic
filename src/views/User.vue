@@ -196,13 +196,17 @@ export default {
   },
   inject: ['reload'],
   methods: {
-    ...mapMutations(['setLoginUser', 'setUserLikeList', 'setToken']),
+    ...mapMutations(['setLoginUser', 'setUserLikeList', 'setToken', 'setIsAdvance']),
     // 返回上一个路由
     routerBack () {
+      // 设置为前进页面
+      this.setIsAdvance(true)
       this.$router.push('/home')
     },
     // 选择专辑进入专辑详情
     selectItem (item) {
+      // 设置为前进页面
+      this.setIsAdvance(true)
       this.$router.push(`/singerAlbum/${item.id}`)
     },
     // 获取用户信息 , 歌单，收藏，mv, dj 数量

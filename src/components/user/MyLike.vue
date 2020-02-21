@@ -5,7 +5,7 @@
        @touchend="handleTouchEnd">
     <!-- 头部导航栏 -->
     <van-sticky>
-      <van-nav-bar title="我的最爱"
+      <van-nav-bar :title="$route.meta.title"
                    ref="navBar"
                    left-arrow
                    @click-left="routerBack" />

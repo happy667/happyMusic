@@ -7,8 +7,10 @@
     <!-- 页面底部 -->
     <play-footer v-on="$listeners"></play-footer>
     <!-- 背景 -->
-    <div class="bg fadeIn"
-         v-lazy:background-image="currentSong.picUrl "></div>
+    <div class="bg">
+      <div class="filter"></div>
+      <img v-lazy="currentSong.picUrl" />
+    </div>
     <!--歌曲列表-->
     <van-action-sheet v-model="togglePlayList">
       <play-list></play-list>
@@ -67,13 +69,22 @@ export default {
 
   .bg {
     position: absolute;
-    left: -50%;
-    top: -50%;
-    width: 300%;
-    height: 300%;
+    left: 50%;
+    margin-left: -50%;
+    width: 100%;
+    height: 100%;
     z-index: -1;
     opacity: 0.6;
-    filter: blur(30px);
+    filter: blur(100px);
+    z-index: -1;
+
+    .filter {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      opacity: 0.4;
+    }
   }
 }
 </style>

@@ -19,7 +19,7 @@
       <div class="lyric"
            v-show="!playerShowImage">
         <scroll ref="lyricList"
-                v-if="!nolyric||currentLyric">
+                v-if="currentLyric">
           <div class="lyric-list-container">
             <ul class="lyric-list">
               <li ref="lyricLine"
@@ -33,7 +33,7 @@
         </scroll>
         <div class="no-result"
              v-else>
-          <no-result text="该歌曲暂无歌词"></no-result>
+          <no-result :text="text"></no-result>
         </div>
       </div>
     </transition>
@@ -52,7 +52,8 @@ import { mapGetters, mapState, mapMutations } from 'vuex'
 export default {
   data () {
     return {
-      nolyric: true
+      nolyric: true,
+      text: ''
     }
   },
   computed: {
@@ -69,6 +70,7 @@ export default {
     ...mapMutations(['setPlayerShowImage', 'setCurrentLyric', 'setCurrentLineNum', 'setCurrentPlayLyric']),
     // 获取歌词
     getLyric (id) {
+      this.text = '加载歌词中...'
       songApi.getSongLyric(id).then(res => {
         res = res.data
         if (res.code === ERR_OK) {
@@ -77,8 +79,8 @@ export default {
           // } else if (res.lrc.lyric) {
           //   this.setCurrentLyric(new Lyric(res.lrc.lyric, this.handleLyric))
           // }
-          if (res.nolyric) {
-            this.nolyric = res.nolyric
+          if (res.nolyric || !res.lrc.lyric) {
+            this.text = '暂无歌词'
             this.setCurrentLyric(null)
           } else {
             this.setCurrentLyric(new Lyric(res.lrc.lyric, this.handleLyric))
@@ -195,6 +197,7 @@ export default {
         height: 1.2rem;
         line-height: 1.2rem;
         no-wrap();
+        color: $color-common-x;
       }
     }
   }
@@ -219,11 +222,11 @@ export default {
         line-height: 0.6rem;
         margin-bottom: 0.3rem;
         text-align: center;
-        color: $color-common;
+        color: rgb(255, 255, 255);
         font-size: $font-size-smaller-x;
 
         &.active {
-          color: $color-common-x;
+          color: $color-common;
           font-size: $font-size-small-x;
           transition: all 0.4s;
         }

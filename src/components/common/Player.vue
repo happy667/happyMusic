@@ -76,6 +76,7 @@ export default {
       if (this.currentLyric) {
         this.currentLyric.stop()
         this.audio.currentTime = 0
+        this.setCurrentLyric(null)
         this.setCurrentPlayLyric('')
         this.setCurrentLineNum(0)
       }
@@ -86,8 +87,8 @@ export default {
 
       this.setPlaying(false)
       this.getSong(this.currentSong)
-      // 默认显示歌曲封面
-      this.setPlayerShowImage(true)
+      // 初始化获取歌手图片（点击歌手弹出歌手框的图片）
+      this.setIsGetSingerImage(false)
     },
     playing (newPlaying) {
       if (newPlaying) {
@@ -124,7 +125,7 @@ export default {
     this.setAudio(this.$refs.audio)
   },
   methods: {
-    ...mapMutations(['setAudio', 'setTogglePlayList', 'setSongReady', 'setPlaying', 'setPlayMode', 'setPlayList', 'setCurrentPlayIndex', 'setSequenceList', 'setPlayerShowImage', 'setCurrentPlayLyric', 'setCurrentLineNum']),
+    ...mapMutations(['setAudio', 'setTogglePlayList', 'setSongReady', 'setPlaying', 'setPlayMode', 'setPlayList', 'setCurrentPlayIndex', 'setSequenceList', 'setPlayerShowImage', 'setCurrentPlayLyric', 'setCurrentLineNum', 'setIsGetSingerImage', 'setCurrentLyric']),
     ...mapActions(['deleteSong']),
     ready () {
       this.playerParams.duration = this.audio.duration

@@ -6,7 +6,8 @@
         <div class="swiper-slide"
              v-for="item in list"
              :key="item.id">
-          <mini-swiper-item :item="item" @select="selectItem"></mini-swiper-item>
+          <mini-swiper-item :item="item"
+                            @select="selectItem"></mini-swiper-item>
         </div>
       </div>
     </div>
@@ -15,11 +16,14 @@
 <script>
 import Swiper from 'swiper'
 import MiniSwiperItem from './MiniSwiperItem'
+import { mapMutations } from 'vuex'
 export default {
   props: {
     list: Array
   },
   methods: {
+
+    ...mapMutations(['setIsAdvance']),
     // 初始化轮播图组件
     initSwiper () {
       // eslint-disable-next-line no-unused-vars
@@ -45,7 +49,8 @@ export default {
 
     // 选择专辑进入专辑页面
     selectItem (item) {
-      console.log(123)
+      // 设置为前进页面
+      this.setIsAdvance(true)
       this.$router.push({ path: `/singerAlbum/${item.id}` })
     }
   },
@@ -66,7 +71,6 @@ export default {
   min-height: 5rem;
 
   .swiper-container {
-
     .swiper-wrapper {
       width: 100%;
       padding: 0 0.4rem 0.5rem;

@@ -2,7 +2,7 @@
   <div class="videoInfo-container">
     <!-- 头部导航栏 -->
     <van-sticky>
-      <van-nav-bar title="MV"
+      <van-nav-bar :title="$route.meta.title"
                    left-arrow
                    @click-left="routerBack" />
     </van-sticky>
@@ -54,6 +54,7 @@ import NoResult from '@/components/common/NoResult'
 import videoApi from '@/api/video.js'
 import SingerApi from '@/api/singer.js'
 import VideoDetail from '@/assets/common/js/videoDetail.js'
+import { mapMutations } from 'vuex'
 import {
   ERR_OK
 } from '@/api/config.js'
@@ -86,6 +87,7 @@ export default {
     })
   },
   methods: {
+    ...mapMutations(['setIsAdvance']),
     // 返回上一个路由
     routerBack () {
       this.$router.back()
@@ -147,6 +149,8 @@ export default {
     },
     goToVideoInfo (mv) {
       this.reload()
+      // 设置为前进页面
+      this.setIsAdvance(true)
       this.$router.push(`/videoInfo/${mv.id}`)
     }
   },

@@ -15,9 +15,6 @@ import {
   defaultMusicImage
 } from 'common/js/config.js'
 import VueLazyLoad from 'vue-lazyload'
-
-// 转场动画插件
-import './plugins/vueg.js'
 // 解决移动端300ms延迟
 import fastclick from 'fastclick'
 // Vue.use(VueAwesomeSwiper)

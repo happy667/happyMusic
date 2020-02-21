@@ -5,7 +5,7 @@
        @touchend="handleTouchEnd">
     <!-- 头部导航栏 -->
     <van-sticky>
-      <van-nav-bar title="歌单列表"
+      <van-nav-bar :title="$route.meta.title"
                    ref="navBar"
                    left-arrow
                    @click-left="routerBack" />
@@ -14,7 +14,8 @@
     <!-- 歌单图片 -->
     <div class="songs-img">
       <template v-if="songSheetDisc.picUrl">
-        <img v-lazy="songSheetDisc.picUrl" :key="songSheetDisc.picUrl">
+        <img v-lazy="songSheetDisc.picUrl"
+             :key="songSheetDisc.picUrl">
       </template>
       <!-- 收藏 -->
       <div class="follow"
@@ -263,6 +264,7 @@ export default {
 }
 
 .song-sheet-desc-container {
+  width: 100%;
   background: $color-common-background;
   min-height: 100vh;
 

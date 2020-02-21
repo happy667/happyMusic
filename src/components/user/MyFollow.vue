@@ -2,7 +2,7 @@
   <div class="my-follow-container">
     <!-- 头部导航栏 -->
     <van-sticky>
-      <van-nav-bar title="我的收藏"
+      <van-nav-bar :title="$route.meta.title"
                    left-arrow
                    @click-left="routerBack" />
     </van-sticky>

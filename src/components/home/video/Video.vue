@@ -219,13 +219,16 @@ export default {
     // 可以播放
     handleCanplay () {
       setTimeout(() => {
-        // 修改时间
-        this.videoParams.duration = this.video.duration
-        this.videoLoad = false
+        this.$nextTick(() => {
+          // 修改时间
+          this.videoParams.duration = this.video.duration
+          this.videoLoad = false
+          // 更新时间
+          this.updateTime()
+        })
+
         this.$forceUpdate()// 由于获取推荐视频中触发了多个异步请求,导致页面无法随时更新，需要刷新才可以重新渲染，使用forceUpdate解决这个问题，使他可以重新渲染
       }, 20)
-      // 更新时间
-      this.updateTime()
     },
     // 更新时间
     updateTime () {

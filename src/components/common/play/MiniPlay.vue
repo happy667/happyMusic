@@ -4,7 +4,8 @@
     <div class="fixed">
       <!-- 左侧图片 -->
       <div class="left">
-        <img v-lazy="picUrl" :key="picUrl"
+        <img v-lazy="picUrl"
+             :key="picUrl"
              :class="cdCls">
       </div>
       <div class="right">
@@ -65,9 +66,10 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setPlayerFullScreen']),
+    ...mapMutations(['setPlayerFullScreen', 'setIsPlayerClick']),
     handleShowFullPlay () {
       this.setPlayerFullScreen(true)
+      this.setIsPlayerClick(false)
     },
     // 切换播放暂停
     handleTogglePlaying () {
@@ -97,7 +99,7 @@ export default {
  }
 
  .mini-play-container {
-   padding-bottom: 1.8rem;
+   height: 0;
 
    .fixed {
      position: fixed;

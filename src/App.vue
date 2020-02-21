@@ -1,9 +1,12 @@
 <template>
-  <div id="app">
-    <keep-alive :exclude="noCacheComponents">
-      <router-view v-if="isRouterAlive"
-                   :key="$route.fullPath"></router-view>
-    </keep-alive>
+  <div id="app"
+       :style="paddingCls">
+    <transition :name="transitionName">
+      <keep-alive :exclude="noCacheComponents">
+        <router-view v-if="isRouterAlive"
+                     :key="$route.fullPath"></router-view>
+      </keep-alive>
+    </transition>
     <player></player>
   </div>
 </template>
@@ -20,7 +23,7 @@ import {
   getItem, clearItem
 } from 'common/js/localStorage.js'
 import Player from '@/components/common/Player'
-import { mapActions, mapState, mapMutations } from 'vuex'
+import { mapActions, mapState, mapMutations, mapGetters } from 'vuex'
 export default {
   provide () {
     return {
@@ -29,11 +32,18 @@ export default {
   },
   data () {
     return {
+      transitionName: '',
       isRouterAlive: true
     }
   },
   computed: {
-    ...mapState(['user', 'token', 'noCacheComponents'])
+    ...mapState(['user', 'token', 'noCacheComponents', 'isAdvance']),
+    ...mapGetters(['currentSong']),
+    paddingCls () {
+      return {
+        paddingBottom: Object.keys(this.currentSong).length === 0 ? '' : '1.8rem'
+      }
+    }
   },
   mounted () {
     if (this.token) {
@@ -47,9 +57,25 @@ export default {
   destroyed () {
     this.removeListener()
   },
-
+  watch: {// 使用watch 监听$router的变化
+    $route (to, from) {
+      console.log(this.isAdvance)
+      if (this.isAdvance) {
+        // 设置动画名称
+        this.transitionName = 'slide-left'
+        // 如果to索引大于from索引,判断为前进状态,反之则为后退状态
+      } else if (to.meta.index > from.meta.index) {
+        // 设置动画名称
+        this.transitionName = 'slide-left'
+      } else {
+        this.transitionName = 'slide-right'
+      }
+      // 重置isAdvance
+      this.setIsAdvance(false)
+    }
+  },
   methods: {
-    ...mapMutations(['setToken', 'setLoginUser', 'setUserLikeList']),
+    ...mapMutations(['setToken', 'setLoginUser', 'setUserLikeList', 'setIsAdvance']),
     ...mapActions(['getLoginUserInfo', 'getUserLikeList']),
     reload () {
       this.isRouterAlive = false
@@ -100,7 +126,42 @@ export default {
 </script>
 <style lang="stylus" scoped>
 #app {
+  position: absolute;
   width: 100%;
   box-shadow: none;
+}
+
+// 转场动画
+.slide-right-enter-active, .slide-right-leave-active, .slide-left-enter-active, .slide-left-leave-active {
+  will-change: all;
+  transition: all 300ms;
+  position: absolute;
+  background-attachment: fixed;
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.slide-right-enter {
+  opacity: 0;
+  transform: translate3d(-100%, 0, 0);
+  transition-timing-function: ease-in;
+}
+
+.slide-right-leave-active {
+  opacity: 0;
+  transform: translate3d(100%, 0, 0);
+  transition-timing-function: cubic-bezier(0.5, 0, 1, 1);
+}
+
+.slide-left-enter {
+  opacity: 0;
+  transform: translate3d(100%, 0, 0);
+  transition-timing-function: ease-in;
+}
+
+.slide-left-leave-active {
+  opacity: 0;
+  transform: translate3d(-100%, 0, 0);
+  transition-timing-function: cubic-bezier(0.5, 0, 1, 1);
 }
 </style>

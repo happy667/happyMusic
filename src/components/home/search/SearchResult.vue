@@ -54,12 +54,6 @@ export default {
       }
     }
   },
-  mouted () {
-    console.log(11111)
-    if (!this.searchKeywords) {
-      this.$router.push('/search/searchPage')
-    }
-  },
   components: {
     Song,
     Singer,
