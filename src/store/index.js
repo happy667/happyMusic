@@ -12,7 +12,9 @@ import {
 import {
   getItem
 } from 'common/js/localStorage.js'
-import util from '@/assets/common/js/utils.js'
+import {
+  utils
+} from '@/assets/common/js/utils.js'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -254,7 +256,7 @@ export default new Vuex.Store({
       // 使用utils中的findIndex方法查找当前歌曲索引
       let {
         findIndex
-      } = util.utils
+      } = utils
       // 移除歌曲列表中的歌曲
       let currentIndex = state.currentPlayIndex
       let pIndex = findIndex(playlist, song)

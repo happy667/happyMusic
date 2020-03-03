@@ -40,12 +40,13 @@ import searchApi from '@/api/search.js'
 import { ERR_OK } from '@/api/config.js'
 import { addLocalSearch } from '@/assets/common/js/localStorage.js'
 import { mapState, mapMutations } from 'vuex'
+import { utils } from '@/assets/common/js/utils.js'
 export default {
   name: 'search',
   data () {
     return {
       searchDefault: '', // 搜索默认关键词
-      searchList: '' // 搜索列表
+      searchList: null // 搜索列表
     }
   },
   inject: ['reload'],
@@ -66,6 +67,7 @@ export default {
     this.$nextTick(() => {
       this.getSearchDefault()
     })
+    console.log(utils)
   },
   activated () {
     // 监听页面滚动
@@ -111,12 +113,14 @@ export default {
       if (res.code === ERR_OK) {
         if (res.result.allMatch) {
           this.searchList = res.result.allMatch.map(item => item.keyword)
+          Promise.resolve('搜索成功')
+        } else {
+          this.searchList = [this.searchKeywords]
         }
       }
     },
     // 搜索
     async handleSearch () {
-      console.log(123)
       this.closeSearchList()
       // 重置标签页到第一个
       this.setSearchCurrentIndex(0)
@@ -126,20 +130,24 @@ export default {
       // 将搜索的内容保存在本地
       addLocalSearch(this.searchKeywords)
       if (this.$route.path === '/search/searchPage') {
-        this.$router.push('/search/searchResult')
+        // 设置为前进页面
+        this.setIsAdvance(true)
+        this.$router.replace('/search/searchResult')
       } else {
         this.reload()
       }
     },
     // 输入搜索内容
-    handleInput () {
+    handleInput: utils.debounce(function () {
       if (this.searchKeywords.trim().length === 0) {
         this.closeSearchList()
       } else {
-        this.openSearchList()
-        this.getSearchAll()
+        this.getSearchAll().then(() => {
+          // 打开搜索列表
+          this.openSearchList()
+        })
       }
-    },
+    }, 300),
     // 选择搜索名称
     selectItem (item) {
       this.setSearchKeywords(item)

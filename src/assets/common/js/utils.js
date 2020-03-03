@@ -140,9 +140,23 @@ const utils = {
         }
       })
     }).catch(() => {})
+  },
+  // 防抖
+  debounce(fn, delay = 500) {
+    // timer是闭包中的
+    let timer = null
+    return function () {
+      if (timer) {
+        clearTimeout(timer)
+      }
+      timer = setTimeout(() => {
+        fn.apply(this, arguments)
+        timer = null
+      }, delay)
+    }
   }
 }
-export default {
+export {
   utils
 }
 Vue.prototype.utils = utils
