@@ -154,6 +154,20 @@ const utils = {
         timer = null
       }, delay)
     }
+  },
+  // 节流
+  throttle(fn, delay = 100) {
+    // timer是闭包中的
+    let timer = null
+    return function () {
+      if (timer) {
+        return
+      }
+      timer = setTimeout(() => {
+        fn.apply(this, arguments)
+        timer = null
+      }, delay)
+    }
   }
 }
 export {

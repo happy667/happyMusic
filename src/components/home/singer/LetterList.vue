@@ -17,6 +17,7 @@
 <script>
 import { getData } from '@/assets/common/js/dom.js'
 import { mapMutations, mapState } from 'vuex'
+import { utils } from '@/assets/common/js/utils.js'
 export default {
   props: {
     letterList: {
@@ -60,7 +61,8 @@ export default {
       this.setStop(true)
     },
     // 触摸移动
-    handleTouchMove (e) {
+    handleTouchMove: utils.throttle(function (e) {
+      console.log(111111111)
       let firstTouch = e.touches[0]
       this.touch.y2 = firstTouch.pageY
       let delta = (this.touch.y2 - this.touch.y1) / this.letterHeight | 0
@@ -69,7 +71,7 @@ export default {
       let anchorIndex = parseInt(this.touch.index) + delta
       // 设置当前滑动的索引
       this.setScrollIndex(anchorIndex)
-    },
+    }),
     handleTouchEnd () {
       this.setStop(false)
     }
