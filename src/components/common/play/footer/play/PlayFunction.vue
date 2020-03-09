@@ -26,9 +26,11 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setPlayerFullScreen', 'setAddNoCacheComponents', 'setIsPlayerClick']),
+    ...mapMutations(['setPlayerFullScreen', 'setAddNoCacheComponents', 'setIsPlayerClick', 'setIsAdvance']),
     // 点击评论
     handleRecommentClick () {
+      // 设置为前进页面
+      this.setIsAdvance(true)
       // 设置从播放器页面点击
       this.setIsPlayerClick(true)
       // 添加不缓存路由
@@ -42,24 +44,10 @@ export default {
     selectItemLove () {
       // 判断是否登录
       if (!this.user) { // 弹窗提示去登录
-        this.alertConfirm()
+        this.utils.alertLogin(this.$router.currentRoute.fullPath)
       } else { // 添加或取消喜欢音乐
         this.likeMusic(this.currentSong)
       }
-    },
-    alertConfirm () {
-      this.utils.alertConfirm({ // 未登录跳转到登录页面
-        message: '您还没有登录哦',
-        confirmButtonText: '去登陆'
-      }).then(() => {
-        // 未登录则跳转到登陆界面
-        this.setPlayerFullScreen(false)
-        if (this.$route.name !== 'login') {
-          this.$router.push({
-            name: 'login'
-          })
-        }
-      }).catch(() => { })
     },
     // 喜欢音乐
     likeMusic (song) {

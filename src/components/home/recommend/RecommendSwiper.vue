@@ -98,7 +98,10 @@ export default {
           pagination: {
             el: '.swiper-pagination'
           },
-          autoplay: true,
+          autoplay: {
+            disableOnInteraction: false,
+            delay: 5000
+          },
           loop: true,
           on: {
             touchStart (e) {

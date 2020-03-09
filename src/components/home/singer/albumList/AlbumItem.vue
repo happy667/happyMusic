@@ -4,7 +4,8 @@
       <img v-lazy="item.picUrl" />
     </div>
     <div class="item-name">{{item.name}}</div>
-    <div class="item-pub-time" v-if="item.publishTime">{{item.publishTime|convertDate}}</div>
+    <div class="item-pub-time"
+         v-if="item.publishTime">{{item.publishTime|convertDate}}</div>
   </div>
 </template>
 <script>
@@ -18,6 +19,7 @@ export default {
 
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
+
 .album-item-container {
   padding: 0.2rem 0.3rem;
   background: #fff;
@@ -31,7 +33,7 @@ export default {
   }
 
   .item-img {
-    width: 2.2rem;
+    width: 2.1rem;
     height: 2rem;
     border-radius: 0.3rem;
 
@@ -44,16 +46,15 @@ export default {
   }
 
   .item-name {
-    width: 2rem;
+    margin-top: 0.2rem;
+    width: 2.1rem;
     no-wrap();
-    height: 0.5rem;
-    line-height: 0.5rem;
   }
 
   .item-pub-time {
     color: #777;
-    height: 0.5rem;
-    line-height: 0.5rem;
+    height: 0.55rem;
+    line-height: 0.55rem;
   }
 }
 </style>

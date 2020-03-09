@@ -3,7 +3,6 @@
   <div class="singer-synopsis-container">
 
     <template v-if="singer">
-
       <!-- 歌手图片 -->
       <div class="singer-img">
         <img :src="singer.picUrl"
@@ -19,7 +18,7 @@
            v-if="followeds">{{followeds|convertCount}}粉丝</p>
       </div>
       <!-- 收藏 -->
-      <div class="followed">
+      <div class="follow">
         <follow @clickFollow="handleClickFollow"
                 :followed="singer.followed"></follow>
       </div>
@@ -114,8 +113,7 @@ export default {
 
   .singer-synopsis {
     position: absolute;
-    width: 100%;
-    padding: 0 0.5rem;
+    padding-left: 0.5rem;
     bottom: 0.5rem;
     color: #fff;
     box-sizing: border-box;
@@ -138,10 +136,10 @@ export default {
     }
   }
 
-  .followed {
+  .follow {
     position: absolute;
-    bottom: 0.6rem;
     right: 0.6rem;
+    bottom: 0.6rem;
   }
 }
 </style>

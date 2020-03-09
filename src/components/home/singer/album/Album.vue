@@ -358,11 +358,13 @@ export default {
             line-height: 0.75rem;
             font-size: $font-size-smaller;
             font-weight: bold;
+            no-wrap();
           }
 
           .album-singer {
             height: 0.75rem;
             line-height: 0.75rem;
+            no-wrap();
 
             a {
               color: #fff;
