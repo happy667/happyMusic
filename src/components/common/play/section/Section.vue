@@ -220,14 +220,15 @@ export default {
 
       .lyric-list-item {
         line-height: 0.6rem;
-        margin-bottom: 0.3rem;
+        margin-bottom: 0.4rem;
         text-align: center;
-        color: rgb(255, 255, 255);
         font-size: $font-size-smaller-x;
+        color: $color-common-x;
 
         &.active {
-          color: $color-common;
-          font-size: $font-size-small-x;
+          font-size: $font-size-smaller;
+          color: rgb(255, 255, 255);
+          font-weight: 500;
           transition: all 0.4s;
         }
       }
