@@ -32,7 +32,7 @@ import userApi from '@/api/user.js'
 import {
   ERR_OK
 } from '@/api/config.js'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
   name: 'myFollow',
@@ -60,6 +60,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['setSingerCurrentIndex']),
     // 返回上一个路由
     routerBack () {
       this.$router.back()
@@ -88,6 +89,7 @@ export default {
     },
     // 选择歌手
     selectItem (item) {
+      this.setSingerCurrentIndex(0)
       this.$router.push(`/singerInfo/${item.id}`)
     },
     handleClickFollow (singer) {
