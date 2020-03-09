@@ -21,7 +21,7 @@
       </ul>
     </div>
     <!-- 热门搜索 -->
-    <div class="recommend-Search">
+    <section class="recommend-Search">
       <!-- 搜索头部 -->
       <div class="search-list-header">
         <p class="title">热门搜索</p>
@@ -55,7 +55,7 @@
           <div class="right">{{item.score}}</div>
         </li>
       </ul>
-    </div>
+    </section>
 
   </div>
 </template>

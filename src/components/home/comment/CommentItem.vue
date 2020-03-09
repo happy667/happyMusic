@@ -1,22 +1,28 @@
 <template>
-  <div class="comment-item-container van-hairline--bottom">
-    <!-- 评论信息 -->
-    <div class="comment-header">
-      <!-- 用户头像 -->
-      <div class="avatar">
-        <music-img :avatar="comment.user.avatarUrl"></music-img>
+  <div class="comment-item-container">
+    <section class="comment-wrapper">
+      <!-- 评论信息 -->
+      <div class="comment-left">
+        <!-- 用户头像 -->
+        <div class="avatar">
+          <music-img :avatar="comment.user.avatarUrl"></music-img>
+        </div>
       </div>
-      <div class="comment-info">
-        <!-- 用户昵称 -->
-        <div class="comment-nikeName">{{comment.user.nickname}}</div>
-        <!--评论时间-->
-        <div class="comment-time">{{comment.time|convertDate}}</div>
+      <div class="comment-right van-hairline--bottom">
+        <div class="top">
+          <!-- 用户昵称 -->
+          <div class="comment-nikeName">{{comment.user.nickname}}</div>
+          <!--评论时间-->
+          <div class="comment-time">{{comment.time|convertDate}}</div>
+        </div>
+        <div class="bottom">
+          <!-- 评论内容 -->
+          <article class="comment-content">
+            {{comment.content}}
+          </article>
+        </div>
       </div>
-    </div>
-    <!-- 评论内容 -->
-    <div class="comment-content">
-      {{comment.content}}
-    </div>
+    </section>
   </div>
 </template>
 <script>
@@ -37,37 +43,51 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
+.comment-item-container>>>.avatar-wrapper {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
 .comment-item-container {
   padding: 0.35rem 0;
 
-  .comment-header {
+  .comment-wrapper {
     display: flex;
 
-    .avatar {
+    .comment-left {
       margin-right: 0.3rem;
     }
 
-    .comment-info {
+    .comment-right {
       display: flex;
       flex-direction: column;
+      flex: 1;
 
-      .comment-nikeName {
-        width: 100%;
-        font-size: $font-size-smaller-x;
-        line-height: 0.7rem;
-        color: #999;
-        no-wrap();
+      .top {
+        display: flex;
+        flex-direction: column;
+
+        .comment-nikeName {
+          width: 100%;
+          font-size: $font-size-smaller-x;
+          line-height: 0.57rem;
+          color: #666;
+          no-wrap();
+        }
+
+        .comment-time {
+          color: #777;
+        }
       }
 
-      .comment-time {
-        color: #999;
+      .bottom {
+        .comment-content {
+          padding: 0.3rem 0;
+          line-height: 0.55rem;
+          word-break: break-all;
+        }
       }
     }
-  }
-
-  .comment-content {
-    padding-top: 0.3rem;
-    line-height: 0.5rem;
   }
 }
 </style>

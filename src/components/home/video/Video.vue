@@ -20,7 +20,7 @@
              x5-video-player-fullscreen=""
              x5-video-orientation="portraint"
              @canplay="handleCanplay"
-             :poster="videoParams.cover"></video>
+             :poster="videoParams.coverUrl"></video>
 
       <!-- 播放按钮 -->
       <div class="big-btn"
@@ -159,6 +159,10 @@ export default {
     moreInfo: {
       type: Boolean,
       default: () => false
+    },
+    showMoreInfo: { // 是否显示更多信息
+      type: Boolean,
+      default: () => false
     }
   },
   data () {
@@ -169,8 +173,7 @@ export default {
       isFullScreen: false, // 是否全屏
       isClickScreen: false, // 是否点击了播放器
       currenTime: 0, // 当前播放时长
-      videoLoad: true, // video是否加载
-      showMoreInfo: false // 是否显示更多信息
+      videoLoad: true// video是否加载
     }
   },
   mounted () {
@@ -212,8 +215,8 @@ export default {
       // 说明不是视频详情页
       if (!this.moreInfo) {
         this.$router.push(`/videoInfo/${this.videoParams.id}`)
-      } else { // 显示更多信息
-        this.showMoreInfo = !this.showMoreInfo
+      } else { // 切换显示更多信息
+        this.$emit('toggleInfo')
       }
     },
     // 可以播放
@@ -329,9 +332,6 @@ export default {
     selectSinger (item) {
       this.setSingerCurrentIndex(0)
       this.$router.push(`/singerInfo/${item.id}`)
-    },
-    handleToggleInfo () {
-      this.showMoreInfo = !this.showMoreInfo
     }
     // 视频宽高设置为手机宽高
     // videoFullScreen () {
@@ -355,14 +355,15 @@ export default {
   margin-bottom: 0.5rem;
   width: 100%;
   box-shadow: 0 0.05rem 1rem rgba(0, 0, 0, 0.1);
-  touch-action: none;
   border-radius: 0 0 0.3rem 0.3rem;
+  background: $color-common-background;
 
   .player {
     position: relative;
     width: 100%;
     height: 5rem;
     margin-bottom: 0.2rem;
+    touch-action: none;
 
     .load {
       position: absolute;
@@ -452,6 +453,7 @@ export default {
         justify-content: space-between;
         width: 100%;
         line-height: 1rem;
+        no-wrap();
 
         .name {
           font-size: $font-size-smaller;

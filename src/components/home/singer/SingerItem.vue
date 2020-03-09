@@ -76,6 +76,8 @@ export default {
         height: 0.7rem;
         line-height: 0.7rem;
         font-size: $font-size-smaller;
+        max-width: 6rem;
+        no-wrap();
       }
     }
   }

@@ -78,7 +78,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setLoginUser', 'setToken']),
+    ...mapMutations(['setLoginUser', 'setToken', 'setIsAdvance']),
     // 显示隐藏密码
     handleShowPwd () {
       this.showPassword = !this.showPassword
@@ -139,6 +139,8 @@ export default {
             } else {
               this.$router.replace('/home')
             }
+            // 设置为前进页面
+            this.setIsAdvance(true)
             this.resetForm()
             this.$toast.clear()
           } else {
@@ -194,7 +196,7 @@ export default {
 
       .submitBtn {
         margin-bottom: 0.45rem;
-        padding: 0.5rem 0;
+        padding: 0.4rem 0;
         width: 100%;
         color: #fff;
         font-size: $font-size-small;

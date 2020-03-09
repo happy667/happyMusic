@@ -1,11 +1,9 @@
 <template>
   <div class="videoInfo-container">
     <!-- 头部导航栏 -->
-    <van-sticky>
-      <van-nav-bar :title="$route.meta.title"
-                   left-arrow
-                   @click-left="routerBack" />
-    </van-sticky>
+    <van-nav-bar :title="$route.meta.title"
+                 left-arrow
+                 @click-left="routerBack" />
     <!-- 正在加载 -->
     <template v-if="!video">
       <van-loading size="24px"
@@ -13,10 +11,14 @@
                    vertical>加载中...</van-loading>
     </template>
     <template v-else>
-      <div class="video">
-        <video-component :videoParams="video"
-                         :moreInfo="true"></video-component>
-      </div>
+      <van-sticky>
+        <div class="video">
+          <video-component :videoParams="video"
+                           @toggleInfo="handleToggleInfo"
+                           :showMoreInfo="showMoreInfo"
+                           :moreInfo="true"></video-component>
+        </div>
+      </van-sticky>
       <div class="content">
         <!-- 相关mv -->
         <div class="related-mv"
@@ -70,7 +72,8 @@ export default {
       video: null, // 视频
       simiMVList: null, // 相似mv列表
       commentList: null, // 评论列表
-      commentCount: 0// 评论数量
+      commentCount: 0, // 评论数量
+      showMoreInfo: false// 是否显示更多信息
     }
   },
   inject: ['reload'],
@@ -152,6 +155,10 @@ export default {
       // 设置为前进页面
       this.setIsAdvance(true)
       this.$router.push(`/videoInfo/${mv.id}`)
+    },
+    // 切换显示隐藏视频详情信息
+    handleToggleInfo () {
+      this.showMoreInfo = !this.showMoreInfo
     }
   },
   components: {

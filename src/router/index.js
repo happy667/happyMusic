@@ -40,6 +40,7 @@ const routes = [
   {
     path: '/appIndex',
     redirect: 'appIndex/index'
+
   },
   {
     path: '/index',
@@ -55,13 +56,19 @@ const routes = [
       {
         path: 'index',
         name: 'index',
-        component: Index
+        component: Index,
+        meta: {
+          index: 1
+        }
       },
       // 跳转到登录页面
       {
         path: 'login',
         name: 'login',
-        component: Login
+        component: Login,
+        meta: {
+          index: 2
+        }
 
       },
 
@@ -69,7 +76,10 @@ const routes = [
       {
         path: 'register',
         name: 'register',
-        component: Register
+        component: Register,
+        meta: {
+          index: 2
+        }
       },
       {
         path: 'findPassword',
@@ -431,6 +441,8 @@ router.beforeEach((to, from, next) => {
         message: '您还没有登录哦',
         confirmButtonText: '去登陆'
       }).then(() => {
+        // 设置为前进页面
+        store.commit('setIsAdvance', true)
         next({
           name: 'login',
           query: {

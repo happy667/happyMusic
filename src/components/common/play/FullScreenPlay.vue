@@ -66,6 +66,7 @@ export default {
   flex-direction: column;
   box-sizing: border-box;
   z-index: 99;
+  touch-action: none;
 
   .bg {
     position: absolute;

@@ -59,12 +59,16 @@ export default {
   },
   watch: {// 使用watch 监听$router的变化
     $route (to, from) {
-      console.log(this.isAdvance)
+      // 如果from不是登录首页并且to不是登录首页并且from和to不包含appIndex(登录注册部分不用动画)就显示动画
+      if (from.name !== 'index' && to.name !== 'index' && from.path.includes('appIndex') && to.path.includes('appIndex')) {
+        this.transitionName = ''
+        return
+      }
       if (this.isAdvance) {
         // 设置动画名称
         this.transitionName = 'slide-left'
-        // 如果to索引大于from索引,判断为前进状态,反之则为后退状态
-      } else if (to.meta.index > from.meta.index) {
+        // 如果to索引大于from索引,判断为前进状态,并且from.name不是登录页面，反之则为后退状态
+      } else if (to.meta.index > from.meta.index && from.name !== 'login') {
         // 设置动画名称
         this.transitionName = 'slide-left'
       } else {

@@ -1,5 +1,5 @@
 <template>
-  <div class="singer-detail-container">
+  <article class="singer-detail-container">
     <!-- loading -->
     <van-loading v-if="isLoad"
                  size="24px"
@@ -28,7 +28,7 @@
         </div>
       </template>
     </template>
-  </div>
+  </article>
 
 </template>
 <script>
@@ -55,7 +55,7 @@ export default {
   @import '~common/stylus/variable';
 
   padding: 0 0.4rem 0.4rem 0.4rem;
-  min-height: calc(100vh - (1.22667rem + 7.4rem + 1.18rem + 0.4rem));
+  min-height: calc(100vh - (7.4rem + 1.18rem + 0.4rem));
   box-sizing: border-box;
 
   .title {

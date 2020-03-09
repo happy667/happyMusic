@@ -57,13 +57,8 @@ export default {
     playerFullScreen () {
       if (this.playerFullScreen) {
         this.$refs.play.style.position = 'fixed'
-        // 解决打开播放器页面还能滚动滚动条的问题
-        // 思路:当打开播放器时设置body节点超出隐藏，
-        // 当关闭时再恢复
-        document.body.style.overflow = 'hidden'
       } else {
         this.$refs.play.style.position = 'relative'
-        document.body.style.overflow = ''
       }
     },
     currentSong (newSong, oldSong) {

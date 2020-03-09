@@ -51,9 +51,9 @@ export default {
     height: 100%;
 
     .logo {
-      margin: 0 auto;
-      width: 9rem;
-      height: 8rem;
+      margin: 0 auto 1rem;
+      width: 6.5rem;
+      height: 6rem;
       text-align: center;
 
       img {
@@ -64,15 +64,15 @@ export default {
 
     .option {
       display: flex;
-      height: 6.5rem;
+      height: 6rem;
       flex-direction: column;
       justify-content: space-evenly;
       align-items: center;
       text-align: center;
 
       a {
-        padding: 0.6rem 0;
-        width: 8rem;
+        padding: 0.4rem 0;
+        width: 6.5rem;
         color: #fff;
         font-size: $font-size-small;
         border-radius: 1rem;

@@ -10,24 +10,19 @@
              :key="singer.picUrl">
       </div>
       <div class="singer-synopsis">
-        <!-- 收藏 -->
-        <div class="left">
-          <!-- 歌手名称 -->
-          <div class="singer-name">
-            {{singer.name}}
-          </div>
-          <div class="follows"
-               v-if="followeds">{{followeds|convertCount}}粉丝</div>
-
+        <!-- 歌手名称 -->
+        <div class="singer-name">
+          {{singer.name}}
         </div>
-        <div class="right">
-          <div class="followed">
-            <follow @clickFollow="handleClickFollow"
-                    :followed="singer.followed"></follow>
-          </div>
-        </div>
+        <!-- 粉丝数量 -->
+        <p class="follows"
+           v-if="followeds">{{followeds|convertCount}}粉丝</p>
       </div>
-
+      <!-- 收藏 -->
+      <div class="followed">
+        <follow @clickFollow="handleClickFollow"
+                :followed="singer.followed"></follow>
+      </div>
     </template>
 
   </div>
@@ -125,28 +120,28 @@ export default {
     color: #fff;
     box-sizing: border-box;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
 
-    .left {
-      .singer-name {
-        font-size: $font-size-small;
-        height: 1rem;
-        line-height: 1rem;
-      }
-
-      .follows {
-        float: left;
-        height: 0.7rem;
-        line-height: 0.7rem;
-        font-size: $font-size-smaller;
-        color: #d4d4d4;
-      }
+    .singer-name {
+      font-size: $font-size-small;
+      height: 1rem;
+      line-height: 1rem;
+      max-width: 6rem;
+      no-wrap();
     }
 
-    .right {
-      display: flex;
-      align-items: center;
+    .follows {
+      height: 0.7rem;
+      line-height: 0.7rem;
+      font-size: $font-size-smaller;
+      color: #d4d4d4;
     }
+  }
+
+  .followed {
+    position: absolute;
+    bottom: 0.6rem;
+    right: 0.6rem;
   }
 }
 </style>

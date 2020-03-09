@@ -75,7 +75,7 @@ export default {
   },
   deactivated () {
     // 取消监听页面滚动
-    document.removeEventListener('scroll', this.handleScroll)
+    window.removeEventListener('scroll', this.handleScroll)
   },
 
   methods: {

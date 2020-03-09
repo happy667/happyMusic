@@ -47,7 +47,7 @@ export default {
     line-height: 0.8rem;
 
     .start-time, .end-time {
-      color: #81898f;
+      color: #f3f3f3;
     }
   }
 }

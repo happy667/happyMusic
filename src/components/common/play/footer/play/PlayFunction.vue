@@ -26,9 +26,11 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setPlayerFullScreen', 'setAddNoCacheComponents']),
+    ...mapMutations(['setPlayerFullScreen', 'setAddNoCacheComponents', 'setIsPlayerClick']),
     // 点击评论
     handleRecommentClick () {
+      // 设置从播放器页面点击
+      this.setIsPlayerClick(true)
       // 添加不缓存路由
       this.setAddNoCacheComponents('songComment')
       this.setPlayerFullScreen(false)

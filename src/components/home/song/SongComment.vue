@@ -71,17 +71,17 @@ export default {
     this.getSongComment(this.id)
   },
   computed: {
-    ...mapState(['playerFullScreen']),
+    ...mapState(['playerFullScreen', 'isPlayerClick']),
     ...mapGetters(['currentSong']),
     commentText () {
       return this.commentCount === 0 ? '' : this.commentCount
     }
   },
   methods: {
-    ...mapMutations(['setPlayerFullScreen']),
+    ...mapMutations(['setPlayerFullScreen', 'setIsPlayerClick']),
     // 返回上一个路由
     routerBack () {
-      if (!this.playerFullScreen && this.currentSong) {
+      if (!this.playerFullScreen && this.currentSong && this.isPlayerClick) {
         this.setPlayerFullScreen(true)
       }
       this.$router.back()
@@ -115,6 +115,8 @@ export default {
       } else {
         this.playMusic(this.song)
       }
+      // 不是由播放器页面点击
+      this.setIsPlayerClick(false)
     },
     async getSongDetail (id) {
       // 获取歌曲详情

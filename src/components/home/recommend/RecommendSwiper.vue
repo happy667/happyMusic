@@ -98,6 +98,7 @@ export default {
           pagination: {
             el: '.swiper-pagination'
           },
+          autoplay: true,
           loop: true,
           on: {
             touchStart (e) {

@@ -257,7 +257,7 @@ export default {
 
       .updateBtn {
         margin-bottom: 0.45rem;
-        padding: 0.5rem 0;
+        padding: 0.4rem 0;
         width: 100%;
         color: #fff;
         font-size: $font-size-small;
