@@ -180,6 +180,7 @@ export default {
              align-items: center;
              width: 1rem;
              height: 1rem;
+             touch-action: none;
 
              i {
                color: $color-common;
