@@ -25,7 +25,8 @@ import {
   ActionSheet,
   Circle,
   Popup,
-  Image
+  Image,
+  Overlay
 } from 'vant'
 Vue.use(Tab)
 Vue.use(Tabs)
@@ -53,5 +54,6 @@ Vue.use(ActionSheet)
 Vue.use(Circle)
 Vue.use(Popup)
 Vue.use(Image)
+Vue.use(Overlay)
 Vue.prototype.$Dialog = Dialog
 Vue.prototype.$toast = Toast

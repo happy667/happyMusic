@@ -14,9 +14,22 @@
     <!-- 歌单图片 -->
     <div class="songs-img">
       <template v-if="songSheetDisc.picUrl">
-        <img v-lazy="songSheetDisc.picUrl"
-             :key="songSheetDisc.picUrl">
+        <div class="image"
+             @click="handleToggleShowImage">
+          <van-image :src="songSheetDisc.picUrl">
+            <template v-slot:loading>
+              <van-loading type="spinner"
+                           size="20" />
+            </template>
+
+          </van-image>
+          <!-- 遮罩层 -->
+          <overlay :showImage="showImage"
+                   :imgUrl="songSheetDisc.picUrl"
+                   @toggle="handleToggleShowImage" />
+        </div>
       </template>
+
       <!-- 收藏 -->
       <div class="follow"
            v-show="songSheetDisc.picUrl">
@@ -72,6 +85,7 @@ import SongSheetDetail from '@/assets/common/js/songSheetDetail.js'
 import NoResult from '@/components/common/NoResult'
 import Follow from '@/components/common/Follow'
 import Position from '@/components/common/Position'
+import overlay from '@/components/common/Overlay'
 import { mapMutations, mapGetters, mapActions, mapState } from 'vuex'
 export default {
   name: 'songSheetDisc',
@@ -82,7 +96,8 @@ export default {
     return {
       songSheetDisc: {},
       followed: false,
-      showPosition: false
+      showPosition: false,
+      showImage: false
     }
   },
   mounted () {
@@ -244,13 +259,17 @@ export default {
       this.timer = setTimeout(() => {
         this.showPosition = false
       }, 5000)
+    },
+    handleToggleShowImage () {
+      this.showImage = !this.showImage
     }
   },
   components: {
     SongsList,
     NoResult,
     Follow,
-    Position
+    Position,
+    overlay
   }
 }
 </script>
@@ -274,8 +293,9 @@ export default {
     height: 0;
     padding-top: 100%;
     background: #e4e4e4;
+    overflow: hidden;
 
-    img {
+    .image {
       position: absolute;
       top: 0;
       left: 0;

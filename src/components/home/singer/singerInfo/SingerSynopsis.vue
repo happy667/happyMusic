@@ -4,13 +4,19 @@
 
     <template v-if="singer">
       <!-- 歌手图片 -->
-      <div class="singer-img">
+      <div class="singer-img"
+           @click="handleToggleShowImage">
         <van-image :src="singer.picUrl">
           <template v-slot:loading>
             <van-loading type="spinner"
                          size="20" />
           </template>
         </van-image>
+        <!-- 遮罩层 -->
+        <overlay :showImage="showImage"
+                 :imgUrl="singer.picUrl"
+                 @toggle="handleToggleShowImage">
+        </overlay>
       </div>
       <div class="singer-synopsis">
         <!-- 歌手名称 -->
@@ -37,13 +43,20 @@ import {
   ERR_OK
 } from '@/api/config.js'
 import Follow from '@/components/common/Follow'
+import overlay from '@/components/common/Overlay'
 import { mapState } from 'vuex'
 export default {
   props: {
     singer: Object
   },
   components: {
-    Follow
+    Follow,
+    overlay
+  },
+  data () {
+    return {
+      showImage: false
+    }
   },
   computed: {
     ...mapState(['user']),
@@ -85,6 +98,9 @@ export default {
           this.$toast(err.data.message)
         })
       }
+    },
+    handleToggleShowImage () {
+      this.showImage = !this.showImage
     }
   }
 
@@ -143,6 +159,13 @@ export default {
     position: absolute;
     right: 0.6rem;
     bottom: 0.6rem;
+  }
+
+  .wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
   }
 }
 </style>
