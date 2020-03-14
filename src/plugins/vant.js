@@ -24,7 +24,8 @@ import {
   CountDown,
   ActionSheet,
   Circle,
-  Popup
+  Popup,
+  Image
 } from 'vant'
 Vue.use(Tab)
 Vue.use(Tabs)
@@ -51,5 +52,6 @@ Vue.use(CountDown)
 Vue.use(ActionSheet)
 Vue.use(Circle)
 Vue.use(Popup)
+Vue.use(Image)
 Vue.prototype.$Dialog = Dialog
 Vue.prototype.$toast = Toast

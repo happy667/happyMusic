@@ -5,8 +5,12 @@
     <template v-if="singer">
       <!-- 歌手图片 -->
       <div class="singer-img">
-        <img :src="singer.picUrl"
-             :key="singer.picUrl">
+        <van-image :src="singer.picUrl">
+          <template v-slot:loading>
+            <van-loading type="spinner"
+                         size="20" />
+          </template>
+        </van-image>
       </div>
       <div class="singer-synopsis">
         <!-- 歌手名称 -->
@@ -94,7 +98,6 @@ export default {
   width: 100%;
   height: 0;
   padding-top: 7.4rem;
-  background: $color-common-b;
   overflow: hidden;
 
   .singer-img {
