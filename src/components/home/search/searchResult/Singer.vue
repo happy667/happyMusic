@@ -31,7 +31,7 @@ import NoResult from '@/components/common/NoResult'
 import Singer from '@/assets/common/js/singer.js'
 import searchApi from '@/api/search.js'
 import { ERR_OK } from '@/api/config.js'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 export default {
   name: 'searchResultSinger',
   data () {
@@ -56,6 +56,7 @@ export default {
     this.getSearchSinger()
   },
   methods: {
+    ...mapMutations(['setIsAdvance', 'setSingerCurrentIndex']),
     // 查询歌手
     async getSearchSinger () {
       // 显示加载logo
@@ -111,6 +112,9 @@ export default {
     },
     // 选择歌手
     handleSelect (item) {
+      // 设置为前进页面
+      this.setIsAdvance(true)
+      this.setSingerCurrentIndex(0)
       this.$router.push(`/singerInfo/${item.id}`)
     }
   },
