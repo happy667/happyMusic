@@ -30,7 +30,6 @@ export default {
   font-size: $font-size-small-x;
   height: 1.1rem;
   line-height: 1.1rem;
-  font-family: $font-common-title;
   background: $color-common-background;
 
   .songs-title {

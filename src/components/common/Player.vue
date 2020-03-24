@@ -23,6 +23,10 @@
              @ended="handleEnd"
              :src="url"></audio>
     </div>
+    <!--歌曲列表-->
+    <van-action-sheet v-model="togglePlayList">
+      <play-list></play-list>
+    </van-action-sheet>
   </div>
 </template>
 <script>
@@ -32,6 +36,7 @@ import {
 } from '@/api/config.js'
 import FullScreenPlay from './play/FullScreenPlay'
 import MiniPlay from './play/MiniPlay'
+import PlayList from '@/components/home/playList/PlayList'
 import {
   playMode
 } from '@/assets/common/js/config.js'
@@ -241,7 +246,8 @@ export default {
   },
   components: {
     FullScreenPlay,
-    MiniPlay
+    MiniPlay,
+    PlayList
   }
 }
 </script>

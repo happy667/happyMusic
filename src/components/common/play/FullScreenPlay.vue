@@ -11,37 +11,25 @@
       <div class="filter"></div>
       <img v-lazy="currentSong.picUrl" />
     </div>
-    <!--歌曲列表-->
-    <van-action-sheet v-model="togglePlayList">
-      <play-list></play-list>
-    </van-action-sheet>
+
   </div>
 </template>
 <script>
 import PlayHeader from './header/Header'
 import PlaySection from './section/Section'
 import PlayFooter from './footer/Footer'
-import PlayList from '@/components/home/playList/PlayList'
+
 import { mapGetters } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters(['currentSong']),
-    togglePlayList: {
-      get () {
-        return this.$store.state.togglePlayList
-      },
-      set (newVal) {
-        this.$store.commit('setTogglePlayList', newVal)
-      }
-    }
+    ...mapGetters(['currentSong'])
   },
 
   components: {
     PlayHeader,
     PlaySection,
-    PlayFooter,
-    PlayList
+    PlayFooter
   }
 }
 </script>

@@ -197,7 +197,7 @@ export default {
 
     .sg-info {
       max-width: 4.5rem;
-      color: #777;
+      color: $color-common-b2;
       no-wrap();
     }
   }

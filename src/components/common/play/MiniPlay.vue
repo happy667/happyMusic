@@ -2,61 +2,72 @@
   <div class="mini-play-container"
        @click="handleShowFullPlay">
     <div class="fixed">
-      <!-- 左侧图片 -->
-      <div class="left">
-        <img v-lazy="picUrl"
-             :key="picUrl"
-             :class="cdCls">
-      </div>
-      <div class="right">
-        <div class="top">
-          <!--歌曲信息-->
-          <div class="song-info">
-            <p class="song-name">{{currentSong.name}}</p>
-            <p class="singer">{{currentSong.singers}}</p>
-          </div>
-          <!-- 按钮区域 -->
-          <div class="player-controller">
-            <div class="prev icon"
-                 @click.stop="prev">
-              <i class="iconfont icon-shangyishoushangyige"></i>
-            </div>
-            <div class="play icon"
-                 @click.stop="handleTogglePlaying">
-              <van-icon :name="playIcon" />
-            </div>
-            <div class="next icon"
-                 @click.stop="next">
-              <i class="iconfont icon-xiayigexiayishou"></i>
+      <div class="swiper-container player-swiper">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide"
+               v-for="item in sequenceList"
+               :key="item.id">
+            <div class="swiper-list-item">
+              <!-- 左侧图片 -->
+              <div class="left">
+                <div class="image">
+                  <img :src="item.picUrl"
+                       :key="item.picUrl"
+                       :class="cdCls">
+                </div>
+              </div>
+              <div class="right">
+                <!--歌曲信息-->
+                <div class="song-info">
+                  <p class="song-name">{{item.name}}</p>
+                  <p class="singer">{{item.singers}}</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="bottom">
-          <!-- 进度条 -->
-          <div class="progress">
-            <van-slider active-color="#FD4979"
-                        @input="handleSlideChange"
-                        v-model="playerParams.width">
-              <div slot="button"
-                   v-show="false">
-              </div>
-            </van-slider>
+      </div>
+      <!-- 按钮区域 -->
+      <div class="player-controller">
+        <div class="play"
+             @click.stop="handleTogglePlaying">
+          <van-circle v-model="playerParams.width"
+                      size="32"
+                      color="#fd4979"
+                      layer-color="#ddd">
+          </van-circle>
+          <div class="icon">
+            <i class="iconfont"
+               :class="playIcon"></i>
           </div>
+        </div>
+
+        <!-- 歌曲列表 -->
+        <div class="play-list icon"
+             @click.stop="handlePlayList">
+          <i class="iconfont icon-bofangliebiao"></i>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
+import Swiper from 'swiper'
 import { defaultMusicImage } from 'common/js/config.js'
 import { mapMutations, mapGetters, mapState } from 'vuex'
+let vm = null
 export default {
+  data () {
+    return {
+      isLoop: false
+    }
+  },
   inject: ['playerParams'],
   computed: {
     ...mapGetters(['currentSong']),
-    ...mapState(['playing', 'audio']),
+    ...mapState(['playing', 'audio', 'sequenceList', 'currentPlayIndex']),
     playIcon () {
-      return this.playing ? 'pause' : 'play'
+      return this.playing ? 'icon-zanting' : 'icon-bofang'
     },
     cdCls () {
       return this.playing ? 'play' : 'play pause'
@@ -65,8 +76,23 @@ export default {
       return this.currentSong.picUrl ? this.currentSong.picUrl : defaultMusicImage
     }
   },
+  mounted () {
+    this.$nextTick(() => {
+      // 初始化轮播图组件
+      this.initSwiper()
+    })
+  },
+  created () {
+    vm = this
+  },
+  watch: {
+    currentSong () {
+      this.swiper.slideTo(this.currentPlayIndex, 0, false)
+    }
+  },
+
   methods: {
-    ...mapMutations(['setPlayerFullScreen', 'setIsPlayerClick']),
+    ...mapMutations(['setPlayerFullScreen', 'setIsPlayerClick', 'setTogglePlayList']),
     handleShowFullPlay () {
       this.setPlayerFullScreen(true)
       this.setIsPlayerClick(false)
@@ -83,9 +109,38 @@ export default {
     next () {
       this.$parent.next()
     },
-    // 滑动进度条
-    handleSlideChange () {
-      this.audio.currentTime = this.playerParams.width * this.playerParams.duration / 100
+    // 查看歌曲列表
+    handlePlayList () {
+      this.setTogglePlayList(true)
+    },
+    // 初始化轮播图组件
+    initSwiper () {
+      // 通过settimeout 解决数据还没有完全加载的时候就已经渲染swiper，导致loop失效。
+      setTimeout(() => {
+        // eslint-disable-next-line no-new
+        vm.swiper = new Swiper('.player-swiper', {
+          // 解决与vant标签页切换冲突问题
+          observer: true,
+          observeParents: true,
+          initialSlide: vm.currentPlayIndex,
+          centeredSlides: true,
+          on: {
+            touchStart (e) {
+              e.stopPropagation()
+            },
+            touchEnd (e) {
+              e.stopPropagation()
+            },
+            slidePrevTransitionEnd () {
+              vm.prev()
+            },
+
+            slideNextTransitionEnd () {
+              vm.next()
+            }
+          }
+        })
+      }, 20)
     }
   }
 
@@ -94,113 +149,132 @@ export default {
  <style lang="stylus" scoped>
  @import '~common/stylus/variable';
 
- .progress >>>.van-progress__portions {
-   width: 100%;
- }
-
  .mini-play-container {
    height: 0;
 
    .fixed {
      position: fixed;
      width: 100%;
-     height: 1.8rem;
+     height: 1.5rem;
      bottom: 0;
      left: 0;
-     padding: 0.2rem 0.25rem;
      display: flex;
      box-sizing: border-box;
      background: $color-common-background;
      box-shadow: 0 -0.15rem 1rem rgba(0, 0, 0, 0.2);
 
-     .left {
-       margin-right: 0.25rem;
-       width: 1.2rem;
-       height: 1.2rem;
-       background-color: #e4e4e4;
-       border-radius: 50%;
+     .swiper-slide {
+       width: 100% !important;
 
-       img {
-         display: block;
+       .swiper-list-item {
+         display: flex;
          width: 100%;
          height: 100%;
-         border-radius: 50%;
 
-         &.play {
-           animation: rotate 10s linear infinite;
+         .left {
+           margin: 0 0.3rem;
+           height: 100%;
+           display: flex;
+           flex-direction: column;
+           justify-content: center;
+
+           .image {
+             width: 1.1rem;
+             height: 1.1rem;
+             background-color: #e4e4e4;
+             border-radius: 50%;
+
+             img {
+               display: block;
+               width: 100%;
+               height: 100%;
+               border-radius: 50%;
+
+               &.play {
+                 animation: rotate 10s linear infinite;
+               }
+
+               &.pause {
+                 animation-play-state: paused;
+               }
+             }
+           }
          }
 
-         &.pause {
-           animation-play-state: paused;
+         .right {
+           flex: 1;
+           width: 7rem;
+
+           .song-info {
+             display: flex;
+             flex-direction: column;
+             justify-content: space-between;
+             height: 100%;
+
+             .song-name {
+               margin-top: 0.15rem;
+               width: 5.5rem;
+               line-height: 0.7rem;
+               font-size: $font-size-smaller;
+               font-weight: 400;
+               no-wrap();
+             }
+
+             .singer {
+               width: 5.5rem;
+               line-height: 0.6rem;
+               font-size: $font-size-smaller-x;
+               color: $color-common-b2;
+               no-wrap();
+             }
+           }
          }
        }
      }
 
-     .right {
+     .player-controller {
        flex: 1;
+       display: flex;
+       justify-content: space-between;
+       align-items: center;
+       z-index: 99;
 
-       .top {
+       .icon {
          display: flex;
-         margin-bottom: 0.2rem;
-         justify-content: space-between;
+         justify-content: center;
+         align-items: center;
+         touch-action: none;
 
-         .song-info {
-           flex: 1;
-           margin-right: 0.5rem;
-
-           .song-name {
-             width: 4rem;
-             height: 0.6rem;
-             line-height: 0.6rem;
-             font-size: $font-size-smaller;
-             font-weight: 400;
-             no-wrap();
-           }
-
-           .singer {
-             width: 4rem;
-             height: 0.5rem;
-             line-height: 0.5rem;
-             font-size: $font-size-smaller-x;
-             color: #999;
-             no-wrap();
-           }
+         i {
+           color: $color-common;
          }
+       }
 
-         .player-controller {
-           flex: 1;
-           display: flex;
-           justify-content: space-between;
-           align-items: center;
-           z-index: 99;
+       .play-list {
+         width: 1.2rem;
+         height: 1.2rem;
 
-           .icon {
-             display: flex;
-             justify-content: center;
-             align-items: center;
-             width: 1rem;
-             height: 1rem;
-             touch-action: none;
+         i {
+           font-size: 0.8rem;
+         }
+       }
 
-             i {
-               color: $color-common;
-               font-size: 0.65rem;
-             }
-           }
+       .play {
+         position: relative;
+         width: 1.2rem;
+         height: 1.2rem;
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         color: red;
+         border-radius: 50%;
 
-           .play {
-             display: flex;
-             justify-content: center;
-             align-items: center;
-             color: red;
-             background: $color-common;
-             width: 1rem;
-             height: 1rem;
-             border-radius: 50%;
+         .icon {
+           position: absolute;
+           color: $color-common;
 
-             i {
-               color: #fff;
-             }
+           i {
+             font-size: 0.55rem;
            }
          }
        }
