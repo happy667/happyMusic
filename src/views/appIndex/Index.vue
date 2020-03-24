@@ -18,15 +18,26 @@
         <router-link to="/appIndex/register">注册</router-link>
       </div>
       <!-- 游客登录 -->
-      <div class="visitor-login">
-        <router-link to="/home">游客登录</router-link>
+      <div class="visitor-login"
+           @click="handleVisitorLogin">
+        <a href="JavaScript:;">游客登录</a>
       </div>
     </div>
   </div>
 </template>
 <script>
+import { mapMutations } from 'vuex'
 export default {
-  name: 'index'
+  name: 'index',
+  methods: {
+    ...mapMutations(['setIsAdvance']),
+    // 显示隐藏密码
+    handleVisitorLogin () {
+      // 设置为前进页面
+      this.setIsAdvance(true)
+      this.$router.replace('/home')
+    }
+  }
 }
 </script>
 <style lang="stylus" scoped>
