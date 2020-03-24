@@ -32,12 +32,13 @@
         <div class="play"
              @click.stop="handleTogglePlaying">
           <van-circle v-model="playerParams.width"
-                      size="32"
+                      size="34"
                       color="#fd4979"
-                      layer-color="#ddd">
+                      :layer-color="circleColor">
           </van-circle>
           <div class="icon">
             <i class="iconfont"
+               :style="iconColor"
                :class="playIcon"></i>
           </div>
         </div>
@@ -72,6 +73,15 @@ export default {
     cdCls () {
       return this.playing ? 'play' : 'play pause'
     },
+    iconColor () {
+      return {
+        color: this.playing ? '#fd4979' : '#999',
+        marginLeft: this.playing ? '0.03rem' : '0.07rem'
+      }
+    },
+    circleColor () {
+      return this.playing ? '#ddd' : '#999'
+    },
     picUrl () {
       return this.currentSong.picUrl ? this.currentSong.picUrl : defaultMusicImage
     }
@@ -87,7 +97,8 @@ export default {
   },
   watch: {
     currentSong () {
-      this.swiper.slideTo(this.currentPlayIndex, 0, false)
+      let index = this.sequenceList.findIndex(item => item.id === this.currentSong.id)
+      this.swiper.slideTo(index, 0, false)
     }
   },
 
@@ -117,12 +128,13 @@ export default {
     initSwiper () {
       // 通过settimeout 解决数据还没有完全加载的时候就已经渲染swiper，导致loop失效。
       setTimeout(() => {
+        let index = this.sequenceList.findIndex(item => item.id === this.currentSong.id)
         // eslint-disable-next-line no-new
         vm.swiper = new Swiper('.player-swiper', {
           // 解决与vant标签页切换冲突问题
           observer: true,
           observeParents: true,
-          initialSlide: vm.currentPlayIndex,
+          initialSlide: index,
           centeredSlides: true,
           on: {
             touchStart (e) {
@@ -164,8 +176,6 @@ export default {
      box-shadow: 0 -0.15rem 1rem rgba(0, 0, 0, 0.2);
 
      .swiper-slide {
-       width: 100% !important;
-
        .swiper-list-item {
          display: flex;
          width: 100%;
@@ -208,21 +218,22 @@ export default {
            .song-info {
              display: flex;
              flex-direction: column;
-             justify-content: space-between;
+             justify-content: space-around;
              height: 100%;
 
              .song-name {
-               margin-top: 0.15rem;
+               margin-top: 0.2rem;
                width: 5.5rem;
-               line-height: 0.7rem;
+               line-height: 0.55rem;
                font-size: $font-size-smaller;
                font-weight: 400;
                no-wrap();
              }
 
              .singer {
+               margin-bottom: 0.2rem;
                width: 5.5rem;
-               line-height: 0.6rem;
+               line-height: 0.55rem;
                font-size: $font-size-smaller-x;
                color: $color-common-b2;
                no-wrap();
@@ -274,7 +285,8 @@ export default {
            color: $color-common;
 
            i {
-             font-size: 0.55rem;
+             color: $color-common-b2;
+             font-size: 0.4rem;
            }
          }
        }

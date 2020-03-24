@@ -41,7 +41,7 @@ export default {
     ...mapGetters(['currentSong']),
     paddingCls () {
       return {
-        paddingBottom: Object.keys(this.currentSong).length === 0 ? '' : '1.8rem'
+        paddingBottom: Object.keys(this.currentSong).length === 0 ? '' : '1.5rem'
       }
     }
   },
