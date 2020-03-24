@@ -20,7 +20,7 @@ export default {
   left: 0;
   top: 0;
   z-index: 99;
-  box-shadow: 0 -1px #fff;
+  box-shadow: 0 0.1rem #fff;
   transform: translateZ(0);
 }
 </style>
