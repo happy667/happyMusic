@@ -5,11 +5,21 @@ import songApi from '@/api/song.js'
 import {
   getPositionTop
 } from '@/assets/common/js/dom.js'
+import {
+  playMode
+} from '@/assets/common/js/config.js'
 const utils = {
   async playMusic(song, list = null, index) {
     // 检查音乐是否可用
     songApi.checkMusic(song.id).then(res => {
       if (res.data.success) {
+        // 同步播放模式
+        let mode = store.state.playMode
+        console.log(mode)
+        if (mode === playMode.random) { // 随机播放
+          let list = utils.randomList(store.state.sequenceList)
+          store.commit('setPlayList', list)
+        }
         if (list === null) { // 传入列表为空
           let list = store.state.playList
           const listIndex = utils.findIndex(list, song)
@@ -68,7 +78,7 @@ const utils = {
     for (let i = 0; i < list.length; i++) {
       arr.push(list[i])
     }
-    arr.sort(() => Math.random() - 0.5)
+    arr.sort(() => 0.5 - Math.random())
     return arr
   },
   // 复制数据
