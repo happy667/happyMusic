@@ -262,6 +262,7 @@ export default {
     },
     handleToggleShowImage () {
       this.showImage = !this.showImage
+      this.showPosition = false
     }
   },
   components: {

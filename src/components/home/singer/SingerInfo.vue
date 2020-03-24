@@ -12,7 +12,8 @@
                  :z-index="99"
                  @click-left="routerBack" />
     <!-- 歌手简介 -->
-    <singer-synopsis :singer="singer" />
+    <singer-synopsis :singer="singer"
+                     @hidePosition="handleHidePosition" />
     <!--歌手信息-->
     <div class="singer-info">
       <van-tabs title-active-color="#FD4979"
@@ -228,6 +229,10 @@ export default {
       this.timer = setTimeout(() => {
         this.showPosition = false
       }, 5000)
+    },
+    // 隐藏定位
+    handleHidePosition () {
+      this.showPosition = false
     }
   },
   components: {

@@ -101,6 +101,7 @@ export default {
     },
     handleToggleShowImage () {
       this.showImage = !this.showImage
+      this.$emit('hidePosition')
     }
   }
 
