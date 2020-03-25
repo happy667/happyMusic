@@ -51,10 +51,6 @@ export default {
       // 如果播放列表为空就隐藏
       if (newList.length === 0) {
         this.setTogglePlayList(false)
-      } else {
-        this.$nextTick(() => { // 获取更新后的dom,防止报错
-          this.scrollList()
-        })
       }
     },
     togglePlayList: {
