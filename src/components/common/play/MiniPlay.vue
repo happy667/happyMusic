@@ -10,10 +10,15 @@
             <div class="swiper-list-item">
               <!-- 左侧图片 -->
               <div class="left">
-                <div class="image">
-                  <img :src="item.picUrl"
-                       :key="item.picUrl"
-                       :class="cdCls">
+                <div class="image"
+                     :class="cdCls">
+                  <van-image :src="item.picUrl"
+                             round>
+                    <template v-slot:loading>
+                      <van-loading type="spinner"
+                                   size="20" />
+                    </template>
+                  </van-image>
                 </div>
               </div>
               <div class="right">
@@ -191,22 +196,18 @@ export default {
            .image {
              width: 1.1rem;
              height: 1.1rem;
-             background-color: #e4e4e4;
-             border-radius: 50%;
 
-             img {
-               display: block;
+             .van-image {
                width: 100%;
                height: 100%;
-               border-radius: 50%;
+             }
 
-               &.play {
-                 animation: rotate 10s linear infinite;
-               }
+             &.play {
+               animation: rotate 10s linear infinite;
+             }
 
-               &.pause {
-                 animation-play-state: paused;
-               }
+             &.pause {
+               animation-play-state: paused;
              }
            }
          }

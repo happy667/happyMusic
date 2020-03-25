@@ -96,7 +96,8 @@ export default {
         // eslint-disable-next-line no-unused-vars
         var mySwiper = new Swiper('.sw-banner', {
           pagination: {
-            el: '.swiper-pagination'
+            el: '.swiper-pagination',
+            clickable: true
           },
           autoplay: {
             disableOnInteraction: false,
