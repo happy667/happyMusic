@@ -28,6 +28,7 @@
                      required
                      center
                      clearable
+                     type="tel"
                      maxlength="4"
                      label="短信验证码"
                      placeholder="请输入短信验证码">
@@ -55,7 +56,7 @@
   </div>
 </template>
 <script>
-import { checkIsNull, checkPhone, checkPassword } from 'common/js/valid.js'
+import { checkIsNull, checkPhone, checkPassword, PASSWORD_VALID_TEXT } from 'common/js/valid.js'
 import registerApi from '@/api/register.js'
 import {
   ERR_OK
@@ -112,6 +113,7 @@ export default {
       // 密码
       if (checkIsNull(this.updateForm.password)) {
         this.$toast('密码不能为空')
+        this.pwdErrMsg = PASSWORD_VALID_TEXT
         return false
       }
       // 验证码
@@ -126,7 +128,7 @@ export default {
       }
       // 验证密码
       if (!checkPassword(this.updateForm.password)) {
-        this.pwdErrMsg = '密码格式有误, 必须由6-16位字母、数字组成'
+        this.pwdErrMsg = PASSWORD_VALID_TEXT
         return false
       }
       // 清空错误提示

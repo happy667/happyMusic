@@ -2,7 +2,7 @@ import request from '@/axios/request.js'
 export default {
   // 获取用户详情
   getUserDetail(uid) {
-    const url = `/user/detail?uid=${uid}`
+    const url = `/user/detail?uid=${uid}&timestamp=${new Date().getTime()}`
     return request({
       url
     })
@@ -89,6 +89,16 @@ export default {
     const url = `/album/sub?t=${t}&id=${id}&timestamp=${new Date().getTime()}`
     return request({
       url
+    })
+  },
+  updateUserInfo(user) {
+    const url = `/user/update?timestamp=${new Date().getTime()}`
+    return request.post(url, {
+      gender: user.gender,
+      birthday: user.birthday,
+      nickname: user.nickname,
+      province: user.province,
+      city: user.city
     })
   }
 

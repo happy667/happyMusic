@@ -1,25 +1,33 @@
 import Vue from 'vue'
 // 过滤次数
-Vue.filter('convertCount', (num) => {
+export function convertCount(num) {
   let number = num.toString()
   return number.length <= 4 ? number : parseFloat(number / 10000).toFixed(1) + '万'
-})
-// 过滤日期时间
-Vue.filter('convertDate', (time) => {
+}
+Vue.filter('convertCount', convertCount)
+
+export function convertDate(time) {
   let date = new Date(time)
   let year = date.getFullYear()
   let month = date.getMonth() + 1
   let day = date.getDate()
   return `${year}-${month}-${day}`
-})
+}
+// 过滤日期时间
+Vue.filter('convertDate', convertDate)
+
 // 过滤播放时间
-Vue.filter('convertTime', (time) => {
+export function convertTime(time) {
   let h = Math.floor(time / 3600).toString().padStart(2, '0')
   let m = Math.floor(time % 3600 / 60).toString().padStart(2, '0')
   let s = Math.floor(time % 60).toString().padStart(2, '0')
   return h === '00' ? `${m}:${s}` : `${h}:${m}:${s}`
-})
+}
+
+Vue.filter('convertTime', convertTime)
+
 // 过滤歌手
-Vue.filter('convertSinger', (item) => {
+export function convertSinger(item) {
   return item.map(item => item.name).join('/')
-})
+}
+Vue.filter('convertSinger', convertSinger)

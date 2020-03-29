@@ -10,9 +10,8 @@
         <van-cell-group>
           <van-field v-model="registerForm.nikeName"
                      required
-                     type="tel"
                      label="用户名"
-                     :error-message="phoneErrMsg"
+                     :error-message="nikeNameErrMsg"
                      placeholder="请输入用户名"
                      maxlength="16" />
           <van-field v-model="registerForm.phone"
@@ -20,6 +19,7 @@
                      type="tel"
                      label="手机号"
                      placeholder="请输入手机号"
+                     :error-message="phoneErrMsg"
                      maxlength="11" />
           <van-field v-model="password1"
                      required
@@ -41,6 +41,7 @@
                      required
                      center
                      clearable
+                     type="tel"
                      maxlength="4"
                      label="短信验证码"
                      placeholder="请输入短信验证码">
@@ -68,7 +69,7 @@
   </div>
 </template>
 <script>
-import { checkIsNull, checkPhone, checkPassword, compare } from 'common/js/valid.js'
+import { checkIsNull, checkPhone, checkPassword, checkNickname, NIKENAME_VALID_TEXT, PASSWORD_VALID_TEXT, compare } from 'common/js/valid.js'
 import registerApi from '@/api/register.js'
 import {
   ERR_OK
@@ -91,7 +92,8 @@ export default {
       sendText: '发送验证码',
       phoneErrMsg: '', // 手机号错误提示
       pwdErrMsg1: '', // 密码错误提示
-      pwdErrMsg2: ''// 确认密码错误提示
+      pwdErrMsg2: '', // 确认密码错误提示
+      nikeNameErrMsg: ''// 用户名错误提示
     }
   },
   computed: {
@@ -123,7 +125,8 @@ export default {
     validForm () {
       // 用户名
       if (checkIsNull(this.registerForm.nikeName)) {
-        this.$toast('用户名不能为空')
+        this.$toast('昵称不能为空')
+        this.nikeNameErrMsg = NIKENAME_VALID_TEXT
         return false
       }
       // 手机号
@@ -134,6 +137,7 @@ export default {
       // 密码
       if (checkIsNull(this.password1)) {
         this.$toast('密码不能为空')
+        this.pwdErrMsg1 = PASSWORD_VALID_TEXT
         return false
       }
       // 确认密码
@@ -146,6 +150,11 @@ export default {
         this.$toast('验证码不能为空')
         return false
       }
+      // 验证用户名
+      if (!checkNickname(this.registerForm.nikeName)) {
+        this.nikeNameErrMsg = NIKENAME_VALID_TEXT
+        return false
+      }
       // 验证手机号
       if (!checkPhone(this.registerForm.phone)) {
         this.phoneErrMsg = '手机号格式有误, 请输入正确的手机号'
@@ -153,7 +162,7 @@ export default {
       }
       // 验证密码
       if (!checkPassword(this.password1)) {
-        this.pwdErrMsg1 = '密码格式有误, 必须由6-16位字母、数字组成'
+        this.pwdErrMsg1 = PASSWORD_VALID_TEXT
         return false
       }
       // 比较二次密码

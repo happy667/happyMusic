@@ -1,0 +1,176 @@
+<template>
+  <div class="edit-container">
+    <!-- 头部导航栏 -->
+    <van-sticky>
+      <van-nav-bar :title="$route.meta.title"
+                   left-arrow
+                   @click-left="routerBack" />
+    </van-sticky>
+    <!-- loading -->
+    <van-loading v-if="loading"
+                 size="24px"
+                 color="#FD4979"
+                 vertical>加载中...</van-loading>
+    <section class="cell-container"
+             v-if="userDetail">
+      <!-- 通知栏 -->
+      <van-notice-bar left-icon="bullhorn-o"
+                      background="#fff"
+                      color='#FD4979'
+                      mode="closeable"
+                      :text="noticeBarText" />
+      <van-cell-group>
+        <van-cell title="昵称"
+                  is-link
+                  :to="{name:'editNickname',params:{nickname:userDetail.nickname}}"
+                  :value="userDetail.nickname" />
+
+        <van-cell title="性别"
+                  :value="gender" />
+
+        <van-cell title="出生日期"
+                  :value="birthday" />
+
+        <van-cell title="地区"
+                  :value="address" />
+      </van-cell-group>
+      <!-- <van-area :area-list="areaList"
+                :columns-num="2"
+                :value="selectAreaValue"
+                title="请选择省市" /> -->
+      <!-- <van-datetime-picker type="date"
+                           :value="currentDate"
+                           :max-date="maxDate"
+                           :min-date="minDate"
+                           :formatter="formatter" /> -->
+    </section>
+  </div>
+</template>
+<script>
+import { convertDate } from 'common/js/convert.js'
+import areaList from 'common/js/area.js'
+import userApi from '@/api/user.js'
+import User from '@/assets/common/js/user.js'
+import { mapState } from 'vuex'
+import {
+  ERR_OK
+} from '@/api/config.js'
+export default {
+  name: 'userEdit',
+  data () {
+    return {
+      userDetail: null, // 用户详情
+      loading: false,
+      areaList,
+      maxDate: new Date(), // 当前日期
+      minDate: new Date('1920/1/1'), // 最小日期
+      formatter (type, value) { // 日期控件格式化
+        if (type === 'year') {
+          return `${value}年`
+        } else if (type === 'month') {
+          return `${value}月`
+        } else if (type === 'day') {
+          return `${value}日`
+        }
+        return value
+      }
+    }
+  },
+  mounted () {
+    if (this.user) {
+      this.getUserDetail(this.user.userId)
+    }
+  },
+  computed: {
+    ...mapState(['user']),
+    gender () {
+      let gender = ''
+      switch (this.userDetail.gender) {
+        case 0:
+          gender = '保密'
+          break
+        case 1:
+          gender = '男'
+          break
+        case 2:
+          gender = '女'
+          break
+      }
+      return gender
+    },
+    birthday () {
+      return this.userDetail.birthday < 0 ? '未设置' : convertDate(this.userDetail.birthday)
+    },
+    currentDate () {
+      return this.userDetail.birthday < 0 ? new Date() : new Date(this.userDetail.birthday)
+    },
+    address () {
+      // 省份代码
+      let provinceCode = this.userDetail.province
+      let province = this.areaList.province_list[provinceCode]
+      // 城市代码
+      let cityCode = this.userDetail.city
+      let city = this.areaList.city_list[cityCode]
+      return province + ' ' + city
+    },
+    noticeBarText () {
+      let day = this.userDetail.createDays
+      let createTime = convertDate(this.userDetail.createTime)
+      return `您来到这里已经有${day}天啦,创建于${createTime}`
+    },
+    selectAreaValue () {
+      return this.userDetail.city.toString() || this.userDetail.province.toString()
+    }
+  },
+  watch: {
+    user () {
+      if (this.user) {
+        this.getUserDetail(this.user.userId)
+      }
+    }
+  },
+  methods: {
+    // 返回上一个路由
+    routerBack () {
+      this.$router.back()
+    },
+    // 获取用户详情
+    async getUserDetail (id) {
+      this.loading = true
+      const {
+        data: res
+      } = await userApi.getUserDetail(id)
+      if (res.code === ERR_OK) {
+        let user = new User({
+          userId: res.profile.userId,
+          nickname: res.profile.nickname,
+          avatarUrl: res.profile.avatarUrl,
+          gender: res.profile.gender,
+          province: res.profile.province,
+          birthday: res.profile.birthday,
+          city: res.profile.city,
+          createDays: res.createDays,
+          createTime: res.createTime
+        })
+        this.userDetail = user
+        console.log(this.userDetail)
+      }
+      this.loading = false
+    }
+  }
+
+}
+</script>
+<style lang="stylus" scoped>
+@import '~common/stylus/variable';
+
+.edit-container>>>.van-picker__cancel, .edit-container>>>.van-picker__confirm, .edit-container>>>.van-picker-column__item {
+  color: $color-common;
+}
+
+.edit-container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: $color-common-background;
+}
+</style>

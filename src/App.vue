@@ -67,8 +67,8 @@ export default {
       if (this.isAdvance) {
         // 设置动画名称
         this.transitionName = 'slide-left'
-        // 如果to索引大于from索引,判断为前进状态,并且from.name不是登录页面，反之则为后退状态
-      } else if (to.meta.index > from.meta.index && from.name !== 'login') {
+        // 如果to索引大于from索引,判断为前进状态,并且from.name不是登录页面或者强制设置了前进(IsAdvance)，反之则为后退状态
+      } else if ((to.meta.index > from.meta.index && from.name !== 'login') || to.meta.IsAdvance) {
         // 设置动画名称
         this.transitionName = 'slide-left'
       } else {

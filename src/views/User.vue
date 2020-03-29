@@ -1,42 +1,48 @@
 <template>
   <div class="user-container">
     <header :style="backgroundImage">
-      <div class="back"
-           @click="routerBack">
-        <van-icon name="arrow-left" />
-      </div>
-      <!-- 头像 -->
-      <div class="avatar">
-        <div class="image"
+      <div class="header-container">
+        <div class="back"
+             @click="routerBack">
+          <van-icon name="arrow-left" />
+        </div>
+        <!-- 头像 -->
+        <div class="avatar">
+          <div class="image"
+               v-if="user">
+            <img :src="user.avatarUrl">
+          </div>
+          <div class="icon"
+               v-else>
+            <van-icon name="user-o" />
+          </div>
+        </div>
+        <!-- 昵称 -->
+        <div class="nikeName"
              v-if="user">
-          <img :src="user.avatarUrl">
+          {{user.nickname}}
         </div>
-        <div class="icon"
-             v-else>
-          <van-icon name="user-o" />
-        </div>
-      </div>
-      <!-- 昵称 -->
-      <div class="nikeName"
-           v-if="user">
-        {{user.nickname}}
-      </div>
 
-      <div class="no-login"
-           v-else>
-        <van-button plain
-                    :to="{name:'index'}"
-                    size="small"
-                    type="info"
-                    color="#fd4979">未登录</van-button>
-      </div>
-      <div class="logout"
-           v-if="user">
-        <div class="icon">
-          <i class="iconfont icon-tuichu"></i>
+        <div class="no-login"
+             v-else>
+          <van-button plain
+                      :to="{name:'index'}"
+                      type="info"
+                      color="#fd4979">未登录</van-button>
         </div>
-        <div class="text"
-             @click="logout">退出登录</div>
+        <div class="logout"
+             v-if="user">
+          <div class="icon">
+            <i class="iconfont icon-tuichu"></i>
+          </div>
+          <div class="text"
+               @click="logout">退出登录</div>
+        </div>
+        <div class="edit"
+             v-if="user">
+          <div class="text"
+               @click="handleEdit">编辑</div>
+        </div>
       </div>
     </header>
     <section>
@@ -252,7 +258,14 @@ export default {
           }
         })
       }).catch(() => { })
+    },
+    // 点击跳转到编辑页面
+    handleEdit () {
+      // 设置为前进页面
+      this.setIsAdvance(true)
+      this.$router.push('/user/edit')
     }
+
   },
   components: {
     SongSheetMiniList,
@@ -270,87 +283,115 @@ export default {
   background-color: $color-common-background;
 
   header {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 2rem;
+    position: relative;
+    width: 100%;
+    padding-bottom: 5.4rem;
     height: 0;
     background-color: #f4f4f4;
+    box-sizing: border-box;
 
-    .avatar {
-      position: relative;
-      width: 2rem;
-      height: 0;
-      margin-bottom: 0.3rem;
-      padding-bottom: 2rem;
-      background: #f4f4f4;
-      border-radius: 50%;
-
-      .image, .icon {
-        position: absolute;
-        left: 0;
-        top: 0;
-        right: 0;
-        bottom: 0;
-
-        img {
-          display: block;
-          width: 100%;
-          height: 100%;
-          border-radius: 50%;
-        }
-      }
-
-      .icon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1rem;
-        color: $color-common;
-        border-radius: 50%;
-        border: 1px solid $color-common;
-        background: #fff;
-      }
-    }
-
-    .nikeName {
-      color: #fff;
-      font-weight: bold;
-      font-size: $font-size-large;
-    }
-
-    .logout {
+    .header-container {
       position: absolute;
-      right: 0.2rem;
-      top: 0.25rem;
-      height: 1rem;
-      line-height: 1rem;
-      color: #fff;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5.4rem;
       display: flex;
-
-      .icon {
-        .iconfont {
-          font-size: $font-size-small;
-        }
-      }
-
-      .text {
-        font-size: $font-size-smaller;
-      }
-    }
-
-    .back {
-      position: absolute;
-      left: 0.2rem;
-      top: 0.25rem;
-      width: 1rem;
-      height: 1rem;
-      font-size: $font-size-large;
-      color: #fff;
-      display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
+
+      .avatar {
+        position: relative;
+        width: 2rem;
+        height: 0;
+        padding-bottom: 2rem;
+        margin-bottom: 0.5rem;
+        background: #f4f4f4;
+        border-radius: 50%;
+
+        .image, .icon {
+          position: absolute;
+          left: 0;
+          top: 0;
+          right: 0;
+          bottom: 0;
+
+          img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+          }
+        }
+
+        .icon {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1rem;
+          color: $color-common;
+          border-radius: 50%;
+          border: 1px solid $color-common;
+          background: #fff;
+        }
+      }
+
+      .nikeName {
+        max-width: 8rem;
+        height: 0.9rem;
+        line-height: 0.9rem;
+        color: #fff;
+        font-weight: bold;
+        font-size: $font-size-large-x;
+        no-wrap();
+      }
+
+      .logout {
+        position: absolute;
+        right: 0.2rem;
+        top: 0.25rem;
+        height: 1rem;
+        line-height: 1rem;
+        color: #fff;
+        display: flex;
+
+        .icon {
+          .iconfont {
+            font-size: $font-size-small;
+          }
+        }
+
+        .text {
+          font-size: $font-size-smaller;
+        }
+      }
+
+      .back {
+        position: absolute;
+        left: 0.2rem;
+        top: 0.25rem;
+        width: 1rem;
+        height: 1rem;
+        font-size: $font-size-large;
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .edit {
+        margin-top: 0.4rem;
+
+        .text {
+          padding: 0.15rem 0.3rem;
+          border-radius: 0.5rem;
+          font-size: $font-size-small-x;
+          background: #e3e3e3;
+          text-align: right;
+          color: #fff;
+        }
+      }
     }
   }
 

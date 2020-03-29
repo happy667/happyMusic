@@ -53,7 +53,7 @@ import {
   USER_TOKEN
 } from '@/assets/common/js/config.js'
 import loginApi from '@/api/login.js'
-import { checkIsNull, checkPhone, checkPassword } from 'common/js/valid.js'
+import { checkIsNull, checkPhone, checkPassword, PASSWORD_VALID_TEXT } from 'common/js/valid.js'
 import { mapMutations } from 'vuex'
 
 export default {
@@ -100,6 +100,7 @@ export default {
       // 密码
       if (checkIsNull(this.loginForm.password)) {
         this.$toast('密码不能为空')
+        this.pwdErrMsg = PASSWORD_VALID_TEXT
         return false
       }
       // 验证手机号
@@ -109,7 +110,7 @@ export default {
       }
       // 验证密码
       if (!checkPassword(this.loginForm.password)) {
-        this.pwdErrMsg = '密码格式有误, 必须由6-16位字母、数字组成'
+        this.pwdErrMsg = PASSWORD_VALID_TEXT
         return false
       }
       // 清空错误提示
@@ -122,6 +123,7 @@ export default {
       if (this.validForm()) {
         this.$toast.loading({
           message: '登陆中...',
+          duration: 0,
           forbidClick: true
         })
         // 验证成功执行登录操作

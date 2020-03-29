@@ -22,11 +22,13 @@ const SingerInfo = () => import('../components/home/singer/SingerInfo')
 const Album = () => import('../components/home/singer/album/Album')
 const AlbumComment = () => import('../components/home/singer/album/AlbumComment')
 
-const User = () => import(/* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend" */ '../views/User')
-const MyFollow = () => import(/* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend" */ '../components/user/MyFollow')
-const MyLike = () => import(/* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend" */ '../components/user/MyLike')
-const PlayRanking = () => import(/* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend" */ '../components/user/PlayRanking')
-const UserRecommend = () => import(/* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend" */ '../components/user/Recommend')
+const User = () => import(/* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend_userEdit" */ '../views/User')
+const MyFollow = () => import(/* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend_userEdit" */ '../components/user/MyFollow')
+const MyLike = () => import(/* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend_userEdit" */ '../components/user/MyLike')
+const PlayRanking = () => import(/* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend_userEdit" */ '../components/user/PlayRanking')
+const UserRecommend = () => import(/* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend_userEdit" */ '../components/user/Recommend')
+const UserEdit = () => import(/* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend_userEdit" */ '../components/user/Edit')
+const UserEditNickname = () => import(/* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend_userEdit" */ '../components/user/edit/EditNickname')
 
 Vue.use(VueRouter)
 
@@ -401,6 +403,49 @@ const routes = [
       }
       next()
     }
+  },
+  // 个人主页编辑
+  {
+    path: '/user/edit',
+    name: 'userEdit',
+    component: UserEdit,
+    meta: {
+      requireLogin: true, // 当前路由需要校验，不需要就不用写
+      title: '个人信息'
+    },
+    beforeEnter(to, from, next) {
+      if (from.name === 'user') {
+        // 添加不缓存路由
+        store.commit('setAddNoCacheComponents', 'userEdit')
+      } else if (from.name === 'editNickname' && !from.meta.isBack) {
+        // 添加不缓存路由
+        store.commit('setAddNoCacheComponents', 'userEdit')
+      } else {
+        // 移除不缓存路由
+        store.commit('setRemoveNoCacheComponents', 'userEdit')
+      }
+      next()
+    }
+
+  },
+  // 修改昵称
+  {
+    path: '/user/edit/editNickname',
+    name: 'editNickname',
+    component: UserEditNickname,
+    meta: {
+      requireLogin: true, // 当前路由需要校验，不需要就不用写
+      IsAdvance: true, // 前进页面
+      title: '修改昵称',
+      isBack: false
+    },
+    beforeEnter(to, from, next) {
+      to.meta.isBack = false
+      // 添加不缓存路由
+      store.commit('setAddNoCacheComponents', 'editNickname')
+      next()
+    }
+
   }
 
 ]
@@ -429,9 +474,7 @@ router.beforeEach((to, from, next) => {
     }
     store.commit('setIsPlayerClick', false)
   }
-  if (window.history.length === 0) { // 说明没有上一个路由
-    next('/') // 回到首页
-  } else if (to.matched.some(record => record.meta.requireLogin)) { // 判断该路由是否需要登录权限
+  if (to.matched.some(record => record.meta.requireLogin)) { // 判断该路由是否需要登录权限
     let utils = Vue.prototype.utils
     console.log(utils.isLogin())
     if (utils.isLogin()) { // 判断是否登录

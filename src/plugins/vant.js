@@ -26,7 +26,11 @@ import {
   Circle,
   Popup,
   Image,
-  Overlay
+  Overlay,
+  Cell,
+  Area,
+  NoticeBar,
+  DatetimePicker
 } from 'vant'
 Vue.use(Tab)
 Vue.use(Tabs)
@@ -55,5 +59,9 @@ Vue.use(Circle)
 Vue.use(Popup)
 Vue.use(Image)
 Vue.use(Overlay)
+Vue.use(Cell)
+Vue.use(Area)
+Vue.use(NoticeBar)
+Vue.use(DatetimePicker)
 Vue.prototype.$Dialog = Dialog
 Vue.prototype.$toast = Toast
