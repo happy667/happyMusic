@@ -12,10 +12,16 @@
 
       <!-- 操作 -->
       <div class="option">
-        <router-link to="/appIndex/login">登录</router-link>
+        <router-link to="/appIndex/login"
+                     tag="div">
+          <btn text="登录" />
+        </router-link>
         <p>OR</p>
         <!-- 注册 -->
-        <router-link to="/appIndex/register">注册</router-link>
+        <router-link to="/appIndex/register"
+                     tag="div">
+          <btn text="注册" />
+        </router-link>
       </div>
       <!-- 游客登录 -->
       <div class="visitor-login"
@@ -26,6 +32,7 @@
   </div>
 </template>
 <script>
+import Btn from '@/components/common/Button'
 import { mapMutations } from 'vuex'
 export default {
   name: 'index',
@@ -37,6 +44,9 @@ export default {
       this.setIsAdvance(true)
       this.$router.replace('/home')
     }
+  },
+  components: {
+    Btn
   }
 }
 </script>
@@ -81,14 +91,8 @@ export default {
       align-items: center;
       text-align: center;
 
-      a {
-        padding: 0.4rem 0;
+      div {
         width: 6.5rem;
-        color: #fff;
-        font-size: $font-size-small;
-        border-radius: 1rem;
-        background: $color-common;
-        box-shadow: 0 0.15rem 0.4rem #F4B3C5;
       }
 
       p {

@@ -307,7 +307,7 @@ export default {
   .album-header {
     position: relative;
     height: 0;
-    background-image: linear-gradient(160deg, #c4c4c4 60%, #fff 100%);
+    background-image: linear-gradient(-20deg, #f794a4 0%, #fdd6bd 100%);
     padding-bottom: 3.1rem;
 
     .album-info {

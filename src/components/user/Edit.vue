@@ -11,47 +11,60 @@
                  size="24px"
                  color="#FD4979"
                  vertical>加载中...</van-loading>
-    <section class="cell-container"
-             v-if="userDetail">
-      <!-- 通知栏 -->
-      <van-notice-bar left-icon="bullhorn-o"
-                      background="#fff"
-                      color='#FD4979'
-                      mode="closeable"
-                      :text="noticeBarText" />
-      <van-cell-group>
-        <van-cell title="昵称"
-                  is-link
-                  :to="{name:'editNickname',params:{nickname:userDetail.nickname}}"
-                  :value="userDetail.nickname" />
+    <template v-if="userDetail">
+      <section class="cell-container">
+        <!-- 通知栏 -->
+        <van-notice-bar left-icon="bullhorn-o"
+                        background="#fff"
+                        color='#FD4979'
+                        mode="closeable"
+                        :text="noticeBarText" />
+        <van-cell-group>
+          <van-cell title="昵称"
+                    is-link
+                    :to="{name:'editNickname',params:{nickname:userDetail.nickname}}"
+                    :value="userDetail.nickname" />
 
-        <van-cell title="性别"
-                  :value="gender" />
+          <van-cell title="性别"
+                    :value="gender" />
 
-        <van-cell title="出生日期"
-                  :value="birthday" />
+          <van-cell title="出生日期"
+                    :value="birthday" />
 
-        <van-cell title="地区"
-                  :value="address" />
-      </van-cell-group>
-      <!-- <van-area :area-list="areaList"
+          <van-cell title="地区"
+                    :value="address" />
+        </van-cell-group>
+
+        <!-- <van-area :area-list="areaList"
                 :columns-num="2"
                 :value="selectAreaValue"
                 title="请选择省市" /> -->
-      <!-- <van-datetime-picker type="date"
+        <!-- <van-datetime-picker type="date"
                            :value="currentDate"
                            :max-date="maxDate"
                            :min-date="minDate"
                            :formatter="formatter" /> -->
-    </section>
+      </section>
+      <footer>
+        <div class="logout"
+             @click="logout"
+             v-if="user">
+          <btn text="退出登录"></btn>
+        </div>
+      </footer>
+    </template>
   </div>
 </template>
 <script>
-import { convertDate } from 'common/js/convert.js'
-import areaList from 'common/js/area.js'
+import Btn from '@/components/common/Button'
+import loginApi from '@/api/login.js'
 import userApi from '@/api/user.js'
+import areaList from 'common/js/area.js'
 import User from '@/assets/common/js/user.js'
-import { mapState } from 'vuex'
+import { convertDate } from 'common/js/convert.js'
+import { USER_TOKEN } from 'common/js/config.js'
+import { clearItem } from 'common/js/localStorage.js'
+import { mapState, mapMutations } from 'vuex'
 import {
   ERR_OK
 } from '@/api/config.js'
@@ -130,6 +143,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['setLoginUser', 'setUserLikeList', 'setToken']),
     // 返回上一个路由
     routerBack () {
       this.$router.back()
@@ -156,7 +170,27 @@ export default {
         console.log(this.userDetail)
       }
       this.loading = false
+    },
+    // 退出登录
+    logout () {
+      this.utils.alertConfirm({ message: '确定要退出登录吗', confirmButtonText: '退出' }).then(() => {
+        loginApi.logout().then(res => {
+          if (res.data.code === ERR_OK) {
+            // 清空用户所有信息
+            clearItem(USER_TOKEN)
+            this.setLoginUser(null)
+            this.setUserLikeList(null)
+            this.setToken(null)
+            // 添加不缓存路由
+            this.$store.commit('setAddNoCacheComponents', 'user')
+            this.$router.replace('/user')// 跳转到个人首页
+          }
+        })
+      }).catch(() => { })
     }
+  },
+  components: {
+    Btn
   }
 
 }
@@ -172,5 +206,12 @@ export default {
   width: 100%;
   min-height: 100vh;
   background-color: $color-common-background;
+
+  footer {
+    .logout {
+      width: 80%;
+      margin: 1rem auto 0;
+    }
+  }
 }
 </style>

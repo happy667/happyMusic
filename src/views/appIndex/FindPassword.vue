@@ -43,8 +43,10 @@
         </van-cell-group>
 
         <!-- 修改 -->
-        <div class="updateBtn"
-             @click="handleUpdate">修改</div>
+        <div class="update"
+             @click="handleUpdate">
+          <btn text="修改"></btn>
+        </div>
         <!-- 去登陆 -->
         <div class="other-wrapper">
           <span>找到账号了?</span>
@@ -56,6 +58,7 @@
   </div>
 </template>
 <script>
+import Btn from '@/components/common/Button'
 import { checkIsNull, checkPhone, checkPassword, PASSWORD_VALID_TEXT } from 'common/js/valid.js'
 import registerApi from '@/api/register.js'
 import {
@@ -215,6 +218,9 @@ export default {
         })
       }
     }
+  },
+  components: {
+    Btn
   }
 }
 </script>
@@ -257,16 +263,9 @@ export default {
       flex-direction: column;
       padding: 0.4rem 0.5rem;
 
-      .updateBtn {
+      .update {
         margin-bottom: 0.45rem;
-        padding: 0.4rem 0;
         width: 100%;
-        color: #fff;
-        font-size: $font-size-small;
-        border-radius: 1rem;
-        background: $color-common;
-        box-shadow: 0 0.15rem 0.4rem #F4B3C5;
-        text-align: center;
       }
     }
   }

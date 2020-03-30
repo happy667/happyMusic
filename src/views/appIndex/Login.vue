@@ -30,8 +30,10 @@
           <router-link to="/appIndex/findPassword">忘记密码?</router-link>
         </div>
         <!-- 登录 -->
-        <div class="submitBtn"
-             @click="handleLogin">登录</div>
+        <div class="login"
+             @click="handleLogin">
+          <btn text="登录"></btn>
+        </div>
         <!-- 去注册 -->
         <div class="other-wrapper">
           <span>还没有账号?</span>
@@ -43,6 +45,7 @@
   </div>
 </template>
 <script>
+import Btn from '@/components/common/Button'
 import {
   ERR_OK
 } from '@/api/config.js'
@@ -153,6 +156,9 @@ export default {
         })
       }
     }
+  },
+  components: {
+    Btn
   }
 }
 </script>
@@ -196,16 +202,9 @@ export default {
       flex-direction: column;
       padding: 0.4rem 0.5rem;
 
-      .submitBtn {
+      .login {
         margin-bottom: 0.45rem;
-        padding: 0.4rem 0;
         width: 100%;
-        color: #fff;
-        font-size: $font-size-small;
-        border-radius: 1rem;
-        background: $color-common;
-        box-shadow: 0 0.15rem 0.4rem #F4B3C5;
-        text-align: center;
       }
     }
 

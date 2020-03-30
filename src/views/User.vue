@@ -1,6 +1,6 @@
 <template>
   <div class="user-container">
-    <header :style="backgroundImage">
+    <header>
       <div class="header-container">
         <div class="back"
              @click="routerBack">
@@ -20,28 +20,21 @@
         <!-- 昵称 -->
         <div class="nikeName"
              v-if="user">
-          {{user.nickname}}
+          <div class="text"> {{user.nickname}}</div>
+
         </div>
 
         <div class="no-login"
              v-else>
-          <van-button plain
-                      :to="{name:'index'}"
-                      type="info"
-                      color="#fd4979">未登录</van-button>
-        </div>
-        <div class="logout"
-             v-if="user">
-          <div class="icon">
-            <i class="iconfont icon-tuichu"></i>
-          </div>
-          <div class="text"
-               @click="logout">退出登录</div>
+          <router-link :to="{name:'index'}">点击登录账户</router-link>
         </div>
         <div class="edit"
              v-if="user">
-          <div class="text"
-               @click="handleEdit">编辑</div>
+          <div class="icon"
+               @click="handleEdit">
+            <van-icon name="setting-o"
+                      size="25" />
+          </div>
         </div>
       </div>
     </header>
@@ -130,12 +123,9 @@ import NoResult from '@/components/common/NoResult'
 import AlbumList from '@/components/home/singer/albumList/AlbumList'
 import SongSheetMiniList from '@/components/home/songSheet/songSheetMini/SongSheetMiniList'
 import userApi from '@/api/user.js'
-import loginApi from '@/api/login.js'
 import {
   ERR_OK
 } from '@/api/config.js'
-import { USER_TOKEN } from 'common/js/config.js'
-import { clearItem } from 'common/js/localStorage.js'
 import { mapState, mapMutations } from 'vuex'
 export default {
   name: 'user',
@@ -149,11 +139,6 @@ export default {
 
   computed: {
     ...mapState(['user', 'userLikeList']),
-    backgroundImage () {
-      return {
-        backgroundImage: `url(http://p1.music.126.net/WLTBvNL_l9ZKlslFwaCM9Q==/109951163792144631.jpg)`
-      }
-    },
     myLikeCount () {
       return this.userLikeList ? this.userLikeList.length + '首' : ''
     },
@@ -200,9 +185,8 @@ export default {
       this.getUserSongSheet(this.user.userId)
     }
   },
-  inject: ['reload'],
   methods: {
-    ...mapMutations(['setLoginUser', 'setUserLikeList', 'setToken', 'setIsAdvance']),
+    ...mapMutations(['setIsAdvance']),
     // 返回上一个路由
     routerBack () {
       // 设置为前进页面
@@ -242,23 +226,7 @@ export default {
         this.userAlbum = res.data
       }
     },
-    // 退出登录
-    logout () {
-      this.utils.alertConfirm({ message: '确定要退出登录吗', confirmButtonText: '退出' }).then(() => {
-        loginApi.logout().then(res => {
-          if (res.data.code === ERR_OK) {
-            // 清空用户所有信息
-            clearItem(USER_TOKEN)
-            this.setLoginUser(null)
-            this.setUserLikeList(null)
-            this.setToken(null)
-            // 添加不缓存路由
-            this.$store.commit('setAddNoCacheComponents', 'user')
-            this.reload()// 刷新页面
-          }
-        })
-      }).catch(() => { })
-    },
+
     // 点击跳转到编辑页面
     handleEdit () {
       // 设置为前进页面
@@ -285,28 +253,29 @@ export default {
   header {
     position: relative;
     width: 100%;
-    padding-bottom: 5.4rem;
+    padding-bottom: 6rem;
     height: 0;
-    background-color: #f4f4f4;
     box-sizing: border-box;
+    background-image: linear-gradient(-20deg, #f794a4 0%, #fdd6bd 100%);
 
     .header-container {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
-      height: 5.4rem;
+      height: 6rem;
+      padding: 1.5rem 0 1rem;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
+      box-sizing: border-box;
 
       .avatar {
         position: relative;
         width: 2rem;
         height: 0;
         padding-bottom: 2rem;
-        margin-bottom: 0.5rem;
         background: #f4f4f4;
         border-radius: 50%;
 
@@ -332,7 +301,7 @@ export default {
           font-size: 1rem;
           color: $color-common;
           border-radius: 50%;
-          border: 1px solid $color-common;
+          border: 1px solid #fff;
           background: #fff;
         }
       }
@@ -341,30 +310,20 @@ export default {
         max-width: 8rem;
         height: 0.9rem;
         line-height: 0.9rem;
-        color: #fff;
-        font-weight: bold;
-        font-size: $font-size-large-x;
         no-wrap();
-      }
-
-      .logout {
-        position: absolute;
-        right: 0.2rem;
-        top: 0.25rem;
-        height: 1rem;
-        line-height: 1rem;
-        color: #fff;
-        display: flex;
-
-        .icon {
-          .iconfont {
-            font-size: $font-size-small;
-          }
-        }
 
         .text {
-          font-size: $font-size-smaller;
+          color: #fff;
+          font-weight: bold;
+          font-size: $font-size-large-x;
         }
+      }
+
+      .edit {
+        position: absolute;
+        right: 0.5rem;
+        top: 0.5rem;
+        color: #fff;
       }
 
       .back {
@@ -380,15 +339,14 @@ export default {
         align-items: center;
       }
 
-      .edit {
-        margin-top: 0.4rem;
+      .no-login {
+        margin-top: 0.5rem;
 
-        .text {
-          padding: 0.15rem 0.3rem;
-          border-radius: 0.5rem;
+        a {
+          display: block;
+          height: 1rem;
+          line-height: 1rem;
           font-size: $font-size-small-x;
-          background: #e3e3e3;
-          text-align: right;
           color: #fff;
         }
       }

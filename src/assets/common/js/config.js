@@ -16,7 +16,9 @@ export const needLoginComponents = [ // 存放路由name属性
   'myFollow',
   'myLike',
   'userRecommend',
-  'playRanking'
+  'playRanking',
+  'userEdit',
+  'editNickname'
 ]
 export const defaultMusicImage = 'http://s4.music.126.net/style/web2/img/default/default_album.jpg?param=130y130'
 export const logoImage = '/assets/images/Logo.png'

@@ -56,8 +56,10 @@
         </van-cell-group>
 
         <!-- 注册 -->
-        <div class="registerBtn"
-             @click="handleRegister">注册</div>
+        <div class="register"
+             @click="handleRegister">
+          <btn text="注册"></btn>
+        </div>
         <!-- 去登陆 -->
         <div class="other-wrapper">
           <span>已经有账号了?</span>
@@ -69,6 +71,7 @@
   </div>
 </template>
 <script>
+import Btn from '@/components/common/Button'
 import { checkIsNull, checkPhone, checkPassword, checkNickname, NIKENAME_VALID_TEXT, PASSWORD_VALID_TEXT, compare } from 'common/js/valid.js'
 import registerApi from '@/api/register.js'
 import {
@@ -254,6 +257,9 @@ export default {
         })
       }
     }
+  },
+  components: {
+    Btn
   }
 }
 </script>
@@ -296,16 +302,9 @@ export default {
       flex-direction: column;
       padding: 0.4rem 0.5rem;
 
-      .registerBtn {
+      .register {
         margin-bottom: 0.45rem;
-        padding: 0.4rem 0;
         width: 100%;
-        color: #fff;
-        font-size: $font-size-small;
-        border-radius: 1rem;
-        background: $color-common;
-        box-shadow: 0 0.15rem 0.4rem #F4B3C5;
-        text-align: center;
       }
     }
   }
