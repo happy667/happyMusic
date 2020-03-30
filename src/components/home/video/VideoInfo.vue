@@ -56,7 +56,7 @@ import NoResult from '@/components/common/NoResult'
 import videoApi from '@/api/video.js'
 import SingerApi from '@/api/singer.js'
 import VideoDetail from '@/assets/common/js/videoDetail.js'
-import { mapMutations } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 import {
   ERR_OK
 } from '@/api/config.js'
@@ -76,8 +76,16 @@ export default {
       showMoreInfo: false// 是否显示更多信息
     }
   },
+  beforeRouteLeave (to, from, next) {
+    // 如果播放就显示迷你播放器
+    if (this.currentPlayIndex !== -1) {
+      this.setHideMiniPlayer(false)
+    }
+    next()
+  },
   inject: ['reload'],
   computed: {
+    ...mapState(['currentPlayIndex']),
     commentText () {
       return this.commentCount === 0 ? '' : this.commentCount
     }
@@ -90,7 +98,7 @@ export default {
     })
   },
   methods: {
-    ...mapMutations(['setIsAdvance']),
+    ...mapMutations(['setIsAdvance', 'setHideMiniPlayer']),
     // 返回上一个路由
     routerBack () {
       this.$router.back()

@@ -110,6 +110,11 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
+.singer-synopsis-container>>>.van-image {
+  width: 100%;
+  height: 100%;
+}
+
 .singer-synopsis-container {
   position: relative;
   width: 100%;

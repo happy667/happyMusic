@@ -10,7 +10,7 @@
     </transition>
     <!-- 迷你播放器 -->
     <transition leave-active-class="animated fadeOut faster">
-      <mini-play v-show="!playerFullScreen">
+      <mini-play v-show="!playerFullScreen&&!hideMiniPlayer">
       </mini-play>
     </transition>
     <div class="audio">
@@ -108,7 +108,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['playerFullScreen', 'songReady', 'playing', 'audio', 'currentPlayIndex', 'playList', 'playMode', 'sequenceList', 'currentLyric', 'isPlay', 'oldVideo']),
+    ...mapState(['playerFullScreen', 'songReady', 'playing', 'audio', 'currentPlayIndex', 'playList', 'playMode', 'sequenceList', 'currentLyric', 'isPlay', 'oldVideo', 'hideMiniPlayer']),
     ...mapGetters(['currentSong']),
     togglePlayList: {
       get () {

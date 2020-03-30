@@ -29,6 +29,7 @@ const PlayRanking = () => import(/* webpackChunkName:"user_myFollow_myLike_playR
 const UserRecommend = () => import(/* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend_userEdit" */ '../components/user/Recommend')
 const UserEdit = () => import(/* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend_userEdit" */ '../components/user/Edit')
 const UserEditNickname = () => import(/* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend_userEdit" */ '../components/user/edit/EditNickname')
+const UserEditPassword = () => import(/* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend_userEdit" */ '../components/user/edit/EditPassword')
 
 Vue.use(VueRouter)
 
@@ -202,7 +203,10 @@ const routes = [
       title: '视频详情'
     }, // meta对象的index用来定义当前路由的层级,由小到大,由低到高
     beforeEnter(to, from, next) {
-      console.log(from)
+      // 如果有歌曲播放就隐藏迷你播放器
+      if (store.state.currentPlayIndex !== -1) {
+        store.commit('setHideMiniPlayer', true)
+      }
       if (from.name === 'home' || from.name === 'searchResult' || from.name === 'videoInfo') {
         // 添加不缓存路由
         store.commit('setAddNoCacheComponents', 'videoInfo')
@@ -443,6 +447,25 @@ const routes = [
       to.meta.isBack = false
       // 添加不缓存路由
       store.commit('setAddNoCacheComponents', 'editNickname')
+      next()
+    }
+
+  },
+  // 修改密码
+  {
+    path: '/user/edit/editPassword',
+    name: 'editPassword',
+    component: UserEditPassword,
+    meta: {
+      requireLogin: true, // 当前路由需要校验，不需要就不用写
+      IsAdvance: true, // 前进页面
+      title: '修改密码',
+      isBack: false
+    },
+    beforeEnter(to, from, next) {
+      to.meta.isBack = false
+      // 添加不缓存路由
+      store.commit('setAddNoCacheComponents', 'editPassword')
       next()
     }
 

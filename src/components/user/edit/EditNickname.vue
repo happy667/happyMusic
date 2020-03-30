@@ -8,6 +8,7 @@
     <van-cell-group>
       <van-field v-model="nickname"
                  label="昵称"
+                 clearable
                  :error-message="nicknameErr"
                  placeholder="请输入昵称"
                  maxlength="16" />

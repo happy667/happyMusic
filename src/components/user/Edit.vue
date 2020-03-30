@@ -14,41 +14,75 @@
     <template v-if="userDetail">
       <section class="cell-container">
         <!-- 通知栏 -->
-        <van-notice-bar left-icon="bullhorn-o"
-                        background="#fff"
-                        color='#FD4979'
-                        mode="closeable"
-                        :text="noticeBarText" />
-        <van-cell-group>
-          <van-cell title="昵称"
-                    is-link
-                    :to="{name:'editNickname',params:{nickname:userDetail.nickname}}"
-                    :value="userDetail.nickname" />
+        <div class="noticeBar">
+          <van-notice-bar left-icon="bullhorn-o"
+                          background="#fff"
+                          color='#FD4979'
+                          mode="closeable"
+                          :text="noticeBarText" />
+        </div>
 
-          <van-cell title="性别"
-                    @click="toggleOption('gender')"
-                    :value="genderValue" />
+        <van-cell-group :border="false">
+          <!-- 昵称 -->
+          <div class="nikename">
+            <van-cell title="昵称"
+                      is-link
+                      :to="{name:'editNickname',params:{nickname:userDetail.nickname}}"
+                      :value="userDetail.nickname" />
 
-          <van-cell title="出生日期"
-                    @click="toggleOption('birthday')"
-                    :value="birthday" />
+          </div>
 
-          <van-cell title="地区"
-                    :value="address" />
+          <!-- 性别 -->
+          <div class="gender">
+            <van-cell title="性别"
+                      clickable
+                      @click="toggleOption('gender')"
+                      :value="genderValue" />
+          </div>
+
+          <!-- 出生日期 -->
+          <div class="birthday">
+            <van-cell title="出生日期"
+                      clickable
+                      @click="toggleOption('birthday')"
+                      :value="birthday" />
+          </div>
+
+          <!-- 地区 -->
+          <div class="address">
+            <van-cell title="地区"
+                      clickable
+                      @click="toggleOption('address')"
+                      :value="address" />
+          </div>
+
         </van-cell-group>
 
-        <!-- <van-area :area-list="areaList"
-                :columns-num="2"
-                :value="selectAreaValue"
-                title="请选择省市" /> -->
-
       </section>
-      <footer>
-        <div class="logout"
-             @click="logout"
-             v-if="user">
-          <btn text="退出登录"></btn>
+      <footer v-if="user">
+        <div class="options">
+          <!-- 修改密码 -->
+          <div class="options-item updatePwd van-hairline--right"
+               @click="$router.push('/user/edit/editPassword')">
+            <div class="icon">
+              <i class="iconfont icon-xiugaimima"></i>
+            </div>
+            <div class="text">
+              修改密码
+            </div>
+          </div>
+          <!-- 退出登录 -->
+          <div class="options-item logout"
+               @click="logout">
+            <div class="icon">
+              <i class="iconfont icon-tuichu"></i>
+            </div>
+            <div class="text">
+              退出登录
+            </div>
+          </div>
         </div>
+
       </footer>
       <van-popup v-model="showPopup"
                  round
@@ -98,12 +132,21 @@
                                :min-date="minDate"
                                :formatter="formatter" />
         </div>
+        <!-- 地区 -->
+        <div class="updateAddress"
+             v-if="option==='address'">
+          <van-area :area-list="areaList"
+                    @cancel="showPopup=false"
+                    @confirm="handleSaveAddress"
+                    :columns-num="2"
+                    :value="selectAreaValue"
+                    title="请选择省市" />
+        </div>
       </van-popup>
     </template>
   </div>
 </template>
 <script>
-import Btn from '@/components/common/Button'
 import loginApi from '@/api/login.js'
 import userApi from '@/api/user.js'
 import areaList from 'common/js/area.js'
@@ -145,8 +188,23 @@ export default {
       this.getUserDetail(this.user.userId)
     }
   },
+  beforeRouteEnter (to, from, next) {
+    // 如果有歌曲播放就隐藏迷你播放器
+    next(vm => {
+      if (vm.currentPlayIndex !== -1) {
+        vm.setHideMiniPlayer(true)
+      }
+    })
+  },
+  beforeRouteLeave (to, from, next) {
+    // 如果有歌曲播放就显示迷你播放器
+    if (this.currentPlayIndex !== -1) {
+      this.setHideMiniPlayer(false)
+    }
+    next()
+  },
   computed: {
-    ...mapState(['user']),
+    ...mapState(['user', 'currentPlayIndex']),
     // 性别处理
     genderValue () {
       let gender = ''
@@ -200,7 +258,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setLoginUser', 'setUserLikeList', 'setToken']),
+    ...mapMutations(['setLoginUser', 'setUserLikeList', 'setToken', 'setHideMiniPlayer']),
     // 返回上一个路由
     routerBack () {
       this.$router.back()
@@ -286,10 +344,30 @@ export default {
         this.nicknameErr = error.data.message
         this.$toast(error.data.message)
       }
+    },
+    // 保存修改地区
+    async handleSaveAddress (address) {
+      try {
+        // 获取省份id
+        let province = address[0].code
+        // 获取城市id
+        let city = address[1].code
+        // 执行保存出生日期
+        const { data: res } = await userApi.updateUserInfo({ province, city })
+        if (res.code === 200) {
+          // 修改成功
+          this.$toast('修改成功')
+          this.userDetail.province = province
+          this.userDetail.city = city
+          this.showPopup = false
+        } else {
+          this.$toast(res.data.message)
+        }
+      } catch (error) {
+        this.nicknameErr = error.data.message
+        this.$toast(error.data.message)
+      }
     }
-  },
-  components: {
-    Btn
   }
 
 }
@@ -311,13 +389,37 @@ export default {
   background-color: $color-common-background;
 
   footer {
-    .logout {
-      width: 80%;
-      margin: 1rem auto 0;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    box-shadow: 0 -0.15rem 1rem rgba(0, 0, 0, 0.2);
+
+    .options {
+      display: flex;
+
+      .options-item {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        height: 1.5rem;
+        line-height: 1.5rem;
+        color: $color-common;
+        text-align: center;
+        font-size: $font-size-smaller;
+
+        .icon {
+          margin-right: 0.2rem;
+        }
+      }
+
+      .updatePwd {
+      }
     }
   }
 
-  .updateGender {
+  .address>>>.van-cell .van-cell__title {
+    flex: 0.5;
   }
 }
 </style>

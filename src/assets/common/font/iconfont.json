@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "228983",
+      "name": "退出",
+      "font_class": "tuichu",
+      "unicode": "e66e",
+      "unicode_decimal": 58990
+    },
+    {
+      "icon_id": "9396056",
+      "name": "修改密码",
+      "font_class": "xiugaimima",
+      "unicode": "e640",
+      "unicode_decimal": 58944
+    },
+    {
       "icon_id": "1117917",
       "name": "播放",
       "font_class": "bofang",
@@ -18,13 +32,6 @@
       "font_class": "zanting",
       "unicode": "e79f",
       "unicode_decimal": 59295
-    },
-    {
-      "icon_id": "1348254",
-      "name": "退出",
-      "font_class": "tuichu",
-      "unicode": "e616",
-      "unicode_decimal": 58902
     },
     {
       "icon_id": "6207819",
