@@ -30,6 +30,7 @@
                     :value="genderValue" />
 
           <van-cell title="出生日期"
+                    @click="toggleOption('birthday')"
                     :value="birthday" />
 
           <van-cell title="地区"
@@ -40,11 +41,6 @@
                 :columns-num="2"
                 :value="selectAreaValue"
                 title="请选择省市" /> -->
-        <!-- <van-datetime-picker type="date"
-                           :value="currentDate"
-                           :max-date="maxDate"
-                           :min-date="minDate"
-                           :formatter="formatter" /> -->
 
       </section>
       <footer>
@@ -57,9 +53,11 @@
       <van-popup v-model="showPopup"
                  round
                  get-container="edit-container">
+        <!-- 修改性别 -->
         <div class="updateGender"
              v-if="option==='gender'">
           <van-radio-group v-model="currentGender"
+                           checked-color="#FD4979"
                            @change="handleGenderChange">
             <van-cell-group>
               <van-cell title="保密"
@@ -88,6 +86,17 @@
               </van-cell>
             </van-cell-group>
           </van-radio-group>
+        </div>
+        <!-- 出生日期 -->
+        <div class="updateBirthday"
+             v-if="option==='birthday'">
+          <van-datetime-picker type="date"
+                               @cancel="showPopup=false"
+                               @confirm="handleSaveBirthday"
+                               :value="currentDate"
+                               :max-date="maxDate"
+                               :min-date="minDate"
+                               :formatter="formatter" />
         </div>
       </van-popup>
     </template>
@@ -221,11 +230,7 @@ export default {
     },
     toggleOption (type) {
       this.showPopup = true
-      switch (type) {
-        case 'gender':
-          this.option = 'gender'
-          break
-      }
+      this.option = type
     },
     // 退出登录
     logout () {
@@ -248,12 +253,31 @@ export default {
     async handleGenderChange () {
       try {
         let gender = parseInt(this.currentGender)
-        // 执行修改昵称方法
+        // 执行处理修改性别
         const { data: res } = await userApi.updateUserInfo({ gender })
         if (res.code === 200) {
-          // 修改成功就跳转到个人信息页
+          // 修改成功
           this.$toast('修改成功')
           this.userDetail.gender = gender
+          this.showPopup = false
+        } else {
+          this.$toast(res.data.message)
+        }
+      } catch (error) {
+        this.nicknameErr = error.data.message
+        this.$toast(error.data.message)
+      }
+    },
+    // 保存出生日期
+    async handleSaveBirthday (time) {
+      try {
+        let birthday = new Date(time).getTime()
+        // 执行保存出生日期
+        const { data: res } = await userApi.updateUserInfo({ birthday })
+        if (res.code === 200) {
+          // 修改成功
+          this.$toast('修改成功')
+          this.userDetail.birthday = birthday
           this.showPopup = false
         } else {
           this.$toast(res.data.message)
@@ -273,12 +297,12 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.edit-container>>>.van-picker__cancel, .edit-container>>>.van-picker__confirm, .edit-container>>>.van-picker-column__item {
+.edit-container>>>.van-picker__cancel, .edit-container>>>.van-picker__confirm {
   color: $color-common;
 }
 
 .edit-container>>>.van-popup {
-  width: 80%;
+  width: 90%;
 }
 
 .edit-container {
