@@ -30,7 +30,9 @@ import {
   Cell,
   Area,
   NoticeBar,
-  DatetimePicker
+  DatetimePicker,
+  RadioGroup,
+  Radio
 } from 'vant'
 Vue.use(Tab)
 Vue.use(Tabs)
@@ -63,5 +65,7 @@ Vue.use(Cell)
 Vue.use(Area)
 Vue.use(NoticeBar)
 Vue.use(DatetimePicker)
+Vue.use(RadioGroup)
+Vue.use(Radio)
 Vue.prototype.$Dialog = Dialog
 Vue.prototype.$toast = Toast

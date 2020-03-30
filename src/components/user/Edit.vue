@@ -26,7 +26,8 @@
                     :value="userDetail.nickname" />
 
           <van-cell title="性别"
-                    :value="gender" />
+                    @click="toggleOption('gender')"
+                    :value="genderValue" />
 
           <van-cell title="出生日期"
                     :value="birthday" />
@@ -44,6 +45,7 @@
                            :max-date="maxDate"
                            :min-date="minDate"
                            :formatter="formatter" /> -->
+
       </section>
       <footer>
         <div class="logout"
@@ -52,6 +54,42 @@
           <btn text="退出登录"></btn>
         </div>
       </footer>
+      <van-popup v-model="showPopup"
+                 round
+                 get-container="edit-container">
+        <div class="updateGender"
+             v-if="option==='gender'">
+          <van-radio-group v-model="currentGender"
+                           @change="handleGenderChange">
+            <van-cell-group>
+              <van-cell title="保密"
+                        :border="false"
+                        clickable
+                        @click="currentGender = '0'">
+                <template #right-icon>
+                  <van-radio name="0" />
+                </template>
+              </van-cell>
+              <van-cell title="男"
+                        :border="false"
+                        clickable
+                        @click="currentGender = '1'">
+                <template #right-icon>
+                  <van-radio name="1" />
+                </template>
+              </van-cell>
+              <van-cell title="女"
+                        :border="false"
+                        clickable
+                        @click="currentGender = '2'">
+                <template #right-icon>
+                  <van-radio name="2" />
+                </template>
+              </van-cell>
+            </van-cell-group>
+          </van-radio-group>
+        </div>
+      </van-popup>
     </template>
   </div>
 </template>
@@ -86,7 +124,11 @@ export default {
           return `${value}日`
         }
         return value
-      }
+      },
+      showPopup: false, // 弹出层
+      option: '', // 当前操作的功能
+      currentGender: null// 用户选择的性别
+
     }
   },
   mounted () {
@@ -96,7 +138,8 @@ export default {
   },
   computed: {
     ...mapState(['user']),
-    gender () {
+    // 性别处理
+    genderValue () {
       let gender = ''
       switch (this.userDetail.gender) {
         case 0:
@@ -111,12 +154,15 @@ export default {
       }
       return gender
     },
+    // 生日
     birthday () {
       return this.userDetail.birthday < 0 ? '未设置' : convertDate(this.userDetail.birthday)
     },
+    // 当前日期
     currentDate () {
       return this.userDetail.birthday < 0 ? new Date() : new Date(this.userDetail.birthday)
     },
+    // 地址
     address () {
       // 省份代码
       let provinceCode = this.userDetail.province
@@ -126,11 +172,13 @@ export default {
       let city = this.areaList.city_list[cityCode]
       return province + ' ' + city
     },
+    // 公告文字
     noticeBarText () {
       let day = this.userDetail.createDays
       let createTime = convertDate(this.userDetail.createTime)
       return `您来到这里已经有${day}天啦,创建于${createTime}`
     },
+    // 选择的地址
     selectAreaValue () {
       return this.userDetail.city.toString() || this.userDetail.province.toString()
     }
@@ -167,9 +215,17 @@ export default {
           createTime: res.createTime
         })
         this.userDetail = user
-        console.log(this.userDetail)
+        this.currentGender = user.gender.toString()
       }
       this.loading = false
+    },
+    toggleOption (type) {
+      this.showPopup = true
+      switch (type) {
+        case 'gender':
+          this.option = 'gender'
+          break
+      }
     },
     // 退出登录
     logout () {
@@ -187,6 +243,25 @@ export default {
           }
         })
       }).catch(() => { })
+    },
+    // 处理修改性别
+    async handleGenderChange () {
+      try {
+        let gender = parseInt(this.currentGender)
+        // 执行修改昵称方法
+        const { data: res } = await userApi.updateUserInfo({ gender })
+        if (res.code === 200) {
+          // 修改成功就跳转到个人信息页
+          this.$toast('修改成功')
+          this.userDetail.gender = gender
+          this.showPopup = false
+        } else {
+          this.$toast(res.data.message)
+        }
+      } catch (error) {
+        this.nicknameErr = error.data.message
+        this.$toast(error.data.message)
+      }
     }
   },
   components: {
@@ -202,6 +277,10 @@ export default {
   color: $color-common;
 }
 
+.edit-container>>>.van-popup {
+  width: 80%;
+}
+
 .edit-container {
   width: 100%;
   min-height: 100vh;
@@ -212,6 +291,9 @@ export default {
       width: 80%;
       margin: 1rem auto 0;
     }
+  }
+
+  .updateGender {
   }
 }
 </style>
