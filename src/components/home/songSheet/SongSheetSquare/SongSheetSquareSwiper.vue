@@ -43,6 +43,14 @@ export default {
           observer: true,
           observeParents: true,
           loop: true,
+          // 使用图片懒加载
+          lazy: {
+            loadPrevNext: true,
+            loadOnTransitionStart: true,
+            loadPrevNextAmount: 3
+          },
+          watchSlidesProgress: true,
+          watchSlidesVisibility: true,
           on: {
             touchStart (e) {
               e.stopPropagation()

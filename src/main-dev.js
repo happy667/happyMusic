@@ -23,7 +23,7 @@ Vue.config.productionTip = false
 Vue.use(animate)
 // 使用懒加载
 Vue.use(VueLazyLoad, {
-  preLoad: 1.3,
+  preLoad: 1,
   loading: defaultMusicImage
 })
 new Vue({

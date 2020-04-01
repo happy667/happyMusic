@@ -36,6 +36,14 @@ export default {
         observeParents: true,
         loop: true,
         touchRatio: 1.2,
+        // 使用图片懒加载
+        lazy: {
+          loadPrevNext: true,
+          loadOnTransitionStart: true,
+          loadPrevNextAmount: 3
+        },
+        watchSlidesProgress: true,
+        watchSlidesVisibility: true,
         on: {
           touchStart (e) {
             e.stopPropagation()
@@ -68,7 +76,7 @@ export default {
 @import '~common/stylus/variable';
 
 .mini-swiper-container {
-  min-height: 5rem;
+  min-height: 3.5rem;
 
   .swiper-container {
     .swiper-wrapper {

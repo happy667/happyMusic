@@ -313,7 +313,8 @@ const routes = [
       index: 0
     }, // meta对象的index用来定义当前路由的层级,由小到大,由低到高
     beforeEnter(to, from, next) {
-      if (from.name === 'home') {
+      let user = store.state.user
+      if (from.name === 'home' || !user) {
         // 添加不缓存路由
         store.commit('setAddNoCacheComponents', 'user')
       } else {
@@ -502,7 +503,7 @@ router.beforeEach((to, from, next) => {
     console.log(utils.isLogin())
     if (utils.isLogin()) { // 判断是否登录
       next()
-    } else {
+    } else if (from.name !== 'login') {
       utils.alertConfirm({ // 未登录跳转到登录页面
         message: '您还没有登录哦',
         confirmButtonText: '去登陆'
@@ -522,6 +523,12 @@ router.beforeEach((to, from, next) => {
           }) // 回到个人主页
         }
       })
+    } else {
+      if (from.name !== 'user') {
+        next({
+          name: 'user'
+        }) // 回到个人主页
+      }
     }
   } else {
     next()

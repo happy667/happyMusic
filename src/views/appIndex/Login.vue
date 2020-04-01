@@ -149,10 +149,11 @@ export default {
             this.resetForm()
             this.$toast.clear()
           } else {
+            console.log(123)
             this.$toast(res.data.message)
           }
         }).catch(error => {
-          this.$toast(error.message)
+          this.$toast(error.data.message)
         })
       }
     }

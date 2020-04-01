@@ -185,7 +185,7 @@ export default {
               this.resetForm()
             }
           } else {
-            this.$toast(res.message)
+            this.$toast(res.data.message)
           }
         }).catch(err => {
           this.$toast(err.data.message)
@@ -214,7 +214,7 @@ export default {
             }, this.time)
           }
         }).catch(error => {
-          this.$toast(error.message)
+          this.$toast(error.data.message || error.message)
         })
       }
     }
