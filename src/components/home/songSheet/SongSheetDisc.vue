@@ -283,7 +283,7 @@ export default {
   background: $color-common-background;
 }
 
-.song-sheet-desc-container>>>.van-image {
+.song-sheet-desc-container>>>#image .van-image {
   width: 100%;
   height: 100%;
 }

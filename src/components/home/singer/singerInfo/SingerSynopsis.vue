@@ -6,12 +6,15 @@
       <!-- 歌手图片 -->
       <div class="singer-img"
            @click="handleToggleShowImage">
-        <van-image :src="singer.picUrl">
-          <template v-slot:loading>
-            <van-loading type="spinner"
-                         size="20" />
-          </template>
-        </van-image>
+        <div id="image">
+          <van-image :src="singer.picUrl">
+            <template v-slot:loading>
+              <van-loading type="spinner"
+                           size="20" />
+            </template>
+          </van-image>
+        </div>
+
         <!-- 遮罩层 -->
         <overlay :showImage="showImage"
                  :imgUrl="singer.picUrl"
@@ -110,7 +113,7 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.singer-synopsis-container>>>.van-image {
+.singer-synopsis-container>>>.singer-img>#image>.van-image {
   width: 100%;
   height: 100%;
 }
@@ -129,10 +132,9 @@ export default {
     width: 100%;
     height: 7.4rem;
 
-    img {
+    #image {
       width: 100%;
       height: 100%;
-      display: block;
     }
   }
 

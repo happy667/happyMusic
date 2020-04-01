@@ -24,7 +24,9 @@
              :src="url"></audio>
     </div>
     <!--歌曲列表-->
-    <van-action-sheet v-model="togglePlayList">
+    <van-action-sheet v-model="togglePlayList"
+                      @open="openPlayList"
+                      @close="closePlayList">
       <play-list></play-list>
     </van-action-sheet>
   </div>
@@ -60,7 +62,7 @@ export default {
   },
   watch: {
     playerFullScreen () {
-      if (this.playerFullScreen) {
+      if (this.playerFullScreen) { // 如果为全屏播放器将定位修改为fixed,解决全屏播放器页面不显示问题
         this.$refs.play.style.position = 'fixed'
       } else {
         this.$refs.play.style.position = 'relative'
@@ -242,6 +244,22 @@ export default {
     resetCurrentIndex (list) {
       let index = list.findIndex(item => item.id === this.currentSong.id)
       this.setCurrentPlayIndex(index)
+    },
+    // 打开歌曲列表
+    openPlayList () {
+      this.closeScroll()
+    },
+    // 关闭歌曲列表
+    closePlayList () {
+      this.openScroll()
+    },
+    // 禁止背景滚动
+    closeScroll () {
+      document.body.style.position = 'fixed'
+    },
+    // 开启背景滚动
+    openScroll () {
+      document.body.style.position = ''
     }
   },
   components: {
