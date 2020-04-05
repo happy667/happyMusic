@@ -1,9 +1,10 @@
 <template>
-  <div class="mv-list-item-container"
-       @click="handleClick">
+  <section class="mv-list-item-container"
+           @click="handleClick">
     <!-- mv 图片 -->
     <div class="mv-img">
-      <img v-lazy="mv.cover" :key="mv.cover"/>
+      <img v-lazy="mv.cover"
+           :key="mv.cover" />
       <!-- 播放次数 -->
       <div class="play-num">
         <i class="iconfont icon-bofang"></i>
@@ -22,7 +23,7 @@
       </div>
 
     </div>
-  </div>
+  </section>
 </template>
 <script>
 import 'common/js/convert.js'

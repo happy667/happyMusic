@@ -30,15 +30,27 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.home-container>>>.van-loading {
-  /* 减去搜索框、导航栏 */
-  height: calc(100vh - (1.7rem + 1.18rem));
-  background: $color-common-background;
+.home-container>>>.header-navBar-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.home-container>>>.van-tabs {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.home-container>>>.van-tabs__content {
+  flex: 1;
 }
 
 .home-container {
   width: 100%;
-  height: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-flow: column;
   background-color: $color-common-background;
 }
 </style>

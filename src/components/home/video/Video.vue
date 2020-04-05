@@ -4,8 +4,7 @@
     <div class="player"
          ref="player"
          @click.stop="handlFirstPlay">
-      <van-loading class="load"
-                   size="1rem"
+      <van-loading size="1.5rem"
                    color="#FD4979"
                    v-if="videoLoad" />
       <video :src="videoParams.url"
@@ -342,6 +341,14 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
+.video-container>>>.van-loading {
+  position: absolute;
+  width: 100%;
+  height: 5rem;
+  z-index: 90;
+  background: $color-common-b;
+}
+
 .video-container {
   margin-bottom: 0.5rem;
   width: 100%;
@@ -354,16 +361,6 @@ export default {
     width: 100%;
     height: 5rem;
     touch-action: none;
-
-    .load {
-      position: absolute;
-      width: 100%;
-      height: 5rem;
-      line-height: 5rem;
-      z-index: 90;
-      text-align: center;
-      background: $color-common-b;
-    }
 
     video {
       display: block;

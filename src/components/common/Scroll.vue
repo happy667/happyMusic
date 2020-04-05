@@ -115,10 +115,3 @@ export default {
   }
 }
 </script>
-
-<style scoped lang="stylus" rel="stylesheet/stylus">
-.scroll {
-  /* 减去搜索框、导航栏 */
-  height: calc(100vh - (1.7rem + 1.18rem));
-}
-</style>

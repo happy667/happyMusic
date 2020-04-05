@@ -5,7 +5,7 @@
                  size="24px"
                  color="#FD4979"
                  vertical>加载中...</van-loading>
-    <template v-show="singerAlbum.length!==0">
+    <template v-if="singerAlbum.length!==0">
       <div class="singer-album-wrapper">
         <van-list v-model="loading"
                   :finished="finished"
@@ -65,12 +65,7 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-.singer-album-container>>>.van-list__loading .van-loading {
-  height: 1rem;
-}
-
 .singer-album-container {
   padding: 0 0.4rem 0 0.4rem;
-  min-height: calc(100vh - (7.4rem + 1.18rem + 0.4rem));
 }
 </style>

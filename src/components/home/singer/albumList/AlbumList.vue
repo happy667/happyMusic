@@ -41,12 +41,12 @@ export default {
     flex-wrap: wrap;
 
     .album-list-item {
-      margin-bottom: 0.3rem;
+      margin-bottom: 0.4rem;
 
       /* 选择最后一排 */
-      &:nth-last-child(-n+3) {
-        margin-bottom: 0;
-      }
+      // &:nth-last-child(-n+3) {
+      //   margin-bottom: 0;
+      // }
     }
   }
 

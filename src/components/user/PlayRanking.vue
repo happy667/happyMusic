@@ -116,12 +116,23 @@ export default {
 
 .play-ranking-container>>>.song-list-container {
   padding-top: 0.3rem;
-  min-height: calc(100vh - 1.22667rem - 1.22667rem);
+}
+
+.play-ranking-container>>>.van-tabs {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.play-ranking-container>>>.van-tabs__content {
+  flex: 1;
 }
 
 .play-ranking-container {
   width: 100%;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   background-color: $color-common-background;
 }
 </style>

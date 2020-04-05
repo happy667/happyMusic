@@ -128,8 +128,4 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.singer-container {
-  min-height: calc(100vh - (1.8rem + 1.22667rem + 1.18rem)) !important;
-  box-sizing: border-box;
-}
 </style>

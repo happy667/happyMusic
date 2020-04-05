@@ -194,10 +194,16 @@ export default {
   box-sizing: border-box;
 }
 
+.search-container>>>.search-result-container {
+  flex: 1;
+}
+
 .search-container {
   width: 100%;
   background: #fff;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 
   .search-list-container {
     position: absolute;

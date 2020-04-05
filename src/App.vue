@@ -148,6 +148,7 @@ export default {
 #app {
   position: absolute;
   width: 100%;
+  min-height: 100%;
   box-shadow: none;
 }
 

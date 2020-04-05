@@ -124,14 +124,22 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.song-sheet-square-container>>>.song-sheet-cagetory-list {
-  min-height: calc(100vh - (1.22667rem + 1.18rem + 0.5rem));
+.song-sheet-square-container>>>.van-tabs {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.song-sheet-square-container>>>.van-tabs__content {
+  flex: 1;
 }
 
 .song-sheet-square-container {
   width: 100%;
   min-height: 100vh;
   background: $color-common-background;
+  display: flex;
+  flex-direction: column;
 
   .recommend-list>>>.songs-sheet-list-container {
     width: 100%;

@@ -1,5 +1,4 @@
 <template>
-
   <div class="videoList-container">
     <!-- 正在加载 -->
     <van-loading v-if="videoList.length===0"

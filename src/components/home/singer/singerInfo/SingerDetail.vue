@@ -53,9 +53,7 @@ export default {
 <style lang="stylus" scoped>
 .singer-detail-container {
   @import '~common/stylus/variable';
-
   padding: 0 0.4rem 0.4rem 0.4rem;
-  min-height: calc(100vh - (7.4rem + 1.18rem + 0.4rem));
   box-sizing: border-box;
 
   .title {

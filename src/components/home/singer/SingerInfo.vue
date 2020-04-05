@@ -15,7 +15,7 @@
     <singer-synopsis :singer="singer"
                      @hidePosition="handleHidePosition" />
     <!--歌手信息-->
-    <div class="singer-info">
+    <section class="content">
       <van-tabs title-active-color="#FD4979"
                 color="#FD4979"
                 animated
@@ -42,7 +42,7 @@
       <!-- 定位 -->
       <position v-show="isShowPosition"
                 @click="handlePosition"></position>
-    </div>
+    </section>
   </div>
 </template>
 <script>
@@ -84,13 +84,6 @@ export default {
       }
     }
   },
-  // beforeRouteLeave (to, from, next) {
-  //   if (to.name === 'singerAlbum') {
-  //     // 移除不缓存路由
-  //     this.$store.commit('setRemoveNoCacheComponents', 'singerInfo')
-  //   }
-  //   next()
-  // },
   mounted () {
     // 根据歌手id获取歌手单曲
     this.handleTabsChange(this.currentIndex)
@@ -248,18 +241,31 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.singer-info-container>>>.van-loading {
-  // 减去头部标题高度、歌手图片高度、标签页高度
-  height: calc(100vh - (1.22667rem + 7.4rem + 1.18rem + 0.4rem));
-}
-
 .singer-info-container>>>.van-tabs__wrap {
   margin-bottom: 0.4rem;
+}
+
+.singer-info-container>>>.van-tabs {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.singer-info-container>>>.van-tabs__content {
+  flex: 1;
 }
 
 .singer-info-container {
   width: 100%;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   background-color: $color-common-background;
+
+  .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
 }
 </style>

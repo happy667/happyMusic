@@ -140,16 +140,24 @@ export default {
 @import '~common/stylus/variable';
 
 .my-like-container>>>.singer-song-container {
-  height: calc(100vh - 1.22667rem);
+  padding-top: 0.3rem;
 }
 
-.my-like-container>>>.singer-song-container {
-  padding-top: 0.3rem;
+.my-like-container>>>.van-tabs {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.my-like-container>>>.van-tabs__content {
+  flex: 1;
 }
 
 .my-like-container {
   width: 100%;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   background-color: $color-common-background;
 }
 </style>

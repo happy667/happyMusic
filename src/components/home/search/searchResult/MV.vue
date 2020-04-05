@@ -107,7 +107,6 @@ export default {
 
 .mv-container {
   padding: 0.25rem 0.4rem 0;
-  min-height: calc(100vh - (1.8rem + 1.22667rem + 1.18rem)) !important;
   box-sizing: border-box;
 }
 </style>

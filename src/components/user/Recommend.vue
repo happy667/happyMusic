@@ -1,5 +1,5 @@
 <template>
-  <div class="play-ranking-container">
+  <div class="recommend-container">
     <!-- 头部导航栏 -->
     <van-sticky>
       <van-nav-bar :title="$route.meta.title"
@@ -136,14 +136,25 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.play-ranking-container>>>.song-list-container, .play-ranking-container>>>.songs-sheet-list-container {
+.recommend-container>>>.song-list-container, .recommend-container>>>.songs-sheet-list-container {
   padding-top: 0.3rem;
-  min-height: calc(100vh - 1.22667rem - 1.22667rem);
 }
 
-.play-ranking-container {
+.recommend-container>>>.van-tabs {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.recommend-container>>>.van-tabs__content {
+  flex: 1;
+}
+
+.recommend-container {
   width: 100%;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   background-color: $color-common-background;
 }
 </style>

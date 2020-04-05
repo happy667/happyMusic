@@ -38,12 +38,12 @@
       </div>
     </div>
     <!-- loading -->
-    <van-loading v-show="!songSheetDisc.songs"
+    <van-loading v-if="loading"
                  size="24px"
                  color="#FD4979"
                  vertical>加载中...</van-loading>
     <!-- 歌单描述 -->
-    <section v-if="songSheetDisc.songs">
+    <section v-if="!loading">
       <div class="songs-desc">
         <div class="songs-title">{{songSheetDisc.name}}</div>
         <div class="songs-nt">
@@ -97,7 +97,8 @@ export default {
       songSheetDisc: {},
       followed: false,
       showPosition: false,
-      showImage: false
+      showImage: false,
+      loading: true
     }
   },
   mounted () {
@@ -139,6 +140,7 @@ export default {
     },
     // 根据id获取歌单列表
     async getSongSheetById (id) {
+      this.loading = true
       const {
         data: res
       } = await recommendApi.getSongSheetById(id)
@@ -171,6 +173,7 @@ export default {
           name: res.playlist.name,
           trackUpdateTime: res.playlist.trackUpdateTime
         })
+        this.loading = false
       }
     },
     // 选择歌曲
@@ -280,12 +283,6 @@ export default {
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
-
-.song-sheet-desc-container>>>.van-loading {
-  /* 减去标题栏、图片高度 */
-  height: calc(100vh - (100vw + 1.22667rem));
-  background: $color-common-background;
-}
 
 .song-sheet-desc-container>>>#image .van-image {
   width: 100%;

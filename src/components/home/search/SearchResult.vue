@@ -62,8 +62,20 @@ export default {
   }
 }
 </script>
-<style lang="stylus">
+<style lang="stylus" scoped>
+.search-result-container>>>.van-tabs {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.search-result-container>>>.van-tabs__content {
+  flex: 1;
+}
+
 .search-result-container {
   width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 </style>
