@@ -117,6 +117,12 @@ export default {
       }
     })
   },
+  activated () {
+    if (this.rankingList.length === 0) {
+      this.getRankingList()
+    }
+  },
+
   components: {
     OfficialList,
     RankingTitle,

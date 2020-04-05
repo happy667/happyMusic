@@ -121,6 +121,11 @@ export default {
     }
 
   },
+  activated () {
+    if (this.singerList.length === 0) {
+      this.getSingerList()
+    }
+  },
   mounted () {
     this.getSingerList()
   },

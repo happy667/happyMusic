@@ -1,5 +1,5 @@
 import axios from 'axios'
-
+import Vue from 'vue'
 // 创建axios实例
 const service = axios.create({
   // baseURL:"http://novel.juhe.im/",代理服务器请求接口地址
@@ -9,7 +9,20 @@ const service = axios.create({
 })
 // 配置请求根路径
 service.defaults.baseURL = ' http://120.77.183.150:3000'
-// request 请求收到后 拦截器设置
+// request拦截器设置
+service.interceptors.request.use(request => {
+  // 判断是否连接网络,如果连接则发送请求，否则提示用户连接
+  if (navigator.onLine) {
+    return request
+  } else {
+    Vue.prototype.$toast('请连接网络后重试')
+  }
+}, error => {
+  console.log(error)
+  // 对请求错误做些什么
+  return Promise.reject(error)
+})
+// response拦截器设置
 service.interceptors.response.use(
   response => {
     // 错误信息处理
@@ -35,7 +48,6 @@ service.interceptors.response.use(
         resData.message = '系统出错'
         break
     }
-
     return Promise.reject(error.response) // 返回接口返回的错误信息
   })
 

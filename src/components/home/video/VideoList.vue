@@ -45,6 +45,9 @@ export default {
     }
   },
   activated () {
+    if (this.videoList.length === 0) {
+      this.getVideoList()
+    }
     this.$refs.videoListScroll.refresh()
   },
 

@@ -53,9 +53,12 @@ export default {
 
     // 监听Storage变化
     this.listenerStorage()
+    // 监听网络连接
+    this.listenerNetWork()
   },
   destroyed () {
     this.removeListener()
+    this.removeListenerNetWork()
   },
   watch: {// 使用watch 监听$router的变化
     $route (to, from) {
@@ -100,6 +103,7 @@ export default {
     removeListener () {
       window.removeEventListener('storage')
     },
+    // 退出登录
     logout () {
       loginApi.logout().then(res => {
         if (res.data.code === ERR_OK) {
@@ -121,6 +125,18 @@ export default {
           }
         }
       })
+    },
+    listenerNetWork () {
+      window.addEventListener('offline', e => {
+        this.$toast('网络已断开，请检查网络')
+      })
+      window.addEventListener('online', e => {
+        this.$toast('网络已连接')
+      })
+    },
+    removeListenerNetWork () {
+      window.removeEventListener('offline')
+      window.removeEventListener('online')
     }
   },
   components: {

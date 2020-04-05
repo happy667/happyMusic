@@ -216,7 +216,7 @@ export default new Vuex.Store({
           context.commit('setLoginUser', user)
           context.dispatch('getUserLikeList', user.userId)
         }
-      }).catch(err => console.log(err.data.msg))
+      }).catch(err => console.log(err.data.message))
     },
     // 获取用户喜欢列表
     async getUserLikeList(context, id) {
