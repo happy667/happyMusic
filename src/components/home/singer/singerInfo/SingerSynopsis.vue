@@ -47,7 +47,7 @@ import {
 } from '@/api/config.js'
 import Follow from '@/components/common/Follow'
 import overlay from '@/components/common/Overlay'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 export default {
   props: {
     singer: Object
@@ -62,12 +62,13 @@ export default {
     }
   },
   computed: {
-    ...mapState(['user']),
+    ...mapState(['user', 'currentPlayIndex', 'hideMiniPlayer']),
     followeds () {
       return this.singer.followeds ? this.singer.followeds : 0
     }
   },
   methods: {
+    ...mapMutations(['setHideMiniPlayer']),
     // 选中歌曲喜欢
     handleClickFollow () {
       if (this.user) { // 说明已经登录
@@ -105,6 +106,9 @@ export default {
     handleToggleShowImage () {
       this.showImage = !this.showImage
       this.$emit('hidePosition')
+      if (this.currentPlayIndex !== -1) {
+        this.setHideMiniPlayer(!this.hideMiniPlayer)
+      }
     }
   }
 

@@ -42,6 +42,7 @@ const utils = {
       }
     }).catch((res) => {
       // 提示
+      console.log(res)
       Vue.prototype.$toast(res.data.message)
     })
   },

@@ -333,15 +333,6 @@ export default {
       this.setSingerCurrentIndex(0)
       this.$router.push(`/singerInfo/${item.id}`)
     }
-    // 视频宽高设置为手机宽高
-    // videoFullScreen () {
-    //   let player = this.$refs.player
-    //   let width = document.documentElement.clientWidth
-    //   let height = document.documentElement.clientHeight
-    //   player.style.height = width + 'px'
-    //   player.style.width = height + 'px'
-    //   player.className = 'full'
-    // }
   },
   components: {
     MusicImg
@@ -362,7 +353,6 @@ export default {
     position: relative;
     width: 100%;
     height: 5rem;
-    margin-bottom: 0.2rem;
     touch-action: none;
 
     .load {

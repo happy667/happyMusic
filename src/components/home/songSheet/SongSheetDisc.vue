@@ -120,7 +120,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['user', 'rank']),
+    ...mapState(['user', 'rank', 'hideMiniPlayer', 'currentPlayIndex']),
     ...mapGetters(['currentSong']),
     // 是否显示定位
     isShowPosition () {
@@ -131,7 +131,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setPlayerFullScreen', 'setRank']),
+    ...mapMutations(['setPlayerFullScreen', 'setRank', 'setHideMiniPlayer']),
     ...mapActions(['setSelectPlay']),
     // 返回上一个路由
     routerBack () {
@@ -263,6 +263,10 @@ export default {
     handleToggleShowImage () {
       this.showImage = !this.showImage
       this.showPosition = false
+
+      if (this.currentPlayIndex !== -1) {
+        this.setHideMiniPlayer(!this.hideMiniPlayer)
+      }
     }
   },
   components: {
@@ -361,8 +365,9 @@ export default {
         box-shadow: 0 0.01rem 0.3rem #f48faa;
 
         i {
+          margin-left: 0.1rem;
           color: #fff;
-          font-size: 0.8rem;
+          font-size: 0.7rem;
         }
       }
     }

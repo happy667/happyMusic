@@ -117,10 +117,11 @@ export default {
             name: data.name,
             playCount: data.playCount,
             artist: { id: res2.artist.id, name: res2.artist.name, avatarUrl: res2.artist.picUrl },
-            url: data.brs[240],
+            url: data.brs[1080],
             publishTime: data.publishTime,
             desc: data.desc
           })
+
           this.commentCount = data.commentCount
           this.video = video
         }

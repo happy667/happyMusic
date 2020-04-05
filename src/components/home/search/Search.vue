@@ -8,13 +8,16 @@
                    @click-left="routerBack" />
     </van-sticky>
     <!--搜索框-->
-    <van-search left-icon=""
-                right-icon="search"
+    <van-search left-icon="search"
                 :placeholder="searchDefault"
                 shape="round"
+                show-action
                 @input="handleInput"
                 v-model="searchVal"
                 @search="handleSearch">
+      <template #action>
+        <div @click="handleSearch">搜索</div>
+      </template>
     </van-search>
     <!-- 搜索列表 -->
     <div class="search-list-container"
@@ -79,7 +82,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['setSearchKeywords', 'setSearchCurrentIndex', 'setShowSearchList']),
+    ...mapMutations(['setSearchKeywords', 'setSearchCurrentIndex', 'setShowSearchList', 'setIsAdvance']),
     // 返回上一个路由
     routerBack () {
       if (this.$route.path === '/search/searchPage') {
@@ -131,6 +134,7 @@ export default {
       addLocalSearch(this.searchKeywords)
       if (this.$route.path === '/search/searchPage') {
         // 设置为前进页面
+        console.log(this)
         this.setIsAdvance(true)
         this.$router.replace('/search/searchResult')
       } else {

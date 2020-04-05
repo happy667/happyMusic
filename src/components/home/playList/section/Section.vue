@@ -10,8 +10,9 @@
           :key="item.id">
         <div class="left">
           <div class="song-desc">
-            <div class="song-name">{{item.name+' - '}}</div>
-            <div class="singer">{{item.singers}}</div>
+            <div class="text">
+              <span class="song-name">{{item.name+' - '}} <span class="song-singer">{{item.singers}}</span></span>
+            </div>
           </div>
           <div class="icon"
                v-show="item.id===currentSong.id ">
@@ -124,16 +125,19 @@ export default {
         .song-desc {
           display: flex;
           width: 6.5rem;
-          no-wrap();
 
-          .song-name {
-            font-size: $font-size-smaller;
-          }
-
-          .singer {
-            color: $color-common-b2;
-            font-size: $font-size-smaller-x;
+          .text {
             no-wrap();
+            color: $color-common-b2;
+
+            .song-name {
+              font-size: $font-size-smaller;
+              color: $color-common-x;
+
+              .song-singer {
+                font-size: $font-size-smaller-x;
+              }
+            }
           }
         }
       }
@@ -148,14 +152,20 @@ export default {
       }
 
       &.active {
-        color: $color-common;
-
         .left {
+          color: $color-common;
+
           .song-desc {
             margin-right: 0.3rem;
 
-            .singer {
-              color: $color-common;
+            .text {
+              .song-name {
+                color: $color-common;
+
+                .song-singer {
+                  color: $color-common;
+                }
+              }
             }
           }
         }

@@ -255,7 +255,7 @@ export default {
     },
     // 禁止背景滚动
     closeScroll () {
-      document.body.style.position = 'fixed'
+      document.body.style.position = 'relative'
     },
     // 开启背景滚动
     openScroll () {
