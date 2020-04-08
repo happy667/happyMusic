@@ -81,7 +81,7 @@ export default {
         return
       }
       // 引入vue原型上的utils
-      this.utils.playMusic(item, this.recommendNewSong, index)
+      this.$utils.playMusic(item, this.recommendNewSong, index)
     },
     // 获取推荐歌单
     async getRecommendSongSheet (limit) {

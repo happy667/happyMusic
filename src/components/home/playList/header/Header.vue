@@ -54,7 +54,7 @@ export default {
       this.setPlayMode(mode)
       let list = null
       if (mode === playMode.random) { // 随机播放
-        list = this.utils.randomList(this.sequenceList)
+        list = this.$utils.randomList(this.sequenceList)
       } else {
         list = this.sequenceList
       }

@@ -196,11 +196,11 @@ export default {
         return
       }
       // 限制播放索引
-      let index = this.utils.limitCutIndex(this.currentPlayIndex, this.playList.length - 1)
+      let index = this.$utils.limitCutIndex(this.currentPlayIndex, this.playList.length - 1)
       this.setCurrentPlayIndex(index)
       if (!this.playing) this.handleTogglePlaying()
       this.setSongReady(false)
-      this.utils.playMusic(this.currentSong, null, this.currentPlayIndex)
+      this.$utils.playMusic(this.currentSong, null, this.currentPlayIndex)
     },
     // 切换播放暂停
     handleTogglePlaying () {
@@ -220,11 +220,11 @@ export default {
         return
       }
       // 限制当前播放索引
-      let index = this.utils.limitAddIndex(this.currentPlayIndex, this.playList.length)
+      let index = this.$utils.limitAddIndex(this.currentPlayIndex, this.playList.length)
       this.setCurrentPlayIndex(index)
       if (!this.playing) this.handleTogglePlaying()
       this.setSongReady(false)
-      this.utils.playMusic(this.currentSong, null, this.currentPlayIndex)
+      this.$utils.playMusic(this.currentSong, null, this.currentPlayIndex)
     },
     // 切换播放类型
     changeMode () {
@@ -232,7 +232,7 @@ export default {
       this.setPlayMode(mode)
       let list = null
       if (mode === playMode.random) { // 随机播放
-        list = this.utils.randomList(this.sequenceList)
+        list = this.$utils.randomList(this.sequenceList)
       } else {
         list = this.sequenceList
       }

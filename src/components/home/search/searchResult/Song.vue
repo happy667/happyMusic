@@ -131,7 +131,7 @@ export default {
         item.picUrl = res.songs[0].al.picUrl
         console.log(index)
         // 引入vue原型上的utils
-        this.utils.playMusic(item)
+        this.$utils.playMusic(item)
       }
     }
   },

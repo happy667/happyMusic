@@ -96,7 +96,7 @@ export default {
       if (this.user) { // 说明已经登录
         this.likeMusic(song)// 添加或取消喜欢音乐
       } else { // 弹窗提示去登录
-        this.utils.alertLogin(this.$router.currentRoute.fullPath)
+        this.$utils.alertLogin(this.$router.currentRoute.fullPath)
       }
     },
     // 同步当前播放歌曲喜欢状态
@@ -130,7 +130,7 @@ export default {
           this.$toast(err.data.message)
         })
       } else {
-        this.utils.alertConfirm({ message: '确定要取消喜欢该歌曲吗', confirmButtonText: '取消' }).then(async () => {
+        this.$utils.alertConfirm({ message: '确定要取消喜欢该歌曲吗', confirmButtonText: '取消' }).then(async () => {
           userApi.likeMusic(song.id, like).then(res => {
             if (res.data.code === ERR_OK) {
               this.$set(this.song, 'isLike', like)

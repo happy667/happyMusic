@@ -154,8 +154,8 @@ export default {
 
 // 转场动画
 .slide-right-enter-active, .slide-right-leave-active, .slide-left-enter-active, .slide-left-leave-active {
-  will-change: all;
-  transition: all 300ms;
+  will-change: transform, opacity;
+  transition: transform 300ms, opacity 300ms;
   position: absolute;
   background-attachment: fixed;
   opacity: 1;
@@ -165,24 +165,20 @@ export default {
 .slide-right-enter {
   opacity: 0;
   transform: translate3d(-100%, 0, 0);
-  transition-timing-function: ease-in;
 }
 
 .slide-right-leave-active {
   opacity: 0;
   transform: translate3d(100%, 0, 0);
-  transition-timing-function: cubic-bezier(0.5, 0, 1, 1);
 }
 
 .slide-left-enter {
   opacity: 0;
   transform: translate3d(100%, 0, 0);
-  transition-timing-function: ease-in;
 }
 
 .slide-left-leave-active {
   opacity: 0;
   transform: translate3d(-100%, 0, 0);
-  transition-timing-function: cubic-bezier(0.5, 0, 1, 1);
 }
 </style>

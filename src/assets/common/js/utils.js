@@ -130,7 +130,7 @@ const utils = {
     })
   },
   isLogin() {
-    if (store.state.token && store.state.user) {
+    if (store.state.token) {
       return true
     } else {
       return false
@@ -181,9 +181,17 @@ const utils = {
         timer = null
       }, delay)
     }
+  },
+  routerBack() {
+    console.log(window.history.length)
+    if (window.history.length <= 1) {
+      router.push('/')
+    } else {
+      router.back()
+    }
   }
 }
 export {
   utils
 }
-Vue.prototype.utils = utils
+Vue.prototype.$utils = utils

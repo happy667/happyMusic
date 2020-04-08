@@ -90,7 +90,7 @@ export default {
     // 选择歌曲
     selectItem (e, item, index) {
       // 引入vue原型上的utils
-      this.utils.playMusic(item, null, index)
+      this.$utils.playMusic(item, null, index)
     },
 
     // 移除歌曲
@@ -136,6 +136,7 @@ export default {
 
               .song-singer {
                 font-size: $font-size-smaller-x;
+                color: $color-common-b2;
               }
             }
           }

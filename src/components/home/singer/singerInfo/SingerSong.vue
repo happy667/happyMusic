@@ -64,7 +64,7 @@ export default {
         return
       }
       // 引入vue原型上的utils
-      this.utils.playMusic(item, this.list, index)
+      this.$utils.playMusic(item, this.list, index)
     },
     handleNoLike (song) {
       this.$emit('noLike', song)

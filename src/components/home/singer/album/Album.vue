@@ -145,7 +145,7 @@ export default {
     routerBack () {
       this.$route.meta.isBack = true
       this.setIsAdvance(false)
-      this.$router.back()
+      this.$utils.routerBack()
     },
     // 播放歌曲
     playSong (item, index) {
@@ -155,7 +155,7 @@ export default {
         return
       }
       // 引入vue原型上的utils
-      this.utils.playMusic(item, this.albumObj.songs, index)
+      this.$utils.playMusic(item, this.albumObj.songs, index)
     },
 
     // 获取专辑详情
@@ -198,7 +198,7 @@ export default {
       if (this.user) { // 说明已经登录
         this.follow() // 收藏/取消收藏专辑
       } else { // 弹窗提示去登录
-        this.utils.alertLogin(this.$router.currentRoute.fullPath)
+        this.$utils.alertLogin(this.$router.currentRoute.fullPath)
       }
     },
     // 收藏/取消收藏专辑
@@ -214,7 +214,7 @@ export default {
           this.$toast(err.data.message)
         })
       } else {
-        this.utils.alertConfirm({ message: '确定不再收藏该专辑', confirmButtonText: '不再收藏' }).then(async () => {
+        this.$utils.alertConfirm({ message: '确定不再收藏该专辑', confirmButtonText: '不再收藏' }).then(async () => {
           userApi.updateFollowAlbum(this.id, follow).then(res => {
             if (res.data.code === ERR_OK) {
               this.followed = false

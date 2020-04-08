@@ -71,7 +71,7 @@ export default {
   methods: {
     // 返回上一个路由
     routerBack () {
-      this.$router.back()
+      this.$utils.routerBack()
     },
     // 获取歌单分类
     async getSongSheetCatList () {

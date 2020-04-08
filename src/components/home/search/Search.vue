@@ -70,7 +70,6 @@ export default {
     this.$nextTick(() => {
       this.getSearchDefault()
     })
-    console.log(utils)
   },
   activated () {
     // 监听页面滚动
@@ -91,7 +90,7 @@ export default {
       }
       // 清空搜索内容
       this.setSearchKeywords('')
-      this.$router.back()
+      this.$utils.routerBack()
     },
     // 关闭搜索列表
     closeSearchList () {

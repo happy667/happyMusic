@@ -44,7 +44,7 @@ export default {
     selectItemLove () {
       // 判断是否登录
       if (!this.user) { // 弹窗提示去登录
-        this.utils.alertLogin(this.$router.currentRoute.fullPath)
+        this.$utils.alertLogin(this.$router.currentRoute.fullPath)
       } else { // 添加或取消喜欢音乐
         this.likeMusic(this.currentSong)
       }

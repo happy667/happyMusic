@@ -52,7 +52,7 @@ export default {
           // 获取歌曲
           this.getSongDetail(id).then(res => {
             // 引入vue原型上的utils
-            this.utils.playMusic(res)
+            this.$utils.playMusic(res)
           })
           break
         case targetType.video:// 视频

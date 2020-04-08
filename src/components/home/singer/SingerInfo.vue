@@ -5,12 +5,14 @@
        @touchend="handleTouchEnd">
     <!-- 返回 -->
     <!-- 头部导航栏 -->
-    <van-nav-bar :title="$route.meta.title"
-                 ref="navBar"
-                 left-arrow
-                 fixed
-                 :z-index="99"
-                 @click-left="routerBack" />
+    <van-sticky>
+      <van-nav-bar :title="$route.meta.title"
+                   ref="navBar"
+                   left-arrow
+                   :z-index="99"
+                   @click-left="routerBack" />
+    </van-sticky>
+
     <!-- 歌手简介 -->
     <singer-synopsis :singer="singer"
                      @hidePosition="handleHidePosition" />
@@ -102,18 +104,18 @@ export default {
     // 是否显示定位
     isShowPosition () {
       // 判断当前歌曲列表是否有正在播放的歌曲（-1表示没有，currentIndex表示当前tab切换页是否在歌曲列表页）
-      let index = this.utils.findIndex(this.singerSong, this.currentSong)
+      let index = this.$utils.findIndex(this.singerSong, this.currentSong)
       return this.showPosition && this.currentIndex === 0 && index !== -1
     }
   },
   methods: {
-    ...mapMutations(['setSingerCurrentIndex', 'setSinger', 'setPlayerFullScreen']),
+    ...mapMutations(['setSingerCurrentIndex', 'setSinger', 'setPlayerFullScreen', 'setIsPlayerClick']),
 
     routerBack () {
       if (this.isPlayerClick) {
         this.setPlayerFullScreen(true)
       }
-      this.$router.back()
+      this.$utils.routerBack()
     },
     handleTabsChange (name) {
       switch (name) {
@@ -206,7 +208,7 @@ export default {
         let listNode = this.$refs.singerSong.$refs.songList.$refs.list
         let song = this.currentSong
         let otherHeight = this.$refs.navBar.offsetHeight
-        this.utils.positionSong({ listNode, list: this.singerSong, song, otherHeight })
+        this.$utils.positionSong({ listNode, list: this.singerSong, song, otherHeight })
         this.$toast('已定位到当前歌曲')
       }
     },

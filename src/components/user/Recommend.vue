@@ -71,7 +71,7 @@ export default {
     ...mapMutations(['setUserRecommendIndex']),
     // 返回上一个路由
     routerBack () {
-      this.$router.back()
+      this.$utils.routerBack()
     },
     // 获取推荐歌曲
     async getRecommendSong () {

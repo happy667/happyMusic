@@ -1,10 +1,14 @@
 <template>
   <div class="editPassword-container">
-    <van-nav-bar :title="$route.meta.title"
-                 left-arrow
-                 @click-left="routerBack"
-                 @click-right="save"
-                 right-text="保存" />
+    <!-- 头部导航 -->
+    <van-sticky>
+      <van-nav-bar :title="$route.meta.title"
+                   left-arrow
+                   @click-left="routerBack"
+                   @click-right="save"
+                   right-text="保存" />
+    </van-sticky>
+
     <div class="find-password-form">
       <van-cell-group>
         <van-field v-model="updateForm.phone"
@@ -87,7 +91,7 @@ export default {
     // 返回上一个路由
     routerBack () {
       this.$route.meta.isBack = true
-      this.$router.back()
+      this.$utils.routerBack()
     },
     // 表单验证
     validForm () {
@@ -157,7 +161,7 @@ export default {
                 this.$toast(error.data.message)
               })
             } else {
-              this.utils.alert({
+              this.$utils.alert({
                 message: '该手机号尚未注册'
               }).then(() => {
                 this.$router.push('/appIndex/login')

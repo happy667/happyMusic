@@ -101,7 +101,7 @@ export default {
     ...mapMutations(['setIsAdvance', 'setHideMiniPlayer']),
     // 返回上一个路由
     routerBack () {
-      this.$router.back()
+      this.$utils.routerBack()
     },
     // 获取视频详情
     async getVideoDetail (id) {

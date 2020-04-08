@@ -46,7 +46,7 @@ export default {
     isShowPosition () {
       if (!this.songList) return
       // 判断当前歌曲列表是否有正在播放的歌曲（-1表示没有)
-      let index = this.utils.findIndex(this.songList, this.currentSong)
+      let index = this.$utils.findIndex(this.songList, this.currentSong)
       return this.showPosition && index !== -1
     }
   },
@@ -61,11 +61,11 @@ export default {
     ...mapActions(['getUserLikeList']),
     // 返回上一个路由
     routerBack () {
-      this.$router.back()
+      this.$utils.routerBack()
     },
     handleNoLike (song) {
       // 移除歌曲
-      this.utils.removeItem(this.songList, song)
+      this.$utils.removeItem(this.songList, song)
     },
     // 获取歌曲详情
     async getSongDetail () {
@@ -109,7 +109,7 @@ export default {
         let song = this.currentSong
         let otherHeight = this.$refs.navBar.offsetHeight
         let list = this.songList
-        this.utils.positionSong({ listNode, list, song, otherHeight })
+        this.$utils.positionSong({ listNode, list, song, otherHeight })
         this.$toast('已定位到当前歌曲')
       }
     },

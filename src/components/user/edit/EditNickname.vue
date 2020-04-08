@@ -1,10 +1,13 @@
 <template>
   <div class="editNikename-container">
-    <van-nav-bar :title="$route.meta.title"
-                 left-arrow
-                 @click-left="routerBack"
-                 @click-right="save"
-                 right-text="保存" />
+    <van-sticky>
+      <van-nav-bar :title="$route.meta.title"
+                   left-arrow
+                   @click-left="routerBack"
+                   @click-right="save"
+                   right-text="保存" />
+    </van-sticky>
+
     <van-cell-group>
       <van-field v-model="nickname"
                  label="昵称"
@@ -36,7 +39,7 @@ export default {
     // 返回上一个路由
     routerBack () {
       this.$route.meta.isBack = true
-      this.$router.back()
+      this.$utils.routerBack()
     },
     valid () {
       // 昵称

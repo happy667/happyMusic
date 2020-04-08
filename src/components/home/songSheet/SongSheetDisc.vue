@@ -16,7 +16,8 @@
       <template v-if="songSheetDisc.picUrl">
         <div class="image"
              @click="handleToggleShowImage">
-          <van-image :src="songSheetDisc.picUrl">
+          <van-image fit="cover"
+                     :src="songSheetDisc.picUrl">
             <template v-slot:loading>
               <van-loading type="spinner"
                            size="20" />
@@ -127,7 +128,7 @@ export default {
     isShowPosition () {
       if (!this.songSheetDisc.songs) return
       // 判断当前歌曲列表是否有正在播放的歌曲（-1表示没有)
-      let index = this.utils.findIndex(this.songSheetDisc.songs, this.currentSong)
+      let index = this.$utils.findIndex(this.songSheetDisc.songs, this.currentSong)
       return this.showPosition && index !== -1
     }
   },
@@ -136,7 +137,7 @@ export default {
     ...mapActions(['setSelectPlay']),
     // 返回上一个路由
     routerBack () {
-      this.$router.back()
+      this.$utils.routerBack()
     },
     // 根据id获取歌单列表
     async getSongSheetById (id) {
@@ -184,7 +185,7 @@ export default {
         return
       }
       // 引入vue原型上的utils
-      this.utils.playMusic(item, this.songSheetDisc.songs, index)
+      this.$utils.playMusic(item, this.songSheetDisc.songs, index)
     },
     // 获取用户收藏的歌单
     async  getUserSongSheet (id) {
@@ -206,14 +207,14 @@ export default {
         return
       }
       // 引入vue原型上的utils
-      this.utils.playMusic(item, this.songSheetDisc.songs, index)
+      this.$utils.playMusic(item, this.songSheetDisc.songs, index)
     },
     // 收藏歌单
     handleClickFollow () {
       if (this.user) { // 说明已经登录
         this.follow()
       } else {
-        this.utils.alertLogin(this.$router.currentRoute.fullPath)
+        this.$utils.alertLogin(this.$router.currentRoute.fullPath)
       }
     },
 
@@ -229,7 +230,7 @@ export default {
           this.$toast(err.data.message)
         })
       } else {
-        this.utils.alertConfirm({ message: '确定不再收藏该歌单', confirmButtonText: '不再收藏' }).then(async () => {
+        this.$utils.alertConfirm({ message: '确定不再收藏该歌单', confirmButtonText: '不再收藏' }).then(async () => {
           userApi.updateFollowSongSheet(this.id, follow).then(res => {
             if (res.data.code === ERR_OK) {
               this.followed = false
@@ -248,7 +249,7 @@ export default {
         let song = this.currentSong
         let otherHeight = this.$refs.navBar.offsetHeight
         let list = this.songSheetDisc.songs
-        this.utils.positionSong({ listNode, list, song, otherHeight })
+        this.$utils.positionSong({ listNode, list, song, otherHeight })
         this.$toast('已定位到当前歌曲')
       }
     },
@@ -284,9 +285,8 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.song-sheet-desc-container>>>#image .van-image {
+.song-sheet-desc-container>>>.image .van-image {
   width: 100%;
-  height: 100%;
 }
 
 .song-sheet-desc-container {

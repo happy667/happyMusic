@@ -261,7 +261,7 @@ export default {
     ...mapMutations(['setLoginUser', 'setUserLikeList', 'setToken', 'setHideMiniPlayer']),
     // 返回上一个路由
     routerBack () {
-      this.$router.back()
+      this.$utils.routerBack()
     },
     // 获取用户详情
     async getUserDetail (id) {
@@ -292,7 +292,7 @@ export default {
     },
     // 退出登录
     logout () {
-      this.utils.alertConfirm({ message: '确定要退出登录吗', confirmButtonText: '退出' }).then(() => {
+      this.$utils.alertConfirm({ message: '确定要退出登录吗', confirmButtonText: '退出' }).then(() => {
         loginApi.logout().then(res => {
           if (res.data.code === ERR_OK) {
             // 清空用户所有信息

@@ -142,7 +142,7 @@ export default {
     },
     playMusic (song) {
       // 引入vue原型上的utils
-      this.utils.playMusic(song)
+      this.$utils.playMusic(song)
     }
   },
   components: {

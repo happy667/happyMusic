@@ -490,16 +490,16 @@ const router = new VueRouter({
 })
 router.beforeEach((to, from, next) => {
   if (store.state.playerFullScreen) {
-    if (from.name === 'songComment' || store.state.isPlayerClick) {
-      next()
-    } else {
+    // 如果路由不是来自歌曲评论或者也不是播放器页面点击的则隐藏全屏播放器，（解决路由跳转时全屏播放器盖住页面)
+    if (!from.name === 'songComment' || !store.state.isPlayerClick) {
       store.commit('setPlayerFullScreen', false)
-      next(false)
     }
+    // 恢复isPlayerClick(这个属性用来判断是否为播放页面点击，如果是则返回时显示全屏播放器)
     store.commit('setIsPlayerClick', false)
+    next()
   }
   if (to.matched.some(record => record.meta.requireLogin)) { // 判断该路由是否需要登录权限
-    let utils = Vue.prototype.utils
+    let utils = Vue.prototype.$utils
     console.log(utils.isLogin())
     if (utils.isLogin()) { // 判断是否登录
       next()

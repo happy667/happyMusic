@@ -103,7 +103,7 @@ export default {
     // 返回上一个路由
     routerBack () {
       this.$route.meta.isBack = true
-      this.$router.back()
+      this.$utils.routerBack()
     },
     goToAlbum () {
       this.$route.meta.isBack = false

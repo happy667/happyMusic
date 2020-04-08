@@ -90,7 +90,7 @@ export default {
         this.setSingerCurrentIndex(0)
         // 添加不缓存路由
         this.setAddNoCacheComponents('singerInfo')
-        this.$router.replace(`/singerInfo/${item.id}`)
+        this.$router.push(`/singerInfo/${item.id}`)
       }
     }
 

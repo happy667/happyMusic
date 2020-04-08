@@ -63,7 +63,7 @@ export default {
     ...mapMutations(['setSingerCurrentIndex']),
     // 返回上一个路由
     routerBack () {
-      this.$router.back()
+      this.$utils.routerBack()
     },
     // 获取用户收藏的歌手
     async getSingerSubList () {
@@ -96,11 +96,11 @@ export default {
       let follow = !singer.followed
       follow = follow ? 1 : 0// 1代表收藏，0代表不收藏
 
-      this.utils.alertConfirm({ message: '确定不再收藏该歌手', confirmButtonText: '不再收藏' }).then(() => {
+      this.$utils.alertConfirm({ message: '确定不再收藏该歌手', confirmButtonText: '不再收藏' }).then(() => {
         userApi.updateFollow(singer.id, follow).then(res => {
           if (res.data.code === ERR_OK) {
             // 移除该歌手
-            this.utils.removeItem(this.singerSubList, singer)
+            this.$utils.removeItem(this.singerSubList, singer)
             this.$toast('已不再收藏')
           }
         }).catch(err => {
