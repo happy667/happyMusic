@@ -88,6 +88,7 @@ export default {
   },
   mounted () {
     // 根据歌手id获取歌手单曲
+
     this.handleTabsChange(this.currentIndex)
   },
   computed: {
@@ -132,28 +133,32 @@ export default {
     },
     // 获取歌手单曲
     async getSingerSong (id) {
-      this.loading = true
-      const { data: res } = await singerApi.getSingerSong(id)
-      if (res.code === ERR_OK) { // 成功获取歌手单曲
-        let songList = []
-        res.hotSongs.map((item) => { // 循环数组对象对每个数据进行处理 返回需要得数据
-          let singers = item.ar.map(item => item.name).join('/')
-          let singersList = []
-          // 处理歌手
-          item.ar.forEach(item => {
-            singersList.push(new Singer({
-              id: item.id,
-              name: item.name
-            }))
+      try {
+        this.loading = true
+        const { data: res } = await singerApi.getSingerSong(id)
+        if (res.code === ERR_OK) { // 成功获取歌手单曲
+          let songList = []
+          res.hotSongs.map((item) => { // 循环数组对象对每个数据进行处理 返回需要得数据
+            let singers = item.ar.map(item => item.name).join('/')
+            let singersList = []
+            // 处理歌手
+            item.ar.forEach(item => {
+              singersList.push(new Singer({
+                id: item.id,
+                name: item.name
+              }))
+            })
+            songList.push(new Song({ id: item.id, name: item.name, singers, singersList, picUrl: item.al.picUrl, st: item.privilege.st }))
           })
-          songList.push(new Song({ id: item.id, name: item.name, singers, singersList, picUrl: item.al.picUrl }))
-        })
-        this.setSingerInfo(res.artist)
-        if (res.artist.accountId) {
-          this.accountId = res.artist.accountId
+          this.setSingerInfo(res.artist)
+          if (res.artist.accountId) {
+            this.accountId = res.artist.accountId
+          }
+          this.singerSong = songList
+          this.loading = false
         }
-        this.singerSong = songList
-        this.loading = false
+      } catch (e) {
+        this.$router.replace('/')
       }
     },
     async getSingerAlbum (id) {

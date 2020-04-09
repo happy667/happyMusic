@@ -122,7 +122,7 @@ const routes = [
     }, // meta对象的index用来定义当前路由的层级,由小到大,由低到高
     beforeEnter(to, from, next) {
       console.log(from)
-      if (from.name === 'home' || from.name === 'searchResult') {
+      if (from.name === 'home' || from.name === 'searchResult' || from.name === 'user') {
         // 添加不缓存路由
         store.commit('setAddNoCacheComponents', 'songSheetDisc')
       } else {
@@ -291,7 +291,7 @@ const routes = [
     },
     beforeEnter(to, from, next) {
       console.log(from)
-      if (from.name === 'singerInfo' || from.name === 'home') {
+      if (from.name === 'singerInfo' || from.name === 'home' || from.name === 'user') {
         // 添加不缓存路由
         store.commit('setAddNoCacheComponents', 'singerAlbum')
       } else if (from.name === 'albumComment' && !from.meta.isBack) {
@@ -313,6 +313,10 @@ const routes = [
       index: 0
     }, // meta对象的index用来定义当前路由的层级,由小到大,由低到高
     beforeEnter(to, from, next) {
+      // 如果有歌曲播放就显示迷你播放器
+      if (store.state.currentPlayIndex !== -1) {
+        store.commit('setHideMiniPlayer', false)
+      }
       let user = store.state.user
       if (from.name === 'home' || !user) {
         // 添加不缓存路由

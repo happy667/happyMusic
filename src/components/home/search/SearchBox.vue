@@ -1,69 +1,75 @@
 <template>
   <div class="search-box-container">
-    <!-- 历史搜索 -->
-    <div class="oldSearch"
-         v-if="localSearchList&&localSearchList.length!==0">
-      <!-- 搜索头部 -->
-      <div class="search-list-header">
-        <p class="title">历史搜索</p>
-        <div class="icon"
-             @click="clearLocalList">
-          <i class="iconfont icon-shanchu"></i>
-        </div>
+    <scroll ref="search_scroll"
+            @scroll="scroll"
+            :listenScroll="listenScroll">
+      <section class="container"
+               ref="container">
+        <!-- 历史搜索 -->
+        <div class="oldSearch"
+             v-if="localSearchList&&localSearchList.length!==0">
+          <!-- 搜索头部 -->
+          <div class="search-list-header">
+            <p class="title">历史搜索</p>
+            <div class="icon"
+                 @click="clearLocalList">
+              <i class="iconfont icon-shanchu"></i>
+            </div>
 
-      </div>
-      <!-- 搜索列表 -->
-      <ul class="old-search-list">
-        <li class="old-search-list-item"
-            v-for="(item,index) in localSearchList"
-            @click="selectItem(item)"
-            :key="index">{{item}}</li>
-      </ul>
-    </div>
-    <!-- 热门搜索 -->
-    <section class="recommend-Search">
-      <!-- 搜索头部 -->
-      <div class="search-list-header">
-        <p class="title">热门搜索</p>
-      </div>
-      <van-loading v-if="load"
-                   size="24px"
-                   color="#FD4979"
-                   class="load"
-                   vertical>加载中...</van-loading>
-      <!-- 搜索列表 -->
-      <ul class="hot-search-list"
-          v-if="this.hotSearchList.length!==0">
-        <li class="hot-search-list-item"
-            @click="selectItem(item)"
-            v-for="(item,index) in hotSearchList"
-            :key="item.searchWord">
-          <div class="left"
-               :class="index < 3 ? 'top' : ''">
-            <div class="index">{{index+1}}</div>
-            <div class="search-info">
-              <div class="top">
-                <div class="name">{{item.searchWord}}</div>
-                <div class="icon"
-                     v-if="item.iconUrl">
-                  <img :src="item.iconUrl">
+          </div>
+          <!-- 搜索列表 -->
+          <ul class="old-search-list">
+            <li class="old-search-list-item"
+                v-for="(item,index) in localSearchList"
+                @click="selectItem(item)"
+                :key="index">{{item}}</li>
+          </ul>
+        </div>
+        <!-- 热门搜索 -->
+        <div class="recommend-Search">
+          <!-- 搜索头部 -->
+          <div class="search-list-header">
+            <p class="title">热门搜索</p>
+          </div>
+          <!-- loading -->
+          <loading :loading="load" />
+          <!-- 搜索列表 -->
+          <ul class="hot-search-list"
+              v-if="this.hotSearchList.length!==0">
+            <li class="hot-search-list-item"
+                @click="selectItem(item)"
+                v-for="(item,index) in hotSearchList"
+                :key="item.searchWord">
+              <div class="left"
+                   :class="index < 3 ? 'top' : ''">
+                <div class="index">{{index+1}}</div>
+                <div class="search-info">
+                  <div class="top">
+                    <div class="name">{{item.searchWord}}</div>
+                    <div class="icon"
+                         v-if="item.iconUrl">
+                      <img :src="item.iconUrl">
+                    </div>
+                  </div>
+                  <div class="bottom">{{item.content}}</div>
                 </div>
               </div>
-              <div class="bottom">{{item.content}}</div>
-            </div>
-          </div>
-          <div class="right">{{item.score}}</div>
-        </li>
-      </ul>
-    </section>
-
+              <div class="right">{{item.score}}</div>
+            </li>
+          </ul>
+        </div>
+      </section>
+    </scroll>
   </div>
+
 </template>
 <script>
+import Scroll from '@/components/common/Scroll'
 import searchApi from '@/api/search.js'
 import { ERR_OK } from '@/api/config.js'
 import { mapState, mapMutations } from 'vuex'
 import { getLocalList, clearLocalList, addLocalSearch } from '@/assets/common/js/localStorage.js'
+import { playlistMixin } from '@/assets/common/js/mixin.js'
 export default {
   name: 'searchPage',
   data () {
@@ -73,13 +79,20 @@ export default {
       load: false
     }
   },
+  mixins: [playlistMixin],
   computed: {
     ...mapState(['searchKeywords', 'showSearchList'])
+  },
+  created () {
+    this.listenScroll = true
   },
   mounted () {
     // 获取热门搜索
     this.getHotSearchList()
     if (getLocalList()) { this.localSearchList = getLocalList() }// 如果本地存在历史记录就赋值
+    this.$nextTick(() => {
+      this.$refs.search_scroll.refresh()
+    })
   },
   methods: {
     ...mapMutations(['setSearchKeywords', 'setSearchCurrentIndex', 'selectSearchItem', 'setShowSearchList']),
@@ -120,126 +133,154 @@ export default {
       if (this.showSearchList) {
         this.setShowSearchList(false)
       }
+    },
+    scroll (pos) {
+      this.closeSearchList()
+    },
+    handlePlaylist (playList) {
+      // 适配播放器与页面底部距离
+      const bottom = playList.length > 0 ? '1.6rem' : ''
+      this.$nextTick(() => {
+        this.$refs.container.style.paddingBottom = bottom
+        this.$refs.search_scroll.refresh()
+      })
     }
   },
   activated () {
     if (getLocalList()) { this.localSearchList = getLocalList() }// 如果本地存在历史记录就赋值
+  },
+
+  components: {
+    Scroll
   }
 }
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.search-box-container {
+.search-box-container>>> .scroll {
+  position: absolute;
+  width: 100%;
   height: 100%;
-  padding: 0 0.5rem;
+  overflow: hidden;
+}
 
-  .search-list-header {
-    display: flex;
-    justify-content: space-between;
+.search-box-container {
+  position: relative;
+  flex: 1;
+  background: $color-common-background;
+  box-sizing: border-box;
 
-    .title {
-      font-weight: bold;
-      line-height: 1rem;
-      font-size: $font-size-smaller-x;
-    }
+  .container {
+    padding: 0 0.5rem;
 
-    .icon {
+    .search-list-header {
       display: flex;
-      justify-content: center;
-      align-items: center;
-      color: #999;
-    }
-  }
+      justify-content: space-between;
 
-  .old-search-list {
-    display: flex;
-    flex-wrap: wrap;
-    max-height: 10rem;
-    font-size: $font-size-smaller-x;
+      .title {
+        font-weight: bold;
+        line-height: 1rem;
+        font-size: $font-size-smaller-x;
+      }
 
-    .old-search-list-item {
-      margin-bottom: 0.3rem;
-      margin-right: 0.2rem;
-      padding: 0 0.2rem;
-      word-break: break-all;
-      height: 0.8rem;
-      border-radius: 0.25rem;
-      line-height: 0.8rem;
-      color: #868e94;
-      background: #f2f2f2;
-      no-wrap();
-    }
-  }
-
-  .recommend-Search {
-    padding: 0;
-
-    .hot-search-list {
-      .hot-search-list-item {
-        padding: 0.15rem 0;
+      .icon {
         display: flex;
-        justify-content: space-between;
-        height: 1rem;
-        color: $color-common-b2;
+        justify-content: center;
+        align-items: center;
+        color: #999;
+      }
+    }
 
-        .left {
+    .old-search-list {
+      display: flex;
+      flex-wrap: wrap;
+      max-height: 10rem;
+      font-size: $font-size-smaller-x;
+
+      .old-search-list-item {
+        margin-bottom: 0.3rem;
+        margin-right: 0.2rem;
+        padding: 0 0.2rem;
+        word-break: break-all;
+        height: 0.8rem;
+        border-radius: 0.25rem;
+        line-height: 0.8rem;
+        color: #868e94;
+        background: #f2f2f2;
+        no-wrap();
+      }
+    }
+
+    .recommend-Search {
+      padding: 0;
+
+      .hot-search-list {
+        .hot-search-list-item {
+          padding: 0.15rem 0;
           display: flex;
+          justify-content: space-between;
+          height: 1rem;
+          color: $color-common-b2;
 
-          &.top {
+          .left {
+            display: flex;
+
+            &.top {
+              .index {
+                font-weight: 600;
+                color: $color-common;
+              }
+
+              .search-info {
+                .top {
+                  .name {
+                    font-weight: 600;
+                  }
+                }
+              }
+            }
+
             .index {
-              font-weight: 600;
-              color: $color-common;
+              line-height: 1rem;
+              margin-right: 0.5rem;
             }
 
             .search-info {
-              .top {
-                .name {
-                  font-weight: 600;
-                }
-              }
-            }
-          }
-
-          .index {
-            line-height: 1rem;
-            margin-right: 0.5rem;
-          }
-
-          .search-info {
-            display: flex;
-            flex-direction: column;
-            line-height: 0.5rem;
-            no-wrap();
-
-            .top {
               display: flex;
+              flex-direction: column;
+              line-height: 0.5rem;
+              no-wrap();
 
-              .name {
-                color: $color-common-x;
-                font-size: $font-size-smaller-x;
-                margin-right: 0.15rem;
-              }
+              .top {
+                display: flex;
 
-              .icon {
-                height: 0.5rem;
-                padding: 0.08rem 0;
-                box-sizing: border-box;
+                .name {
+                  color: $color-common-x;
+                  font-size: $font-size-smaller-x;
+                  margin-right: 0.15rem;
+                }
 
-                img {
-                  display: block;
-                  width: 32%;
+                .icon {
+                  height: 0.5rem;
+                  padding: 0.08rem 0;
+                  box-sizing: border-box;
+
+                  img {
+                    display: block;
+                    width: 32%;
+                  }
                 }
               }
-            }
 
-            .bottom {
+              .bottom {
+              }
             }
           }
-        }
 
-        .right {
-          line-height: 1rem;
+          .right {
+            line-height: 1rem;
+          }
         }
       }
     }

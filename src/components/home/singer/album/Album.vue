@@ -50,31 +50,43 @@
           </div>
         </section>
       </div>
-      <!-- 专辑简介 -->
-      <div class="album-desc"
-           v-if="albumObj.album.description">
-        <section class="content">
-          <p>简介:</p>
-          <p v-html="albumObj.album.description"></p>
-        </section>
-      </div>
-    </template>
-    <section class="play-list"
-             v-if="albumObj.songs&&albumObj.songs.length!==0">
-      <div class="play">
-        <div class="play-icon">
-          <van-icon name="play-circle-o" />
-        </div>
-        <div class="play-all"
-             @click="playSong(albumObj.songs[0],0)">
-          播放全部({{albumObj.songs.length}})
-        </div>
-      </div>
-      <!-- 歌曲列表 -->
-      <songs-list :songsList="albumObj.songs"
-                  @select="playSong"></songs-list>
 
-    </section>
+      <!-- 歌曲列表 -->
+      <section>
+        <scroll ref="album_scroll">
+          <div class="container"
+               ref="container">
+            <!-- 专辑简介 -->
+            <div class="album-desc"
+                 v-if="albumObj.album.description">
+              <section class="content">
+                <p>简介:</p>
+                <p v-html="albumObj.album.description"></p>
+              </section>
+            </div>
+            <div class="play-list"
+                 v-if="albumObj.songs&&albumObj.songs.length!==0">
+              <div class="play">
+                <div class="top">
+                  <div class="play-icon">
+                    <van-icon name="play-circle-o" />
+                  </div>
+                  <div class="play-all"
+                       @click="playAllSong(albumObj.songs[0],albumObj.songs)">
+                    播放全部({{albumObj.songs.length}})
+                  </div>
+                </div>
+                <!-- 歌曲列表 -->
+                <songs-list :songsList="albumObj.songs"
+                            @select="selectSong"></songs-list>
+
+              </div>
+            </div>
+          </div>
+        </scroll>
+      </section>
+    </template>
+
     <no-result v-if="albumObj.songs&&albumObj.songs.length===0"
                text="暂无相关资源"></no-result>
     <!-- 上拉提示框 -->
@@ -101,16 +113,19 @@ import Song from '@/assets/common/js/song.js'
 import Singer from '@/assets/common/js/singer.js'
 import NoResult from '@/components/common/NoResult'
 import SingerItem from '@/components/home/singer/SingerItem'
-
+import Scroll from '@/components/common/Scroll'
 import {
   ERR_OK
 } from '@/api/config.js'
 import { mapMutations, mapGetters, mapState } from 'vuex'
+import { playlistMixin } from '@/assets/common/js/mixin.js'
+
 export default {
   name: 'singerAlbum',
   props: {
     id: String
   },
+  mixins: [playlistMixin],
   data () {
     return {
       albumObj: {}, // 专辑对象
@@ -147,37 +162,60 @@ export default {
       this.setIsAdvance(false)
       this.$utils.routerBack()
     },
-    // 播放歌曲
-    playSong (item, index) {
-      // 判断点击的是否是当前播放的歌曲
-      if (this.currentSong.id === item.id) {
-        this.setPlayerFullScreen(true)
-        return
+    handlePlaylist (playList) {
+      // 适配播放器与页面底部距离
+      const bottom = playList.length > 0 ? '1.6rem' : ''
+      this.$nextTick(() => {
+        if (this.$refs.container) {
+          this.$refs.container.style.paddingBottom = bottom
+          this.$refs.album_scroll.refresh()
+        }
+      })
+    },
+    // 选择歌曲
+    selectSong (item, index) {
+      // 比较两首歌曲
+      let result = this.$utils.compareSong(this.currentSong, item)
+      if (!result) {
+        // 引入vue原型上的utils
+        this.$utils.playMusic(item, this.list, index)
       }
-      // 引入vue原型上的utils
-      this.$utils.playMusic(item, this.albumObj.songs, index)
+    },
+    // 比较两首歌曲
+    playAllSong (item, list) {
+      let result = this.$utils.compareSong(this.currentSong, item)
+      if (!result) {
+        // 引入vue原型上的utils
+        this.$utils.playAllSong(list)
+      }
     },
 
     // 获取专辑详情
     async getAlbumInfo (id) {
-      const { data: res } = await singerApi.getAlbumInfo(id)
-      if (res.code === ERR_OK) {
-        let songList = []
-        res.songs.map((item) => { // 循环数组对象对每个数据进行处理 返回需要得数据
-          let singers = item.ar.map(item => item.name).join('/')
+      try {
+        const { data: res } = await singerApi.getAlbumInfo(id)
+        if (res.code === ERR_OK) {
+          let songList = []
+          res.songs.map((item) => { // 循环数组对象对每个数据进行处理 返回需要得数据
+            let singers = item.ar.map(item => item.name).join('/')
+            // 处理歌手
+            let singersList = this.handleSingerList(item.ar)
+            songList.push(new Song({ id: item.id, name: item.name, singers, singersList, picUrl: item.al.picUrl, st: item.privilege.st }))
+          })
+          // 处理专辑歌手名称
+          let albumSingers = res.album.artists.map(item => item.name).join('/')
           // 处理歌手
-          let singersList = this.handleSingerList(item.ar)
-          songList.push(new Song({ id: item.id, name: item.name, singers, singersList, picUrl: item.al.picUrl }))
-        })
-        // 处理专辑歌手名称
-        let albumSingers = res.album.artists.map(item => item.name).join('/')
-        // 处理歌手
-        let albumSingersList = this.handleSingerList(res.album.artists)
-        res.album.singers = albumSingers
-        res.album.albumSingersList = albumSingersList
-        this.$set(this.albumObj, 'songs', songList)
-        this.$set(this.albumObj, 'commentCount', res.album.info.commentCount)
-        this.$set(this.albumObj, 'album', res.album)
+          let albumSingersList = this.handleSingerList(res.album.artists)
+          res.album.singers = albumSingers
+          res.album.albumSingersList = albumSingersList
+          this.$set(this.albumObj, 'songs', songList)
+          this.$set(this.albumObj, 'commentCount', res.album.info.commentCount)
+          this.$set(this.albumObj, 'album', res.album)
+          // 适配页面底部
+          this.handlePlaylist(this.playList)
+        }
+      } catch (e) {
+        this.$router.replace('/')
       }
     },
     // 获取用户收藏专辑
@@ -288,14 +326,27 @@ export default {
   components: {
     SongsList,
     NoResult,
-    SingerItem
+    SingerItem,
+    Scroll
   }
 }
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.album-container>>>.singerList {
+.album-container>>>.list-box {
+  position: relative;
+  flex: 1;
+}
+
+.album-container >>> .scroll {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.album-container, .album-container>>>.singerList {
   max-height: 6rem;
 }
 
@@ -303,6 +354,8 @@ export default {
   width: 100%;
   background: $color-common-background;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 
   .album-header {
     position: relative;
@@ -401,38 +454,45 @@ export default {
     }
   }
 
-  .album-desc {
-    padding: 0.3rem 0.4rem;
+  section {
+    position: relative;
+    flex: 1;
 
-    .content {
-      no-wrap3();
-      line-height: 0.5rem;
-      color: #777;
-      font-size: $font-size-smaller-x;
-    }
-  }
+    .container {
+      .album-desc {
+        padding: 0.3rem 0.4rem;
 
-  .play-list {
-    padding-top: 0.3rem;
-
-    .play {
-      display: flex;
-      padding-left: 0.4rem;
-
-      .play-icon {
-        font-size: $font-size-small;
-        color: $color-common;
-        margin-right: 0.2rem;
-
-        i {
-          line-height: 0.8rem;
+        .content {
+          no-wrap3();
+          line-height: 0.5rem;
+          color: #777;
+          font-size: $font-size-smaller-x;
         }
       }
 
-      .play-all {
-        font-size: $font-size-smaller;
-        height: 0.8rem;
-        line-height: 0.8rem;
+      .play-list {
+        .play {
+          .top {
+            padding-left: 0.4rem;
+            display: flex;
+
+            .play-icon {
+              font-size: $font-size-small;
+              color: $color-common;
+              margin-right: 0.2rem;
+
+              i {
+                line-height: 0.8rem;
+              }
+            }
+
+            .play-all {
+              font-size: $font-size-smaller;
+              height: 0.8rem;
+              line-height: 0.8rem;
+            }
+          }
+        }
       }
     }
   }

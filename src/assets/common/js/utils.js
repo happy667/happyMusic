@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import router from '@/router/index.js'
 import store from '@/store/index.js'
-import songApi from '@/api/song.js'
+// import songApi from '@/api/song.js'
 import {
   getPositionTop
 } from '@/assets/common/js/dom.js'
@@ -9,43 +9,80 @@ import {
   playMode
 } from '@/assets/common/js/config.js'
 const utils = {
-  async playMusic(song, list = null, index) {
-    // 检查音乐是否可用
-    songApi.checkMusic(song.id).then(res => {
-      if (res.data.success) {
-        // 同步播放模式
-        let mode = store.state.playMode
-        console.log(mode)
-        if (mode === playMode.random) { // 随机播放
-          let list = utils.randomList(store.state.sequenceList)
-          store.commit('setPlayList', list)
-        }
-        if (list === null) { // 传入列表为空
-          let list = store.state.playList
-          const listIndex = utils.findIndex(list, song)
-          if (listIndex === -1) { // 如果不存在该歌曲就添加到歌曲列表中
-            list.unshift(song)
-            store.dispatch('setSelectPlay', {
-              list,
-              index: 0
-            })
-          } else {
-            // 播放索引为index的歌曲
-            store.commit('setCurrentPlayIndex', listIndex)
-          }
-        } else {
-          store.dispatch('setSelectPlay', {
-            list,
-            index
-          })
-        }
-      }
-    }).catch((res) => {
-      // 提示
-      console.log(res)
-      Vue.prototype.$toast(res.data.message)
-    })
+  playMusic(song, list = null, index) {
+    if (song && song.st < 0) {
+      Vue.prototype.$toast('亲爱的，暂无版权')
+      return
+    }
+    utils.handlePlayList(song, list, index)
   },
+  handlePlayList(song, list = null, index) {
+    // 同步播放模式
+    let mode = store.state.playMode
+
+    if (mode === playMode.random) { // 随机播放
+      let list = utils.randomList(store.state.sequenceList)
+      store.commit('setPlayList', list)
+    }
+    if (list === null) { // 传入列表为空
+      let list = store.state.playList
+      console.log(list)
+      const listIndex = utils.findIndex(list, song)
+      if (listIndex === -1) { // 如果不存在该歌曲就添加到歌曲列表中
+        list.unshift(song)
+        store.dispatch('setSelectPlay', {
+          list,
+          index: 0
+        })
+      } else {
+        // 播放索引为index的歌曲
+        store.commit('setCurrentPlayIndex', listIndex)
+      }
+    } else {
+      if (song) {
+        // 只筛选出可以播放的歌曲
+        // 由于筛选列表发生变化所以index需要重置
+        list = list.filter(item => item.st >= 0)
+        index = list.findIndex(item => item.id === song.id)
+      }
+      store.dispatch('setSelectPlay', {
+        list,
+        index
+      })
+    }
+  },
+  // 播放所有歌曲
+  playAllSong(list) {
+    utils.handlePlayList(null, list, 0)
+  },
+  // 比较歌曲
+  compareSong(item1, item2) {
+    // 判断点击的是否是当前播放的歌曲
+    if (item1.id === item2.id) {
+      store.commit('setPlayerFullScreen', true)
+      return true
+    } else {
+      return false
+    }
+  },
+  // playRandomMusic(list) {
+  //   // 打乱数组
+  //   let randomList = utils.randomList(list)
+  //   // 获取当前播放歌曲
+  //   let currentPlaySong = store.state.currentSong
+  //   // 播放全部歌曲，默认将第一首歌作为播放全部时的歌曲
+  //   let willPlaySong = randomList[0]
+  //   if (currentPlaySong) { // 存在当前播放歌曲
+  //     // 如果当前播放歌曲和播放全部歌曲相同则再次打乱数组，直到不相同
+  //     while (willPlaySong.id === currentPlaySong.id || willPlaySong.st < 0) {
+  //       randomList = utils.randomList(list)
+  //       willPlaySong = randomList[0]
+  //     }
+  //   }
+  //   // 获取歌曲索引index传入playMusic
+  //   let index = randomList.findIndex(item => item.id === willPlaySong.id)
+  //   utils.playMusic(willPlaySong, list, index)
+  // },
   // 限制向前向后移动索引
   limitMoveIndex(index1, index2, length) {
     if (index1 > index2) { // 说明是下一首播放

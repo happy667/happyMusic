@@ -1,12 +1,11 @@
 <template>
-  <div class="singer-container">
-    <van-loading v-show="this.singerList.length === 0"
-                 size="24px"
-                 color="#FD4979"
-                 vertical>加载中...</van-loading>
-
+  <div class="singer-container"
+       ref="singer">
+    <!-- loading -->
+    <loading :loading="this.singerList.length === 0" />
     <!-- 歌手列表 -->
-    <singer-list :singer-list="singerList"></singer-list>
+    <singer-list :singer-list="singerList"
+                 ref="list"></singer-list>
     <!-- 字母列表 -->
     <letter-list :letter-list="letterList"></letter-list>
   </div>
@@ -17,6 +16,7 @@ import LetterList from './LetterList'
 import SingerList from './SingerList'
 import singerApi from '@/api/singer.js'
 import Singer from '@/assets/common/js/singer.js'
+
 import {
   ERR_OK
 } from '@/api/config.js'
@@ -29,6 +29,7 @@ export default {
       singerList: [] // 歌手列表
     }
   },
+
   computed: {
     // 右侧字母表
     letterList () {
@@ -139,7 +140,7 @@ export default {
 @import '~common/stylus/variable';
 
 .singer-container {
-  position: relative;
+  position: absolute;
   width: 100%;
   height: 100%;
 }

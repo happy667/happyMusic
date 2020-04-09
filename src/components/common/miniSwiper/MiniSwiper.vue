@@ -5,8 +5,10 @@
       <div class="swiper-wrapper">
         <div class="swiper-slide"
              v-for="item in list"
+             :data-id="item.id"
              :key="item.id">
           <mini-swiper-item :item="item"
+                            ref="item"
                             @select="selectItem"></mini-swiper-item>
         </div>
       </div>
@@ -17,6 +19,7 @@
 import Swiper from 'swiper'
 import MiniSwiperItem from './MiniSwiperItem'
 import { mapMutations } from 'vuex'
+import { getData, getParentByClassName } from '@/assets/common/js/dom.js'
 export default {
   props: {
     list: Array
@@ -26,6 +29,8 @@ export default {
     ...mapMutations(['setIsAdvance']),
     // 初始化轮播图组件
     initSwiper () {
+      // 这里的this是vue对象，提前声明(需要在swiper中应用)
+      let _this = this
       // eslint-disable-next-line no-unused-vars
       var mySwiper = new Swiper('.mini-swiper', {
         slidesPerView: 'auto',
@@ -50,16 +55,25 @@ export default {
           },
           touchEnd (e) {
             e.stopPropagation()
+          },
+          // 解决阻止事件传播点击事件失效
+          // 利用自定义属性获取id
+          click (e) {
+            let target = getParentByClassName(e.target, 'swiper-slide')
+            let id = getData(target, 'id')
+            if (id) {
+              _this.selectItem(id)
+            }
           }
         }
       })
     },
 
     // 选择专辑进入专辑页面
-    selectItem (item) {
+    selectItem (id) {
       // 设置为前进页面
       this.setIsAdvance(true)
-      this.$router.push({ path: `/singerAlbum/${item.id}` })
+      this.$router.push({ path: `/singerAlbum/${id}` })
     }
   },
   mounted () {

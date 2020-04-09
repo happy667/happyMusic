@@ -1,5 +1,6 @@
 <template>
-  <div class="songs-list-item-containter">
+  <div class="songs-list-item-containter"
+       :class="disableCls?'disable':''">
     <!-- 索引 -->
     <div class="song-index"
          :class="top?'rank':''"
@@ -17,18 +18,18 @@
       <div class="sg-info">{{song.singers}}</div>
     </div>
 
-    <div v-if="showPlayCount"
+    <div v-if="song.st>=0"
+         class="love"
+         @click.stop="selectItemLove">
+      <i class="iconfont"
+         :class="loveIcon"></i>
+    </div>
+    <div v-else-if="showPlayCount"
          class="play-count">
       <div class="icon">
         <van-icon name="play-circle-o" />
       </div>
       <div class="count">{{song.playCount}}</div>
-    </div>
-    <div v-else
-         class="love"
-         @click.stop="selectItemLove">
-      <i class="iconfont"
-         :class="loveIcon"></i>
     </div>
   </div>
 </template>
@@ -61,6 +62,9 @@ export default {
     },
     picUrl () {
       return this.song.picUrl ? this.song.picUrl : defaultMusicImage
+    },
+    disableCls () {
+      return this.song.st ? this.song.st < 0 : false
     }
   },
   watch: {
@@ -157,6 +161,11 @@ export default {
   position: relative;
   display: flex;
   padding: 0.2rem 0;
+
+  &.disable {
+    color: $color-common-b2;
+    opacity: 0.5;
+  }
 
   .song-index {
     width: 1.3rem;

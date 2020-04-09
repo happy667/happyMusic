@@ -37,18 +37,26 @@ service.interceptors.response.use(
     return response
   },
   error => {
-    let resData = error.response.data
-    let status = error.response.data.code
-    // 错误信息处理
-    if (resData.msg && !resData.message) {
-      resData.message = resData.msg
+    let res = error.response
+    if (res) {
+      let resData = res.data
+      let status = error.response.data.code
+      // 错误信息处理
+      if (resData.msg && !resData.message) {
+        resData.message = resData.msg
+      }
+      switch (status) {
+        case 500:
+          resData.message = '系统出错'
+          break
+      }
+      return Promise.reject(res) // 返回接口返回的错误信息
+    } else {
+      let resData = {
+        message: '加载超时'
+      }
+      return Promise.reject(resData) // 返回接口返回的错误信息
     }
-    switch (status) {
-      case 500:
-        resData.message = '系统出错'
-        break
-    }
-    return Promise.reject(error.response) // 返回接口返回的错误信息
   })
 
 export default service

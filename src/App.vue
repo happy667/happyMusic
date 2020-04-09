@@ -1,6 +1,5 @@
 <template>
-  <div id="app"
-       :style="paddingCls">
+  <div id="app">
     <transition :name="transitionName">
       <keep-alive :exclude="noCacheComponents">
         <router-view v-if="isRouterAlive"
@@ -38,12 +37,7 @@ export default {
   },
   computed: {
     ...mapState(['user', 'token', 'noCacheComponents', 'isAdvance']),
-    ...mapGetters(['currentSong']),
-    paddingCls () {
-      return {
-        paddingBottom: Object.keys(this.currentSong).length === 0 ? '' : '1.5rem'
-      }
-    }
+    ...mapGetters(['currentSong'])
   },
   mounted () {
     if (this.token) {

@@ -1,27 +1,22 @@
 <template>
   <div class="videoList-container">
     <!-- 正在加载 -->
-    <van-loading v-if="videoList.length===0"
-                 size="24px"
-                 color="#FD4979"
-                 vertical>加载中...</van-loading>
-
+    <loading :loading="videoList.length===0" />
     <scroll :data="videoList"
             ref="videoListScroll"
             :pullUp="pullUp"
             @pullingUpLoad="handlePullingUp">
-      <div class="video-list">
+      <div class="video-list"
+           ref="container">
         <template v-if="videoList.length!==0">
           <template v-for="item in videoList">
             <video-item :videoParams="item"
                         :key="item.id"></video-item>
           </template>
 
-          <van-loading v-if="loadMore"
-                       class="loadMore"
-                       size="24px"
-                       color="#FD4979"
-                       vertical>加载更多...</van-loading>
+          <!-- loading -->
+          <loading :loading="loadMore"
+                   height="2rem" />
         </template>
       </div>
     </scroll>
@@ -61,6 +56,13 @@ export default {
       }
     })
   },
+  watch: {
+    loadMore () {
+      this.$nextTick(() => {
+        this.refresh()
+      })
+    }
+  },
   methods: {
     // 上拉加载
     async handlePullingUp () {
@@ -75,44 +77,52 @@ export default {
     },
     // 获取推荐视频
     async getVideoList (context) {
-      const offset = this.videoList.length
-      const { data: res } = await videoApi.getRecommendVideo(offset)
-      if (res.code === ERR_OK) {
-        const data = res.data
-        let videoList = []
-        let length = 0// 用于判断是否执行完毕
-        data.forEach(async (item) => {
-          // 获取歌手信息
-          const { data: res2 } = await SingerApi.getSinger(item.artistId)
-          if (res2.code === ERR_OK) {
-            // 获取mv路径
-            const { data: res3 } = await videoApi.getRecommendVideoUrl(item.id)
-            if (res3.code === ERR_OK) {
-              let video = new Video({
-                id: item.id,
-                coverUrl: item.cover,
-                name: item.name,
-                playCount: item.playCount,
-                artist: {
-                  id: res2.artist.id,
-                  name: res2.artist.name,
-                  avatarUrl: res2.artist.img1v1Url
-                },
-                url: res3.data.url
-              })
-              length++
-              videoList.push(video)
-              if (length === data.length) { // 说明请求完成
-                this.loadMore = false
-                this.videoList = this.videoList.concat(videoList)
-                this.$nextTick(() => {
-                  this.$refs.videoListScroll.finishPullUp()
+      try {
+        const offset = this.videoList.length
+        const { data: res } = await videoApi.getRecommendVideo(offset)
+        if (res.code === ERR_OK) {
+          const data = res.data
+          let videoList = []
+          let length = 0// 用于判断是否执行完毕
+          data.forEach(async (item) => {
+            // 获取歌手信息
+            const { data: res2 } = await SingerApi.getSinger(item.artistId)
+            if (res2.code === ERR_OK) {
+              // 获取mv路径
+              const { data: res3 } = await videoApi.getRecommendVideoUrl(item.id)
+              if (res3.code === ERR_OK) {
+                let video = new Video({
+                  id: item.id,
+                  coverUrl: item.cover,
+                  name: item.name,
+                  playCount: item.playCount,
+                  artist: {
+                    id: res2.artist.id,
+                    name: res2.artist.name,
+                    avatarUrl: res2.artist.img1v1Url
+                  },
+                  url: res3.data.url
                 })
+                length++
+                videoList.push(video)
+                if (length === data.length) { // 说明请求完成
+                  this.loadMore = false
+                  this.videoList = this.videoList.concat(videoList)
+                  this.$nextTick(() => {
+                    this.$refs.videoListScroll.finishPullUp()
+                  })
+                }
               }
             }
-          }
-        })
+          })
+        }
+      } catch (e) {
+        this.$toast(e.message)
       }
+    },
+    // 刷新
+    refresh () {
+      this.$refs.videoListScroll.refresh()
     }
   },
   components: {
@@ -126,15 +136,6 @@ export default {
 
 [v-cloak] {
   display: none;
-}
-
-.scroll {
-  /* 减去搜索框、导航栏 */
-  height: calc(100vh - (1.7rem + 1.18rem));
-}
-
-.videoList-container>>>.loadMore {
-  height: 2rem !important;
 }
 
 .videoList-container {

@@ -1,12 +1,28 @@
 <template>
   <div class="appIndex-container">
-      <router-view></router-view>
+    <router-view></router-view>
   </div>
 
 </template>
 <script>
 export default {
-  name: 'appIndex'
+  name: 'appIndex',
+
+  mounted () {
+    console.log(232)
+    // 如果有歌曲播放就隐藏迷你播放器
+    if (this.$store.state.currentPlayIndex !== -1) {
+      this.$store.commit('setHideMiniPlayer', true)
+    }
+  },
+  beforeRouteLeave (to, from, next) {
+    // 如果有歌曲播放就显示迷你播放器
+    if (this.$store.state.currentPlayIndex !== -1) {
+      this.$store.commit('setHideMiniPlayer', false)
+    }
+    next()
+  }
+
 }
 </script>
 <style lang="stylus" scoped>

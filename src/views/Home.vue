@@ -36,6 +36,13 @@ export default {
   flex-direction: column;
 }
 
+.home-container>>> .scroll {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
 .home-container>>>.van-tabs {
   flex: 1;
   display: flex;
@@ -43,7 +50,14 @@ export default {
 }
 
 .home-container>>>.van-tabs__content {
+  position: relative;
   flex: 1;
+}
+
+.home-container>>>.van-tabs__content .van-tabs__track, .home-container>>>.van-tabs__content .van-tab__pane {
+  position: absolute;
+  top: 0;
+  bottom: 0;
 }
 
 .home-container {

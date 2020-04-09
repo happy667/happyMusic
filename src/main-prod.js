@@ -8,6 +8,7 @@ import './plugins/vant.js'
 import '@/assets/common/font/iconfont.css'
 import '@/assets/common/js/utils.js'
 import VueLazyLoad from 'vue-lazyload'
+import '@/assets/common/js/globalComponents.js'
 import {
   defaultMusicImage
 } from 'common/js/config.js'

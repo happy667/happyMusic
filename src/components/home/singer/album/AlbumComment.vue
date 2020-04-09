@@ -9,9 +9,8 @@
 
     </header>
     <template v-if="!commentList">
-      <van-loading size="24px"
-                   color="#FD4979"
-                   vertical>加载中...</van-loading>
+      <!-- loading -->
+      <loading />
     </template>
     <template v-else>
       <section class="section">

@@ -7,10 +7,7 @@
                    @click-left="routerBack" />
     </van-sticky>
     <!-- loading -->
-    <van-loading v-if="loading"
-                 size="24px"
-                 color="#FD4979"
-                 vertical>加载中...</van-loading>
+    <loading :loading="loading" />
     <template v-if="userDetail">
       <section class="cell-container">
         <!-- 通知栏 -->
@@ -188,21 +185,7 @@ export default {
       this.getUserDetail(this.user.userId)
     }
   },
-  beforeRouteEnter (to, from, next) {
-    // 如果有歌曲播放就隐藏迷你播放器
-    next(vm => {
-      if (vm.currentPlayIndex !== -1) {
-        vm.setHideMiniPlayer(true)
-      }
-    })
-  },
-  beforeRouteLeave (to, from, next) {
-    // 如果有歌曲播放就显示迷你播放器
-    if (this.currentPlayIndex !== -1) {
-      this.setHideMiniPlayer(false)
-    }
-    next()
-  },
+
   computed: {
     ...mapState(['user', 'currentPlayIndex']),
     // 性别处理

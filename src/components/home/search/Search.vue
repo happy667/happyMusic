@@ -1,4 +1,5 @@
 <template>
+
   <div class="search-container">
     <!-- 头部导航 -->
     <van-sticky>
@@ -7,36 +8,42 @@
                    left-arrow
                    @click-left="routerBack" />
     </van-sticky>
-    <!--搜索框-->
-    <van-search left-icon="search"
-                :placeholder="searchDefault"
-                shape="round"
-                show-action
-                @input="handleInput"
-                v-model="searchVal"
-                @search="handleSearch">
-      <template #action>
-        <div @click="handleSearch">搜索</div>
-      </template>
-    </van-search>
-    <!-- 搜索列表 -->
-    <div class="search-list-container"
-         v-show="showSearchList">
-      <ul class="search-list">
-        <li class="search-list-item van-hairline--top"
-            @click="selectItem(item)"
-            v-for="(item,index) in searchList"
-            :key="index">
-          <div class="icon">
-            <van-icon name="search" />
-          </div>
-          {{item}}
-        </li>
-      </ul>
+
+    <div class="container">
+      <!--搜索框-->
+      <van-search left-icon="search"
+                  :placeholder="searchDefault"
+                  shape="round"
+                  show-action
+                  @input="handleInput"
+                  v-model="searchVal"
+                  @search="handleSearch">
+        <template #action>
+          <div @click="handleSearch">搜索</div>
+        </template>
+      </van-search>
+      <!-- 搜索列表 -->
+      <section class="search-list-container"
+               v-show="showSearchList">
+        <ul class="search-list">
+          <li class="search-list-item van-hairline--top"
+              @click="selectItem(item)"
+              v-for="(item,index) in searchList"
+              :key="index">
+            <div class="icon">
+              <van-icon name="search" />
+            </div>
+            {{item}}
+          </li>
+        </ul>
+      </section>
+
+      <router-view></router-view>
+
     </div>
-    <router-view></router-view>
 
   </div>
+
 </template>
 <script>
 import searchApi from '@/api/search.js'
@@ -179,22 +186,10 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.van-tabs {
-  height: 100% !important;
-}
-
-.van-cell {
-  padding: 0.2rem 0.3rem;
-}
-
 .van-search {
   height: 1.8rem;
   padding: 0.25rem 0.32rem;
   box-sizing: border-box;
-}
-
-.search-container>>>.search-result-container {
-  flex: 1;
 }
 
 .search-container {
@@ -204,28 +199,34 @@ export default {
   display: flex;
   flex-direction: column;
 
-  .search-list-container {
-    position: absolute;
-    background: $color-common-background;
-    width: 100%;
-    padding: 0 0.4rem;
-    box-sizing: border-box;
-    max-height: 8rem;
-    z-index: 99;
-    box-shadow: 0 0.25rem 0.6rem rgba(0, 0, 0, 0.1);
+  .container {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
 
-    .search-list {
-      .search-list-item {
-        display: flex;
-        padding: 0 0.2rem;
-        line-height: 1rem;
-        height: 1rem;
-        font-size: $font-size-smaller-x;
-        color: $color-common-x;
+    .search-list-container {
+      position: absolute;
+      top: 3rem;
+      background: $color-common-background;
+      width: 100%;
+      padding: 0 0.4rem;
+      box-sizing: border-box;
+      max-height: 8rem;
+      z-index: 99;
+      box-shadow: 0 0.25rem 0.6rem rgba(0, 0, 0, 0.1);
 
-        .icon {
-          margin-right: 0.2rem;
-          font-size: 0.45rem;
+      .search-list {
+        .search-list-item {
+          display: flex;
+          line-height: 1rem;
+          height: 1rem;
+          font-size: $font-size-smaller-x;
+          color: $color-common-x;
+
+          .icon {
+            margin-right: 0.2rem;
+            font-size: 0.45rem;
+          }
         }
       }
     }

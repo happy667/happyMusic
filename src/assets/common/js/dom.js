@@ -17,3 +17,14 @@ export function getPositionTop(node) {
   }
   return top // 所有的父元素top和
 };
+
+// 根据className获取元素的父级元素
+export function getParentByClassName(node, className) {
+  var parent = node.parentNode
+  console.log(parent.className.includes(className))
+  while (!parent.className.includes(className)) {
+    console.log(123)
+    parent = parent.parentNode
+  }
+  return parent // 获取祖先元素
+};

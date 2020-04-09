@@ -1,16 +1,13 @@
 <template>
   <div class="song-container">
-    <template v-if="song.songList.length===0&&!song.isNull">
-      <van-loading size="24px"
-                   color="#FD4979"
-                   vertical>加载中...</van-loading>
-    </template>
+    <!-- loading -->
+    <loading :loading="pageLoading" />
     <template v-if="song.songList.length!==0">
       <van-list v-model="loading"
                 :finished="finished"
                 finished-text="没有更多了"
                 @load="handlePullingUp">
-        <song-list @select="handleSelect"
+        <song-list @select="selectSong"
                    ref="songList"
                    :songsList="song.songList"></song-list>
       </van-list>
@@ -44,10 +41,12 @@ export default {
   },
   computed: {
     ...mapState(['searchKeywords', 'searchCurrentIndex']),
-    ...mapGetters(['currentSong'])
+    ...mapGetters(['currentSong']),
+    pageLoading () {
+      return this.song.songList.length === 0 && !this.song.isNull
+    }
   },
   mounted () {
-    console.log(2222)
     if (this.searchKeywords.trim().length === 0) {
       this.song.isNull = true
       return
@@ -64,8 +63,9 @@ export default {
       let offset = this.song.songList.length
       const { data: res } = await searchApi.getSearchResult(this.searchKeywords, 1, offset, 20)
       if (res.code === ERR_OK) {
+        console.log(res)
         // 没有查询到数据
-        if (res.result.songCount === 0 || !res.result.songs) {
+        if (!res.result.songs) {
           this.song.isNull = true
           return
         }
@@ -116,22 +116,21 @@ export default {
       }
     },
     // 选择歌曲
-    async handleSelect (item, index) {
+    async selectSong (item, index) {
       this.$emit('closeList')
-      // 判断点击的是否是当前播放的歌曲
-      if (this.currentSong.id === item.id) {
-        this.setPlayerFullScreen(true)
-        return
-      }
-      // 获取歌曲详情
-      const {
-        data: res
-      } = await songApi.getSongDetail(item.id)
-      if (res.code === ERR_OK) {
-        item.picUrl = res.songs[0].al.picUrl
-        console.log(index)
-        // 引入vue原型上的utils
-        this.$utils.playMusic(item)
+      // 比较两首歌曲
+      let result = this.$utils.compareSong(this.currentSong, item)
+      if (!result) {
+        // 获取歌曲详情
+        const {
+          data: res
+        } = await songApi.getSongDetail(item.id)
+        if (res.code === ERR_OK) {
+          item.picUrl = res.songs[0].al.picUrl
+          console.log(index)
+          // 引入vue原型上的utils
+          this.$utils.playMusic(item)
+        }
       }
     }
   },
@@ -146,7 +145,6 @@ export default {
 @import '~common/stylus/variable';
 
 .song-container {
-
   .song-list-null {
     width: 100%;
     height: 1rem;

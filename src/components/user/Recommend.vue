@@ -13,22 +13,29 @@
               @change="handleChange"
               swipeable>
       <van-tab title="推荐歌曲">
-        <song-list :list="recommendSongList"
-                   :loading="songLoading" />
+        <scroll ref="songList_scroll">
+          <song-list ref="songList_container"
+                     :list="recommendSongList"
+                     :loading="songLoading" />
+        </scroll>
+
       </van-tab>
       <van-tab title="推荐歌单">
-        <!-- loading -->
-        <van-loading v-if="songSheetloading"
-                     size="24px"
-                     color="#FD4979"
-                     vertical>加载中...</van-loading>
-        <song-sheet-list :list="recommendSongSheet"></song-sheet-list>
+        <scroll ref="songSheet_scroll">
+          <div class="container"
+               ref="songSheet_container">
+            <!-- loading -->
+            <loading :loading="songSheetloading" />
+            <song-sheet-list :list="recommendSongSheet"></song-sheet-list>
+          </div>
+        </scroll>
       </van-tab>
     </van-tabs>
 
   </div>
 </template>
 <script>
+import Scroll from '@/components/common/Scroll'
 import SongSheetList from '@/components/home/songSheet/SongSheetList'
 import SongList from '@/components/home/singer/singerInfo/SingerSong'
 import Singer from '@/assets/common/js/singer.js'
@@ -38,7 +45,7 @@ import {
   ERR_OK
 } from '@/api/config.js'
 import { mapState, mapMutations } from 'vuex'
-
+import { playlistMixin } from '@/assets/common/js/mixin.js'
 export default {
   name: 'userRecommend',
   data () {
@@ -49,6 +56,7 @@ export default {
       songSheetloading: false
     }
   },
+  mixins: [playlistMixin],
   computed: {
     ...mapState(['userRecommendIndex', 'user']),
     index: {
@@ -109,6 +117,7 @@ export default {
       }
     },
     handleChange (index) {
+      this.handlePlaylist(this.playList)
       if (this.user) {
         if (index === 0) { // 推荐歌曲
           if (!this.recommendSongList) {
@@ -120,6 +129,23 @@ export default {
           }
         }
       }
+    },
+    handlePlaylist (playList) {
+      // 适配播放器与页面底部距离
+      const bottom = playList.length > 0 ? '1.6rem' : ''
+      this.$nextTick(() => {
+        console.log(this.index)
+        switch (this.index) {
+          case 0:
+            this.$refs.songList_container.$el.style.paddingBottom = bottom
+            this.$refs.songList_scroll.refresh()
+            break
+          case 1:
+            this.$refs.songSheet_container.style.paddingBottom = bottom
+            this.$refs.songSheet_scroll.refresh()
+            break
+        }
+      })
     }
   },
   mounted () {
@@ -129,12 +155,20 @@ export default {
   },
   components: {
     SongList,
-    SongSheetList
+    SongSheetList,
+    Scroll
   }
 }
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
+
+.recommend-container >>> .scroll {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
 
 .recommend-container>>>.song-list-container, .recommend-container>>>.songs-sheet-list-container {
   padding-top: 0.3rem;
@@ -147,7 +181,14 @@ export default {
 }
 
 .recommend-container>>>.van-tabs__content {
+  position: relative;
   flex: 1;
+}
+
+.recommend-container>>>.van-tabs__content .van-tabs__track, .recommend-container>>>.van-tabs__content .van-tab__pane {
+  position: absolute;
+  top: 0;
+  bottom: 0;
 }
 
 .recommend-container {

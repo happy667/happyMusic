@@ -6,9 +6,8 @@
                  @click-left="routerBack" />
     <!-- 正在加载 -->
     <template v-if="!video">
-      <van-loading size="24px"
-                   color="#FD4979"
-                   vertical>加载中...</van-loading>
+      <!-- loading -->
+      <loading />
     </template>
     <template v-else>
       <van-sticky>
@@ -19,7 +18,7 @@
                            :moreInfo="true"></video-component>
         </div>
       </van-sticky>
-      <div class="content">
+      <div class="container">
         <!-- 相关mv -->
         <div class="related-mv"
              v-if="simiMVList">
@@ -169,6 +168,7 @@ export default {
     handleToggleInfo () {
       this.showMoreInfo = !this.showMoreInfo
     }
+
   },
   components: {
     VideoComponent,
@@ -186,28 +186,26 @@ export default {
   width: 100%;
   min-height: 100vh;
 
-  .content {
+  .container {
     width: 100%;
     box-sizing: border-box;
     padding: 0 0.5rem;
     min-height: cale(1.22667rem + 8.5rem);
 
-    .comment {
-      .comment-title {
-        font-size: $font-size-smaller;
-        font-weight: bold;
-        height: 1rem;
-        line-height: 1rem;
-      }
+    .comment-title {
+      font-size: $font-size-smaller;
+      font-weight: bold;
+      height: 1rem;
+      line-height: 1rem;
     }
+  }
 
-    .related-mv {
-      p {
-        height: 1rem;
-        line-height: 1rem;
-        font-size: $font-size-smaller;
-        font-weight: bold;
-      }
+  .related-mv {
+    p {
+      height: 1rem;
+      line-height: 1rem;
+      font-size: $font-size-smaller;
+      font-weight: bold;
     }
   }
 }

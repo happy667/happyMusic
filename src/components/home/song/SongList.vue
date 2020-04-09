@@ -1,8 +1,9 @@
 <template>
-  <div class="songs-list-containter" >
+  <div class="songs-list-containter">
     <ul class="songs-list"
         ref="list">
       <li class="songs-list-item"
+          ref="listGroup"
           :class="currentSong.id === item.id ? 'active' : ''"
           v-for="(item,index) in songsList"
           @click="selectItem(item,index)"

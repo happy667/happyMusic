@@ -1,5 +1,6 @@
 <template>
-  <div class="search-result-container">
+  <div class="search-result-container"
+       ref="container">
     <!-- 标签页 -->
     <van-tabs v-model="currentIndex"
               title-active-color="#FD4979"
@@ -26,14 +27,15 @@
   </div>
 </template>
 <script>
-
 import Singer from './searchResult/Singer'
 import Song from './searchResult/Song'
 import SongSheet from './searchResult/SongSheet'
 import Mv from './searchResult/MV'
 import { mapState, mapMutations } from 'vuex'
+import { playlistMixin } from '@/assets/common/js/mixin.js'
 export default {
   name: 'searchResult',
+  mixins: [playlistMixin],
   computed: {
     ...mapState(['searchKeywords', 'searchCurrentIndex', 'showSearchList']),
     currentIndex: {
@@ -52,6 +54,13 @@ export default {
       if (this.showSearchList) {
         this.setShowSearchList(false)
       }
+    },
+    handlePlaylist (playList) {
+      // 适配播放器与页面底部距离
+      const bottom = playList.length > 0 ? '1.6rem' : ''
+      this.$nextTick(() => {
+        this.$refs.container.style.paddingBottom = bottom
+      })
     }
   },
   components: {
@@ -75,7 +84,9 @@ export default {
 
 .search-result-container {
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
 </style>

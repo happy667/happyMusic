@@ -14,6 +14,7 @@ import 'swiper/css/swiper.css'
 import {
   defaultMusicImage
 } from 'common/js/config.js'
+import '@/assets/common/js/globalComponents.js'
 import VueLazyLoad from 'vue-lazyload'
 // 解决移动端300ms延迟
 import fastclick from 'fastclick'

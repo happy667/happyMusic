@@ -1,36 +1,43 @@
 <template>
   <section class="section-container">
-    <!-- 播放列表 -->
-    <ul class="play-list"
-        ref="list">
-      <li class="play-list-item"
-          @click="selectItem($event,item,index)"
-          :class="item.id===currentSong.id ? 'active':''"
-          v-for="(item,index) in playList"
-          :key="item.id">
-        <div class="left">
-          <div class="song-desc">
-            <div class="text">
-              <span class="song-name">{{item.name+' - '}} <span class="song-singer">{{item.singers}}</span></span>
+    <scroll ref="section_scroll">
+      <div class="container"
+           ref="container">
+        <!-- 播放列表 -->
+        <ul class="play-list"
+            ref="list">
+          <li class="play-list-item"
+              ref="listGroup"
+              @click.stop="selectItem($event,item,index)"
+              :class="item.id===currentSong.id ? 'active':''"
+              v-for="(item,index) in playList"
+              :key="item.id">
+            <div class="left">
+              <div class="song-desc">
+                <div class="text">
+                  <span class="song-name">{{item.name+' - '}} <span class="song-singer">{{item.singers}}</span></span>
+                </div>
+              </div>
+              <div class="icon"
+                   v-show="item.id===currentSong.id ">
+                <i class="iconfont icon-ziyuanldpi"></i>
+              </div>
             </div>
-          </div>
-          <div class="icon"
-               v-show="item.id===currentSong.id ">
-            <i class="iconfont icon-ziyuanldpi"></i>
-          </div>
-        </div>
 
-        <div class="right delete"
-             @click.stop="handleDelete(item)">
-          <div class="icon">
-            <i class="iconfont icon-cha"></i>
-          </div>
-        </div>
-      </li>
-    </ul>
+            <div class="right delete"
+                 @click.stop="handleDelete(item)">
+              <div class="icon">
+                <i class="iconfont icon-cha"></i>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </scroll>
   </section>
 </template>
 <script>
+import Scroll from '@/components/common/Scroll'
 import { mapGetters, mapMutations, mapState, mapActions } from 'vuex'
 export default {
   computed: {
@@ -72,19 +79,14 @@ export default {
     // 移动元素
     scrollList () {
       if (this.playList.length === 0) return
-      // 获取当前播放的歌曲节点
-      const list = this.$refs.list
-      // 首先查找当前播放歌曲在播放列表中的索引
-      const index = this.playList.findIndex(item => item.id === this.currentSong.id)
-      // 再找到当前索引的节点
-      const element = list.childNodes[index]
-      // 这里减去4个歌曲节点高度是因为保持每次移动位置在元素中间
-      let top = element.offsetTop - (element.offsetHeight * 4)
-      // 如果大于0就移动
-      if (top > 0) {
-        list.scrollTo(0, top)
-      } else { // 回到最顶的位置
-        list.scrollTo(0, 0)
+      let element = this.$refs.listGroup[this.currentPlayIndex - 3]
+      if (element) {
+        this.$refs.section_scroll.scrollToElement(element, 0)
+      } else {
+        // 移动到第一个元素
+        element = this.$refs.listGroup[0]
+        this.$refs.section_scroll.scrollToElement(element, 0)
+        this.$refs.section_scroll.refresh()
       }
     },
     // 选择歌曲
@@ -99,72 +101,81 @@ export default {
       this.deleteSong(song)
     }
 
+  },
+  components: {
+    Scroll
   }
 }
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
+.section-container >>> .scroll {
+  height: 9rem;
+  overflow: hidden;
+}
+
 .section-container {
   width: 100%;
 
-  .play-list {
-    height: 9rem;
-    overflow: scroll;
-
-    .play-list-item {
-      display: flex;
-      justify-content: space-between;
-      height: 1rem;
-      line-height: 1rem;
-      padding-left: 0.4rem;
-
-      .left {
+  .container {
+    .play-list {
+      .play-list-item {
         display: flex;
+        justify-content: space-between;
+        height: 1rem;
+        line-height: 1rem;
+        padding-left: 0.4rem;
 
-        .song-desc {
+        .left {
           display: flex;
-          width: 6.5rem;
 
-          .text {
-            no-wrap();
-            color: $color-common-b2;
+          .song-desc {
+            display: flex;
+            width: 6.5rem;
 
-            .song-name {
-              font-size: $font-size-smaller;
-              color: $color-common-x;
+            .text {
+              no-wrap();
+              color: $color-common-b2;
 
-              .song-singer {
-                font-size: $font-size-smaller-x;
-                color: $color-common-b2;
+              .song-name {
+                font-size: $font-size-smaller;
+                color: $color-common-x;
+
+                .song-singer {
+                  font-size: $font-size-smaller-x;
+                  color: $color-common-b2;
+                }
               }
             }
           }
         }
-      }
 
-      .icon {
-        width: 1rem;
-        text-align: center;
+        .icon {
+          width: 1rem;
+          text-align: center;
 
-        i {
-          font-size: $font-size-smaller;
+          i {
+            font-size: $font-size-smaller;
+          }
         }
-      }
 
-      &.active {
-        .left {
-          color: $color-common;
+        &.active {
+          .left {
+            color: $color-common;
 
-          .song-desc {
-            margin-right: 0.3rem;
+            .song-desc {
+              margin-right: 0.3rem;
 
-            .text {
-              .song-name {
+              .text {
                 color: $color-common;
 
-                .song-singer {
+                .song-name {
                   color: $color-common;
+
+                  .song-singer {
+                    color: $color-common;
+                  }
                 }
               }
             }

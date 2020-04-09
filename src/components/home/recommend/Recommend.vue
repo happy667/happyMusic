@@ -1,41 +1,44 @@
 <template>
-  <div class="recommend-container ">
-    <!-- loading -->
-    <van-loading v-if="load"
-                 size="24px"
-                 color="#FD4979"
-                 vertical>加载中...</van-loading>
-    <template v-if="!load">
+  <scroll ref="recommend_scroll">
+    <div class="recommend-container "
+         ref="container">
+      <!-- loading -->
+      <!-- loading -->
+      <loading :loading="load" />
+      <template v-if="!load">
 
-      <!-- 轮播图区域 -->
-      <recommend-swiper :banners="banners"></recommend-swiper>
+        <!-- 轮播图区域 -->
+        <recommend-swiper :banners="banners"></recommend-swiper>
 
-      <!-- 推荐新音乐 -->
-      <song-swiper :recommendNewSong="recommendNewSong"
-                   @select="handleSelect">
-        <template>
-          <Title title="新歌推送"></Title>
-        </template>
-      </song-swiper>
-      <!-- 推荐歌单区域 -->
-      <song-sheet-list :list="recommendSongSheet">
-        <template>
-          <Title :isShowLoadMore="true"
-                 path='/SongSheetSquare'
-                 title="推荐歌单"></Title>
-        </template>
-      </song-sheet-list>
+        <!-- 推荐新音乐 -->
+        <song-swiper :recommendNewSong="recommendNewSong"
+                     @select="selectSong">
+          <template>
+            <Title title="新歌推送"></Title>
+          </template>
+        </song-swiper>
+        <!-- 推荐歌单区域 -->
+        <song-sheet-list :list="recommendSongSheet">
+          <template>
+            <Title :isShowLoadMore="true"
+                   path='/SongSheetSquare'
+                   title="推荐歌单"></Title>
+          </template>
+        </song-sheet-list>
 
-      <!-- 新碟上线 -->
-      <album-swiper :list="recommendNewAlbum">
-        <template>
-          <Title title="新碟上线"></Title>
-        </template>
-      </album-swiper>
-    </template>
-  </div>
+        <!-- 新碟上线 -->
+        <album-swiper :list="recommendNewAlbum">
+          <template>
+            <Title title="新碟上线"></Title>
+          </template>
+        </album-swiper>
+      </template>
+
+    </div>
+  </scroll>
 </template>
 <script>
+import Scroll from '@/components/common/Scroll'
 import recommendSwiper from './RecommendSwiper'
 import SongSheetList from '@/components/home/songSheet/SongSheetList'
 import SongSwiper from '@/components/home/song/SongSwiper'
@@ -74,14 +77,13 @@ export default {
       }
     },
 
-    handleSelect (item, index) {
-      // 判断点击的是否是当前播放的歌曲
-      if (this.currentSong.id === item.id) {
-        this.setPlayerFullScreen(true)
-        return
+    selectSong (item, index) {
+      // 比较两首歌曲
+      let result = this.$utils.compareSong(this.currentSong, item)
+      if (!result) {
+        // 引入vue原型上的utils
+        this.$utils.playMusic(item, this.list, index)
       }
-      // 引入vue原型上的utils
-      this.$utils.playMusic(item, this.recommendNewSong, index)
     },
     // 获取推荐歌单
     async getRecommendSongSheet (limit) {
@@ -131,6 +133,10 @@ export default {
       if (res.code === ERR_OK) { // 成功获取推荐新碟
         this.recommendNewAlbum = res.albums
       }
+    },
+    // 刷新
+    refresh () {
+      this.$refs.recommend_scroll.refresh()
     }
 
   },
@@ -150,7 +156,8 @@ export default {
     SongSheetList,
     SongSwiper,
     AlbumSwiper,
-    Title
+    Title,
+    Scroll
   }
 }
 
@@ -160,6 +167,7 @@ export default {
 @import '~common/stylus/variable';
 
 .recommend-container {
+  position: absolute;
   width: 100%;
 }
 </style>

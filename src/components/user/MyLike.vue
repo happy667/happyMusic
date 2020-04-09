@@ -10,16 +10,26 @@
                    left-arrow
                    @click-left="routerBack" />
     </van-sticky>
-    <song-list @noLike="handleNoLike"
-               ref="songList"
-               :list="songList"
-               :loading="loading" />
-    <!-- 定位 -->
-    <position v-show="isShowPosition"
-              @click="handlePosition"></position>
+
+    <section>
+      <scroll ref="my_like_scroll">
+        <div class="container"
+             ref="container">
+          <song-list @noLike="handleNoLike"
+                     ref="songList"
+                     :list="songList"
+                     :loading="loading" />
+
+        </div>
+      </scroll>
+      <!-- 定位 -->
+      <position v-show="isShowPosition"
+                @click="handlePosition"></position>
+    </section>
   </div>
 </template>
 <script>
+import Scroll from '@/components/common/Scroll'
 import Position from '@/components/common/Position'
 import SongList from '@/components/home/singer/singerInfo/SingerSong'
 import Singer from '@/assets/common/js/singer.js'
@@ -29,7 +39,7 @@ import {
   ERR_OK
 } from '@/api/config.js'
 import { mapState, mapActions, mapGetters } from 'vuex'
-
+import { playlistMixin } from '@/assets/common/js/mixin.js'
 export default {
   name: 'myLike',
   data () {
@@ -39,8 +49,9 @@ export default {
       showPosition: false
     }
   },
+  mixins: [playlistMixin],
   computed: {
-    ...mapState(['user', 'userLikeList']),
+    ...mapState(['user', 'userLikeList', 'currentPlayIndex']),
     ...mapGetters(['currentSong']),
     // 是否显示定位
     isShowPosition () {
@@ -91,7 +102,7 @@ export default {
               name: item.name
             }))
           })
-          let song = new Song({ id: item.id, name: item.name, singers, singersList, picUrl: item.al.picUrl })
+          let song = new Song({ id: item.id, name: item.name, singers, singersList, picUrl: item.al.picUrl, st: item.st })
           songList.push(song)
         })
         this.songList = songList
@@ -105,11 +116,9 @@ export default {
     handlePosition () {
       // 说明有歌曲在播放
       if (this.currentSong) {
-        let listNode = this.$refs.songList.$refs.songList.$refs.list
-        let song = this.currentSong
-        let otherHeight = this.$refs.navBar.offsetHeight
-        let list = this.songList
-        this.$utils.positionSong({ listNode, list, song, otherHeight })
+        let element = this.$refs.songList.$refs.songList.$refs.listGroup[this.currentPlayIndex]
+        this.$refs.my_like_scroll.scrollToElement(element, 0)
+        this.$refs.my_like_scroll.refresh()
         this.$toast('已定位到当前歌曲')
       }
     },
@@ -123,6 +132,14 @@ export default {
       this.timer = setTimeout(() => {
         this.showPosition = false
       }, 5000)
+    },
+    handlePlaylist (playList) {
+      // 适配播放器与页面底部距离
+      const bottom = playList.length > 0 ? '1.6rem' : ''
+      this.$nextTick(() => {
+        this.$refs.container.style.paddingBottom = bottom
+        this.$refs.my_like_scroll.refresh()
+      })
     }
   },
   mounted () {
@@ -132,25 +149,23 @@ export default {
   },
   components: {
     SongList,
-    Position
+    Position,
+    Scroll
   }
 }
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
+.my-like-container >>> .scroll {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
 .my-like-container>>>.singer-song-container {
   padding-top: 0.3rem;
-}
-
-.my-like-container>>>.van-tabs {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.my-like-container>>>.van-tabs__content {
-  flex: 1;
 }
 
 .my-like-container {
@@ -159,5 +174,10 @@ export default {
   display: flex;
   flex-direction: column;
   background-color: $color-common-background;
+
+  section {
+    position: relative;
+    flex: 1;
+  }
 }
 </style>

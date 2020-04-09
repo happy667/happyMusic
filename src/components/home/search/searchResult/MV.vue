@@ -1,10 +1,7 @@
 <template>
   <div class="mv-container">
-    <template v-if="mv.mvList.length===0&&!mv.isNull">
-      <van-loading size="24px"
-                   color="#FD4979"
-                   vertical>加载中...</van-loading>
-    </template>
+    <!-- loading -->
+    <loading :loading="pageLoading" />
     <template v-if="mv.mvList.length!==0">
       <van-list v-model="loading"
                 :finished="finished"
@@ -45,6 +42,9 @@ export default {
     listenChange () {
       const { searchKeywords, searchCurrentIndex } = this
       return { searchKeywords, searchCurrentIndex }
+    },
+    pageLoading () {
+      return this.mv.mvList.length === 0 && !this.mv.isNull
     }
   },
   mounted () {

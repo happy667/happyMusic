@@ -24,11 +24,11 @@
              :src="url"></audio>
     </div>
     <!--歌曲列表-->
-    <van-action-sheet v-model="togglePlayList"
-                      @open="openPlayList"
-                      @close="closePlayList">
-      <play-list></play-list>
-    </van-action-sheet>
+    <transition enter-active-class="animated fadeIn faster"
+                leave-active-class="animated fadeOut faster">
+      <play-list v-show="togglePlayList"
+                 @close="togglePlayList"></play-list>
+    </transition>
   </div>
 </template>
 <script>
@@ -83,10 +83,6 @@ export default {
         this.setCurrentLineNum(0)
       }
       clearTimeout(this.timer)
-      this.timer = setTimeout(() => {
-        this.$refs.FullScreenPlay.$refs.playSection.getLyric(this.currentSong.id)// 获取歌词
-      }, 1000)
-
       this.setPlaying(false)
       this.getSong(this.currentSong)
       // 初始化获取歌手图片（点击歌手弹出歌手框的图片）
@@ -106,6 +102,13 @@ export default {
         this.$nextTick(() => {
           this.audio.pause()
         })
+      }
+    },
+    togglePlayList () {
+      if (this.togglePlayList) {
+        this.closeScroll()
+      } else {
+        this.openScroll()
       }
     }
   },
@@ -138,21 +141,36 @@ export default {
     },
     // 获取歌曲
     async getSong (song) {
-      // 获取音乐播放路径
-      const { data: res } = await songApi.getMusicUrl(song.id)
-      if (res.code === ERR_OK) {
-        this.url = res.data[0].url
-        if (!this.url) { // 判断是否为空
-          // 移除该歌曲
-          this.deleteSong(song)
-          this.$toast('该歌曲暂时不能播放,自动移除该歌曲')
-          this.setSongReady(true)
-        } else {
-          this.$nextTick(() => {
-            this.setPlaying(true)
-          })
+      // 检查音乐是否可用
+      songApi.checkMusic(song.id).then(async res => {
+        if (res.data.success) {
+          // 获取音乐播放路径
+          const { data: res } = await songApi.getMusicUrl(song.id)
+          if (res.code === ERR_OK) {
+            this.url = res.data[0].url
+            if (!this.url) { // 判断是否为空
+              song.st = -1
+              // 移除该歌曲
+              this.deleteSong(song)
+              this.setSongReady(true)
+              this.$toast('该歌曲暂时不能播放')
+            } else {
+              this.timer = setTimeout(() => {
+                this.$refs.FullScreenPlay.$refs.playSection.getLyric(this.currentSong.id)// 获取歌词
+              }, 1000)
+              this.$nextTick(() => {
+                this.setPlaying(true)
+              })
+            }
+          }
         }
-      }
+      }).catch((res) => {
+        song.st = -1
+        // 移除该歌曲
+        this.deleteSong(song)
+        this.setSongReady(true)
+        this.$toast(res.data.message)
+      })
     },
     // 更新时间
     handleUpdateTime (e) {
@@ -245,17 +263,9 @@ export default {
       let index = list.findIndex(item => item.id === this.currentSong.id)
       this.setCurrentPlayIndex(index)
     },
-    // 打开歌曲列表
-    openPlayList () {
-      this.closeScroll()
-    },
-    // 关闭歌曲列表
-    closePlayList () {
-      this.openScroll()
-    },
     // 禁止背景滚动
     closeScroll () {
-      document.body.style.position = 'relative'
+      document.body.style.position = 'fixed'
     },
     // 开启背景滚动
     openScroll () {

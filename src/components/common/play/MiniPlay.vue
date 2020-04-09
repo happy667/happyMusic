@@ -102,8 +102,10 @@ export default {
   },
   watch: {
     currentSong () {
-      let index = this.sequenceList.findIndex(item => item.id === this.currentSong.id)
-      this.swiper.slideTo(index, 0, false)
+      if (this.currentSong) {
+        let index = this.sequenceList.findIndex(item => item.id === this.currentSong.id)
+        this.swiper.slideTo(index, 0, false)
+      }
     }
   },
 

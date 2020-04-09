@@ -3,76 +3,86 @@
        @touchstart="handleTouchStart"
        @touchmove="handleTouchMove"
        @touchend="handleTouchEnd">
+
     <!-- 头部导航栏 -->
     <van-sticky>
-      <van-nav-bar :title="$route.meta.title"
+      <van-nav-bar :title="title"
                    ref="navBar"
                    left-arrow
                    @click-left="routerBack" />
     </van-sticky>
 
-    <!-- 歌单图片 -->
-    <div class="songs-img">
-      <template v-if="songSheetDisc.picUrl">
-        <div class="image"
-             @click="handleToggleShowImage">
-          <van-image fit="cover"
-                     :src="songSheetDisc.picUrl">
-            <template v-slot:loading>
-              <van-loading type="spinner"
-                           size="20" />
-            </template>
+    <div class="container">
+      <!-- 歌单图片 -->
+      <div class="songs-img"
+           ref="bgImage">
+        <template v-if="songSheetDisc.picUrl">
+          <div class="image"
+               @click="handleToggleShowImage">
+            <van-image fit="cover"
+                       :src="songSheetDisc.picUrl">
+              <template v-slot:loading>
+                <van-loading type="spinner"
+                             size="20" />
+              </template>
 
-          </van-image>
-          <!-- 遮罩层 -->
-          <overlay :showImage="showImage"
-                   :imgUrl="songSheetDisc.picUrl"
-                   @toggle="handleToggleShowImage" />
+            </van-image>
+            <!-- 遮罩层 -->
+            <overlay :showImage="showImage"
+                     :imgUrl="songSheetDisc.picUrl"
+                     @toggle="handleToggleShowImage" />
+          </div>
+        </template>
+
+        <!-- 收藏 -->
+        <div class="follow"
+             v-show="songSheetDisc.picUrl">
+          <follow @clickFollow="handleClickFollow"
+                  :followed="followed"></follow>
         </div>
-      </template>
-
-      <!-- 收藏 -->
-      <div class="follow"
-           v-show="songSheetDisc.picUrl">
-        <follow @clickFollow="handleClickFollow"
-                :followed="followed"></follow>
       </div>
+      <!-- loading -->
+      <loading :loading="loading"></loading>
+      <!-- 歌单描述 -->
+      <section v-if="!loading"
+               ref="sectionBox">
+        <div class="songs-desc">
+          <div class="songs-title">{{songSheetDisc.name}}</div>
+          <div class="songs-nt">
+            <div class="songs-num">{{songSheetDisc.songs.length}}首</div>
+            <div class="songs-time"
+                 v-if="songSheetDisc.songs.length!==0">{{songSheetDisc.trackUpdateTime|convertDate}}</div>
+          </div>
+
+          <!-- 播放按钮 -->
+          <div class="playBtn"
+               @click="playAllSong(songSheetDisc.songs[0],songSheetDisc.songs)">
+            <i class="iconfont icon-bofang"></i>
+          </div>
+        </div>
+        <scroll ref="song_sheet_desc_scroll"
+                @scroll="scroll"
+                :listen-scroll="listenScroll"
+                :probe-type="probeType"
+                :data="songSheetDisc.songs">
+          <!-- 歌曲列表 -->
+          <songs-list :songsList="songSheetDisc.songs"
+                      ref="songList"
+                      :showImage="true"
+                      @select="selectSong"></songs-list>
+        </scroll>
+        <no-result v-if="songSheetDisc.songs.length===0"
+                   text="暂无相关资源"></no-result>
+      </section>
+      <!-- 定位 -->
+      <position v-show="isShowPosition"
+                @click="handlePosition"></position>
     </div>
-    <!-- loading -->
-    <van-loading v-if="loading"
-                 size="24px"
-                 color="#FD4979"
-                 vertical>加载中...</van-loading>
-    <!-- 歌单描述 -->
-    <section v-if="!loading">
-      <div class="songs-desc">
-        <div class="songs-title">{{songSheetDisc.name}}</div>
-        <div class="songs-nt">
-          <div class="songs-num">{{songSheetDisc.songs.length}}首</div>
-          <div class="songs-time"
-               v-if="songSheetDisc.songs.length!==0">{{songSheetDisc.trackUpdateTime|convertDate}}</div>
-        </div>
 
-        <!-- 播放按钮 -->
-        <div class="playBtn"
-             @click="playAll(songSheetDisc.songs[0],0)">
-          <i class="iconfont icon-bofang"></i>
-        </div>
-      </div>
-      <!-- 歌曲列表 -->
-      <songs-list :songsList="songSheetDisc.songs"
-                  ref="songList"
-                  :showImage="true"
-                  @select="handleSelect"></songs-list>
-      <no-result v-if="songSheetDisc.songs.length===0"
-                 text="暂无相关资源"></no-result>
-    </section>
-    <!-- 定位 -->
-    <position v-show="isShowPosition"
-              @click="handlePosition"></position>
   </div>
 </template>
 <script>
+import Scroll from '@/components/common/Scroll'
 import 'common/js/convert.js'
 import recommendApi from '@/api/recommend.js'
 import userApi from '@/api/user.js'
@@ -87,20 +97,30 @@ import NoResult from '@/components/common/NoResult'
 import Follow from '@/components/common/Follow'
 import Position from '@/components/common/Position'
 import overlay from '@/components/common/Overlay'
+import { playlistMixin } from '@/assets/common/js/mixin.js'
 import { mapMutations, mapGetters, mapActions, mapState } from 'vuex'
+const RESERVED_HEIGHT = 40
 export default {
   name: 'songSheetDisc',
   props: {
     id: String
   },
+  mixins: [playlistMixin],
   data () {
     return {
       songSheetDisc: {},
       followed: false,
       showPosition: false,
       showImage: false,
-      loading: true
+      loading: true,
+      scrollY: 0,
+      title: ''
     }
+  },
+  created () {
+    this.probeType = 3
+    this.listenScroll = true
+    this.title = this.$route.meta.title
   },
   mounted () {
     this.getSongSheetById(this.id)
@@ -108,12 +128,31 @@ export default {
     if (this.user) {
       this.getUserSongSheet(this.user.userId)
     }
+    this.imageHeight = this.$refs.bgImage.clientHeight
+    this.minTransalteY = -this.imageHeight + RESERVED_HEIGHT
   },
   watch: {
     user () {
       if (this.user) {
         this.getUserSongSheet(this.user.userId)
       }
+    },
+    scrollY (newVal) {
+      let translateY = Math.max(this.minTransalteY, newVal)
+      console.log(translateY)
+      if (translateY < -250) {
+        this.title = this.songSheetDisc.name
+      } else {
+        this.title = this.$route.meta.title
+      }
+      if (translateY > 0 && translateY < 60) {
+        let scale = 0.2 * translateY / 60
+        this.$refs.bgImage.style.transform = `scale(${1 + scale})`
+        let top = 50 * translateY / 60
+        this.$refs.sectionBox.style.top = `${top}px`
+      }
+
+      // this.$refs.songList.style.transform = `translateY3d(0,${translateY},0)`
     }
   },
   destroyed () {
@@ -142,50 +181,68 @@ export default {
     // 根据id获取歌单列表
     async getSongSheetById (id) {
       this.loading = true
-      const {
-        data: res
-      } = await recommendApi.getSongSheetById(id)
-      if (res.code === ERR_OK) {
-        let songList = []
-        res.playlist.tracks.map((item) => { // 循环数组对象对每个数据进行处理 返回需要得数据
-          let singerName = item.ar.map(item => item.name).join('/')
-          let singersList = []
-          // 处理歌手
-          item.ar.forEach(item => {
-            singersList.push(new Singer({
+      try {
+        const {
+          data: res
+        } = await recommendApi.getSongSheetById(id)
+        if (res.code === ERR_OK) {
+          let songList = []
+          res.playlist.tracks.map((item) => { // 循环数组对象对每个数据进行处理 返回需要得数据
+            let singerName = item.ar.map(item => item.name).join('/')
+            let singersList = []
+            // 处理歌手
+            item.ar.forEach(item => {
+              singersList.push(new Singer({
+                id: item.id,
+                name: item.name,
+                avatar: item.img1v1Url,
+                picUrl: item.picUrl
+              }))
+            })
+            songList.push(new Song({
               id: item.id,
               name: item.name,
-              avatar: item.img1v1Url,
-              picUrl: item.picUrl
+              singers: singerName,
+              singersList,
+              picUrl: item.al.picUrl,
+              st: item.st
             }))
           })
-          songList.push(new Song({
-            id: item.id,
-            name: item.name,
-            singers: singerName,
-            singersList,
-            picUrl: item.al.picUrl
-          }))
-        })
-        this.songSheetDisc = new SongSheetDetail({
-          id: res.playlist.id,
-          picUrl: res.playlist.coverImgUrl || res.playlist.backgroundCoverUrl,
-          songs: songList,
-          name: res.playlist.name,
-          trackUpdateTime: res.playlist.trackUpdateTime
-        })
-        this.loading = false
+          res.privileges.map(item => {
+            let song = songList.find(item2 => item2.id === item.id)
+            song.st = item.st
+          })
+          this.songSheetDisc = new SongSheetDetail({
+            id: res.playlist.id,
+            picUrl: res.playlist.coverImgUrl || res.playlist.backgroundCoverUrl,
+            songs: songList,
+            name: res.playlist.name,
+            trackUpdateTime: res.playlist.trackUpdateTime
+          })
+          this.loading = false
+        } else {
+          this.$router.replace('/')
+        }
+      } catch (e) {
+        this.$toast(e.data.message)
+        this.$router.replace('/')
       }
     },
-    // 选择歌曲
-    handleSelect (item, index) {
-      // 判断点击的是否是当前播放的歌曲
-      if (this.currentSong.id === item.id) {
-        this.setPlayerFullScreen(true)
-        return
+    selectSong (item, index) {
+      // 比较两首歌曲
+      let result = this.$utils.compareSong(this.currentSong, item)
+      if (!result) {
+        // 引入vue原型上的utils
+        this.$utils.playMusic(item, this.list, index)
       }
-      // 引入vue原型上的utils
-      this.$utils.playMusic(item, this.songSheetDisc.songs, index)
+    },
+    // 比较两首歌曲
+    playAllSong (item, list) {
+      let result = this.$utils.compareSong(this.currentSong, item)
+      if (!result) {
+        // 引入vue原型上的utils
+        this.$utils.playAllSong(list)
+      }
     },
     // 获取用户收藏的歌单
     async  getUserSongSheet (id) {
@@ -245,11 +302,8 @@ export default {
     handlePosition () {
       // 说明有歌曲在播放
       if (this.currentSong) {
-        let listNode = this.$refs.songList.$refs.list
-        let song = this.currentSong
-        let otherHeight = this.$refs.navBar.offsetHeight
-        let list = this.songSheetDisc.songs
-        this.$utils.positionSong({ listNode, list, song, otherHeight })
+        let element = this.$refs.songList.$refs.listGroup[this.currentPlayIndex]
+        this.$refs.song_sheet_desc_scroll.scrollToElement(element, 0)
         this.$toast('已定位到当前歌曲')
       }
     },
@@ -271,6 +325,33 @@ export default {
       if (this.currentPlayIndex !== -1) {
         this.setHideMiniPlayer(!this.hideMiniPlayer)
       }
+    },
+    handlePlaylist (playList) {
+      // 适配播放器与页面底部距离
+      // const bottom = playList.length > 0 ? '1.6rem' : ''
+      // this.$nextTick(() => {
+      //   switch (this.currentIndex) {
+      //     case 0:
+      //       this.$refs.recommend.$refs.container.style.paddingBottom = bottom
+      //       this.$refs.recommend.refresh()
+      //       break
+      //     case 1:
+      //       this.$refs.ranking.$refs.container.style.paddingBottom = bottom
+      //       this.$refs.ranking.refresh()
+      //       break
+      //     case 2:
+      //       this.$refs.singer.$refs.list.$refs.container.style.paddingBottom = bottom
+      //       this.$refs.singer.$refs.list.refresh()
+      //       break
+      //     case 3:
+      //       this.$refs.mv.$refs.container.style.paddingBottom = bottom
+      //       this.$refs.mv.refresh()
+      //       break
+      //   }
+      // })
+    },
+    scroll (pos) {
+      this.scrollY = pos.y
     }
   },
   components: {
@@ -278,12 +359,22 @@ export default {
     NoResult,
     Follow,
     Position,
-    overlay
+    overlay,
+    Scroll
   }
 }
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
+
+.song-sheet-desc-container>>>.scroll {
+  // position: fixed;
+  // top: 46px;
+  // bottom: 0;
+  // width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
 
 .song-sheet-desc-container>>>.image .van-image {
   width: 100%;
@@ -319,6 +410,8 @@ export default {
   }
 
   section {
+    position: relative;
+
     .songs-desc {
       padding: 0.4rem;
       position: relative;

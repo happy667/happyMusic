@@ -1,10 +1,7 @@
 <template>
   <div class="songSheet-container">
-    <template v-if="songSheet.songSheetList.length===0&&!songSheet.isNull">
-      <van-loading size="24px"
-                   color="#FD4979"
-                   vertical>加载中...</van-loading>
-    </template>
+    <!-- loading -->
+    <loading :loading="pageLoading" />
     <template v-if="songSheet.songSheetList.length!==0">
       <van-list v-model="loading"
                 :finished="finished"
@@ -38,7 +35,10 @@ export default {
     }
   },
   computed: {
-    ...mapState(['searchKeywords', 'searchCurrentIndex'])
+    ...mapState(['searchKeywords', 'searchCurrentIndex']),
+    pageLoading () {
+      return this.songSheet.songSheetList.length === 0 && !this.songSheet.isNull
+    }
   },
   mounted () {
     if (this.searchKeywords.trim().length === 0) {

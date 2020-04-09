@@ -4,15 +4,14 @@
         class="fixed-title singer-list-group-title"
         v-show="fixedTitle">{{fixedTitle}}</h2>
     <scroll :data="singerList"
-            class="scroll"
-            ref="singerList"
+            ref="singer_list_scroll"
             @scroll="scroll"
             @scrollToEnd="scrollToEnd"
             :listenScroll="listenScroll"
             :scrollEnd="scrollEnd"
             :probeType="probeType">
       <div class="singer-list-wrapper"
-           :style="paddingBottom">
+           ref="container">
         <ul class="singer-list"
             v-if="this.singerList.length !== 0">
           <li class="singer-list-item"
@@ -59,7 +58,7 @@ export default {
     this.probeType = 3// 可以监听缓冲时的滑动位置
   },
   activated () {
-    this.$refs.singerList.refresh()
+    this.$refs.singer_list_scroll.refresh()
   },
   computed: {
     ...mapState(['scrollIndex', 'stop', 'isScroll']),
@@ -70,10 +69,6 @@ export default {
         return ''
       }
       return this.singerList[this.scrollIndex] ? this.singerList[this.scrollIndex].title : ''
-    },
-
-    paddingBottom () {
-      return Object.keys(this.currentSong).length === 0 ? '' : { paddingBottom: '1.8rem' }
     }
   },
   watch: {
@@ -167,12 +162,15 @@ export default {
         this.setScrollIndex(this.listHeight.length - 2)
       }
       this.scrollY = -this.listHeight[index]
-      this.$refs.singerList.scrollToElement(this.$refs.listGroup[index], 0)
+      this.$refs.singer_list_scroll.scrollToElement(this.$refs.listGroup[index], 0)
     },
     // 选择歌手
     handleSelect (item) {
       this.setSingerCurrentIndex(0)
       this.$router.push(`/singerInfo/${item.id}`)
+    },
+    refresh () {
+      this.$refs.singer_list_scroll.refresh()
     }
   },
   components: {
@@ -185,13 +183,9 @@ export default {
 @import '~common/stylus/variable';
 
 .singer-list-container {
-  position: relative;
+  position: absolute;
   width: 100%;
-
-  .scroll {
-    /* 减去搜索框、导航栏 */
-    height: calc(100vh - (1.7rem + 1.18rem));
-  }
+  height: 100%;
 
   h2.fixed-title {
     position: absolute;

@@ -39,90 +39,95 @@
       </div>
     </header>
     <section>
-      <div class="my-list">
-        <router-link to="/user/myFollow">
-          <div class="my-follow my-list-item">
-            <div class="left-image">
-              <van-icon name="star" />
-            </div>
-            <div class="right-info">
-              <div class="title">收藏歌手</div>
-              <div class="num">{{followCount}}</div>
-            </div>
-          </div>
-        </router-link>
-        <router-link to="/user/myLike">
-          <div class="my-like my-list-item">
-            <div class="left-image">
-              <van-icon name="like" />
-            </div>
-            <div class="right-info">
-              <div class="title">我的最爱</div>
-              <div class="num">{{myLikeCount}}</div>
-            </div>
+      <scroll ref="user_scroll">
+        <div class="user-index"
+             ref="container">
+          <div class="my-list">
+            <router-link to="/user/myFollow">
+              <div class="my-follow my-list-item">
+                <div class="left-image">
+                  <van-icon name="star" />
+                </div>
+                <div class="right-info">
+                  <div class="title">收藏歌手</div>
+                  <div class="num">{{followCount}}</div>
+                </div>
+              </div>
+            </router-link>
+            <router-link to="/user/myLike">
+              <div class="my-like my-list-item">
+                <div class="left-image">
+                  <van-icon name="like" />
+                </div>
+                <div class="right-info">
+                  <div class="title">我的最爱</div>
+                  <div class="num">{{myLikeCount}}</div>
+                </div>
+
+              </div>
+            </router-link>
+            <router-link to="/user/recommend">
+              <div class="my-recommend my-list-item">
+                <div class="left-image">
+                  <van-icon name="gem" />
+                </div>
+                <div class="right-info">
+                  <div class="title">每日推荐</div>
+                </div>
+              </div>
+            </router-link>
+            <router-link to="/user/playRanking">
+              <div class="play-music-ranking my-list-item">
+                <div class="left-image">
+                  <van-icon name="medal" />
+                </div>
+                <div class="right-info">
+                  <div class="title">听歌排行</div>
+                </div>
+              </div>
+            </router-link>
 
           </div>
-        </router-link>
-        <router-link to="/user/recommend">
-          <div class="my-recommend my-list-item">
-            <div class="left-image">
-              <van-icon name="gem" />
-            </div>
-            <div class="right-info">
-              <div class="title">每日推荐</div>
-            </div>
-          </div>
-        </router-link>
-        <router-link to="/user/playRanking">
-          <div class="play-music-ranking my-list-item">
-            <div class="left-image">
-              <van-icon name="medal" />
-            </div>
-            <div class="right-info">
-              <div class="title">听歌排行</div>
-            </div>
-          </div>
-        </router-link>
 
-      </div>
-
-      <template v-if="userSongSheet&&userAlbum">
-        <div class="my-follow my-song-sheet-list">
-          <div class="title">
-            <div class="text">收藏的歌单</div>
-            <span class="count">({{songSheetCount}}个)</span>
-          </div>
-          <song-sheet-mini-list :list="userSongSheet"></song-sheet-mini-list>
-        </div>
-        <div class="my-follow my-album-list">
-          <div class="title">
-            <div class="text">收藏的专辑</div>
-            <span class="count">({{albumCount}}个)</span>
-          </div>
-          <template v-if="userAlbum.length!==0">
-            <album-list :list="userAlbum"
-                        @select="selectItem"></album-list>
+          <template v-if="userSongSheet&&userAlbum">
+            <div class="my-follow my-song-sheet-list">
+              <div class="title">
+                <div class="text">收藏的歌单</div>
+                <span class="count">({{songSheetCount}}个)</span>
+              </div>
+              <song-sheet-mini-list :list="userSongSheet"></song-sheet-mini-list>
+            </div>
+            <div class="my-follow my-album-list">
+              <div class="title">
+                <div class="text">收藏的专辑</div>
+                <span class="count">({{albumCount}}个)</span>
+              </div>
+              <template v-if="userAlbum.length!==0">
+                <album-list :list="userAlbum"
+                            @select="selectItem"></album-list>
+              </template>
+              <template v-if="userAlbum.length===0">
+                <no-result text="还没有专辑,快去收藏吧"></no-result>
+              </template>
+            </div>
           </template>
-          <template v-if="userAlbum.length===0">
-            <no-result text="还没有专辑,快去收藏吧"></no-result>
+          <template v-if="load">
+            <!-- loading -->
+            <loading />
           </template>
         </div>
-      </template>
-      <template v-if="load">
-        <van-loading size="24px"
-                     color="#FD4979"
-                     class="load"
-                     vertical>加载中...</van-loading>
-      </template>
+      </scroll>
     </section>
 
   </div>
 </template>
 <script>
+import Scroll from '@/components/common/Scroll'
 import NoResult from '@/components/common/NoResult'
 import AlbumList from '@/components/home/singer/albumList/AlbumList'
 import SongSheetMiniList from '@/components/home/songSheet/songSheetMini/SongSheetMiniList'
 import userApi from '@/api/user.js'
+import { playlistMixin } from '@/assets/common/js/mixin.js'
 import {
   ERR_OK
 } from '@/api/config.js'
@@ -136,9 +141,9 @@ export default {
       userAlbum: null// 用户专辑
     }
   },
-
+  mixins: [playlistMixin],
   computed: {
-    ...mapState(['user', 'userLikeList']),
+    ...mapState(['user', 'userLikeList', 'currentPlayIndex']),
     myLikeCount () {
       return this.userLikeList ? this.userLikeList.length + '首' : ''
     },
@@ -185,8 +190,9 @@ export default {
       this.getUserSongSheet(this.user.userId)
     }
   },
+
   methods: {
-    ...mapMutations(['setIsAdvance']),
+    ...mapMutations(['setIsAdvance', 'setHideMiniPlayer']),
     // 返回上一个路由
     routerBack () {
       // 设置为前进页面
@@ -229,25 +235,47 @@ export default {
 
     // 点击跳转到编辑页面
     handleEdit () {
+      // 如果有歌曲播放就隐藏迷你播放器
+      if (this.currentPlayIndex !== -1) {
+        this.setHideMiniPlayer(true)
+      }
       // 设置为前进页面
       this.setIsAdvance(true)
       this.$router.push('/user/edit')
+    },
+    handlePlaylist (playList) {
+      // 适配播放器与页面底部距离
+      const bottom = playList.length > 0 ? '1.6rem' : ''
+      this.$nextTick(() => {
+        this.$refs.container.style.paddingBottom = bottom
+        this.$refs.user_scroll.refresh()
+      })
     }
 
   },
   components: {
     SongSheetMiniList,
     AlbumList,
-    NoResult
+    NoResult,
+    Scroll
   }
 }
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
+.user-container>>> .scroll {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
 .user-container {
   width: 100%;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   background-color: $color-common-background;
 
   header {
@@ -354,59 +382,64 @@ export default {
   }
 
   section {
-    padding: 0.4rem;
+    position: relative;
+    flex: 1;
 
-    .my-list {
-      .my-list-item {
-        display: flex;
-        width: 100%;
-        height: 1.7rem;
-        margin-bottom: 0.3rem;
-        box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.1);
-        border-radius: 0.1rem;
-        color: $color-common-x;
+    .user-index {
+      padding: 0.4rem;
 
-        .left-image {
+      .my-list {
+        .my-list-item {
           display: flex;
-          justify-content: center;
-          align-items: center;
-          width: 1.7rem;
+          width: 100%;
           height: 1.7rem;
-          font-size: $font-size-large;
-          color: $color-common;
-        }
+          margin-bottom: 0.3rem;
+          box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.1);
+          border-radius: 0.1rem;
+          color: $color-common-x;
 
-        .right-info {
-          display: flex;
-          justify-content: center;
-          flex-direction: column;
-
-          .title {
-            height: 0.7rem;
-            line-height: 0.7rem;
+          .left-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 1.7rem;
+            height: 1.7rem;
+            font-size: $font-size-large;
+            color: $color-common;
           }
 
-          .num {
-            color: $color-common-b2;
+          .right-info {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+
+            .title {
+              height: 0.7rem;
+              line-height: 0.7rem;
+            }
+
+            .num {
+              color: $color-common-b2;
+            }
           }
         }
       }
-    }
 
-    .my-follow {
-      .title {
-        display: flex;
-        height: 1rem;
-        line-height: 1rem;
+      .my-follow {
+        .title {
+          display: flex;
+          height: 1rem;
+          line-height: 1rem;
 
-        .text {
-          font-size: $font-size-smaller;
-          font-weight: bold;
-          margin-right: 0.1rem;
-        }
+          .text {
+            font-size: $font-size-smaller;
+            font-weight: bold;
+            margin-right: 0.1rem;
+          }
 
-        .count {
-          color: $color-common-b2;
+          .count {
+            color: $color-common-b2;
+          }
         }
       }
     }

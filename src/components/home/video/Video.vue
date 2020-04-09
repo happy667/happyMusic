@@ -4,9 +4,11 @@
     <div class="player"
          ref="player"
          @click.stop="handlFirstPlay">
-      <van-loading size="1.5rem"
-                   color="#FD4979"
-                   v-if="videoLoad" />
+      <!-- loading -->
+      <loading :loading="videoLoad"
+               height="5rem"
+               size="1.5rem"
+               noValue />
       <video :src="videoParams.url"
              preload='metadata'
              ref="video"

@@ -1,10 +1,10 @@
 <template>
   <div class="song-list-container">
-    <!-- loading -->
-    <van-loading v-if="loading"
-                 size="24px"
-                 color="#FD4979"
-                 vertical>加载中...</van-loading>
+    <template v-if="loading">
+      <!-- loading -->
+      <loading :loading="loading" />
+    </template>
+
     <!-- 歌曲数量 -->
     <template v-else-if="list&&list.length!==0">
       <div class="play">
@@ -12,13 +12,13 @@
           <van-icon name="play-circle-o" />
         </div>
         <div class="play-all"
-             @click="handleSelect(list[0],0)">
+             @click="playAllSong(list[0],list)">
           播放全部({{list.length}})
         </div>
       </div>
       <!-- 歌曲列表 -->
       <song-list @noLike="handleNoLike"
-                 @select="handleSelect"
+                 @select="selectSong"
                  ref="songList"
                  :showImage="true"
                  :songsList="list" />
@@ -56,15 +56,22 @@ export default {
   },
   methods: {
     ...mapMutations(['setPlayerFullScreen']),
-    // 选择歌曲
-    handleSelect (item, index) {
-      // 判断点击的是否是当前播放的歌曲
-      if (this.currentSong.id === item.id) {
-        this.setPlayerFullScreen(true)
-        return
+
+    selectSong (item, index) {
+      // 比较两首歌曲
+      let result = this.$utils.compareSong(this.currentSong, item)
+      if (!result) {
+        // 引入vue原型上的utils
+        this.$utils.playMusic(item, this.list, index)
       }
-      // 引入vue原型上的utils
-      this.$utils.playMusic(item, this.list, index)
+    },
+    // 比较两首歌曲
+    playAllSong (item, list) {
+      let result = this.$utils.compareSong(this.currentSong, item)
+      if (!result) {
+        // 引入vue原型上的utils
+        this.$utils.playAllSong(list)
+      }
     },
     handleNoLike (song) {
       this.$emit('noLike', song)

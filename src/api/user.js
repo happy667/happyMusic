@@ -91,6 +91,7 @@ export default {
       url
     })
   },
+  // 更改用户信息
   updateUserInfo(user) {
     const url = `/user/update?timestamp=${new Date().getTime()}`
     return request.post(url, {

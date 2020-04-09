@@ -8,14 +8,13 @@
       </van-sticky>
     </header>
     <template v-if="!commentList">
-      <van-loading size="24px"
-                   color="#FD4979"
-                   vertical>加载中...</van-loading>
+      <!-- loading -->
+      <loading />
     </template>
     <template v-else>
       <section class="section">
         <div class="song"
-             @click="handleClick(song)">
+             @click="selectSong(song)">
           <song-item :song="song"
                      :showImage="true"></song-item>
         </div>
@@ -109,11 +108,12 @@ export default {
         this.loading = false
       }, 500)
     },
-    handleClick (item) {
-      if (this.currentSong.id === item.id) { // 打开全屏播放器页面
-        this.setPlayerFullScreen(true)
-      } else {
-        this.playMusic(this.song)
+    selectSong (item) {
+      // 比较两首歌曲
+      let result = this.$utils.compareSong(this.currentSong, item)
+      if (!result) {
+        // 引入vue原型上的utils
+        this.$utils.playMusic(item)
       }
       // 不是由播放器页面点击
       this.setIsPlayerClick(false)
@@ -139,10 +139,6 @@ export default {
         this.song = song
         console.log(song)
       }
-    },
-    playMusic (song) {
-      // 引入vue原型上的utils
-      this.$utils.playMusic(song)
     }
   },
   components: {

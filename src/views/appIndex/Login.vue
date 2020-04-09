@@ -126,7 +126,7 @@ export default {
       if (this.validForm()) {
         this.$toast.loading({
           message: '登陆中...',
-          duration: 0,
+          duration: 10000,
           forbidClick: true
         })
         // 验证成功执行登录操作

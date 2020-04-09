@@ -236,9 +236,9 @@ export default new Vuex.Store({
       index
     }) {
       commit('setPlaying', true)
-      commit('setPlayList', list)
       commit('setSequenceList', list)
       commit('setCurrentPlayIndex', index)
+      commit('setPlayList', list)
     },
     // 删除歌曲列表
     deleteSongList({
@@ -276,6 +276,7 @@ export default new Vuex.Store({
       commit('setPlayList', playlist)
       commit('setSequenceList', sequenceList)
       if (!playlist.length) {
+        console.log(123)
         commit('setPlaying', false) // 如果没有歌曲就停止播放
         commit('setPlayerFullScreen', false)
       } else {

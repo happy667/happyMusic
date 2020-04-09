@@ -3,6 +3,7 @@
     <div class="swiper-container square-swiper">
       <div class="swiper-wrapper">
         <div class="swiper-slide"
+             :data-id="item.id"
              v-for="item in list"
              :key="item.id">
           <div class="swiper-list-item"
@@ -18,6 +19,7 @@
 <script>
 import Swiper from 'swiper'
 import SongSheetSwiperItem from '@/components/common/miniSwiper/MiniSwiperItem'
+import { getData, getParentByClassName } from '@/assets/common/js/dom.js'
 export default {
   props: {
     list: Array
@@ -31,6 +33,8 @@ export default {
   methods: {
     // 初始化轮播图组件
     initSwiper () {
+      // 这里的this是vue对象，提前声明(需要在swiper中应用)
+      let _this = this
       // 通过settimeout 解决数据还没有完全加载的时候就已经渲染swiper，导致loop失效。
       setTimeout(() => {
         // eslint-disable-next-line no-new
@@ -57,14 +61,23 @@ export default {
             },
             touchEnd (e) {
               e.stopPropagation()
+            },
+            // 解决阻止事件传播点击事件失效
+            // 利用自定义属性获取id
+            click (e) {
+              let target = getParentByClassName(e.target, 'swiper-slide')
+              let id = getData(target, 'id')
+              if (id) {
+                _this.selectItem(id)
+              }
             }
           }
         })
       }, 0)
     },
     // 选择歌单进入歌单详情
-    selectItem (item) {
-      this.$router.push({ path: `/songSheetDisc/${item.id}` })
+    selectItem (id) {
+      this.$router.push({ path: `/songSheetDisc/${id}` })
     }
   },
   components: {

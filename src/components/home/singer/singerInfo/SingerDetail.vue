@@ -1,12 +1,9 @@
 <template>
   <article class="singer-detail-container">
     <!-- loading -->
-    <van-loading v-if="isLoad"
-                 size="24px"
-                 color="#FD4979"
-                 vertical>加载中...</van-loading>
+    <loading :loading="loading" />
     <!-- 歌手简介 -->
-    <template v-if="!isLoad">
+    <template v-if="!loading">
       <div class="singer-synopsis-title">
         <h2 class="title">歌手简介</h2>
       </div>
@@ -33,6 +30,7 @@
 </template>
 <script>
 import NoResult from '@/components/common/NoResult'
+
 export default {
   props: {
     singerDetail: {
@@ -41,7 +39,7 @@ export default {
     }
   },
   computed: {
-    isLoad () {
+    loading () {
       return !this.singerDetail
     }
   },

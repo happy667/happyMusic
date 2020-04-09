@@ -1,10 +1,7 @@
 <template>
   <div class="singer-album-container">
     <!-- loading -->
-    <van-loading v-if="singerAlbum.length===0"
-                 size="24px"
-                 color="#FD4979"
-                 vertical>加载中...</van-loading>
+    <loading :loading="singerAlbum.length===0" />
     <template v-if="singerAlbum.length!==0">
       <div class="singer-album-wrapper">
         <van-list v-model="loading"

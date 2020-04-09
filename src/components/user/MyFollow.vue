@@ -6,25 +6,31 @@
                    left-arrow
                    @click-left="routerBack" />
     </van-sticky>
-    <!-- loading -->
-    <van-loading v-if="loading"
-                 size="24px"
-                 color="#FD4979"
-                 vertical>加载中...</van-loading>
-    <div class="singerList"
-         v-if="singerSubList&&singerSubList.length!==0">
-      <singer-item :singer="item"
-                   :showFollow="true"
-                   @clickFollow="handleClickFollow"
-                   @select="selectItem(item)"
-                   v-for="item in singerSubList"
-                   :key="item.id"></singer-item>
-    </div>
-    <no-result v-if="singerSubList&&singerSubList.length===0"
-               text="还没有收藏的歌手"></no-result>
+    <section>
+      <scroll ref="my_follow_scroll">
+        <div class="container"
+             ref="container">
+          <!-- loading -->
+          <loading :loading="loading" />
+          <div class="singerList"
+               v-if="singerSubList&&singerSubList.length!==0">
+            <singer-item :singer="item"
+                         :showFollow="true"
+                         @clickFollow="handleClickFollow"
+                         @select="selectItem(item)"
+                         v-for="item in singerSubList"
+                         :key="item.id"></singer-item>
+          </div>
+          <no-result v-if="singerSubList&&singerSubList.length===0"
+                     text="还没有收藏的歌手"></no-result>
+        </div>
+      </scroll>
+    </section>
+
   </div>
 </template>
 <script>
+import Scroll from '@/components/common/Scroll'
 import NoResult from '@/components/common/NoResult'
 import SingerItem from '@/components/home/singer/SingerItem'
 import Singer from '@/assets/common/js/singer.js'
@@ -33,7 +39,7 @@ import {
   ERR_OK
 } from '@/api/config.js'
 import { mapState, mapMutations } from 'vuex'
-
+import { playlistMixin } from '@/assets/common/js/mixin.js'
 export default {
   name: 'myFollow',
   data () {
@@ -42,6 +48,7 @@ export default {
       loading: false
     }
   },
+  mixins: [playlistMixin],
   computed: {
     ...mapState(['user'])
   },
@@ -107,20 +114,43 @@ export default {
           this.$toast(err.data.message)
         })
       }).catch(() => { })
+    },
+    handlePlaylist (playList) {
+      // 适配播放器与页面底部距离
+      const bottom = playList.length > 0 ? '1.6rem' : ''
+      this.$nextTick(() => {
+        this.$refs.container.style.paddingBottom = bottom
+        this.$refs.my_follow_scroll.refresh()
+      })
     }
   },
   components: {
     SingerItem,
-    NoResult
+    NoResult,
+    Scroll
   }
 }
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
+.my-follow-container >>> .scroll {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
 .my-follow-container {
   width: 100%;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   background-color: $color-common-background;
+
+  section {
+    position: relative;
+    flex: 1;
+  }
 }
 </style>

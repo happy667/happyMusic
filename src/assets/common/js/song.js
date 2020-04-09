@@ -5,7 +5,8 @@ export default class Song {
     singers,
     singersList,
     picUrl,
-    playCount
+    playCount,
+    st = 0
   }) {
     this.id = id
     this.name = name
@@ -14,5 +15,6 @@ export default class Song {
     this.singersList = singersList
     this.isLike = false
     this.playCount = playCount
+    this.st = st
   }
 }
