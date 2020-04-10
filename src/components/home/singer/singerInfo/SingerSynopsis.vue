@@ -5,7 +5,7 @@
     <template v-if="singer">
       <!-- 歌手图片 -->
       <div class="singer-img"
-           @click="handleToggleShowImage">
+           @click="handleClick">
         <div id="image">
           <van-image :src="singer.picUrl">
             <template v-slot:loading>
@@ -15,11 +15,6 @@
           </van-image>
         </div>
 
-        <!-- 遮罩层 -->
-        <overlay :showImage="showImage"
-                 :imgUrl="singer.picUrl"
-                 @toggle="handleToggleShowImage">
-        </overlay>
       </div>
       <div class="singer-synopsis">
         <!-- 歌手名称 -->
@@ -35,6 +30,7 @@
         <follow @clickFollow="handleClickFollow"
                 :followed="singer.followed"></follow>
       </div>
+
     </template>
 
   </div>
@@ -46,35 +42,27 @@ import {
   ERR_OK
 } from '@/api/config.js'
 import Follow from '@/components/common/Follow'
-import overlay from '@/components/common/Overlay'
-import { mapState, mapMutations } from 'vuex'
+import { mapState } from 'vuex'
 export default {
   props: {
     singer: Object
   },
   components: {
-    Follow,
-    overlay
-  },
-  data () {
-    return {
-      showImage: false
-    }
+    Follow
   },
   computed: {
-    ...mapState(['user', 'currentPlayIndex', 'hideMiniPlayer']),
+    ...mapState(['user', 'currentPlayIndex']),
     followeds () {
       return this.singer.followeds ? this.singer.followeds : 0
     }
   },
   methods: {
-    ...mapMutations(['setHideMiniPlayer']),
     // 选中歌曲喜欢
     handleClickFollow () {
       if (this.user) { // 说明已经登录
         this.follow() // 收藏/取消收藏歌手
       } else { // 弹窗提示去登录
-        this.utils.alertLogin(this.$router.currentRoute.fullPath)
+        this.$utils.alertLogin(this.$router.currentRoute.fullPath)
       }
     },
     // 收藏/取消收藏歌手
@@ -83,7 +71,7 @@ export default {
       let follow = !singer.followed
       follow = follow ? 1 : 0// 1代表收藏，0代表不收藏
       if (!follow) {
-        this.utils.alertConfirm({ message: '确定不再收藏该歌手', confirmButtonText: '不再收藏' }).then(() => {
+        this.$utils.alertConfirm({ message: '确定不再收藏该歌手', confirmButtonText: '不再收藏' }).then(() => {
           userApi.updateFollow(singer.id, follow).then(res => {
             if (res.data.code === ERR_OK) {
               this.$set(singer, 'followed', false)
@@ -103,13 +91,10 @@ export default {
         })
       }
     },
-    handleToggleShowImage () {
-      this.showImage = !this.showImage
-      this.$emit('hidePosition')
-      if (this.currentPlayIndex !== -1) {
-        this.setHideMiniPlayer(!this.hideMiniPlayer)
-      }
+    handleClick () {
+      this.$emit('toggle')
     }
+
   }
 
 }

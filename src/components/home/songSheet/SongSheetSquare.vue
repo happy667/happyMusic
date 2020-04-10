@@ -174,8 +174,9 @@ export default {
 }
 
 .song-sheet-square-container {
+  position: fixed;
   width: 100%;
-  min-height: 100vh;
+  height: 100%;
   background: $color-common-background;
   display: flex;
   flex-direction: column;

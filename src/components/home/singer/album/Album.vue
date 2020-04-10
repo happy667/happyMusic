@@ -346,14 +346,11 @@ export default {
   overflow: hidden;
 }
 
-.album-container, .album-container>>>.singerList {
-  max-height: 6rem;
-}
-
 .album-container {
+  position: fixed;
   width: 100%;
+  height: 100%;
   background: $color-common-background;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
 

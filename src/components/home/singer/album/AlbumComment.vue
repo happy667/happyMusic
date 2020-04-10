@@ -8,61 +8,65 @@
       </van-sticky>
 
     </header>
-    <template v-if="!commentList">
-      <!-- loading -->
-      <loading />
-    </template>
-    <template v-else>
-      <section class="section">
-        <!-- 专辑头部 -->
-        <div class="album-header"
-             @click="goToAlbum">
-          <section class="album-info">
-            <div class="top">
-              <div class="left-img">
-                <div class="album-image">
-                  <img v-lazy="album.picUrl"
-                       :key="album.picUrl" />
+    <section class="container"
+             ref="container">
+
+      <template v-if="!commentList">
+        <!-- loading -->
+        <loading />
+      </template>
+      <template v-else>
+        <div class="section">
+          <!-- 专辑头部 -->
+          <div class="album-header"
+               @click="goToAlbum">
+            <div class="album-info">
+              <div class="top">
+                <div class="left-img">
+                  <div class="album-image">
+                    <img v-lazy="album.picUrl"
+                         :key="album.picUrl" />
+                  </div>
                 </div>
-              </div>
-              <div class="right-info">
-                <div class="album-name">{{album.name}}</div>
-                <div class="album-singer">歌手:{{album.singers}}
+                <div class="right-info">
+                  <div class="album-name">{{album.name}}</div>
+                  <div class="album-singer">歌手:{{album.singers}}
+                  </div>
                 </div>
-              </div>
-              <div class="icon">
-                <van-icon name="arrow" />
+                <div class="icon">
+                  <van-icon name="arrow" />
+                </div>
               </div>
             </div>
-          </section>
-        </div>
-
-        <!-- 评论列表 -->
-        <template v-if="commentList">
-          <div class="comment">
-            <div class="comment-title">精彩评论{{commentText}}</div>
-            <van-list v-model="loading"
-                      :immediate-check='false'
-                      :finished="finished"
-                      :finished-text="commentCount===0?'':'没有更多了'"
-                      @load="handlePullingUp">
-              <template v-if="commentList.length!==0">
-                <comment-list :commentList="commentList"></comment-list>
-              </template>
-              <template v-else>
-                <no-result text="暂无评论"></no-result>
-              </template>
-            </van-list>
           </div>
-        </template>
-        <template v-else>
-          <van-loading size="24px"
-                       color="#FD4979"
-                       vertical>加载中...</van-loading>
-        </template>
-      </section>
-    </template>
+        </div>
+      </template>
+      <!-- 评论列表 -->
+      <template v-if="commentList">
+        <div class="comment"
+             ref="container">
+          <div class="comment-title">精彩评论{{commentText}}</div>
+          <van-list v-model="loading"
+                    :immediate-check='false'
+                    :finished="finished"
+                    :finished-text="commentCount===0?'':'没有更多了'"
+                    @load="handlePullingUp">
+            <template v-if="commentList.length!==0">
+              <comment-list :commentList="commentList"></comment-list>
+            </template>
+            <template v-else>
+              <no-result text="暂无评论"></no-result>
+            </template>
+          </van-list>
+        </div>
+      </template>
+      <template v-else>
+        <van-loading size="24px"
+                     color="#FD4979"
+                     vertical>加载中...</van-loading>
+      </template>
 
+    </section>
   </div>
 </template>
 <script>
@@ -73,11 +77,13 @@ import { mapMutations } from 'vuex'
 import {
   ERR_OK
 } from '@/api/config.js'
+import { playlistMixin } from '@/assets/common/js/mixin.js'
 export default {
   name: 'albumComment',
   props: {
     id: String
   },
+  mixins: [playlistMixin],
   data () {
     return {
       loading: false, // 加载中
@@ -146,6 +152,13 @@ export default {
         }
         this.loading = false
       }, 500)
+    },
+    handlePlaylist (playList) {
+      // 适配播放器与页面底部距离
+      const bottom = playList.length > 0 ? '1.6rem' : ''
+      this.$nextTick(() => {
+        this.$refs.container.style.paddingBottom = bottom
+      })
     }
   },
   components: {
@@ -169,83 +182,85 @@ export default {
 
 .album-comment-container {
   width: 100%;
-  min-height: 100vh;
+  height: 100%;
   background: $color-common-background;
 
-  .section {
-    .album-header {
-      position: relative;
-      height: 0;
-      background-image: linear-gradient(-20deg, #f794a4 0%, #fdd6bd 100%);
-      padding-bottom: 2.3rem;
+  .container {
+    .section {
+      .album-header {
+        position: relative;
+        height: 0;
+        background-image: linear-gradient(-20deg, #f794a4 0%, #fdd6bd 100%);
+        padding-bottom: 2.3rem;
 
-      .album-info {
-        position: absolute;
-        left: 0;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        padding: 0.3rem;
+        .album-info {
+          position: absolute;
+          left: 0;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          padding: 0.3rem;
 
-        .top {
-          display: flex;
+          .top {
+            display: flex;
 
-          .left-img {
-            position: relative;
-            margin-right: 0.5rem;
+            .left-img {
+              position: relative;
+              margin-right: 0.5rem;
 
-            .album-image {
-              width: 1.7rem;
-              height: 1.7rem;
-              border-radius: 0.3rem;
-
-              img {
-                display: block;
-                width: 100%;
-                height: 100%;
+              .album-image {
+                width: 1.7rem;
+                height: 1.7rem;
                 border-radius: 0.3rem;
+
+                img {
+                  display: block;
+                  width: 100%;
+                  height: 100%;
+                  border-radius: 0.3rem;
+                }
               }
             }
-          }
 
-          .right-info {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            width: 100%;
-            color: #fff;
-            font-size: $font-size-smaller-x;
-            no-wrap();
+            .right-info {
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              width: 100%;
+              color: #fff;
+              font-size: $font-size-smaller-x;
+              no-wrap();
 
-            .album-name {
-              height: 0.8rem;
-              line-height: 0.8rem;
-              font-weight: bold;
-              font-size: $font-size-smaller;
-            }
+              .album-name {
+                height: 0.8rem;
+                line-height: 0.8rem;
+                font-weight: bold;
+                font-size: $font-size-smaller;
+              }
 
-            .album-singer {
-              height: 0.8rem;
-              line-height: 0.8rem;
+              .album-singer {
+                height: 0.8rem;
+                line-height: 0.8rem;
 
-              a {
-                color: #fff;
+                a {
+                  color: #fff;
+                }
               }
             }
-          }
 
-          .icon {
-            display: flex;
-            align-items: center;
-            font-size: 1rem;
-            color: $color-common-b;
+            .icon {
+              display: flex;
+              align-items: center;
+              font-size: 1rem;
+              color: $color-common-b;
+            }
           }
         }
       }
-    }
 
-    .song {
-      margin-bottom: 0.5rem;
+      .song {
+        margin-bottom: 0.5rem;
+      }
     }
 
     .comment {

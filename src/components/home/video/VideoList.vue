@@ -65,14 +65,17 @@ export default {
   },
   methods: {
     // 上拉加载
-    async handlePullingUp () {
+    handlePullingUp () {
       if (this.loadMore) { // 如果请求未完成就不继续请求数据
         return
       }
       clearTimeout(this.loadTimer)
       this.loadMore = true
-      this.loadTimer = setTimeout(() => {
-        this.getVideoList()
+      this.loadTimer = setTimeout(async () => {
+        await this.getVideoList()
+        this.$nextTick(() => {
+          this.$refs.videoListScroll.finishPullUp()
+        })
       }, 300)
     },
     // 获取推荐视频
@@ -108,9 +111,6 @@ export default {
                 if (length === data.length) { // 说明请求完成
                   this.loadMore = false
                   this.videoList = this.videoList.concat(videoList)
-                  this.$nextTick(() => {
-                    this.$refs.videoListScroll.finishPullUp()
-                  })
                 }
               }
             }

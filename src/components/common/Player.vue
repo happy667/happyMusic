@@ -265,11 +265,13 @@ export default {
     },
     // 禁止背景滚动
     closeScroll () {
-      document.body.style.position = 'fixed'
+      document.body.style.position = 'absolute'
+      document.body.style.overflow = 'hidden'
     },
     // 开启背景滚动
     openScroll () {
       document.body.style.position = ''
+      document.body.style.overflow = ''
     }
   },
   components: {

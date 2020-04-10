@@ -194,8 +194,8 @@ export default {
 
 .search-container {
   width: 100%;
-  background: #fff;
   min-height: 100vh;
+  background: $color-common-background;
   display: flex;
   flex-direction: column;
 

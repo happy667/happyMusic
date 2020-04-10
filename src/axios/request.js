@@ -53,7 +53,10 @@ service.interceptors.response.use(
       return Promise.reject(res) // 返回接口返回的错误信息
     } else {
       let resData = {
-        message: '加载超时'
+        data: {
+          message: '加载超时'
+        }
+
       }
       return Promise.reject(resData) // 返回接口返回的错误信息
     }

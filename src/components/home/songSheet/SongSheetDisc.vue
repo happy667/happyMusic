@@ -13,72 +13,77 @@
     </van-sticky>
 
     <div class="container">
-      <!-- 歌单图片 -->
-      <div class="songs-img"
-           ref="bgImage">
-        <template v-if="songSheetDisc.picUrl">
-          <div class="image"
-               @click="handleToggleShowImage">
-            <van-image fit="cover"
-                       :src="songSheetDisc.picUrl">
-              <template v-slot:loading>
-                <van-loading type="spinner"
-                             size="20" />
-              </template>
+      <scroll ref="song_sheet_desc_scroll"
+              :data="songSheetDisc.songs">
+        <section class="scroll-container"
+                 ref="container">
 
-            </van-image>
-            <!-- 遮罩层 -->
-            <overlay :showImage="showImage"
-                     :imgUrl="songSheetDisc.picUrl"
-                     @toggle="handleToggleShowImage" />
-          </div>
-        </template>
+          <!-- 歌单图片 -->
+          <div class="songs-img"
+               ref="bgImage">
+            <template v-if="songSheetDisc.picUrl">
+              <div class="image"
+                   @click="handleToggleShowImage">
+                <van-image fit="cover"
+                           :src="songSheetDisc.picUrl">
+                  <template v-slot:loading>
+                    <van-loading type="spinner"
+                                 size="20" />
+                  </template>
 
-        <!-- 收藏 -->
-        <div class="follow"
-             v-show="songSheetDisc.picUrl">
-          <follow @clickFollow="handleClickFollow"
-                  :followed="followed"></follow>
-        </div>
-      </div>
-      <!-- loading -->
-      <loading :loading="loading"></loading>
-      <!-- 歌单描述 -->
-      <section v-if="!loading"
-               ref="sectionBox">
-        <div class="songs-desc">
-          <div class="songs-title">{{songSheetDisc.name}}</div>
-          <div class="songs-nt">
-            <div class="songs-num">{{songSheetDisc.songs.length}}首</div>
-            <div class="songs-time"
-                 v-if="songSheetDisc.songs.length!==0">{{songSheetDisc.trackUpdateTime|convertDate}}</div>
-          </div>
+                </van-image>
 
-          <!-- 播放按钮 -->
-          <div class="playBtn"
-               @click="playAllSong(songSheetDisc.songs[0],songSheetDisc.songs)">
-            <i class="iconfont icon-bofang"></i>
+              </div>
+            </template>
+
+            <!-- 收藏 -->
+            <div class="follow"
+                 v-show="songSheetDisc.picUrl">
+              <follow @clickFollow="handleClickFollow"
+                      :followed="followed"></follow>
+            </div>
           </div>
-        </div>
-        <scroll ref="song_sheet_desc_scroll"
-                @scroll="scroll"
-                :listen-scroll="listenScroll"
-                :probe-type="probeType"
-                :data="songSheetDisc.songs">
-          <!-- 歌曲列表 -->
-          <songs-list :songsList="songSheetDisc.songs"
-                      ref="songList"
-                      :showImage="true"
-                      @select="selectSong"></songs-list>
-        </scroll>
-        <no-result v-if="songSheetDisc.songs.length===0"
-                   text="暂无相关资源"></no-result>
-      </section>
+          <!-- loading -->
+          <loading :loading="loading"></loading>
+          <!-- 歌单描述 -->
+          <section v-if="!loading"
+                   ref="sectionBox">
+
+            <!-- 歌单描述 -->
+            <section class="songs-desc">
+              <div class="songs-title">{{songSheetDisc.name}}</div>
+              <div class="songs-nt">
+                <div class="songs-num">{{songSheetDisc.songs.length}}首</div>
+                <div class="songs-time"
+                     v-if="songSheetDisc.songs.length!==0">{{songSheetDisc.trackUpdateTime|convertDate}}</div>
+              </div>
+              <!-- 播放按钮 -->
+              <div class="playBtn"
+                   @click="playAllSong(songSheetDisc.songs[0],songSheetDisc.songs)">
+                <i class="iconfont icon-bofang"></i>
+              </div>
+            </section>
+
+            <!-- 歌曲列表 -->
+            <songs-list :songsList="songSheetDisc.songs"
+                        ref="songList"
+                        :showImage="true"
+                        @select="selectSong" />
+
+            <no-result v-if="songSheetDisc.songs.length===0"
+                       text="暂无相关资源"></no-result>
+          </section>
+
+        </section>
+      </scroll>
       <!-- 定位 -->
       <position v-show="isShowPosition"
                 @click="handlePosition"></position>
+      <!-- 遮罩层 -->
+      <overlay :showImage="showImage"
+               :imgUrl="songSheetDisc.picUrl"
+               @toggle="handleToggleShowImage" />
     </div>
-
   </div>
 </template>
 <script>
@@ -99,7 +104,7 @@ import Position from '@/components/common/Position'
 import overlay from '@/components/common/Overlay'
 import { playlistMixin } from '@/assets/common/js/mixin.js'
 import { mapMutations, mapGetters, mapActions, mapState } from 'vuex'
-const RESERVED_HEIGHT = 40
+
 export default {
   name: 'songSheetDisc',
   props: {
@@ -118,8 +123,6 @@ export default {
     }
   },
   created () {
-    this.probeType = 3
-    this.listenScroll = true
     this.title = this.$route.meta.title
   },
   mounted () {
@@ -128,31 +131,12 @@ export default {
     if (this.user) {
       this.getUserSongSheet(this.user.userId)
     }
-    this.imageHeight = this.$refs.bgImage.clientHeight
-    this.minTransalteY = -this.imageHeight + RESERVED_HEIGHT
   },
   watch: {
     user () {
       if (this.user) {
         this.getUserSongSheet(this.user.userId)
       }
-    },
-    scrollY (newVal) {
-      let translateY = Math.max(this.minTransalteY, newVal)
-      console.log(translateY)
-      if (translateY < -250) {
-        this.title = this.songSheetDisc.name
-      } else {
-        this.title = this.$route.meta.title
-      }
-      if (translateY > 0 && translateY < 60) {
-        let scale = 0.2 * translateY / 60
-        this.$refs.bgImage.style.transform = `scale(${1 + scale})`
-        let top = 50 * translateY / 60
-        this.$refs.sectionBox.style.top = `${top}px`
-      }
-
-      // this.$refs.songList.style.transform = `translateY3d(0,${translateY},0)`
     }
   },
   destroyed () {
@@ -233,7 +217,7 @@ export default {
       let result = this.$utils.compareSong(this.currentSong, item)
       if (!result) {
         // 引入vue原型上的utils
-        this.$utils.playMusic(item, this.list, index)
+        this.$utils.playMusic(item, this.songSheetDisc.songs, index)
       }
     },
     // 比较两首歌曲
@@ -328,30 +312,11 @@ export default {
     },
     handlePlaylist (playList) {
       // 适配播放器与页面底部距离
-      // const bottom = playList.length > 0 ? '1.6rem' : ''
-      // this.$nextTick(() => {
-      //   switch (this.currentIndex) {
-      //     case 0:
-      //       this.$refs.recommend.$refs.container.style.paddingBottom = bottom
-      //       this.$refs.recommend.refresh()
-      //       break
-      //     case 1:
-      //       this.$refs.ranking.$refs.container.style.paddingBottom = bottom
-      //       this.$refs.ranking.refresh()
-      //       break
-      //     case 2:
-      //       this.$refs.singer.$refs.list.$refs.container.style.paddingBottom = bottom
-      //       this.$refs.singer.$refs.list.refresh()
-      //       break
-      //     case 3:
-      //       this.$refs.mv.$refs.container.style.paddingBottom = bottom
-      //       this.$refs.mv.refresh()
-      //       break
-      //   }
-      // })
-    },
-    scroll (pos) {
-      this.scrollY = pos.y
+      const bottom = playList.length > 0 ? '1.6rem' : ''
+      this.$nextTick(() => {
+        this.$refs.container.style.paddingBottom = bottom
+        this.$refs.song_sheet_desc_scroll.refresh()
+      })
     }
   },
   components: {
@@ -368,11 +333,9 @@ export default {
 @import '~common/stylus/variable';
 
 .song-sheet-desc-container>>>.scroll {
-  // position: fixed;
-  // top: 46px;
-  // bottom: 0;
-  // width: 100%;
-  height: 200px;
+  position: absolute;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
 }
 
@@ -381,83 +344,94 @@ export default {
 }
 
 .song-sheet-desc-container {
+  position: fixed;
   width: 100%;
+  height: 100%;
   background: $color-common-background;
-  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 
-  .songs-img {
+  .container {
     position: relative;
-    width: 100%;
-    height: 0;
-    padding-top: 100%;
-    background: #e4e4e4;
-    overflow: hidden;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 
-    .image {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    .follow {
-      position: absolute;
-      bottom: 0.5rem;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-  }
-
-  section {
-    position: relative;
-
-    .songs-desc {
-      padding: 0.4rem;
+    .songs-img {
       position: relative;
+      width: 100%;
+      height: 0;
+      padding-top: 100%;
+      background: #e4e4e4;
+      overflow: hidden;
 
-      .songs-title {
-        max-width: 7rem;
-        line-height: 0.8rem;
-        font-weight: 500;
-        font-size: $font-size-small;
-        margin-bottom: 0.4rem;
-        no-wrap2();
-      }
-
-      .songs-nt {
-        display: flex;
-        justify-content: space-between;
-        color: $color-common-b2;
-
-        .songs-num {
-          font-size: $font-size-smaller;
-        }
-
-        .songs-time {
-          font-size: $font-size-smaller-x;
-        }
-      }
-
-      .playBtn {
+      .image {
         position: absolute;
-        right: 0.6rem;
         top: 0;
-        margin-top: -0.8rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: red;
-        background: linear-gradient(to bottom right, #f48faa, #f57f9e);
-        width: 1.5rem;
-        height: 1.5rem;
-        border-radius: 50%;
-        box-shadow: 0 0.01rem 0.3rem #f48faa;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
 
-        i {
-          margin-left: 0.1rem;
-          color: #fff;
-          font-size: 0.7rem;
+      .follow {
+        position: absolute;
+        bottom: 0.5rem;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+    }
+
+    section {
+      position: relative;
+      flex: 1;
+      background: $color-common-background;
+
+      .songs-desc {
+        padding: 0.4rem;
+        position: relative;
+
+        .songs-title {
+          max-width: 7rem;
+          line-height: 0.8rem;
+          font-weight: 500;
+          font-size: $font-size-small;
+          margin-bottom: 0.4rem;
+          no-wrap2();
+        }
+
+        .playBtn {
+          position: absolute;
+          right: 0.6rem;
+          top: -0.8rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          color: red;
+          background: linear-gradient(to bottom right, #f48faa, #f57f9e);
+          width: 1.5rem;
+          height: 1.5rem;
+          border-radius: 50%;
+          box-shadow: 0 0.01rem 0.3rem #f48faa;
+
+          i {
+            margin-left: 0.1rem;
+            color: #fff;
+            font-size: 0.7rem;
+          }
+        }
+
+        .songs-nt {
+          display: flex;
+          justify-content: space-between;
+          color: $color-common-b2;
+
+          .songs-num {
+            font-size: $font-size-smaller;
+          }
+
+          .songs-time {
+            font-size: $font-size-smaller-x;
+          }
         }
       }
     }

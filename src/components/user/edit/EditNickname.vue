@@ -87,8 +87,9 @@ export default {
 @import '~common/stylus/variable';
 
 .editNikename-container {
+  position: fixed;
   width: 100%;
-  min-height: 100vh;
+  height: 100%;
 }
 
 .editNikename-container>>>.van-nav-bar__text {

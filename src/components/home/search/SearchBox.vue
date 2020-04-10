@@ -90,9 +90,6 @@ export default {
     // 获取热门搜索
     this.getHotSearchList()
     if (getLocalList()) { this.localSearchList = getLocalList() }// 如果本地存在历史记录就赋值
-    this.$nextTick(() => {
-      this.$refs.search_scroll.refresh()
-    })
   },
   methods: {
     ...mapMutations(['setSearchKeywords', 'setSearchCurrentIndex', 'selectSearchItem', 'setShowSearchList']),

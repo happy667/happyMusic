@@ -140,9 +140,9 @@ export default {
 </script>
 <style lang="stylus" scoped>
 #app {
-  position: absolute;
+  // position: fixed;
   width: 100%;
-  min-height: 100%;
+  height: 100%;
   box-shadow: none;
 }
 

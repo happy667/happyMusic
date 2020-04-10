@@ -7,37 +7,40 @@
                      @click-left="routerBack" />
       </van-sticky>
     </header>
-    <template v-if="!commentList">
-      <!-- loading -->
-      <loading />
-    </template>
-    <template v-else>
-      <section class="section">
-        <div class="song"
-             @click="selectSong(song)">
-          <song-item :song="song"
-                     :showImage="true"></song-item>
-        </div>
+    <section class="container"
+             ref="container">
+      <template v-if="!commentList">
+        <!-- loading -->
+        <loading />
+      </template>
+      <template v-else>
+        <section class="section">
+          <div class="song"
+               @click="selectSong(song)">
+            <song-item :song="song"
+                       :showImage="true"></song-item>
+          </div>
 
-        <!-- 评论列表 -->
-        <div class="comment"
-             v-if="commentList">
-          <div class="comment-title">精彩评论{{commentText}}</div>
-          <van-list v-model="loading"
-                    :immediate-check='false'
-                    :finished="finished"
-                    :finished-text="commentCount===0?'':'没有更多了'"
-                    @load="handlePullingUp">
-            <template v-if="commentList.length!==0">
-              <comment-list :commentList="commentList"></comment-list>
-            </template>
-            <template v-else>
-              <no-result text="还没有小伙伴发表评论哦~"></no-result>
-            </template>
-          </van-list>
-        </div>
-      </section>
-    </template>
+          <!-- 评论列表 -->
+          <div class="comment"
+               v-if="commentList">
+            <div class="comment-title">精彩评论{{commentText}}</div>
+            <van-list v-model="loading"
+                      :immediate-check='false'
+                      :finished="finished"
+                      :finished-text="commentCount===0?'':'没有更多了'"
+                      @load="handlePullingUp">
+              <template v-if="commentList.length!==0">
+                <comment-list :commentList="commentList"></comment-list>
+              </template>
+              <template v-else>
+                <no-result text="还没有小伙伴发表评论哦~"></no-result>
+              </template>
+            </van-list>
+          </div>
+        </section>
+      </template>
+    </section>
 
   </div>
 </template>
@@ -51,11 +54,13 @@ import songApi from '@/api/song.js'
 import {
   ERR_OK
 } from '@/api/config.js'
+import { playlistMixin } from '@/assets/common/js/mixin.js'
 export default {
   name: 'songComment',
   props: {
     id: String
   },
+  mixins: [playlistMixin],
   data () {
     return {
       loading: false, // 加载中
@@ -139,6 +144,13 @@ export default {
         this.song = song
         console.log(song)
       }
+    },
+    handlePlaylist (playList) {
+      // 适配播放器与页面底部距离
+      const bottom = playList.length > 0 ? '1.6rem' : ''
+      this.$nextTick(() => {
+        this.$refs.container.style.paddingBottom = bottom
+      })
     }
   },
   components: {
@@ -158,22 +170,24 @@ export default {
 
 .song-comment-container {
   width: 100%;
-  min-height: 100vh;
+  height: 100%;
   background: $color-common-background;
 
-  .section {
-    padding: 0.3rem 0.5rem;
+  .container {
+    .section {
+      padding: 0.3rem 0.5rem;
 
-    .song {
-      margin-bottom: 0.5rem;
-    }
+      .song {
+        margin-bottom: 0.5rem;
+      }
 
-    .comment {
-      .comment-title {
-        font-size: $font-size-smaller;
-        font-weight: bold;
-        height: 1rem;
-        line-height: 1rem;
+      .comment {
+        .comment-title {
+          font-size: $font-size-smaller;
+          font-weight: bold;
+          height: 1rem;
+          line-height: 1rem;
+        }
       }
     }
   }

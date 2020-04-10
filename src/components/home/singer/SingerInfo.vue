@@ -12,38 +12,59 @@
                    :z-index="99"
                    @click-left="routerBack" />
     </van-sticky>
-
-    <!-- 歌手简介 -->
-    <singer-synopsis :singer="singer"
-                     @hidePosition="handleHidePosition" />
     <!--歌手信息-->
     <section class="content">
-      <van-tabs title-active-color="#FD4979"
-                color="#FD4979"
-                animated
-                v-model="currentIndex"
-                @change="handleTabsChange"
-                swipeable>
-        <!-- 歌手单曲 -->
-        <van-tab title="歌曲">
-          <singer-song :list="singerSong"
-                       ref="singerSong"
-                       :loading="loading" />
-        </van-tab>
-        <!-- 歌手专辑 -->
-        <van-tab title="专辑">
-          <singer-album :singerAlbum="singerAlbum"
-                        @pullingUp="handlePullingUp"
-                        :finished="singerAlbumFinished" />
-        </van-tab>
-        <!-- 歌手详情 -->
-        <van-tab title="详情">
-          <singer-detail :singerDetail="singerDetail" />
-        </van-tab>
-      </van-tabs>
-      <!-- 定位 -->
-      <position v-show="isShowPosition"
-                @click="handlePosition"></position>
+      <scroll ref="singerInfo_scroll"
+              @scroll="scroll"
+              :listenScroll="listenScroll"
+              :pullUp="pullUp"
+              @pullingUpLoad="handlePullingUp"
+              :probeType="probeType">
+        <div class="container"
+             ref="container">
+          <!-- 歌手简介 -->
+          <singer-synopsis :singer="singer"
+                           @toggle="handleToggleShowImage" />
+
+          <van-tabs title-active-color="#FD4979"
+                    color="#FD4979"
+                    animated
+                    v-model="currentIndex"
+                    @change="handleTabsChange"
+                    swipeable>
+            <!-- 歌手单曲 -->
+            <van-tab title="歌曲">
+
+              <singer-song :list="singerSong"
+                           ref="singerSong"
+                           :loading="loading" />
+            </van-tab>
+            <!-- 歌手专辑 -->
+            <van-tab title="专辑">
+              <singer-album :singerAlbum="singerAlbum" />
+              <!-- loading -->
+              <loading :loading="loadMore"
+                       height="2rem" />
+            </van-tab>
+            <!-- 歌手详情 -->
+            <van-tab title="详情">
+              <singer-detail ref="singerDetail"
+                             :singerDetail="singerDetail" />
+            </van-tab>
+          </van-tabs>
+        </div>
+
+        <!-- 定位 -->
+        <position v-show="isShowPosition"
+                  @click="handlePosition"></position>
+      </scroll>
+      <!-- 遮罩层 -->
+      <template v-if="singer">
+        <overlay :showImage="showImage"
+                 :imgUrl="singer.picUrl"
+                 @toggle="handleToggleShowImage">
+        </overlay>
+      </template>
     </section>
   </div>
 </template>
@@ -57,15 +78,19 @@ import singerApi from '@/api/singer.js'
 import userApi from '@/api/user.js'
 import Song from '@/assets/common/js/song.js'
 import Singer from '@/assets/common/js/singer.js'
+import overlay from '@/components/common/Overlay'
 import {
   ERR_OK
 } from '@/api/config.js'
 import { mapState, mapMutations, mapGetters } from 'vuex'
+import Scroll from '@/components/common/Scroll'
+import { playlistMixin } from '@/assets/common/js/mixin.js'
 export default {
   name: 'singerInfo',
   props: {
     id: String
   },
+  mixins: [playlistMixin],
   data () {
     return {
       singerDesc: {},
@@ -75,8 +100,17 @@ export default {
       singerAlbumFinished: false, // 是否加载完歌手专辑
       loading: false,
       accountId: null,
-      showPosition: false
+      showPosition: false,
+      scrollY: 0,
+      loadMore: false,
+      showImage: false
     }
+  },
+  created () {
+    this.listenScroll = true// 可以监听页面滚动
+    this.scrollEnd = true// 可以监听页面停止滚动
+    this.probeType = 3// 可以监听缓冲时的滑动位置
+    this.pullUp = true
   },
   watch: {
     accountId (newId) {
@@ -84,6 +118,11 @@ export default {
         // 获取歌手用户详情
         this.getUserDetail(newId)
       }
+    },
+    loadMore () {
+      this.$nextTick(() => {
+        this.refresh()
+      })
     }
   },
   mounted () {
@@ -92,7 +131,7 @@ export default {
     this.handleTabsChange(this.currentIndex)
   },
   computed: {
-    ...mapState(['singerCurrentIndex', 'singer', 'currentPlayIndex', 'isPlayerClick']),
+    ...mapState(['singerCurrentIndex', 'singer', 'currentPlayIndex', 'isPlayerClick', 'hideMiniPlayer']),
     ...mapGetters(['currentSong']),
     currentIndex: {
       get () {
@@ -110,8 +149,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setSingerCurrentIndex', 'setSinger', 'setPlayerFullScreen', 'setIsPlayerClick']),
-
+    ...mapMutations(['setSingerCurrentIndex', 'setSinger', 'setPlayerFullScreen', 'setIsPlayerClick', 'setHideMiniPlayer']),
     routerBack () {
       if (this.isPlayerClick) {
         this.setPlayerFullScreen(true)
@@ -161,6 +199,7 @@ export default {
         this.$router.replace('/')
       }
     },
+    // 获取歌手专辑
     async getSingerAlbum (id) {
       // 获取歌手专辑
       const offset = this.singerAlbum.length
@@ -168,6 +207,7 @@ export default {
       if (res.code === ERR_OK) { // 成功获取歌手单曲
         this.singerAlbum = this.singerAlbum.concat(res.hotAlbums)
         this.singerAlbumFinished = !res.more
+        this.loadMore = false
       }
     },
     // 获取歌手详情
@@ -203,17 +243,26 @@ export default {
     },
     // 上拉加载
     handlePullingUp () {
-      setTimeout(async () => {
+      if (this.singerAlbumFinished) { // 加载完成
+        return
+      }
+      if (this.loadMore) { // 如果请求未完成就不继续请求数据
+        return
+      }
+      clearTimeout(this.loadTimer)
+      this.loadMore = true
+      this.loadTimer = setTimeout(async () => {
         await this.getSingerAlbum(this.id)
-      }, 500)
+        this.$nextTick(() => {
+          this.$refs.singerInfo_scroll.finishPullUp()
+        })
+      }, 300)
     },
     handlePosition () {
       // 说明有歌曲在播放
       if (this.currentSong) {
-        let listNode = this.$refs.singerSong.$refs.songList.$refs.list
-        let song = this.currentSong
-        let otherHeight = this.$refs.navBar.offsetHeight
-        this.$utils.positionSong({ listNode, list: this.singerSong, song, otherHeight })
+        let element = this.$refs.singerSong.$refs.songList.$refs.listGroup[this.currentPlayIndex]
+        this.$refs.singerInfo_scroll.scrollToElement(element, 0)
         this.$toast('已定位到当前歌曲')
       }
     },
@@ -233,6 +282,29 @@ export default {
     // 隐藏定位
     handleHidePosition () {
       this.showPosition = false
+    },
+    handlePlaylist (playList) {
+      // 适配播放器与页面底部距离
+      const bottom = playList.length > 0 ? '1.6rem' : ''
+      this.$nextTick(() => {
+        this.$refs.container.style.paddingBottom = bottom
+        this.refresh()
+      })
+    },
+    // 页面滚动
+    scroll (pos) {
+      this.scrollY = pos.y
+    },
+    refresh () {
+      this.$refs.singerInfo_scroll.refresh()
+    },
+    // 显示隐藏图片
+    handleToggleShowImage () {
+      this.showImage = !this.showImage
+      this.handleHidePosition()
+      if (this.currentPlayIndex !== -1) {
+        this.setHideMiniPlayer(!this.hideMiniPlayer)
+      }
     }
   },
   components: {
@@ -240,13 +312,21 @@ export default {
     SingerSong,
     SingerAlbum,
     SingerDetail,
-    Position
-
+    Position,
+    Scroll,
+    overlay
   }
 }
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
+
+.singer-info-container >>> .scroll {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
 
 .singer-info-container>>>.van-tabs__wrap {
   margin-bottom: 0.4rem;
@@ -263,8 +343,9 @@ export default {
 }
 
 .singer-info-container {
+  position: fixed;
   width: 100%;
-  min-height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   background-color: $color-common-background;
@@ -273,6 +354,16 @@ export default {
     flex: 1;
     display: flex;
     flex-direction: column;
+    position: relative;
+
+    .container {
+      position: absolute;
+      width: 100%;
+      min-height: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
   }
 }
 </style>

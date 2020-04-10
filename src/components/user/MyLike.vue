@@ -169,8 +169,9 @@ export default {
 }
 
 .my-like-container {
+  position: fixed;
   width: 100%;
-  min-height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   background-color: $color-common-background;

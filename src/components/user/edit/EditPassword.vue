@@ -208,8 +208,9 @@ export default {
 @import '~common/stylus/variable';
 
 .editPassword-container {
+  position: fixed;
   width: 100%;
-  min-height: 100vh;
+  height: 100%;
 }
 
 .editPassword-container>>>.van-nav-bar__text {

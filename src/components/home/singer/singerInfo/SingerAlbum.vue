@@ -4,15 +4,8 @@
     <loading :loading="singerAlbum.length===0" />
     <template v-if="singerAlbum.length!==0">
       <div class="singer-album-wrapper">
-        <van-list v-model="loading"
-                  :finished="finished"
-                  finished-text="没有更多专辑了"
-                  :immediate-check='false'
-                  @load="handlePullingUp">
-          <album-list :list="singerAlbum"
-                      @select="selectItem"></album-list>
-
-        </van-list>
+        <album-list :list="singerAlbum"
+                    @select="selectItem"></album-list>
       </div>
     </template>
   </div>
@@ -26,21 +19,6 @@ export default {
     singerAlbum: {
       type: Array,
       default: () => []
-    },
-    finished: {
-      type: Boolean,
-      default: () => false
-    }
-  },
-  data () {
-    return {
-      loading: false
-    }
-  },
-  watch: {
-    singerAlbum () {
-      // 没有加载完
-      this.loading = false
     }
   },
   methods: {
@@ -50,10 +28,6 @@ export default {
       // 设置为前进页面
       this.setIsAdvance(true)
       this.$router.push(`/singerAlbum/${item.id}`)
-    },
-    // 加载更多
-    handlePullingUp () {
-      this.$emit('pullingUp')
     }
   },
   components: {
