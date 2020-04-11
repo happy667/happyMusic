@@ -6,7 +6,9 @@
                  class="official-list">
       <!-- 排行列表图片 -->
       <div class="official-list-img">
-        <img v-lazy="rankingObj.coverImgUrl" :key="rankingObj.coverImgUrl" />
+        <img v-lazy="rankingObj.coverImgUrl"
+             class="animated fadeIn"
+             :key="rankingObj.coverImgUrl" />
       </div>
       <!-- 歌曲排名 -->
       <ul class="official-list-info">
@@ -58,6 +60,7 @@ export default {
       height: 2rem;
       border-radius: 0.2rem;
       margin-right: 0.3rem;
+      background-color: $color-common-b;
 
       img {
         display: block;

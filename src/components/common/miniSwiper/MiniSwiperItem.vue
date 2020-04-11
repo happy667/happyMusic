@@ -3,7 +3,7 @@
        @click="handleClick">
     <div class="mini-swiper-item">
       <div class="image-wrapper">
-        <div class="image">
+        <div class="image animated fadeIn">
           <img :data-src="item.picUrl"
                class="swiper-lazy"
                :key="item.picUrl">

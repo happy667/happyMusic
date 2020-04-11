@@ -110,7 +110,8 @@
       </div>
     </div>
     <!-- 视频信息 -->
-    <div class="video-info">
+    <div class="video-info"
+         v-show="!hideInfo">
       <div class="info-top van-hairline--bottom"
            @click="goToVideoInfo">
         <!-- 视频标题 -->
@@ -122,23 +123,27 @@
           </div>
         </div>
         <!-- 视频描述 -->
-        <div class="video-desc"
-             v-show="showMoreInfo">
-          <div class="top">
-            <div class="video-num">{{videoParams.playCount}} 次观看</div>
-            <div class="video-time">{{videoParams.publishTime}} 发布</div>
+        <transition-group enter-active-class="animated fadeIn faster">
+          <div class="video-desc"
+               v-show="showMoreInfo"
+               key="video-desc">
+            <div class="top">
+              <div class="video-num">{{videoParams.playCount}} 次观看</div>
+              <div class="video-time">{{videoParams.publishTime}} 发布</div>
+            </div>
+            <div class="bottom">
+              <div class="video-desc">{{videoParams.desc}}</div>
+            </div>
           </div>
-          <div class="bottom">
-            <div class="video-desc">{{videoParams.desc}}</div>
-          </div>
-        </div>
+        </transition-group>
+
       </div>
 
       <!-- 视频出处 -->
       <div class="info-bottom"
            @click="selectSinger(videoParams.artist)">
         <div class="play-source-img">
-          <music-img :avatar="this.videoParams.artist.avatarUrl"></music-img>
+          <mini-image :avatar="this.videoParams.artist.avatarUrl"></mini-image>
         </div>
         <div class="play-source-author">
           {{videoParams.artist.name}}
@@ -148,7 +153,7 @@
   </div>
 </template>
 <script>
-import MusicImg from '../img/MusicImg'
+import MiniImage from '../img/MiniImage'
 import 'common/js/convert.js'
 import { mapMutations, mapState } from 'vuex'
 export default {
@@ -162,6 +167,10 @@ export default {
       default: () => false
     },
     showMoreInfo: { // 是否显示更多信息
+      type: Boolean,
+      default: () => false
+    },
+    hideInfo: { // 是否隐藏视频信息
       type: Boolean,
       default: () => false
     }
@@ -336,7 +345,7 @@ export default {
     }
   },
   components: {
-    MusicImg
+    MiniImage
   }
 }
 </script>

@@ -10,7 +10,8 @@
         <div class="avatar">
           <div class="image"
                v-if="user">
-            <img :src="user.avatarUrl">
+            <img v-lazy="user.avatarUrl"
+                 class="animated fadeIn">
           </div>
           <div class="icon"
                v-else>
@@ -90,25 +91,40 @@
           </div>
 
           <template v-if="userSongSheet&&userAlbum">
-            <div class="my-follow my-song-sheet-list">
-              <div class="title">
-                <div class="text">收藏的歌单</div>
-                <span class="count">({{songSheetCount}}个)</span>
-              </div>
-              <song-sheet-mini-list :list="userSongSheet"></song-sheet-mini-list>
-            </div>
-            <div class="my-follow my-album-list">
-              <div class="title">
-                <div class="text">收藏的专辑</div>
-                <span class="count">({{albumCount}}个)</span>
-              </div>
-              <template v-if="userAlbum.length!==0">
-                <album-list :list="userAlbum"
-                            @select="selectItem"></album-list>
-              </template>
-              <template v-if="userAlbum.length===0">
-                <no-result text="还没有专辑,快去收藏吧"></no-result>
-              </template>
+            <div class="my-follow">
+              <van-collapse v-model="activeNames"
+                            @change="changeCollapse"
+                            :border="false">
+                <van-collapse-item name="1"
+                                   ref="collapseItem1">
+                  <template #title>
+                    <div class="title">
+                      <div class="text">收藏的歌单</div>
+                      <span class="count">({{songSheetCount}}个)</span>
+                    </div>
+                  </template>
+                  <song-sheet-mini-list :list="userSongSheet"></song-sheet-mini-list>
+                  <template v-if="userSongSheet.length===0">
+                    <no-result text="还没有歌单,快去收藏吧"></no-result>
+                  </template>
+                </van-collapse-item>
+                <van-collapse-item name="2"
+                                   ref="collapseItem2">
+                  <template #title>
+                    <div class="title">
+                      <div class="text">收藏的专辑</div>
+                      <span class="count">({{albumCount}}个)</span>
+                    </div>
+
+                  </template>
+
+                  <album-list :list="userAlbum"
+                              @select="selectItem"></album-list>
+                  <template v-if="userAlbum.length===0">
+                    <no-result text="还没有专辑,快去收藏吧"></no-result>
+                  </template>
+                </van-collapse-item>
+              </van-collapse>
             </div>
           </template>
           <template v-if="load">
@@ -138,7 +154,8 @@ export default {
     return {
       userCount: null,
       userSongSheet: null, // 用户歌单
-      userAlbum: null// 用户专辑
+      userAlbum: null, // 用户专辑
+      activeNames: ['1', '2']
     }
   },
   mixins: [playlistMixin],
@@ -250,6 +267,29 @@ export default {
         this.$refs.container.style.paddingBottom = bottom
         this.$refs.user_scroll.refresh()
       })
+    },
+    // 切换面板
+    changeCollapse (activeNames) {
+      let element = null
+      let index = null
+      if (activeNames.length > 1) {
+        index = activeNames[activeNames.length - 1]
+      } else {
+        index = activeNames[0]
+      }
+      console.log(index)
+      switch (index) {
+        case '1':
+          element = this.$refs.collapseItem1.$el
+          break
+        case '2':
+          element = this.$refs.collapseItem2.$el
+          break
+      }
+      if (element) {
+        this.$refs.user_scroll.scrollToElement(element, 0)
+      }
+      this.$refs.user_scroll.refresh()
     }
 
   },
@@ -323,6 +363,11 @@ export default {
           }
         }
 
+        .image {
+          background: $color-common-b;
+          border-radius: 50%;
+        }
+
         .icon {
           display: flex;
           align-items: center;
@@ -387,9 +432,9 @@ export default {
     flex: 1;
 
     .user-index {
-      padding: 0.4rem;
-
       .my-list {
+        padding: 0.4rem;
+
         .my-list-item {
           display: flex;
           width: 100%;
@@ -429,8 +474,6 @@ export default {
       .my-follow {
         .title {
           display: flex;
-          height: 1rem;
-          line-height: 1rem;
 
           .text {
             font-size: $font-size-smaller;

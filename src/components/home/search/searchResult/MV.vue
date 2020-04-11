@@ -14,7 +14,7 @@
       </van-list>
     </template>
     <template v-if="mv.isNull">
-      <no-result text="暂无相关MV"></no-result>
+      <no-result text="暂无相关MV" image="search"></no-result>
     </template>
   </div>
 </template>

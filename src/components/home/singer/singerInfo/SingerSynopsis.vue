@@ -6,7 +6,8 @@
       <!-- 歌手图片 -->
       <div class="singer-img"
            @click="handleClick">
-        <div id="image">
+        <div id="image"
+             class="animated fadeIn">
           <van-image :src="singer.picUrl">
             <template v-slot:loading>
               <van-loading type="spinner"

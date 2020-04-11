@@ -33,7 +33,7 @@
         </scroll>
         <div class="no-result"
              v-else>
-          <no-result :text="text"></no-result>
+          {{text}}
         </div>
       </div>
     </transition>
@@ -43,7 +43,6 @@
 import Lyric from 'lyric-parser'
 import songApi from '@/api/song.js'
 import Scroll from '@/components/common/Scroll'
-import NoResult from '@/components/common/NoResult'
 import {
   ERR_OK
 } from '@/api/config.js'
@@ -56,6 +55,7 @@ export default {
       text: ''
     }
   },
+
   computed: {
     ...mapState(['playing', 'playerShowImage', 'currentLyric', 'currentLineNum', 'currentPlayLyric']),
     ...mapGetters(['currentSong']),
@@ -64,6 +64,16 @@ export default {
     },
     picUrl () {
       return this.currentSong.picUrl ? this.currentSong.picUrl : defaultMusicImage
+    },
+    lyric () {
+      return this.currentLyric
+    }
+  },
+  watch: {
+    playing () {
+      if (this.playing) {
+        this.currentLyric.play()
+      }
     }
   },
   methods: {
@@ -74,19 +84,21 @@ export default {
       songApi.getSongLyric(id).then(res => {
         res = res.data
         if (res.code === ERR_OK) {
-          // if (res.klyric.lyric) {
-          //   this.setCurrentLyric(new Lyric(res.klyric.lyric, this.handleLyric))
-          // } else if (res.lrc.lyric) {
-          //   this.setCurrentLyric(new Lyric(res.lrc.lyric, this.handleLyric))
-          // }
+          // 没有歌词
           if (res.nolyric || !res.lrc.lyric) {
             this.text = '暂无歌词'
             this.setCurrentLyric(null)
           } else {
-            this.setCurrentLyric(new Lyric(res.lrc.lyric, this.handleLyric))
-          }
-          if (this.playing) { // 如果是播放状态
-            this.currentLyric.play()
+            // 先解析歌词
+            let lyric = this.parseLyric(res.lrc.lyric)
+            // 创建lyric对象对歌词进行处理
+            let currentLyric = new Lyric(lyric, this.handleLyric)
+            this.setCurrentLyric(currentLyric)
+            // 若解析出来没有歌词说明该歌曲没有歌词
+            if (currentLyric.lines.length === 0) {
+              this.text = '暂无歌词'
+              this.setCurrentLyric(null)
+            }
           }
         }
       }).catch(() => {
@@ -94,7 +106,19 @@ export default {
         this.setCurrentLineNum(0)
       })
     },
-    // 处理歌词
+    // 解析歌词
+    /**
+     * 由于lyric-parse中解析歌词时间为【00:00:00】而网易云歌词时间为【00:00:000】从而导致歌词不同步
+     * 通过正则匹配将歌词时间转换成【00:00:00】形式
+     */
+    parseLyric (lyric) {
+      var timeReg = /\[\d{2}:\d{2}\.\d{3}\]/g
+      let newLyric = lyric.replace(timeReg, res => {
+        return res.substr(0, res.length - 2) + ']'
+      })
+      return newLyric
+    },
+    // lyric-parse中的方法
     handleLyric ({ lineNum, txt }) {
       this.setCurrentLineNum(lineNum)
       if (lineNum > 5) {
@@ -103,6 +127,7 @@ export default {
       } else {
         this.$refs.lyricList.scrollTo(0, 0, 1000)// 滚动到顶部
       }
+
       this.setCurrentPlayLyric(txt)
     },
     // 歌词和图片
@@ -111,8 +136,7 @@ export default {
     }
   },
   components: {
-    Scroll,
-    NoResult
+    Scroll
   }
 }
 </script>
@@ -239,6 +263,10 @@ export default {
     height: 100%;
     display: flex;
     align-items: center;
+    justify-content: center;
+    line-height: 100%;
+    color: #e4e4e4;
+    font-size: $font-size-smaller;
   }
 }
 

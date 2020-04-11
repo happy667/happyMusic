@@ -5,7 +5,7 @@
       <div class="comment-left">
         <!-- 用户头像 -->
         <div class="avatar">
-          <music-img :avatar="comment.user.avatarUrl"></music-img>
+          <mini-image :avatar="comment.user.avatarUrl"></mini-image>
         </div>
       </div>
       <div class="comment-right van-hairline--bottom">
@@ -27,7 +27,7 @@
 </template>
 <script>
 import 'common/js/convert.js'
-import MusicImg from '../img/MusicImg'
+import MiniImage from '../img/MiniImage'
 export default {
   props: {
     comment: {
@@ -36,7 +36,7 @@ export default {
     }
   },
   components: {
-    MusicImg
+    MiniImage
   }
 }
 </script>

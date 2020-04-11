@@ -8,7 +8,7 @@
     <!-- 歌曲图片 -->
     <div class="song-img"
          v-if="showImage">
-      <img v-lazy="picUrl"
+      <img v-lazy="picUrl" class="animated fadeIn"
            :key="picUrl">
     </div>
     <div class="song-desc">
@@ -185,6 +185,8 @@ export default {
     height: 1.2rem;
     margin: 0.1rem;
     margin-right: 0.4rem;
+    background-color: $color-common-b;
+    border-radius: 50%;
 
     img {
       text-align: center;

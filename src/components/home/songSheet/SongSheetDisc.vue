@@ -45,7 +45,6 @@
           </div>
           <!-- loading -->
           <loading :loading="loading"></loading>
-          <!-- 歌单描述 -->
           <section v-if="!loading"
                    ref="sectionBox">
 
@@ -188,8 +187,7 @@ export default {
               name: item.name,
               singers: singerName,
               singersList,
-              picUrl: item.al.picUrl,
-              st: item.st
+              picUrl: item.al.picUrl
             }))
           })
           res.privileges.map(item => {

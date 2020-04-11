@@ -4,6 +4,7 @@
     <!-- mv 图片 -->
     <div class="mv-img">
       <img v-lazy="mv.cover"
+           class="animated fadeIn"
            :key="mv.cover" />
       <!-- 播放次数 -->
       <div class="play-num">

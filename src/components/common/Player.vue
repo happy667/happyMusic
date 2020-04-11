@@ -3,16 +3,13 @@
        ref="play"
        v-show="playList.length>0">
     <!-- 全屏播放器 -->
-    <transition enter-active-class="animated fadeInUp faster">
-      <FullScreenPlay ref="FullScreenPlay"
-                      v-show="playerFullScreen"
-                      @prev="prev"></FullScreenPlay>
-    </transition>
+    <FullScreenPlay ref="FullScreenPlay"
+                    v-show="playerFullScreen"
+                    @prev="prev"></FullScreenPlay>
+
     <!-- 迷你播放器 -->
-    <transition leave-active-class="animated fadeOut faster">
-      <mini-play v-show="!playerFullScreen&&!hideMiniPlayer">
-      </mini-play>
-    </transition>
+    <mini-play v-show="!playerFullScreen&&!hideMiniPlayer">
+    </mini-play>
     <div class="audio">
       <audio ref="audio"
              id="audio"
@@ -82,9 +79,10 @@ export default {
         this.setCurrentPlayLyric('')
         this.setCurrentLineNum(0)
       }
-      clearTimeout(this.timer)
       this.setPlaying(false)
       this.getSong(this.currentSong)
+      // 获取歌词
+      this.$refs.FullScreenPlay.$refs.playSection.getLyric(this.currentSong.id)
       // 初始化获取歌手图片（点击歌手弹出歌手框的图片）
       this.setIsGetSingerImage(false)
     },
@@ -155,9 +153,6 @@ export default {
               this.setSongReady(true)
               this.$toast('该歌曲暂时不能播放')
             } else {
-              this.timer = setTimeout(() => {
-                this.$refs.FullScreenPlay.$refs.playSection.getLyric(this.currentSong.id)// 获取歌词
-              }, 1000)
               this.$nextTick(() => {
                 this.setPlaying(true)
               })
@@ -172,6 +167,7 @@ export default {
         this.$toast(res.data.message)
       })
     },
+
     // 更新时间
     handleUpdateTime (e) {
       // 更新当前播放时间

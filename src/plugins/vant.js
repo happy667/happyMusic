@@ -8,8 +8,6 @@ import {
   Icon,
   search,
   Sticky,
-  IndexBar,
-  IndexAnchor,
   List,
   slider,
   progress,
@@ -21,8 +19,6 @@ import {
   Field,
   CellGroup,
   Button,
-  CountDown,
-  ActionSheet,
   Circle,
   Popup,
   Image,
@@ -32,7 +28,10 @@ import {
   NoticeBar,
   DatetimePicker,
   RadioGroup,
-  Radio
+  Radio,
+  Empty,
+  Collapse,
+  CollapseItem
 } from 'vant'
 Vue.use(Tab)
 Vue.use(Tabs)
@@ -42,8 +41,6 @@ Vue.use(NavBar)
 Vue.use(Icon)
 Vue.use(search)
 Vue.use(Sticky)
-Vue.use(IndexBar)
-Vue.use(IndexAnchor)
 Vue.use(List)
 Vue.use(slider)
 Vue.use(progress)
@@ -55,8 +52,6 @@ Vue.use(Lazyload)
 Vue.use(Field)
 Vue.use(CellGroup)
 Vue.use(Button)
-Vue.use(CountDown)
-Vue.use(ActionSheet)
 Vue.use(Circle)
 Vue.use(Popup)
 Vue.use(Image)
@@ -67,5 +62,8 @@ Vue.use(NoticeBar)
 Vue.use(DatetimePicker)
 Vue.use(RadioGroup)
 Vue.use(Radio)
+Vue.use(Empty)
+Vue.use(Collapse)
+Vue.use(CollapseItem)
 Vue.prototype.$Dialog = Dialog
 Vue.prototype.$toast = Toast

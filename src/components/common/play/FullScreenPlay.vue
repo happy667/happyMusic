@@ -1,18 +1,20 @@
 <template>
-  <div class="full-screen-play-container">
-    <!-- 头部导航栏 -->
-    <play-header></play-header>
-    <!-- 内容区域 -->
-    <play-section ref="playSection"></play-section>
-    <!-- 页面底部 -->
-    <play-footer v-on="$listeners"></play-footer>
-    <!-- 背景 -->
-    <div class="bg">
-      <div class="filter"></div>
-      <img v-lazy="currentSong.picUrl" />
+  <transition enter-active-class="animated fadeInUp faster"
+              leave-active-class="animated fadeOutDown faster">
+    <div class="full-screen-play-container">
+      <!-- 头部导航栏 -->
+      <play-header></play-header>
+      <!-- 内容区域 -->
+      <play-section ref="playSection"></play-section>
+      <!-- 页面底部 -->
+      <play-footer v-on="$listeners"></play-footer>
+      <!-- 背景 -->
+      <div class="bg">
+        <div class="filter"></div>
+        <img v-lazy="currentSong.picUrl" />
+      </div>
     </div>
-
-  </div>
+  </transition>
 </template>
 <script>
 import PlayHeader from './header/Header'

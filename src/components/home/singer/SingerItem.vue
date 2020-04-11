@@ -5,7 +5,7 @@
       <div class="left">
         <!-- 歌手头像 -->
         <div class="singer-avatar">
-          <music-img :avatar="singer.avatar"></music-img>
+          <mini-image :avatar="singer.avatar"></mini-image>
         </div>
         <!-- 歌手姓名 -->
         <div class="singer-name">{{singer.name}}</div>
@@ -23,7 +23,7 @@
 
 </template>
 <script>
-import MusicImg from '../img/MusicImg'
+import MiniImage from '../img/MiniImage'
 import Follow from '@/components/common/Follow'
 import { mapMutations } from 'vuex'
 export default {
@@ -35,7 +35,7 @@ export default {
     }
   },
   components: {
-    MusicImg,
+    MiniImage,
     Follow
   },
   methods: {

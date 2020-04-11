@@ -25,7 +25,8 @@
                 <div class="left-img">
                   <div class="album-image">
                     <img v-lazy="album.picUrl"
-                         :key="album.picUrl" />
+                         :key="album.picUrl"
+                         class="animated fadeIn" />
                   </div>
                 </div>
                 <div class="right-info">
@@ -212,6 +213,7 @@ export default {
                 width: 1.7rem;
                 height: 1.7rem;
                 border-radius: 0.3rem;
+                background: $color-common-b;
 
                 img {
                   display: block;

@@ -1,61 +1,64 @@
 <template>
-  <div class="mini-play-container"
-       @click="handleShowFullPlay">
-    <div class="fixed">
-      <div class="swiper-container player-swiper">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide"
-               v-for="item in sequenceList"
-               :key="item.id">
-            <div class="swiper-list-item">
-              <!-- 左侧图片 -->
-              <div class="left">
-                <div class="image"
-                     :class="cdCls">
-                  <van-image :src="item.picUrl"
-                             round>
-                    <template v-slot:loading>
-                      <van-loading type="spinner"
-                                   size="20" />
-                    </template>
-                  </van-image>
+  <transition enter-active-class="animated fadeIn faster"
+              leave-active-class="animated fadeOut faster">
+    <div class="mini-play-container"
+         @click="handleShowFullPlay">
+      <div class="fixed">
+        <div class="swiper-container player-swiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide"
+                 v-for="item in sequenceList"
+                 :key="item.id">
+              <div class="swiper-list-item">
+                <!-- 左侧图片 -->
+                <div class="left">
+                  <div class="image  animated fadeIn"
+                       :class="cdCls">
+                    <van-image :src="item.picUrl"
+                               round>
+                      <template v-slot:loading>
+                        <van-loading type="spinner"
+                                     size="20" />
+                      </template>
+                    </van-image>
+                  </div>
                 </div>
-              </div>
-              <div class="right">
-                <!--歌曲信息-->
-                <div class="song-info">
-                  <p class="song-name">{{item.name}}</p>
-                  <p class="singer">{{item.singers}}</p>
+                <div class="right">
+                  <!--歌曲信息-->
+                  <div class="song-info">
+                    <p class="song-name">{{item.name}}</p>
+                    <p class="singer">{{item.singers}}</p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <!-- 按钮区域 -->
-      <div class="player-controller">
-        <div class="play"
-             @click.stop="handleTogglePlaying">
-          <van-circle v-model="playerParams.width"
-                      size="34"
-                      color="#fd4979"
-                      :layer-color="circleColor">
-          </van-circle>
-          <div class="icon">
-            <i class="iconfont"
-               :style="iconColor"
-               :class="playIcon"></i>
+        <!-- 按钮区域 -->
+        <div class="player-controller">
+          <div class="play"
+               @click.stop="handleTogglePlaying">
+            <van-circle v-model="playerParams.width"
+                        size="34"
+                        color="#fd4979"
+                        :layer-color="circleColor">
+            </van-circle>
+            <div class="icon">
+              <i class="iconfont"
+                 :style="iconColor"
+                 :class="playIcon"></i>
+            </div>
           </div>
-        </div>
 
-        <!-- 歌曲列表 -->
-        <div class="play-list icon"
-             @click.stop="handlePlayList">
-          <i class="iconfont icon-bofangliebiao"></i>
+          <!-- 歌曲列表 -->
+          <div class="play-list icon"
+               @click.stop="handlePlayList">
+            <i class="iconfont icon-bofangliebiao"></i>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </transition>
 </template>
 <script>
 import Swiper from 'swiper'

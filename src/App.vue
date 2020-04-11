@@ -161,18 +161,8 @@ export default {
   transform: translate3d(-100%, 0, 0);
 }
 
-.slide-right-leave-active {
-  opacity: 0;
-  transform: translate3d(100%, 0, 0);
-}
-
 .slide-left-enter {
   opacity: 0;
   transform: translate3d(100%, 0, 0);
-}
-
-.slide-left-leave-active {
-  opacity: 0;
-  transform: translate3d(-100%, 0, 0);
 }
 </style>

@@ -11,7 +11,8 @@
       </van-list>
     </template>
     <template v-if="songSheet.isNull">
-      <no-result text="暂无相关歌单"></no-result>
+      <no-result text="暂无相关歌单"
+                 image="search"></no-result>
     </template>
   </div>
 </template>

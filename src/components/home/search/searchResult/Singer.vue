@@ -18,7 +18,7 @@
       </van-list>
     </template>
     <template v-if="singer.isNull">
-      <no-result text="暂无相关歌手"></no-result>
+      <no-result text="暂无相关歌手"  image="search"></no-result>
     </template>
   </div>
 </template>

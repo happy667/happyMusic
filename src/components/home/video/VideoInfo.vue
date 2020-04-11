@@ -1,20 +1,23 @@
 <template>
   <div class="videoInfo-container">
     <!-- 头部导航栏 -->
-    <van-nav-bar :title="$route.meta.title"
-                 left-arrow
-                 @click-left="routerBack" />
+    <van-sticky>
+      <van-nav-bar :title="$route.meta.title"
+                   left-arrow
+                   @click-left="routerBack" />
+    </van-sticky>
     <!-- 正在加载 -->
     <template v-if="!video">
       <!-- loading -->
       <loading />
     </template>
     <template v-else>
-      <van-sticky>
+      <van-sticky :offset-top="46">
         <div class="video">
           <video-component :videoParams="video"
                            @toggleInfo="handleToggleInfo"
                            :showMoreInfo="showMoreInfo"
+                           :hideInfo="hideVideoInfo"
                            :moreInfo="true"></video-component>
         </div>
       </van-sticky>
@@ -72,7 +75,8 @@ export default {
       simiMVList: null, // 相似mv列表
       commentList: null, // 评论列表
       commentCount: 0, // 评论数量
-      showMoreInfo: false// 是否显示更多信息
+      showMoreInfo: false, // 是否显示更多信息
+      hideVideoInfo: false// 是否隐藏视频信息
     }
   },
   beforeRouteLeave (to, from, next) {
@@ -95,6 +99,20 @@ export default {
       await this.getSimiMV(this.id)
       await this.getVideoComment(this.id)
     })
+    // 监听页面滚动
+    window.addEventListener('scroll', this.handleScroll)
+  },
+  activated () {
+    // 监听页面滚动
+    window.addEventListener('scroll', this.handleScroll)
+  },
+  deactivated () {
+    // 取消监听页面滚动
+    window.removeEventListener('scroll', this.handleScroll)
+  },
+  destroyed () {
+    // 取消监听页面滚动
+    window.removeEventListener('scroll', this.handleScroll)
   },
   methods: {
     ...mapMutations(['setIsAdvance', 'setHideMiniPlayer']),
@@ -167,6 +185,14 @@ export default {
     // 切换显示隐藏视频详情信息
     handleToggleInfo () {
       this.showMoreInfo = !this.showMoreInfo
+    },
+    // 监听页面滚动
+    handleScroll () {
+      if (window.scrollY > 0) {
+        this.hideVideoInfo = true
+      } else {
+        this.hideVideoInfo = false
+      }
     }
 
   },

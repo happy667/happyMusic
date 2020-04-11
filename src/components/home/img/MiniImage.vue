@@ -1,6 +1,8 @@
 <template>
   <div class="avatar-wrapper">
-    <img v-lazy="avatar" :key="avatar" />
+    <img v-lazy="avatar"
+         :key="avatar"
+         class="animated fadeIn" />
   </div>
 </template>
 <script>
@@ -11,10 +13,13 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
+@import '~common/stylus/variable';
+
 .avatar-wrapper {
   width: 1rem;
   height: 1rem;
   border-radius: 50%;
+  background-color: $color-common-b;
 
   img {
     display: block;

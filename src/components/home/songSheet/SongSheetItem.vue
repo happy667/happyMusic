@@ -2,6 +2,7 @@
   <div class="song-sheet-item-container">
     <div class="sons-img">
       <img v-lazy="picUrl"
+           class="animated fadeIn"
            :key="picUrl">
     </div>
     <div class="songs-desc">{{songSheet.name}}</div>
@@ -51,6 +52,7 @@ export default {
       width: 100%;
       height: 100%;
       border-radius: 0.3rem;
+      background: $color-common-b;
     }
   }
 

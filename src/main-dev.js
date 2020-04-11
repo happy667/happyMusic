@@ -11,21 +11,16 @@ import 'vant/lib/index.css'
 import '@/assets/common/font/iconfont.css'
 import '@/assets/common/js/utils.js'
 import 'swiper/css/swiper.css'
-import {
-  defaultMusicImage
-} from 'common/js/config.js'
 import '@/assets/common/js/globalComponents.js'
 import VueLazyLoad from 'vue-lazyload'
 // 解决移动端300ms延迟
 import fastclick from 'fastclick'
-// Vue.use(VueAwesomeSwiper)
 fastclick.attach(document.body)
 Vue.config.productionTip = false
 Vue.use(animate)
 // 使用懒加载
 Vue.use(VueLazyLoad, {
-  preLoad: 1,
-  loading: defaultMusicImage
+  preLoad: 1
 })
 new Vue({
   router,

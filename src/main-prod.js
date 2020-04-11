@@ -9,17 +9,13 @@ import '@/assets/common/font/iconfont.css'
 import '@/assets/common/js/utils.js'
 import VueLazyLoad from 'vue-lazyload'
 import '@/assets/common/js/globalComponents.js'
-import {
-  defaultMusicImage
-} from 'common/js/config.js'
 // 解决移动端300ms延迟
 import fastclick from 'fastclick'
 fastclick.attach(document.body)
 Vue.config.productionTip = false
 // 使用懒加载
 Vue.use(VueLazyLoad, {
-  preLoad: 1.3,
-  loading: defaultMusicImage
+  preLoad: 1
 })
 new Vue({
   router,

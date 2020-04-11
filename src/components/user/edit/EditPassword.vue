@@ -211,6 +211,7 @@ export default {
   position: fixed;
   width: 100%;
   height: 100%;
+  background-color: $color-common-background;
 }
 
 .editPassword-container>>>.van-nav-bar__text {

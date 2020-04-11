@@ -1,7 +1,8 @@
 <template>
   <div class="album-item-container">
-    <div class="item-img">
-      <img v-lazy="item.picUrl" />
+    <div class="item-img ">
+      <img v-lazy="item.picUrl"
+           class="animated fadeIn" />
     </div>
     <div class="item-name">{{item.name}}</div>
     <div class="item-pub-time"
@@ -22,7 +23,7 @@ export default {
 
 .album-item-container {
   padding: 0.2rem 0.3rem;
-  background: #fff;
+  background: $color-common-background;
   box-shadow: 0 0.1rem 0.8rem rgba(0, 0, 0, 0.1);
   border-radius: 0.2rem;
   box-sizing: border-box;
@@ -36,6 +37,7 @@ export default {
     width: 2.1rem;
     height: 2rem;
     border-radius: 0.3rem;
+    background: $color-common-b;
 
     img {
       display: block;
@@ -48,6 +50,7 @@ export default {
   .item-name {
     margin-top: 0.2rem;
     width: 2.1rem;
+    color: $color-common-x;
     no-wrap();
   }
 

@@ -36,7 +36,7 @@ export default {
   height: 100%;
   top: 0;
   left: 0;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.6);
   z-index: 2000;
 
   .container {

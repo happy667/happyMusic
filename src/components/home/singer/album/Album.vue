@@ -19,6 +19,7 @@
             <div class="left-img">
               <div class="album-image">
                 <img v-lazy="albumObj.album.picUrl"
+                     class="animated fadeIn"
                      :key="albumObj.album.picUrl" />
               </div>
               <div class="public-time">{{albumObj.album.publishTime|convertDate}}</div>
@@ -379,6 +380,7 @@ export default {
             width: 2.2rem;
             height: 2.2rem;
             border-radius: 0.3rem;
+            background: $color-common-b;
 
             img {
               display: block;

@@ -4,6 +4,7 @@
     <!--  图片 -->
     <div class="img">
       <img v-lazy="item.coverImgUrl"
+           class="animated fadeIn"
            :key="item.coverImgUrl" />
     </div>
     <!-- 信息 -->
@@ -81,6 +82,7 @@ export default {
     .title {
       line-height: 0.5rem;
       font-weight: bold;
+      color: $color-common-x;
       no-wrap2();
     }
 

@@ -6,7 +6,9 @@
           v-for="(item,index) in rankingList"
           :key="index">
         <div class="list-item-img">
-          <img v-lazy="item.coverImgUrl" :key="item.coverImgUrl" />
+          <img v-lazy="item.coverImgUrl"
+               :key="item.coverImgUrl"
+               class="animated fadeIn" />
         </div>
         <div class="list-item-title">{{item.name}}</div>
       </li>
@@ -56,6 +58,7 @@ export default {
         height: 2.2rem;
         border-radius: 0.2rem;
         margin-bottom: 0.2rem;
+        background-color: $color-common-b;
 
         img {
           display: block;
