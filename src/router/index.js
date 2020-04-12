@@ -108,7 +108,17 @@ const routes = [
     meta: {
       index: 1,
       title: '歌单广场'
-    } // meta对象的index用来定义当前路由的层级,由小到大,由低到高
+    }, // meta对象的index用来定义当前路由的层级,由小到大,由低到高
+    beforeEnter(to, from, next) {
+      if (from.name === 'home') {
+        // 添加不缓存路由
+        store.commit('setAddNoCacheComponents', 'songSheetSquare')
+      } else {
+        // 移除不缓存路由
+        store.commit('setRemoveNoCacheComponents', 'songSheetSquare')
+      }
+      next()
+    }
   },
   // 歌单详情
   {
@@ -122,7 +132,7 @@ const routes = [
     }, // meta对象的index用来定义当前路由的层级,由小到大,由低到高
     beforeEnter(to, from, next) {
       console.log(from)
-      if (from.name === 'home' || from.name === 'searchResult' || from.name === 'user') {
+      if (from.name === 'home' || from.name === 'searchResult' || from.name === 'songSheetSquare' || from.name === 'user') {
         // 添加不缓存路由
         store.commit('setAddNoCacheComponents', 'songSheetDisc')
       } else {

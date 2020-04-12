@@ -123,25 +123,38 @@ export default {
 
   .song-info {
     width: 100%;
-    padding: 0 1.5rem;
+    margin: 0 1.5rem;
     box-sizing: border-box;
+    overflow: hidden;
 
     .song-name, .singer {
       width: 100%;
       height: 0.7rem;
       line-height: 0.7rem;
       text-align: center;
-      no-wrap();
       font-size: $font-size-smaller;
     }
 
     .song-name {
       font-weight: 600;
+      animation: 10s wordsLoop linear infinite normal;
+      white-space: nowrap;
     }
 
     .singer {
+      no-wrap();
       color: $color-common-x;
     }
+  }
+}
+
+@keyframes wordsLoop {
+  0% {
+    transform: translateX(100%);
+  }
+
+  100% {
+    transform: translateX(-100%);
   }
 }
 </style>

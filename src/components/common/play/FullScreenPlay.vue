@@ -1,6 +1,5 @@
 <template>
-  <transition enter-active-class="animated fadeInUp faster"
-              leave-active-class="animated fadeOutDown faster">
+  <transition name="slide">
     <div class="full-screen-play-container">
       <!-- 头部导航栏 -->
       <play-header></play-header>
@@ -11,7 +10,8 @@
       <!-- 背景 -->
       <div class="bg">
         <div class="filter"></div>
-        <img v-lazy="currentSong.picUrl" />
+        <div class="image"
+             :style="bgImage"></div>
       </div>
     </div>
   </transition>
@@ -25,7 +25,12 @@ import { mapGetters } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters(['currentSong'])
+    ...mapGetters(['currentSong']),
+    bgImage () {
+      return {
+        backgroundImage: `url(${this.currentSong.picUrl})`
+      }
+    }
   },
 
   components: {
@@ -37,6 +42,14 @@ export default {
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
+
+.slide-enter-active, .slide-leave-active {
+  transition: all 0.3s;
+}
+
+.slide-enter, .slide-leave-to {
+  transform: translate3d(0, 100%, 0);
+}
 
 .full-screen-play-container>>>.van-slider__button {
   width: 0.25rem;
@@ -60,21 +73,25 @@ export default {
 
   .bg {
     position: absolute;
-    left: 50%;
-    margin-left: -50%;
     width: 100%;
     height: 100%;
     z-index: -1;
-    opacity: 0.5;
-    filter: blur(100px);
-    z-index: -1;
+    opacity: 0.8;
 
     .filter {
       position: absolute;
       width: 100%;
       height: 100%;
       background: #000;
-      opacity: 0.4;
+      opacity: 0.5;
+    }
+
+    .image {
+      width: 100%;
+      height: 100%;
+      transition: background-image 0.4s;
+      background: no-repeat 50% / cover;
+      filter: blur(100px);
     }
   }
 }

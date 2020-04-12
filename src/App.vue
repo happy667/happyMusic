@@ -44,7 +44,6 @@ export default {
       // 获取用户信息
       this.getLoginUserInfo()
     }
-
     // 监听Storage变化
     this.listenerStorage()
     // 监听网络连接
@@ -164,5 +163,9 @@ export default {
 .slide-left-enter {
   opacity: 0;
   transform: translate3d(100%, 0, 0);
+}
+
+#app>>>.singerList {
+  max-height: 6rem;
 }
 </style>

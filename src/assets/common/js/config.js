@@ -21,6 +21,6 @@ export const needLoginComponents = [ // 存放路由name属性
   'editNickname',
   'editPassword'
 ]
-export const defaultMusicImage = 'http://s4.music.126.net/style/web2/img/default/default_album.jpg?param=130y130'
+export const defaultImage = 'http://s4.music.126.net/style/web2/img/default/default_album.jpg?param=130y130'
 export const logoImage = '/assets/images/Logo.png'
 export const logoIndexImage = 'src/assets/images/logoIndex.png'

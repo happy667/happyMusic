@@ -122,7 +122,6 @@ export default {
         clearLocalList()
         this.localSearchList = []// 清空当前数组
       }).catch(() => {
-
       })
     },
     // 关闭搜索列表
@@ -146,7 +145,6 @@ export default {
   activated () {
     if (getLocalList()) { this.localSearchList = getLocalList() }// 如果本地存在历史记录就赋值
   },
-
   components: {
     Scroll
   }

@@ -20,6 +20,7 @@
                       title-active-color="#FD4979"
                       color="#FD4979"
                       animated
+                      swipe-threshold="4"
                       swipeable>
               <van-tab title="推荐">
                 <div class="recommend-list">
@@ -32,7 +33,7 @@
                        :title="item.playlistTag.name">
 
                 <div class="song-sheet-cagetory-list">
-                  <van-loading v-if="!songSheetCagetoryList[index+1]"
+                  <van-loading v-if="loading||!songSheetCagetoryList[index+1]"
                                size="24px"
                                color="#FD4979"
                                class="load"
@@ -64,10 +65,11 @@ export default {
       currentIndex: 0, // 当前索引
       recommendSongSheet: [], // 推荐歌单列表
       songSheetCagetory: [], // 歌单分类
-      songSheetCagetoryList: {}// 歌单分类列表
-
+      songSheetCagetoryList: {}, // 歌单分类列表
+      loading: true
     }
   },
+  name: 'songSheetSquare',
   mixins: [playlistMixin],
   computed: {
     swiperList () {
@@ -75,9 +77,6 @@ export default {
     },
     newRecommendSongSheet () {
       return this.recommendSongSheet.slice(3)
-    },
-    loading () {
-      return this.songSheetCagetory.length === 0 && this.recommendSongSheet.length === 0
     }
   },
   methods: {
@@ -105,11 +104,13 @@ export default {
     },
     // 获取推荐歌单
     async getRecommendSongSheet () {
+      this.loading = true
       const {
         data: res
       } = await recommendApi.getRecommendSongSheet()
       if (res.code === ERR_OK) { // 成功获取推荐歌单
         this.recommendSongSheet = res.result
+        this.loading = false
       }
     },
     handleChange (name, title) {

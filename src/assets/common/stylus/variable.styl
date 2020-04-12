@@ -15,14 +15,6 @@ $font-size-large-x = .6rem
 $font-size-large = .65rem
 // 背景图片
 $baImage=url('./assets/images/bgImages/bg1.jpg');
-// 字体样式
-$font-common='Roboto'
-// 背景图片
-bg-image($url)
-  background-image: url($url + "@2x.png")
-  @media (-webkit-min-device-pixel-ratio: 3),(min-device-pixel-ratio: 3)
-    background-image: url($url + "@3x.png")
-
 // 不换行
 no-wrap()
   text-overflow: ellipsis
@@ -50,6 +42,7 @@ roundImg(){
    height: 100%;
    border-radius: 50%;
 }
+
 // 扩展点击区域
 extend-click()
   position: relative

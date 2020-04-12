@@ -1,8 +1,7 @@
 <template>
   <div class="play-list-container"
        @click="handleClick">
-    <transition enter-active-class="animated fadeInUp faster"
-                leave-active-class="animated fadeOutDown faster">
+    <transition name="list-fade">
       <div class="container"
            v-show="$store.state.togglePlayList"
            @click.stop>
@@ -30,6 +29,14 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
+.list-fade-enter-active, .list-fade-leave-active {
+  transition: all 0.3s;
+}
+
+.list-fade-enter, .list-fade-leave-to {
+  transform: translate3d(0, 100%, 0);
+}
+
 .play-list-container {
   position: fixed;
   width: 100%;

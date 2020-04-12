@@ -1,5 +1,4 @@
 <template>
-
   <div class="search-container">
     <!-- 头部导航 -->
     <van-sticky>
@@ -72,11 +71,12 @@ export default {
       }
     }
   },
-
   mounted () {
     this.$nextTick(() => {
       this.getSearchDefault()
     })
+    // 监听页面滚动
+    window.addEventListener('scroll', this.handleScroll)
   },
   activated () {
     // 监听页面滚动
@@ -86,7 +86,10 @@ export default {
     // 取消监听页面滚动
     window.removeEventListener('scroll', this.handleScroll)
   },
-
+  destroyed () {
+    // 取消监听页面滚动
+    window.removeEventListener('scroll', this.handleScroll)
+  },
   methods: {
     ...mapMutations(['setSearchKeywords', 'setSearchCurrentIndex', 'setShowSearchList', 'setIsAdvance']),
     // 返回上一个路由
@@ -179,7 +182,6 @@ export default {
         this.closeSearchList()
       }
     }
-
   }
 }
 </script>

@@ -6,7 +6,7 @@
       <div class="song-image">
         <div class="image"
              :class="cdCls">
-          <img v-lazy="picUrl"
+          <img :src="picUrl"
                :key="picUrl">
           <div class="img-linght"></div>
         </div>
@@ -44,9 +44,11 @@ import Lyric from 'lyric-parser'
 import songApi from '@/api/song.js'
 import Scroll from '@/components/common/Scroll'
 import {
+  defaultImage
+} from '@/assets/common/js/config.js'
+import {
   ERR_OK
 } from '@/api/config.js'
-import { defaultMusicImage } from 'common/js/config.js'
 import { mapGetters, mapState, mapMutations } from 'vuex'
 export default {
   data () {
@@ -63,7 +65,7 @@ export default {
       return this.playing ? 'play' : 'play pause'
     },
     picUrl () {
-      return this.currentSong.picUrl ? this.currentSong.picUrl : defaultMusicImage
+      return this.currentSong.picUrl ? this.currentSong.picUrl : defaultImage
     },
     lyric () {
       return this.currentLyric

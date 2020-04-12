@@ -25,7 +25,8 @@
                 </div>
                 <div class="right">
                   <!--歌曲信息-->
-                  <div class="song-info">
+                  <div class="song-info"
+                       :class="currentSong.id===item.id?'active':''">
                     <p class="song-name">{{item.name}}</p>
                     <p class="singer">{{item.singers}}</p>
                   </div>
@@ -39,7 +40,7 @@
           <div class="play"
                @click.stop="handleTogglePlaying">
             <van-circle v-model="playerParams.width"
-                        size="34"
+                        size="32"
                         color="#fd4979"
                         :layer-color="circleColor">
             </van-circle>
@@ -218,9 +219,6 @@ export default {
          }
 
          .right {
-           flex: 1;
-           width: 7rem;
-
            .song-info {
              display: flex;
              flex-direction: column;
@@ -229,16 +227,25 @@ export default {
 
              .song-name {
                margin-top: 0.2rem;
-               width: 5.5rem;
+               width: 5.7rem;
                line-height: 0.55rem;
                font-size: $font-size-smaller;
                font-weight: 400;
                no-wrap();
              }
 
+             &.active {
+               overflow: hidden;
+
+               .song-name {
+                 overflow: visible;
+                 animation: 10s wordsLoop linear infinite normal;
+               }
+             }
+
              .singer {
                margin-bottom: 0.2rem;
-               width: 5.5rem;
+               width: 5.7rem;
                line-height: 0.55rem;
                font-size: $font-size-smaller-x;
                color: $color-common-b2;
@@ -269,7 +276,7 @@ export default {
 
        .play-list {
          width: 1.2rem;
-         height: 1.2rem;
+         height: 1.5rem;
 
          i {
            font-size: 0.8rem;
@@ -279,7 +286,7 @@ export default {
        .play {
          position: relative;
          width: 1.2rem;
-         height: 1.2rem;
+         height: 1.5rem;
          display: flex;
          justify-content: center;
          align-items: center;
@@ -292,7 +299,7 @@ export default {
 
            i {
              color: $color-common-b2;
-             font-size: 0.4rem;
+             font-size: 0.35rem;
            }
          }
        }
@@ -307,6 +314,16 @@ export default {
 
    100% {
      transform: rotate(360deg);
+   }
+ }
+
+ @keyframes wordsLoop {
+   0% {
+     transform: translateX(100%);
+   }
+
+   100% {
+     transform: translateX(-100%);
    }
  }
 </style>

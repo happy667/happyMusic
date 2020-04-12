@@ -19,8 +19,8 @@
                 </div>
               </div>
               <div class="icon"
-                   v-show="item.id===currentSong.id ">
-                <i class="iconfont icon-ziyuanldpi"></i>
+                   v-show="item.id===currentSong.id">
+                <img src="@/assets/images/loading.svg">
               </div>
             </div>
 
@@ -39,6 +39,7 @@
 <script>
 import Scroll from '@/components/common/Scroll'
 import { mapGetters, mapMutations, mapState, mapActions } from 'vuex'
+
 export default {
   computed: {
     ...mapState(['currentPlayIndex', 'togglePlayList']),
@@ -141,6 +142,7 @@ export default {
               .song-name {
                 font-size: $font-size-smaller;
                 color: $color-common-x;
+                animation: 5s wordsLoop linear infinite normal;
 
                 .song-singer {
                   font-size: $font-size-smaller-x;
@@ -152,11 +154,12 @@ export default {
         }
 
         .icon {
-          width: 1rem;
-          text-align: center;
+          width: 0.6rem;
 
-          i {
-            font-size: $font-size-smaller;
+          img {
+            display: block;
+            width: 100%;
+            height: 100%;
           }
         }
 
@@ -166,9 +169,12 @@ export default {
 
             .song-desc {
               margin-right: 0.3rem;
+              overflow: hidden;
 
               .text {
                 color: $color-common;
+                overflow: visible;
+                animation: 10s wordsLoop linear infinite normal;
 
                 .song-name {
                   color: $color-common;
@@ -183,6 +189,16 @@ export default {
         }
       }
     }
+  }
+}
+
+@keyframes wordsLoop {
+  0% {
+    transform: translateX(100%);
+  }
+
+  100% {
+    transform: translateX(-100%);
   }
 }
 </style>

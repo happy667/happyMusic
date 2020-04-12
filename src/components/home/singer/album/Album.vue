@@ -107,6 +107,7 @@
 </template>
 <script>
 import 'common/js/convert.js'
+import Scroll from '@/components/common/Scroll'
 import SongsList from '@/components/home/song/SongList'
 import singerApi from '@/api/singer.js'
 import userApi from '@/api/user.js'
@@ -114,7 +115,6 @@ import Song from '@/assets/common/js/song.js'
 import Singer from '@/assets/common/js/singer.js'
 import NoResult from '@/components/common/NoResult'
 import SingerItem from '@/components/home/singer/SingerItem'
-import Scroll from '@/components/common/Scroll'
 import {
   ERR_OK
 } from '@/api/config.js'
@@ -274,6 +274,7 @@ export default {
         this.setSingerCurrentIndex(0)
         this.$router.push(`/singerInfo/${list[0].id}`)
       } else {
+        console.log(123)
         this.showSingerPopup = true
         if (!this.isGetAlbumSingerImage) { // 判断是否获取过歌手图片
           list.forEach(async (item, index) => { // 查询该歌手图片
@@ -295,7 +296,7 @@ export default {
     },
     // 获取容器
     getContainer () {
-      return document.querySelector('.album-container')
+      return document.querySelector('#app')
     },
     // 选择歌手列表中歌手
     handleSelectSinger (item) {
@@ -471,6 +472,8 @@ export default {
 
       .play-list {
         .play {
+          margin-top: 0.3rem;
+
           .top {
             padding-left: 0.4rem;
             display: flex;
@@ -487,8 +490,8 @@ export default {
 
             .play-all {
               font-size: $font-size-smaller;
-              height: 0.8rem;
-              line-height: 0.8rem;
+              height: 1rem;
+              line-height: 1rem;
             }
           }
         }
