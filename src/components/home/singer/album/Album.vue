@@ -15,7 +15,7 @@
       <!-- 专辑头部 -->
       <div class="album-header">
         <section class="album-info">
-          <div class="top">
+          <div class="container">
             <div class="left-img">
               <div class="album-image">
                 <img v-lazy="albumObj.album.picUrl"
@@ -49,22 +49,28 @@
               </div>
             </div>
           </div>
+          <div class="bg">
+            <div class="filter"></div>
+            <div class="image"
+                 :style="bgImage"></div>
+          </div>
         </section>
       </div>
 
-      <!-- 歌曲列表 -->
       <section>
         <scroll ref="album_scroll">
           <div class="container"
                ref="container">
             <!-- 专辑简介 -->
             <div class="album-desc"
-                 v-if="albumObj.album.description">
+                 v-if="albumObj.album.description"
+                 @click="openOverlay">
               <section class="content">
                 <p>简介:</p>
                 <p v-html="albumObj.album.description"></p>
               </section>
             </div>
+            <!-- 歌曲列表 -->
             <div class="play-list"
                  v-if="albumObj.songs&&albumObj.songs.length!==0">
               <div class="play">
@@ -103,6 +109,45 @@
                      :key="item.id"></singer-item>
       </div>
     </van-popup>
+    <!-- 遮罩层 -->
+    <van-overlay :show="showOverlay"
+                 v-if="albumObj.album"
+                 class="overlay-container">
+      <div class="container"
+           @click="closeOverlay"
+           @touchmove.stop>
+        <div class="top">
+          <div class="image-container">
+            <div class="image">
+              <img v-lazy="albumObj.album.picUrl">
+            </div>
+          </div>
+
+          <p class="title">{{albumObj.album.name}}</p>
+        </div>
+        <div class="bottom">
+          <article class="description">
+            <p class="subType">专辑类别: {{albumObj.album.subType}}</p>
+            <div class="content"
+                 v-html="albumObj.album.description"></div>
+          </article>
+        </div>
+
+      </div>
+      <!-- 背景 -->
+      <div class="bg"
+           v-if="albumObj.album.blurPicUrl">
+        <div class="filter"></div>
+        <div class="image"
+             :style="bgImage"></div>
+      </div>
+      <div class="close"
+           @click="closeOverlay">
+        <div class="icon">
+          <i class="iconfont icon-cha"></i>
+        </div>
+      </div>
+    </van-overlay>
   </div>
 </template>
 <script>
@@ -131,7 +176,8 @@ export default {
     return {
       albumObj: {}, // 专辑对象
       showSingerPopup: false, // 显示歌手弹出层
-      followed: false
+      followed: false,
+      showOverlay: false// 是否显示遮罩层
     }
   },
   computed: {
@@ -145,6 +191,11 @@ export default {
     },
     followText () {
       return this.followed ? '已收藏' : '收藏'
+    },
+    bgImage () {
+      return {
+        backgroundImage: `url(${this.albumObj.album.blurPicUrl})`
+      }
     }
   },
   mounted () {
@@ -157,7 +208,7 @@ export default {
     this.setIsGetAlbumSingerImage(false)
   },
   methods: {
-    ...mapMutations(['setPlayerFullScreen', 'setSingerCurrentIndex', 'setIsAdvance', 'setIsGetAlbumSingerImage']),
+    ...mapMutations(['setPlayerFullScreen', 'setSingerCurrentIndex', 'setIsAdvance', 'setIsGetAlbumSingerImage', 'setHideMiniPlayer']),
     routerBack () {
       this.$route.meta.isBack = true
       this.setIsAdvance(false)
@@ -323,6 +374,21 @@ export default {
       // 设置为前进页面
       this.setIsAdvance(true)
       this.$router.push(`/albumComment/${this.id}`)
+    },
+    // 打开遮罩层
+    openOverlay () {
+      this.showOverlay = true
+      this.setHideMiniPlayer(true)
+      // 不让页面滚动
+      document.body.style.position = 'absolute'
+      document.body.style.overflow = 'hidden'
+    },
+    // 关闭遮罩层
+    closeOverlay () {
+      this.showOverlay = false
+      this.setHideMiniPlayer(false)
+      document.body.style.position = ''
+      document.body.style.overflow = ''
     }
   },
   components: {
@@ -359,7 +425,6 @@ export default {
   .album-header {
     position: relative;
     height: 0;
-    background-image: linear-gradient(-20deg, #f794a4 0%, #fdd6bd 100%);
     padding-bottom: 3.1rem;
 
     .album-info {
@@ -370,24 +435,25 @@ export default {
       bottom: 0;
       padding: 0.5rem;
 
-      .top {
+      .container {
         display: flex;
+        height: 2.1rem;
 
         .left-img {
           position: relative;
           margin-right: 0.5rem;
 
           .album-image {
-            width: 2.2rem;
-            height: 2.2rem;
+            width: 2.1rem;
+            height: 2.1rem;
             border-radius: 0.3rem;
-            background: $color-common-b;
 
             img {
               display: block;
               width: 100%;
               height: 100%;
               border-radius: 0.3rem;
+              background: $color-common-b;
             }
           }
 
@@ -446,9 +512,36 @@ export default {
             }
 
             .icon, .iconfont {
-              font-size: 0.7rem;
+              font-size: 0.65rem;
             }
           }
+        }
+      }
+
+      .bg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        z-index: -1;
+        overflow: hidden;
+
+        .filter {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          background: #000;
+          opacity: 0.9;
+        }
+
+        .image {
+          width: 100%;
+          height: 100%;
+          transition: background-image 0.4s;
+          background: no-repeat 50% / cover;
+          filter: blur(30px);
+          transform: scale(1.5);
         }
       }
     }
@@ -460,7 +553,7 @@ export default {
 
     .container {
       .album-desc {
-        padding: 0.3rem 0.4rem;
+        padding: 0.3rem 0.4rem 0 0.4rem;
 
         .content {
           no-wrap3();
@@ -471,9 +564,9 @@ export default {
       }
 
       .play-list {
-        .play {
-          margin-top: 0.3rem;
+        padding-top: 0.3rem;
 
+        .play {
           .top {
             padding-left: 0.4rem;
             display: flex;
@@ -494,6 +587,113 @@ export default {
               line-height: 1rem;
             }
           }
+        }
+      }
+    }
+  }
+
+  .overlay-container {
+    top: 0;
+    bottom: 0;
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    .container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding: 1.4rem 0.5rem 1rem;
+      width: 100%;
+      min-height: 100%;
+      box-sizing: border-box;
+      color: #fff;
+      z-index: 0;
+
+      .top {
+        margin-bottom: 0.3rem;
+        width: 100%;
+
+        .image-container {
+          margin-bottom: 0.3rem;
+
+          .image {
+            margin: 0 auto;
+            width: 4rem;
+            height: 4rem;
+
+            img {
+              display: block;
+              width: 100%;
+              height: 100%;
+            }
+          }
+        }
+
+        .title {
+          line-height: 0.7rem;
+          text-align: center;
+          font-size: $font-size-smaller-x;
+        }
+      }
+
+      .bottom {
+        font-size: $font-size-mini;
+
+        .subType {
+          height: 1rem;
+          line-height: 1rem;
+        }
+
+        .content {
+          line-height: 0.5rem;
+          white-space: pre-wrap;
+        }
+      }
+    }
+
+    .bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+
+      .filter {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        opacity: 0.9;
+      }
+
+      .image {
+        width: 100%;
+        height: 100%;
+        background: no-repeat 50% / cover;
+        filter: blur(150px);
+      }
+    }
+
+    .close {
+      position: fixed;
+      right: 0.5rem;
+      top: 0.5rem;
+
+      .icon {
+        width: 1rem;
+        height: 1rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        i {
+          color: #fff;
+          font-size: $font-size-smaller;
         }
       }
     }

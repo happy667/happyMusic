@@ -16,31 +16,39 @@
         <loading />
       </template>
       <template v-else>
-        <div class="section">
-          <!-- 专辑头部 -->
-          <div class="album-header"
-               @click="goToAlbum">
-            <div class="album-info">
-              <div class="top">
-                <div class="left-img">
-                  <div class="album-image">
-                    <img v-lazy="album.picUrl"
-                         :key="album.picUrl"
-                         class="animated fadeIn" />
+        <van-sticky :offset-top="46">
+          <div class="section">
+            <!-- 专辑头部 -->
+            <div class="album-header"
+                 @click="goToAlbum">
+              <div class="album-info">
+                <div class="container">
+                  <div class="left-img">
+                    <div class="album-image">
+                      <img v-lazy="album.picUrl"
+                           :key="album.picUrl"
+                           class="animated fadeIn" />
+                    </div>
+                  </div>
+                  <div class="right-info">
+                    <div class="album-name">{{album.name}}</div>
+                    <div class="album-singer">歌手:{{album.singers}}
+                    </div>
+                  </div>
+                  <div class="icon">
+                    <van-icon name="arrow" />
                   </div>
                 </div>
-                <div class="right-info">
-                  <div class="album-name">{{album.name}}</div>
-                  <div class="album-singer">歌手:{{album.singers}}
-                  </div>
-                </div>
-                <div class="icon">
-                  <van-icon name="arrow" />
+                <div class="bg"
+                     v-if="album.blurPicUrl">
+                  <div class="filter"></div>
+                  <div class="image"
+                       :style="bgImage"></div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </van-sticky>
       </template>
       <!-- 评论列表 -->
       <template v-if="commentList">
@@ -97,6 +105,11 @@ export default {
   computed: {
     commentText () {
       return this.commentCount === 0 ? '' : this.commentCount
+    },
+    bgImage () {
+      return {
+        backgroundImage: `url(${this.album.blurPicUrl})`
+      }
     }
   },
   methods: {
@@ -178,15 +191,20 @@ export default {
 
 .album-comment-container {
   width: 100%;
-  height: 100%;
+  height: 100vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
   background: $color-common-background;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   .container {
     .section {
       .album-header {
         position: relative;
         height: 0;
-        background-image: linear-gradient(-20deg, #f794a4 0%, #fdd6bd 100%);
         padding-bottom: 2.3rem;
 
         .album-info {
@@ -196,8 +214,10 @@ export default {
           right: 0;
           bottom: 0;
           padding: 0.3rem;
+          z-index: 99;
 
-          .top {
+          .container {
+            position: relative;
             display: flex;
 
             .left-img {
@@ -250,6 +270,33 @@ export default {
               align-items: center;
               font-size: 1rem;
               color: $color-common-b;
+            }
+          }
+
+          .bg {
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            overflow: hidden;
+
+            .filter {
+              position: absolute;
+              width: 100%;
+              height: 100%;
+              background: #000;
+              opacity: 0.9;
+            }
+
+            .image {
+              width: 100%;
+              height: 100%;
+              transition: background-image 0.4s;
+              background: no-repeat 50% / cover;
+              filter: blur(30px);
+              transform: scale(1.5);
             }
           }
         }

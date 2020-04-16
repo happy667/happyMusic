@@ -112,7 +112,7 @@ import SongSheetDetail from '@/assets/common/js/songSheetDetail.js'
 import NoResult from '@/components/common/NoResult'
 import Follow from '@/components/common/Follow'
 import Position from '@/components/common/Position'
-import overlay from '@/components/common/Overlay'
+import overlay from '@/components/common/OverlayImage'
 import { playlistMixin } from '@/assets/common/js/mixin.js'
 import { mapMutations, mapGetters, mapActions, mapState } from 'vuex'
 

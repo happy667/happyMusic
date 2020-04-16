@@ -78,7 +78,7 @@ import singerApi from '@/api/singer.js'
 import userApi from '@/api/user.js'
 import Song from '@/assets/common/js/song.js'
 import Singer from '@/assets/common/js/singer.js'
-import overlay from '@/components/common/Overlay'
+import overlay from '@/components/common/OverlayImage'
 import {
   ERR_OK
 } from '@/api/config.js'
