@@ -7,13 +7,14 @@
 <script>
 export default {
   name: 'appIndex',
-
-  mounted () {
-    console.log(232)
-    // 如果有歌曲播放就隐藏迷你播放器
-    if (this.$store.state.currentPlayIndex !== -1) {
-      this.$store.commit('setHideMiniPlayer', true)
-    }
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      // 如果有歌曲播放就隐藏迷你播放器
+      if (vm.$store.state.currentPlayIndex !== -1) {
+        vm.$store.commit('setHideMiniPlayer', true)
+      }
+      next()
+    })
   },
   beforeRouteLeave (to, from, next) {
     // 如果有歌曲播放就显示迷你播放器

@@ -214,7 +214,7 @@ export default {
             }, this.time)
           }
         }).catch(error => {
-          this.$toast(error.data.message || error.message)
+          this.$toast(error.data.message)
         })
       }
     }

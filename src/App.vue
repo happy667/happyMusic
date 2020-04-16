@@ -165,7 +165,7 @@ export default {
   transform: translate3d(100%, 0, 0);
 }
 
-#app>>>.singerList {
+#app>>>.van-popup .singerList {
   max-height: 6rem;
 }
 </style>

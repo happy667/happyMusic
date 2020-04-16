@@ -151,15 +151,29 @@ export default {
               }
             }
           }
+
+          .icon {
+            width: 0.6rem;
+            height: 100%;
+
+            img {
+              display: block;
+              width: 100%;
+              height: 100%;
+            }
+          }
         }
 
-        .icon {
-          width: 0.6rem;
-
-          img {
-            display: block;
-            width: 100%;
+        .right {
+          .icon {
+            width: 0.8rem;
             height: 100%;
+
+            img {
+              display: block;
+              width: 100%;
+              height: 100%;
+            }
           }
         }
 

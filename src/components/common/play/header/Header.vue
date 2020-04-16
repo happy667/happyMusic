@@ -77,7 +77,7 @@ export default {
       }
     },
     getContainer () {
-      return document.querySelector('.play-container')
+      return document.querySelector('#app')
     },
     // 选择歌手列表中歌手
     handleSelect (item) {
@@ -137,8 +137,6 @@ export default {
 
     .song-name {
       font-weight: 600;
-      animation: 10s wordsLoop linear infinite normal;
-      white-space: nowrap;
     }
 
     .singer {
@@ -148,13 +146,4 @@ export default {
   }
 }
 
-@keyframes wordsLoop {
-  0% {
-    transform: translateX(100%);
-  }
-
-  100% {
-    transform: translateX(-100%);
-  }
-}
 </style>

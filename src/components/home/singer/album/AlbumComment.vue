@@ -61,11 +61,6 @@
           </van-list>
         </div>
       </template>
-      <template v-else>
-        <van-loading size="24px"
-                     color="#FD4979"
-                     vertical>加载中...</van-loading>
-      </template>
 
     </section>
   </div>

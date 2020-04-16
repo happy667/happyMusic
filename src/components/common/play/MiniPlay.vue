@@ -239,6 +239,7 @@ export default {
 
                .song-name {
                  overflow: visible;
+                 color: $color-common;
                  animation: 10s wordsLoop linear infinite normal;
                }
              }

@@ -30,7 +30,6 @@
                     <van-loading type="spinner"
                                  size="20" />
                   </template>
-
                 </van-image>
 
               </div>
@@ -51,6 +50,19 @@
             <!-- 歌单描述 -->
             <section class="songs-desc">
               <div class="songs-title">{{songSheetDisc.name}}</div>
+              <div class="tags"
+                   v-if="songSheetDisc.tags">
+                <ul class="list">
+                  <li class="item"
+                      v-for="(item,index) in songSheetDisc.tags"
+                      :key="index">
+                    <van-tag round
+                             size="medium"
+                             color="#FD4979">{{item}}</van-tag>
+                  </li>
+                </ul>
+
+              </div>
               <div class="songs-nt">
                 <div class="songs-num">{{songSheetDisc.songs.length}}首</div>
                 <div class="songs-time"
@@ -199,7 +211,8 @@ export default {
             picUrl: res.playlist.coverImgUrl || res.playlist.backgroundCoverUrl,
             songs: songList,
             name: res.playlist.name,
-            trackUpdateTime: res.playlist.trackUpdateTime
+            trackUpdateTime: res.playlist.trackUpdateTime,
+            tags: res.playlist.tags
           })
           this.loading = false
         } else {
@@ -385,7 +398,7 @@ export default {
       background: $color-common-background;
 
       .songs-desc {
-        padding: 0.4rem;
+        padding: 0.4rem 0.4rem 0 0.4rem;
         position: relative;
 
         .songs-title {
@@ -393,7 +406,6 @@ export default {
           line-height: 0.8rem;
           font-weight: 500;
           font-size: $font-size-small;
-          margin-bottom: 0.4rem;
           no-wrap2();
         }
 
@@ -418,10 +430,24 @@ export default {
           }
         }
 
+        .tags {
+          .list {
+            display: flex;
+
+            .item {
+              margin-right: 0.3rem;
+              height: 1rem;
+              line-height: 1rem;
+            }
+          }
+        }
+
         .songs-nt {
           display: flex;
           justify-content: space-between;
           color: $color-common-b2;
+          height: 1rem;
+          line-height: 1rem;
 
           .songs-num {
             font-size: $font-size-smaller;

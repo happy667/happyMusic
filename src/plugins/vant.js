@@ -31,7 +31,8 @@ import {
   Radio,
   Empty,
   Collapse,
-  CollapseItem
+  CollapseItem,
+  Tag
 } from 'vant'
 Vue.use(Tab)
 Vue.use(Tabs)
@@ -65,5 +66,6 @@ Vue.use(Radio)
 Vue.use(Empty)
 Vue.use(Collapse)
 Vue.use(CollapseItem)
+Vue.use(Tag)
 Vue.prototype.$Dialog = Dialog
 Vue.prototype.$toast = Toast

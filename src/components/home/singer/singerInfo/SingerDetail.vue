@@ -4,13 +4,13 @@
     <loading :loading="loading" />
     <!-- 歌手简介 -->
     <template v-if="!loading">
-      <div class="singer-synopsis-title">
-        <h2 class="title">歌手简介</h2>
-      </div>
       <template v-if="!singerDetail.briefDesc&&singerDetail.introduction.length===0">
         <no-result text="暂无歌手简介"></no-result>
       </template>
       <template v-else>
+        <div class="singer-synopsis-title">
+          <h2 class="title">歌手简介</h2>
+        </div>
         <div class="singer-synopsis">
           <p class="context">
             {{singerDetail.briefDesc}}
@@ -51,6 +51,7 @@ export default {
 <style lang="stylus" scoped>
 .singer-detail-container {
   @import '~common/stylus/variable';
+
   padding: 0 0.4rem 0.4rem 0.4rem;
   box-sizing: border-box;
 

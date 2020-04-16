@@ -86,6 +86,11 @@ export default {
   created () {
     this.listenScroll = true
   },
+  watch: {
+    localSearchList () {
+      this.handlePlaylist(this.playList)
+    }
+  },
   mounted () {
     // 获取热门搜索
     this.getHotSearchList()

@@ -4,12 +4,14 @@ export default class Singer {
     picUrl,
     songs,
     name,
-    trackUpdateTime
+    trackUpdateTime,
+    tags
   }) {
     this.id = id
     this.name = name
     this.songs = songs
     this.picUrl = picUrl
     this.trackUpdateTime = trackUpdateTime
+    this.tags = tags
   }
 }
