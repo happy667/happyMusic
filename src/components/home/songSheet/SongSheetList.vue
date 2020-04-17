@@ -27,7 +27,7 @@ export default {
   methods: {
     // 选择歌单进入歌单详情
     selectItem (item) {
-      this.$emit('select', item)
+      this.$router.push(`/songSheetDisc/${item.id}`)
     }
   },
 

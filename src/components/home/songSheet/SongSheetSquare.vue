@@ -20,7 +20,7 @@
                       title-active-color="#FD4979"
                       color="#FD4979"
                       animated
-                      swipe-threshold="4"
+                      swipe-threshold="6"
                       swipeable>
               <van-tab title="推荐">
                 <div class="recommend-list">

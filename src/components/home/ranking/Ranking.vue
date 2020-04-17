@@ -60,11 +60,13 @@ import OfficialList from './OfficialList'
 import CommonList from './List'
 import RankingTitle from '@/components/common/Title'
 import rankingApi from '@/api/ranking.js'
+import { mapState } from 'vuex'
 import {
   ERR_OK
 } from '@/api/config.js'
 export default {
   computed: {
+    ...mapState(['currentPlayIndex']),
     load () {
       return !this.rankingList[0]
     },
@@ -79,9 +81,14 @@ export default {
   },
   watch: {
     loadMore () {
-      this.$nextTick(() => {
-        this.refresh()
-      })
+      if (this.currentPlayIndex !== -1) {
+        this.$emit('refreshList')
+      }
+    },
+    rankingList () {
+      if (this.currentPlayIndex !== -1) {
+        this.$emit('refreshList')
+      }
     }
   },
   methods: {

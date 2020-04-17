@@ -76,8 +76,7 @@
       <!-- 歌单 -->
       <div class="search">
         <div class="search-songSheet">
-          <song-sheet-list @select="selectSongSheet"
-                           :list="result.songSheet.songSheetList">
+          <song-sheet-list :list="result.songSheet.songSheetList">
             <template>
               <Title title="歌单"></Title>
             </template>
@@ -107,6 +106,7 @@ import {
 } from '@/assets/common/js/config.js'
 import { ERR_OK } from '@/api/config.js'
 import Song from '@/assets/common/js/song.js'
+import Album from '@/assets/common/js/album.js'
 import PlayAll from '@/components/common/PlayAll'
 import Singer from '@/assets/common/js/singer.js'
 import searchApi from '@/api/search.js'
@@ -134,7 +134,7 @@ export default {
     this.getSearchAll()
   },
   methods: {
-    ...mapMutations(['setSearchCurrentIndex', 'setIsAdvance', 'setSingerCurrentIndex', 'setRank']),
+    ...mapMutations(['setSearchCurrentIndex', 'setIsAdvance', 'setSingerCurrentIndex']),
     // 查询综合结果
     async getSearchAll () {
       // 显示加载logo
@@ -210,12 +210,25 @@ export default {
     },
     // 处理专辑结果
     handleAlbum (album) {
+      // 用于存放处理后的专辑列表
+      let albumList = []
       // 存放专辑搜索结果信息
       let albumObj = {
         more: album.more,
         moreText: album.moreText,
-        albumList: album.albums
+        albumList
       }
+      album.albums.forEach(item => {
+        let album = new Album({
+          id: item.id,
+          name: item.name,
+          picUrl: item.picUrl,
+          singerName: item.artist.name,
+          publishTime: item.publishTime
+        })
+        albumList.push(album)
+      })
+
       return albumObj
     },
     // 处理歌单结果
@@ -258,11 +271,6 @@ export default {
       // 设置为前进页面
       this.setIsAdvance(true)
       this.$router.push(`/singerAlbum/${item.id}`)
-    },
-    // 选择歌单
-    selectSongSheet (item) {
-      this.setRank(false)// 不需要排行
-      this.$router.push(`/songSheetDisc/${item.id}`)
     },
     setCurrentIndex (index) {
       document.documentElement.scrollTop = 0

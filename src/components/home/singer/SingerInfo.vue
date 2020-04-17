@@ -78,6 +78,7 @@ import singerApi from '@/api/singer.js'
 import userApi from '@/api/user.js'
 import Song from '@/assets/common/js/song.js'
 import Singer from '@/assets/common/js/singer.js'
+import Album from '@/assets/common/js/album.js'
 import overlay from '@/components/common/OverlayImage'
 import {
   ERR_OK
@@ -205,7 +206,19 @@ export default {
       const offset = this.singerAlbum.length
       const { data: res } = await singerApi.getSingerAlbum(id, offset)
       if (res.code === ERR_OK) { // 成功获取歌手单曲
-        this.singerAlbum = this.singerAlbum.concat(res.hotAlbums)
+        let albumList = []
+        res.hotAlbums.forEach(item => {
+          let album = new Album({
+            id: item.id,
+            name: item.name,
+            picUrl: item.picUrl,
+            singerName: item.artist.name,
+            publishTime: item.publishTime
+          })
+          albumList.push(album)
+        })
+
+        this.singerAlbum = this.singerAlbum.concat(albumList)
         this.singerAlbumFinished = !res.more
         this.loadMore = false
       }

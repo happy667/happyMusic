@@ -137,6 +137,7 @@ export default {
 
     .song-name {
       font-weight: 600;
+      no-wrap();
     }
 
     .singer {
@@ -145,5 +146,4 @@ export default {
     }
   }
 }
-
 </style>

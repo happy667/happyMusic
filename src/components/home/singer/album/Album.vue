@@ -113,7 +113,8 @@
         <div class="top">
           <div class="image-container">
             <div class="image">
-              <img v-lazy="albumObj.album.picUrl">
+              <img v-lazy="albumObj.album.picUrl"
+                   class="animated fadeIn">
             </div>
           </div>
 
@@ -527,7 +528,7 @@ export default {
           position: absolute;
           width: 100%;
           height: 100%;
-          background: #000;
+          background: $color-common-b2;
           opacity: 0.9;
         }
 
@@ -597,11 +598,13 @@ export default {
             margin: 0 auto;
             width: 4rem;
             height: 4rem;
+            border-radius: 0.3rem;
 
             img {
               display: block;
               width: 100%;
               height: 100%;
+              border-radius: 0.3rem;
             }
           }
         }
@@ -640,7 +643,7 @@ export default {
         position: fixed;
         width: 100%;
         height: 100%;
-        background: #000;
+        background: $color-common-b2;
         opacity: 0.9;
       }
 

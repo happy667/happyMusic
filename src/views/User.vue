@@ -138,9 +138,10 @@
   </div>
 </template>
 <script>
+import Album from '@/assets/common/js/album.js'
 import Scroll from '@/components/common/Scroll'
 import NoResult from '@/components/common/NoResult'
-import AlbumList from '@/components/home/singer/albumList/AlbumList'
+import AlbumList from '@/components/common/album/AlbumList'
 import SongSheetMiniList from '@/components/home/songSheet/songSheetMini/SongSheetMiniList'
 import userApi from '@/api/user.js'
 import { playlistMixin } from '@/assets/common/js/mixin.js'
@@ -246,7 +247,18 @@ export default {
         data: res
       } = await userApi.getUserAlbum()
       if (res.code === ERR_OK) {
-        this.userAlbum = res.data
+        let albumList = []
+        res.data.forEach(item => {
+          let album = new Album({
+            id: item.id,
+            name: item.name,
+            picUrl: item.picUrl,
+            singerName: item.artists.map(item => item.name).join('/'),
+            publishTime: item.subTime
+          })
+          albumList.push(album)
+        })
+        this.userAlbum = albumList
       }
     },
 
@@ -309,6 +321,10 @@ export default {
   width: 100%;
   height: 100%;
   overflow: hidden;
+}
+
+.user-container>>>.album-container {
+  padding: 0;
 }
 
 .user-container {

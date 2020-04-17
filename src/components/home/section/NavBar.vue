@@ -14,7 +14,8 @@
       </van-tab>
       <!-- 排行页 -->
       <van-tab title="排行">
-        <ranking ref="ranking" />
+        <ranking ref="ranking"
+                 @refreshList="handlePlaylist(this.playList)" />
       </van-tab>
       <!-- 歌手页 -->
       <van-tab title="歌手">

@@ -63,7 +63,7 @@ export default {
         &::after {
           position: absolute;
           top: 50%;
-          left: 0;
+          left: 0.02rem;
           content: '';
           display: block;
           margin-top: -0.65rem;

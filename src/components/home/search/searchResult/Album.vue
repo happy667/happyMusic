@@ -9,7 +9,7 @@
                 @load="handlePullingUp">
         <div class="album-list">
           <album-list :list="album.albumList"
-                      @select="selectItem"></album-list>
+                      @select="selectAlbum"></album-list>
         </div>
       </van-list>
     </template>
@@ -23,8 +23,9 @@
 import AlbumList from '@/components/common/album/AlbumList'
 import NoResult from '@/components/common/NoResult'
 import searchApi from '@/api/search.js'
+import Album from '@/assets/common/js/album.js'
 import { ERR_OK } from '@/api/config.js'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import {
   searchType
 } from '@/assets/common/js/config.js'
@@ -59,6 +60,7 @@ export default {
     this.getSearchSAlbum()
   },
   methods: {
+    ...mapMutations(['setIsAdvance']),
     // 查询专辑
     async getSearchSAlbum () {
       // 显示加载logo
@@ -77,7 +79,19 @@ export default {
         if (this.album.albumCount === -1) {
           this.album.albumCount = res.result.albumCount
         }
-        let list = this.album.albumList.concat(res.result.albums)
+        let albumList = []
+        res.result.albums.forEach(item => {
+          let album = new Album({
+            id: item.id,
+            name: item.name,
+            picUrl: item.picUrl,
+            singerName: item.artist.name,
+            publishTime: item.publishTime
+          })
+          albumList.push(album)
+        })
+
+        let list = this.album.albumList.concat(albumList)
         // 将每次查询的list追加到album.albumList中
         this.album.albumList = list
         // 关闭加载logo
@@ -104,7 +118,10 @@ export default {
         this.loading = false
       }
     },
-    selectItem (item) {
+    // 选择专辑
+    selectAlbum (item) {
+      // 设置为前进页面
+      this.setIsAdvance(true)
       this.$router.push(`/singerAlbum/${item.id}`)
     }
   },

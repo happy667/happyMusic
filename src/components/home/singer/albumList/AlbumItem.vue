@@ -5,8 +5,7 @@
            class="animated fadeIn" />
     </div>
     <div class="item-name">{{item.name}}</div>
-    <div class="item-pub-time"
-         v-if="item.publishTime">{{item.publishTime|convertDate}}</div>
+    <div class="item-pub-time">{{item.publishTime|convertDate}}</div>
   </div>
 </template>
 <script>

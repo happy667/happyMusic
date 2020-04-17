@@ -164,10 +164,6 @@ export default {
   overflow: hidden;
 }
 
-.my-like-container>>>.singer-song-container {
-  padding-top: 0.3rem;
-}
-
 .my-like-container {
   position: fixed;
   width: 100%;
@@ -178,6 +174,7 @@ export default {
 
   section {
     position: relative;
+    padding-top: 0.3rem;
     flex: 1;
   }
 }

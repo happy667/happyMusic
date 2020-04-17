@@ -14,7 +14,7 @@
     <div class="info">
       <div class="name">{{item.name}}</div>
       <div class="desc">
-        <span class="singer">{{item.artist.name}}</span>
+        <span class="singer">{{item.singerName}}</span>
         <span class="time">{{item.publishTime|convertDate}}</span>
       </div>
     </div>
