@@ -1,5 +1,5 @@
 <template>
-  <div class="singer-container">
+  <div class="search-singer-container">
     <!-- loading -->
     <loading :loading="pageLoading" />
     <template v-if="singer.singerList.length!==0">
@@ -17,8 +17,9 @@
         </ul>
       </van-list>
     </template>
-    <template v-if="singer.isNull">
-      <no-result text="暂无相关歌手"  image="search"></no-result>
+    <template v-if="singer.singerCount===0">
+      <no-result text="暂无相关歌手"
+                 image="search"></no-result>
     </template>
   </div>
 </template>
@@ -29,12 +30,15 @@ import Singer from '@/assets/common/js/singer.js'
 import searchApi from '@/api/search.js'
 import { ERR_OK } from '@/api/config.js'
 import { mapState, mapMutations } from 'vuex'
+import {
+  searchType
+} from '@/assets/common/js/config.js'
 export default {
   name: 'searchResultSinger',
   data () {
     return {
       singer: {
-        singerCount: 0,
+        singerCount: -1,
         singerList: [],
         isNull: false
       },
@@ -63,12 +67,17 @@ export default {
       this.loading = true
       // 设置偏移量=歌手列表长度
       let offset = this.singer.singerList.length
-      const { data: res } = await searchApi.getSearchResult(this.searchKeywords, 100, offset, 15)
+      const { data: res } = await searchApi.getSearchResult(this.searchKeywords, searchType.singer, offset, 15)
       if (res.code === ERR_OK) {
         // 没有查询到数据
-        if (res.result.singerCount === 0 || !res.result.artists) {
+        if (!res.result.artists || res.result.artistCount === 0) {
+          this.singer.singerCount = 0
           this.singer.isNull = true
           return
+        }
+        // 保存查询数量
+        if (this.singer.singerCount === -1) {
+          this.singer.singerCount = res.result.artistCount
         }
         let singerList = []
         res.result.artists.forEach(item => {
@@ -80,7 +89,7 @@ export default {
             picUrl: item.picUrl
           }))
         })
-        if (this.singer.singerCount === 0) {
+        if (this.singer.singerCount === -1) {
           this.singer.singerCount = res.result.artistCount
         }
         // 因为可能存在重复数据，所以需要去重处理
@@ -97,7 +106,11 @@ export default {
     // 上拉加载更多歌手
     handlePullingUp () {
       // 加载时判断当前滚动的页面是否为该页面，因为其他页面在上拉加载时会干扰该页面
-      if (this.searchCurrentIndex === 1) {
+      if (this.searchCurrentIndex === 2) {
+        if (this.singer.isNull) { // 没有结果了
+          this.finished = true
+          return
+        }
         setTimeout(async () => {
           if (this.singer.singerList.length >= this.singer.singerCount) {
             this.finished = true

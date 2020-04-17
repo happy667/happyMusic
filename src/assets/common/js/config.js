@@ -9,6 +9,17 @@ export const targetType = {
   album: 10, // 专辑
   songSheet: 1000 // 歌单
 }
+// 搜索类型
+
+export const searchType = {
+  song: 1,
+  album: 10,
+  singer: 100,
+  songSheet: 1000,
+  mv: 1004,
+  lyric: 1006,
+  all: 1018
+}
 export const USER_TOKEN = 'token'
 // 需要登录的组件
 export const needLoginComponents = [ // 存放路由name属性

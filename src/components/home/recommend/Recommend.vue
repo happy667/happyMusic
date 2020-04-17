@@ -18,7 +18,8 @@
           </template>
         </song-swiper>
         <!-- 推荐歌单区域 -->
-        <song-sheet-list :list="recommendSongSheet">
+        <song-sheet-list @select="selectSongSheet"
+                         :list="recommendSongSheet">
           <template>
             <Title :isShowLoadMore="true"
                    path='/SongSheetSquare'
@@ -68,7 +69,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setPlayerFullScreen']),
+    ...mapMutations(['setPlayerFullScreen', 'setRank']),
     // 获取轮播图数据
     async getBanner () {
       const { data: res } = await recommendApi.getBanner()
@@ -76,7 +77,7 @@ export default {
         this.banners = res.banners
       }
     },
-
+    // 选择歌曲
     selectSong (item, index) {
       // 比较两首歌曲
       let result = this.$utils.compareSong(this.currentSong, item)
@@ -84,6 +85,11 @@ export default {
         // 引入vue原型上的utils
         this.$utils.playMusic(item, this.list, index)
       }
+    },
+    // 选择歌单
+    selectSongSheet (item) {
+      this.setRank(false)// 不需要排行
+      this.$router.push(`/songSheetDisc/${item.id}`)
     },
     // 获取推荐歌单
     async getRecommendSongSheet (limit) {

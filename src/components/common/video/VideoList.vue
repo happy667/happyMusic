@@ -1,17 +1,17 @@
 <template>
-  <div class="mv-list-container">
-    <div class="mv-list">
+  <div class="video-list-container">
+    <div class="video-list">
       <template v-for="item in list">
-        <mv-item @click="handleClick"
-                 :mv="item"
-                 :key="item.id"></mv-item>
+        <video-item @click="handleClick"
+                 :video="item"
+                 :key="item.id"></video-item>
       </template>
 
     </div>
   </div>
 </template>
 <script>
-import MvItem from './MvItem'
+import VideoItem from './VideoItem'
 export default {
   props: {
     list: {
@@ -20,23 +20,23 @@ export default {
     }
   },
   methods: {
-    handleClick (mv) {
-      this.$emit('click', mv)
+    handleClick (video) {
+      this.$emit('select', video)
     }
   },
   components: {
-    MvItem
+    VideoItem
   }
 }
 </script>
 <style lang="stylus" scoped>
-.mv-list-container>>>.mv-list-item-container {
+.video-list-container>>>.video-list-item-container {
   &:last-child {
     margin-bottom: 0;
   }
 }
 
-.mv-list-container {
+.video-list-container {
   width: 100%;
   background: $color-common-background;
 }

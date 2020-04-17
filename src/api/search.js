@@ -21,8 +21,11 @@ export default {
    * @param {偏移量} offset
    * @param {限制} limit
    */
-  getSearchResult(keywords, type = 1, offset = 0, limit = 20) {
-    const url = `/search?keywords=${keywords}&offset=${offset}&limit=${limit}&type=${type}`
+  getSearchResult(keywords, type = 1, offset = null, limit = null) {
+    let url = `/search?keywords=${keywords}&type=${type}`
+    if (offset && limit) {
+      url = `/search?keywords=${keywords}&offset=${offset}&limit=${limit}&type=${type}`
+    }
     return request({
       url
     })

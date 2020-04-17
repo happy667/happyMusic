@@ -1,5 +1,5 @@
 <template>
-  <div class="songSheet-container">
+  <div class="search-songSheet-container">
     <!-- loading -->
     <loading :loading="pageLoading" />
     <template v-if="songSheet.songSheetList.length!==0">
@@ -10,7 +10,7 @@
         <song-sheet-list :list="songSheet.songSheetList"></song-sheet-list>
       </van-list>
     </template>
-    <template v-if="songSheet.isNull">
+    <template v-if="songSheet.songSheetCount===0">
       <no-result text="暂无相关歌单"
                  image="search"></no-result>
     </template>
@@ -21,13 +21,16 @@ import SongSheetList from '@/components/home/songSheet/SongSheetList'
 import NoResult from '@/components/common/NoResult'
 import searchApi from '@/api/search.js'
 import { ERR_OK } from '@/api/config.js'
+import {
+  searchType
+} from '@/assets/common/js/config.js'
 import { mapState } from 'vuex'
 export default {
   name: 'searchResultSongSheet',
   data () {
     return {
       songSheet: {
-        songSheetCount: 0,
+        songSheetCount: -1,
         songSheetList: [],
         isNull: false
       },
@@ -55,14 +58,16 @@ export default {
       this.loading = true
       // 设置偏移量=歌单列表长度
       let offset = this.songSheet.songSheetList.length
-      const { data: res } = await searchApi.getSearchResult(this.searchKeywords, 1000, offset, 12)
+      const { data: res } = await searchApi.getSearchResult(this.searchKeywords, searchType.songSheet, offset, 12)
       if (res.code === ERR_OK) {
         // 没有查询到数据
-        if (res.result.playlistCount === 0 || !res.result.playlists) {
+
+        if (!res.result.playlists || res.result.playlistCount === 0) {
+          this.songSheet.songSheetCount = 0
           this.songSheet.isNull = true
           return
         }
-        if (this.songSheet.songSheetCount === 0) {
+        if (this.songSheet.songSheetCount === -1) {
           this.songSheet.songSheetCount = res.result.playlistCount
         }
 
@@ -79,7 +84,11 @@ export default {
     // 上拉加载更多歌单
     handlePullingUp () {
       // 加载时判断当前滚动的页面是否为该页面，因为其他页面在上拉加载时会干扰该页面
-      if (this.searchCurrentIndex === 2) {
+      if (this.searchCurrentIndex === 4) {
+        if (this.songSheet.isNull) { // 没有结果了
+          this.finished = true
+          return
+        }
         setTimeout(async () => {
           if (this.songSheet.songSheetList.length >= this.songSheet.songSheetCount) {
             this.finished = true
@@ -103,7 +112,7 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.songSheet-container {
+.search-songSheet-container {
   padding-top: 0.25rem;
   box-sizing: border-box;
 

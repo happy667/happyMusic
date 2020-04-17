@@ -1,5 +1,6 @@
 <template>
   <div class="songs-list-containter">
+    <slot></slot>
     <ul class="songs-list"
         ref="list">
       <li class="songs-list-item"

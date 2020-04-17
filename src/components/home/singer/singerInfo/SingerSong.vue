@@ -7,15 +7,8 @@
 
     <!-- 歌曲数量 -->
     <template v-else-if="list&&list.length!==0">
-      <div class="play">
-        <div class="play-icon">
-          <van-icon name="play-circle-o" />
-        </div>
-        <div class="play-all"
-             @click="playAllSong(list[0],list)">
-          播放全部({{list.length}})
-        </div>
-      </div>
+      <play-all :length="list.length"
+                @play="playAllSong(list[0],list)"></play-all>
       <!-- 歌曲列表 -->
       <song-list @noLike="handleNoLike"
                  @select="selectSong"
@@ -33,7 +26,7 @@
 <script>
 import NoResult from '@/components/common/NoResult'
 import SongList from '@/components/home/song/SongList'
-
+import PlayAll from '@/components/common/PlayAll'
 import { mapMutations, mapGetters } from 'vuex'
 export default {
   props: {
@@ -65,8 +58,9 @@ export default {
         this.$utils.playMusic(item, this.list, index)
       }
     },
-    // 比较两首歌曲
+
     playAllSong (item, list) {
+      // 比较两首歌曲
       let result = this.$utils.compareSong(this.currentSong, item)
       if (!result) {
         // 引入vue原型上的utils
@@ -79,36 +73,8 @@ export default {
   },
   components: {
     SongList,
-    NoResult
-
+    NoResult,
+    PlayAll
   }
 }
 </script>
-<style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
-.song-list-container {
-  box-sizing: border-box;
-
-  .play {
-    display: flex;
-    padding-left: 0.4rem;
-
-    .play-icon {
-      font-size: $font-size-small;
-      color: $color-common;
-      margin-right: 0.2rem;
-
-      i {
-        line-height: 0.8rem;
-      }
-    }
-
-    .play-all {
-      font-size: $font-size-smaller;
-      height: 0.8rem;
-      line-height: 0.8rem;
-    }
-  }
-}
-</style>

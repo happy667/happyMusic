@@ -1,26 +1,26 @@
 <template>
-  <section class="mv-list-item-container"
+  <section class="video-list-item-container"
            @click="handleClick">
-    <!-- mv 图片 -->
-    <div class="mv-img">
-      <img v-lazy="mv.cover"
+    <!-- video 图片 -->
+    <div class="video-img">
+      <img v-lazy="video.cover"
            class="animated fadeIn"
-           :key="mv.cover" />
+           :key="video.cover" />
       <!-- 播放次数 -->
       <div class="play-num">
         <i class="iconfont icon-bofang"></i>
-        {{mv.playCount|convertCount}}
+        {{video.playCount|convertCount}}
       </div>
     </div>
-    <!-- mv信息 -->
-    <div class="mv-info">
+    <!-- video信息 -->
+    <div class="video-info">
       <!-- 标题 -->
-      <div class="mv-title">{{mv.name}}</div>
+      <div class="video-title">{{video.name}}</div>
       <div class="bottom">
         <!-- 时间 -->
-        <div class="mv-time">{{mv.duration/1000|convertTime}}</div>
+        <div class="video-time">{{video.duration/1000|convertTime}}</div>
         <!-- 来源 -->
-        <div class="mv-source">{{mv.artistName}}</div>
+        <div class="video-source">{{video.artistName}}</div>
       </div>
 
     </div>
@@ -30,13 +30,13 @@
 import 'common/js/convert.js'
 export default {
   props: {
-    mv: {
+    video: {
       type: Object
     }
   },
   methods: {
     handleClick () {
-      this.$emit('click', this.mv)
+      this.$emit('click', this.video)
     }
   }
 }
@@ -44,12 +44,12 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.mv-list-item-container {
+.video-list-item-container {
   width: 100%;
   display: flex;
   margin-bottom: 0.3rem;
 
-  .mv-img {
+  .video-img {
     position: relative;
     margin-right: 0.4rem;
     height: 0;
@@ -77,14 +77,14 @@ export default {
     }
   }
 
-  .mv-info {
+  .video-info {
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
     font-size: $font-size-mini;
 
-    .mv-title {
+    .video-title {
       line-height: 0.5rem;
       font-weight: bold;
       no-wrap2();
@@ -98,11 +98,11 @@ export default {
       line-height: 0.6rem;
       no-wrap();
 
-      .mv-time {
+      .video-time {
         margin-right: 0.3rem;
       }
 
-      .mv-source {
+      .video-source {
         width: 3rem;
         no-wrap();
       }

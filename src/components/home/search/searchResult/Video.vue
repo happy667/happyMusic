@@ -1,5 +1,5 @@
 <template>
-  <div class="mv-container">
+  <div class="search-mv-container">
     <!-- loading -->
     <loading :loading="pageLoading" />
     <template v-if="mv.mvList.length!==0">
@@ -8,28 +8,32 @@
                 finished-text="没有更多了"
                 @load="handlePullingUp">
         <div class="mv-list">
-          <mv-list @click="goToVideoInfo"
+          <mv-list @select="goToVideoInfo"
                    :list="mv.mvList"></mv-list>
         </div>
       </van-list>
     </template>
-    <template v-if="mv.isNull">
-      <no-result text="暂无相关MV" image="search"></no-result>
+    <template v-if="mv.mvCount===0">
+      <no-result text="暂无相关MV"
+                 image="search"></no-result>
     </template>
   </div>
 </template>
 <script>
-import MvList from '@/components/common/mv/MvList'
+import MvList from '@/components/common/video/VideoList'
 import NoResult from '@/components/common/NoResult'
 import searchApi from '@/api/search.js'
 import { ERR_OK } from '@/api/config.js'
 import { mapState } from 'vuex'
+import {
+  searchType
+} from '@/assets/common/js/config.js'
 export default {
   name: 'searchResultMV',
   data () {
     return {
       mv: {
-        mvCount: 0,
+        mvCount: -1,
         mvList: [],
         isNull: false
       },
@@ -61,12 +65,17 @@ export default {
       this.loading = true
       // 设置偏移量=mv列表长度
       let offset = this.mv.mvList.length
-      const { data: res } = await searchApi.getSearchResult(this.searchKeywords, 1004, offset, 8)
+      const { data: res } = await searchApi.getSearchResult(this.searchKeywords, searchType.mv, offset, 8)
       if (res.code === ERR_OK) {
         // 没有查询到数据
-        if (res.result.mvCount === 0 || !res.result.mvs) {
+        if (!res.result.mvs || res.result.mvCount === 0) {
+          this.mv.mvCount = 0
           this.mv.isNull = true
           return
+        }
+        // 保存查询数量
+        if (this.mv.mvCount === -1) {
+          this.mv.mvCount = res.result.mvCount
         }
         let list = this.mv.mvList.concat(res.result.mvs)
         // 将每次查询的mv追加到mv.mvList中
@@ -78,7 +87,11 @@ export default {
     // 上拉加载更多mv
     handlePullingUp () {
       // 加载时判断当前滚动的页面是否为该页面，因为其他页面在上拉加载时会干扰该页面
-      if (this.searchCurrentIndex === 3) {
+      if (this.searchCurrentIndex === 5) {
+        if (this.mv.isNull) { // 没有结果了
+          this.finished = true
+          return
+        }
         setTimeout(async () => {
           if (this.mv.mvList.length >= this.mv.mvCount) {
             this.finished = true
@@ -105,7 +118,7 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.mv-container {
+.search-mv-container {
   padding: 0.25rem 0.4rem 0;
   box-sizing: border-box;
 }

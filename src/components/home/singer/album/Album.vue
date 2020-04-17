@@ -74,20 +74,14 @@
             <div class="play-list"
                  v-if="albumObj.songs&&albumObj.songs.length!==0">
               <div class="play">
-                <div class="top">
-                  <div class="play-icon">
-                    <van-icon name="play-circle-o" />
-                  </div>
-                  <div class="play-all"
-                       @click="playAllSong(albumObj.songs[0],albumObj.songs)">
-                    播放全部({{albumObj.songs.length}})
-                  </div>
-                </div>
+                <play-all :length="albumObj.songs.length"
+                          @play="playAllSong(albumObj.songs[0],albumObj.songs)"></play-all>
                 <!-- 歌曲列表 -->
                 <songs-list :songsList="albumObj.songs"
                             @select="selectSong"></songs-list>
 
               </div>
+
             </div>
           </div>
         </scroll>
@@ -160,6 +154,7 @@ import Song from '@/assets/common/js/song.js'
 import Singer from '@/assets/common/js/singer.js'
 import NoResult from '@/components/common/NoResult'
 import SingerItem from '@/components/home/singer/SingerItem'
+import PlayAll from '@/components/common/PlayAll'
 import {
   ERR_OK
 } from '@/api/config.js'
@@ -395,7 +390,8 @@ export default {
     SongsList,
     NoResult,
     SingerItem,
-    Scroll
+    Scroll,
+    PlayAll
   }
 }
 </script>
@@ -565,29 +561,6 @@ export default {
 
       .play-list {
         padding-top: 0.3rem;
-
-        .play {
-          .top {
-            padding-left: 0.4rem;
-            display: flex;
-
-            .play-icon {
-              font-size: $font-size-small;
-              color: $color-common;
-              margin-right: 0.2rem;
-
-              i {
-                line-height: 0.8rem;
-              }
-            }
-
-            .play-all {
-              font-size: $font-size-smaller;
-              height: 1rem;
-              line-height: 1rem;
-            }
-          }
-        }
       }
     }
   }

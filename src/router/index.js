@@ -301,7 +301,7 @@ const routes = [
     },
     beforeEnter(to, from, next) {
       console.log(from)
-      if (from.name === 'singerInfo' || from.name === 'home' || from.name === 'user') {
+      if (from.name === 'singerInfo' || from.name === 'home' || from.name === 'user' || from.name === 'searchResult') {
         // 添加不缓存路由
         store.commit('setAddNoCacheComponents', 'singerAlbum')
       } else if (from.name === 'albumComment' && !from.meta.isBack) {

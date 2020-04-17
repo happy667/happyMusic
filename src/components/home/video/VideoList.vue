@@ -91,7 +91,7 @@ export default {
             // 获取歌手信息
             const { data: res2 } = await SingerApi.getSinger(item.artistId)
             if (res2.code === ERR_OK) {
-              // 获取mv路径
+              // 获取video路径
               const { data: res3 } = await videoApi.getRecommendVideoUrl(item.id)
               if (res3.code === ERR_OK) {
                 let video = new Video({

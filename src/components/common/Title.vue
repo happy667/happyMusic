@@ -1,6 +1,6 @@
 <template>
   <div class="title-container">
-    <p class="songs-title">{{title}}</p>
+    <h2 class="songs-title">{{title}}</h2>
     <router-link tag="div"
                  :to="path"
                  class="viewMore"

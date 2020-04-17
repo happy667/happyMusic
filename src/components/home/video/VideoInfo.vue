@@ -27,7 +27,7 @@
              v-if="simiMVList">
           <p>相关视频</p>
           <video-list :list="simiMVList"
-                      @click="goToVideoInfo"></video-list>
+                      @select="goToVideoInfo"></video-list>
         </div>
         <!-- 评论列表 -->
         <div class="comment"
@@ -53,7 +53,7 @@
 <script>
 import VideoComponent from './Video'
 import CommentList from '@/components/home/comment/CommentList'
-import VideoList from '@/components/common/mv/MvList'
+import VideoList from '@/components/common/video/VideoList'
 import NoResult from '@/components/common/NoResult'
 import videoApi from '@/api/video.js'
 import SingerApi from '@/api/singer.js'

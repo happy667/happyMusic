@@ -1,5 +1,5 @@
 <template>
-  <div class="song-container">
+  <div class="search-song-container">
     <!-- loading -->
     <loading :loading="pageLoading" />
     <template v-if="song.songList.length!==0">
@@ -12,8 +12,9 @@
                    :songsList="song.songList"></song-list>
       </van-list>
     </template>
-    <template v-if="song.isNull">
-      <no-result text="暂无相关歌曲"  image="search"></no-result>
+    <template v-if="song.songCount===0">
+      <no-result text="暂无相关歌曲"
+                 image="search"></no-result>
     </template>
   </div>
 </template>
@@ -22,16 +23,20 @@ import SongList from '@/components/home/song/SongList'
 import NoResult from '@/components/common/NoResult'
 import searchApi from '@/api/search.js'
 import { ERR_OK } from '@/api/config.js'
+import {
+  searchType
+} from '@/assets/common/js/config.js'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 import Song from '@/assets/common/js/song.js'
 import Singer from '@/assets/common/js/singer.js'
 import songApi from '@/api/song.js'
+
 export default {
   name: 'searchResultSong',
   data () {
     return {
       song: {
-        songCount: 0,
+        songCount: -1,
         songList: [],
         isNull: false
       },
@@ -61,15 +66,18 @@ export default {
       this.loading = true
       // 设置偏移量=歌曲列表长度
       let offset = this.song.songList.length
-      const { data: res } = await searchApi.getSearchResult(this.searchKeywords, 1, offset, 20)
+      const { data: res } = await searchApi.getSearchResult(this.searchKeywords, searchType.song, offset, 20)
       if (res.code === ERR_OK) {
         console.log(res)
         // 没有查询到数据
-        if (!res.result.songs) {
+        if (!res.result.songs || res.result.songCount === 0) {
+          this.song.songCount = 0
           this.song.isNull = true
           return
         }
-        if (this.song.songCount === 0) {
+        // 保存查询数量
+        console.log(this.song.songCount)
+        if (this.song.songCount === -1) {
           this.song.songCount = res.result.songCount
         }
         // 将每次查询的歌曲追加到song.songList中
@@ -102,7 +110,11 @@ export default {
     // 上拉加载更多单曲
     handlePullingUp () {
       // 加载时判断当前滚动的页面是否为该页面，因为其他页面在上拉加载时会干扰该页面
-      if (this.searchCurrentIndex === 0) {
+      if (this.searchCurrentIndex === 1) {
+        if (this.song.isNull) { // 没有结果了
+          this.finished = true
+          return
+        }
         setTimeout(async () => {
           if (this.song.songList.length >= this.song.songCount) {
             this.finished = true
@@ -144,7 +156,7 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.song-container {
+.search-song-container {
   .song-list-null {
     width: 100%;
     height: 1rem;

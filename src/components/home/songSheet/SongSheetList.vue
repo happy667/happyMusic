@@ -20,17 +20,14 @@
 <script>
 import NoResult from '@/components/common/NoResult'
 import SongSheetItem from './SongSheetItem'
-import { mapMutations } from 'vuex'
 export default {
   props: {
     list: Array // 列表
   },
   methods: {
-    ...mapMutations(['setRank']),
     // 选择歌单进入歌单详情
     selectItem (item) {
-      this.setRank(false)// 不需要排行
-      this.$router.push(`/songSheetDisc/${item.id}`)
+      this.$emit('select', item)
     }
   },
 
