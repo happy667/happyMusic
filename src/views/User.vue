@@ -14,6 +14,7 @@
                  class="animated fadeIn">
           </div>
           <div class="icon"
+               @click="$router.push({name:'login'})"
                v-else>
             <van-icon name="user-o" />
           </div>
@@ -219,8 +220,6 @@ export default {
     },
     // 选择专辑进入专辑详情
     selectItem (item) {
-      // 设置为前进页面
-      this.setIsAdvance(true)
       this.$router.push(`/singerAlbum/${item.id}`)
     },
     // 获取用户信息 , 歌单，收藏，mv, dj 数量
@@ -268,8 +267,6 @@ export default {
       if (this.currentPlayIndex !== -1) {
         this.setHideMiniPlayer(true)
       }
-      // 设置为前进页面
-      this.setIsAdvance(true)
       this.$router.push('/user/edit')
     },
     handlePlaylist (playList) {
@@ -325,6 +322,7 @@ export default {
 
 .user-container>>>.album-container {
   padding: 0;
+  margin-bottom: 0.4rem;
 }
 
 .user-container {

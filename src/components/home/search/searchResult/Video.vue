@@ -69,7 +69,10 @@ export default {
       if (res.code === ERR_OK) {
         // 没有查询到数据
         if (!res.result.mvs || res.result.mvCount === 0) {
-          this.mv.mvCount = 0
+          if (this.mv.mvCount === -1) {
+            this.mv.mvCount = 0
+          }
+
           this.mv.isNull = true
           return
         }

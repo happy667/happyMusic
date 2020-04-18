@@ -50,7 +50,7 @@ export default new Vuex.Store({
     noCacheComponents: [], // 不缓存的组件
     isPlayerClick: false, // 是否为播放页面点击的
     isGetSingerImage: false, // 是否获取歌手图片
-    isAdvance: false, // 跳转的是否为前进页面
+    isAdvance: true, // 跳转的是否为前进页面
     isGetAlbumSingerImage: false, // 是否获取专辑歌手图片
     hideMiniPlayer: false // 隐藏迷你播放器
   },

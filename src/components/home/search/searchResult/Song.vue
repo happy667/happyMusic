@@ -71,7 +71,10 @@ export default {
         console.log(res)
         // 没有查询到数据
         if (!res.result.songs || res.result.songCount === 0) {
-          this.song.songCount = 0
+          if (this.song.songCount === -1) {
+            this.song.songCount = 0
+          }
+
           this.song.isNull = true
           return
         }

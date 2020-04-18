@@ -43,7 +43,14 @@
             <van-tab title="专辑">
               <singer-album :singerAlbum="singerAlbum" />
               <!-- loading -->
-              <loading :loading="loadMore"
+              <loading :loading="loadMoreAlbum"
+                       height="2rem" />
+            </van-tab>
+            <!-- 歌手mv -->
+            <van-tab title="MV">
+              <singer-mv :mvList="singerMV" />
+              <!-- loading -->
+              <loading :loading="loadMoreMV"
                        height="2rem" />
             </van-tab>
             <!-- 歌手详情 -->
@@ -69,6 +76,7 @@
   </div>
 </template>
 <script>
+import SingerMv from './singerInfo/SingerMV'
 import SingerSynopsis from './singerInfo/SingerSynopsis'
 import SingerSong from './singerInfo/SingerSong'
 import SingerAlbum from './singerInfo/SingerAlbum'
@@ -97,13 +105,16 @@ export default {
       singerDesc: {},
       singerSong: [], // 歌手单曲
       singerAlbum: [], // 歌手专辑
+      singerMV: [], // 歌手MV
       singerDetail: null, // 歌手详情
-      singerAlbumFinished: false, // 是否加载完歌手专辑
+      singerAlbumFinished: false, // 歌手专辑是否加载完成
+      singerMVFinished: false, // 歌手mv是否加载完成
       loading: false,
       accountId: null,
       showPosition: false,
       scrollY: 0,
-      loadMore: false,
+      loadMoreAlbum: false,
+      loadMoreMV: false,
       showImage: false
     }
   },
@@ -120,7 +131,12 @@ export default {
         this.getUserDetail(newId)
       }
     },
-    loadMore () {
+    loadMoreAlbum () {
+      this.$nextTick(() => {
+        this.refresh()
+      })
+    },
+    loadMoreMV () {
       this.$nextTick(() => {
         this.refresh()
       })
@@ -128,7 +144,6 @@ export default {
   },
   mounted () {
     // 根据歌手id获取歌手单曲
-
     this.handleTabsChange(this.currentIndex)
   },
   computed: {
@@ -165,7 +180,10 @@ export default {
         case 1:// 歌手专辑
           if (this.singerAlbum.length === 0) this.getSingerAlbum(this.id)
           break
-        case 2: // 歌手详情
+        case 2:// 歌手MV
+          if (this.singerMV.length === 0) this.getSingerMV(this.id)
+          break
+        case 3: // 歌手详情
           if (!this.singerDetail) this.getSingerDetail(this.id)
           break
       }
@@ -217,12 +235,23 @@ export default {
           })
           albumList.push(album)
         })
-
         this.singerAlbum = this.singerAlbum.concat(albumList)
         this.singerAlbumFinished = !res.more
-        this.loadMore = false
+        this.loadMoreAlbum = false
       }
     },
+    // 获取歌手mv
+    async getSingerMV (id) {
+      const offset = this.singerMV.length
+      // 获取歌手mv
+      const { data: res } = await singerApi.getSingerMV(id, offset)
+      if (res.code === ERR_OK) { // 成功获取歌手MV
+        this.singerMV = this.singerMV.concat(res.mvs)
+        this.singerMVFinished = !res.hasMore
+        this.loadMoreMV = false
+      }
+    },
+
     // 获取歌手详情
     async getSingerDetail (id) {
       const { data: res } = await singerApi.getSingerDetail(id)
@@ -256,16 +285,44 @@ export default {
     },
     // 上拉加载
     handlePullingUp () {
+      switch (this.currentIndex) {
+        case 1:
+          this.handleLoadMoreAlbum()
+          break
+        case 2:
+          this.handleLoadMoreMV()
+          break
+      }
+    },
+    // 处理加载更多专辑
+    handleLoadMoreAlbum () {
       if (this.singerAlbumFinished) { // 加载完成
         return
       }
-      if (this.loadMore) { // 如果请求未完成就不继续请求数据
+      if (this.loadMoreAlbum) { // 如果请求未完成就不继续请求数据
         return
       }
-      clearTimeout(this.loadTimer)
-      this.loadMore = true
-      this.loadTimer = setTimeout(async () => {
+      clearTimeout(this.loadTimerAlbum)
+      this.loadMoreAlbum = true
+      this.loadTimerAlbum = setTimeout(async () => {
         await this.getSingerAlbum(this.id)
+        this.$nextTick(() => {
+          this.$refs.singerInfo_scroll.finishPullUp()
+        })
+      }, 300)
+    },
+    // 处理加载更多mv
+    handleLoadMoreMV () {
+      if (this.singerMVFinished) { // 加载完成
+        return
+      }
+      if (this.loadMoreMV) { // 如果请求未完成就不继续请求数据
+        return
+      }
+      clearTimeout(this.loadTimerAlbum)
+      this.loadMoreMV = true
+      this.loadTimerMV = setTimeout(async () => {
+        await this.getSingerMV(this.id)
         this.$nextTick(() => {
           this.$refs.singerInfo_scroll.finishPullUp()
         })
@@ -327,7 +384,8 @@ export default {
     SingerDetail,
     Position,
     Scroll,
-    overlay
+    overlay,
+    SingerMv
   }
 }
 </script>

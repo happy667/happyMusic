@@ -42,7 +42,7 @@ export default {
     ...mapGetters(['currentSong'])
   },
   methods: {
-    ...mapMutations(['setPlayerFullScreen', 'setSinger', 'setSingerCurrentIndex', 'setIsPlayerClick', 'setAddNoCacheComponents', 'setIsGetSingerImage', 'setIsAdvance']),
+    ...mapMutations(['setPlayerFullScreen', 'setSinger', 'setSingerCurrentIndex', 'setIsPlayerClick', 'setAddNoCacheComponents', 'setIsGetSingerImage']),
     handleBack () {
       this.setPlayerFullScreen(false)
     },
@@ -81,8 +81,6 @@ export default {
     },
     // 选择歌手列表中歌手
     handleSelect (item) {
-      // 设置为前进页面
-      this.setIsAdvance(true)
       this.setIsPlayerClick(true)
       this.showSingerPopup = false
       this.setPlayerFullScreen(false)

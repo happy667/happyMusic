@@ -33,7 +33,7 @@ export default {
 @import '~common/stylus/variable';
 
 .album-container {
-  padding: 0.25rem 0.4rem;
+  padding: 0.25rem 0;
   display: flex;
 
   .album-image {

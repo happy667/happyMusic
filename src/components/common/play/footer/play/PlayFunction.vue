@@ -26,11 +26,9 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setPlayerFullScreen', 'setAddNoCacheComponents', 'setIsPlayerClick', 'setIsAdvance']),
+    ...mapMutations(['setPlayerFullScreen', 'setAddNoCacheComponents', 'setIsPlayerClick']),
     // 点击评论
     handleRecommentClick () {
-      // 设置为前进页面
-      this.setIsAdvance(true)
       // 设置从播放器页面点击
       this.setIsPlayerClick(true)
       // 添加不缓存路由

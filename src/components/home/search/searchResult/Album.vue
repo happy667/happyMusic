@@ -25,7 +25,7 @@ import NoResult from '@/components/common/NoResult'
 import searchApi from '@/api/search.js'
 import Album from '@/assets/common/js/album.js'
 import { ERR_OK } from '@/api/config.js'
-import { mapState, mapMutations } from 'vuex'
+import { mapState } from 'vuex'
 import {
   searchType
 } from '@/assets/common/js/config.js'
@@ -60,7 +60,6 @@ export default {
     this.getSearchSAlbum()
   },
   methods: {
-    ...mapMutations(['setIsAdvance']),
     // 查询专辑
     async getSearchSAlbum () {
       // 显示加载logo
@@ -71,7 +70,10 @@ export default {
       if (res.code === ERR_OK) {
         // 没有查询到数据
         if (!res.result.albums || res.result.albumCount === 0) {
-          this.album.albumCount = 0
+          if (this.album.albumCount === -1) {
+            this.album.albumCount = 0
+          }
+
           this.album.isNull = true
           return
         }
@@ -100,6 +102,7 @@ export default {
     },
     // 上拉加载更多专辑
     handlePullingUp () {
+      console.log(123)
       // 加载时判断当前滚动的页面是否为该页面，因为其他页面在上拉加载时会干扰该页面
       if (this.searchCurrentIndex === 3) {
         if (this.album.isNull) { // 没有结果了
@@ -120,8 +123,6 @@ export default {
     },
     // 选择专辑
     selectAlbum (item) {
-      // 设置为前进页面
-      this.setIsAdvance(true)
       this.$router.push(`/singerAlbum/${item.id}`)
     }
   },
@@ -132,3 +133,8 @@ export default {
   }
 }
 </script>
+<style lang="stylus" scoped>
+.search-album-container {
+  padding: 0 0.4rem;
+}
+</style>

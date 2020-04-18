@@ -84,6 +84,7 @@ export default {
     if (this.currentPlayIndex !== -1) {
       this.setHideMiniPlayer(false)
     }
+
     next()
   },
   inject: ['reload'],
@@ -115,7 +116,7 @@ export default {
     window.removeEventListener('scroll', this.handleScroll)
   },
   methods: {
-    ...mapMutations(['setIsAdvance', 'setHideMiniPlayer']),
+    ...mapMutations(['setHideMiniPlayer']),
     // 返回上一个路由
     routerBack () {
       this.$utils.routerBack()
@@ -178,8 +179,6 @@ export default {
     },
     goToVideoInfo (mv) {
       this.reload()
-      // 设置为前进页面
-      this.setIsAdvance(true)
       this.$router.push(`/videoInfo/${mv.id}`)
     },
     // 切换显示隐藏视频详情信息

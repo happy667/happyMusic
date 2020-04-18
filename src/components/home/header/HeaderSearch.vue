@@ -20,7 +20,7 @@
 import { mapMutations } from 'vuex'
 export default {
   methods: {
-    ...mapMutations(['setSearchKeywords']),
+    ...mapMutations(['setSearchKeywords', 'setIsAdvance']),
     // 点击搜索跳转搜索页面
     handleSearchClick () {
       // 清空搜索内容
@@ -28,6 +28,8 @@ export default {
       this.$router.push('/search/searchPage')
     },
     goToMyHome () {
+      // 不设置为前进页面
+      this.setIsAdvance(false)
       this.$router.push('/user')
     }
   }

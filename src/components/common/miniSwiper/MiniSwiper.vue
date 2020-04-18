@@ -18,7 +18,6 @@
 <script>
 import Swiper from 'swiper'
 import MiniSwiperItem from './MiniSwiperItem'
-import { mapMutations } from 'vuex'
 import { getData, getParentByClassName } from '@/assets/common/js/dom.js'
 export default {
   props: {
@@ -26,7 +25,6 @@ export default {
   },
   methods: {
 
-    ...mapMutations(['setIsAdvance']),
     // 初始化轮播图组件
     initSwiper () {
       // 这里的this是vue对象，提前声明(需要在swiper中应用)
@@ -71,8 +69,6 @@ export default {
 
     // 选择专辑进入专辑页面
     selectItem (id) {
-      // 设置为前进页面
-      this.setIsAdvance(true)
       this.$router.push({ path: `/singerAlbum/${id}` })
     }
   },

@@ -48,6 +48,13 @@ export default {
       url
     })
   },
+  // 获取歌手mv
+  getSingerMV(id, offset = 0, limit = 26) {
+    const url = `/artist/mv?id=${id}&offset=${offset}&limit=${limit}&timestamp=${new Date().getTime()}`
+    return request({
+      url
+    })
+  },
   // 获取相似歌手
   getSimilarSinger(id) {
     const url = `/simi/artist?id=${id}`

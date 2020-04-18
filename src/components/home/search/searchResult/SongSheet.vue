@@ -63,7 +63,9 @@ export default {
         // 没有查询到数据
 
         if (!res.result.playlists || res.result.playlistCount === 0) {
-          this.songSheet.songSheetCount = 0
+          if (this.songSheet.songSheetCount === -1) {
+            this.songSheet.songSheetCount = 0
+          }
           this.songSheet.isNull = true
           return
         }

@@ -181,8 +181,6 @@ const utils = {
     }).then(() => {
       // 未登录则跳转到登陆界面
       console.dir(router)
-      // 设置为前进页面
-      store.commit('setIsAdvance', true)
       router.push({
         name: 'login',
         query: {
@@ -220,6 +218,8 @@ const utils = {
     }
   },
   routerBack() {
+    store.commit('setIsAdvance', false)
+    console.log(store.isAdvance)
     console.log(window.history.length)
     if (window.history.length <= 1) {
       router.push('/')

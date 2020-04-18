@@ -134,7 +134,7 @@ export default {
     this.getSearchAll()
   },
   methods: {
-    ...mapMutations(['setSearchCurrentIndex', 'setIsAdvance', 'setSingerCurrentIndex']),
+    ...mapMutations(['setSearchCurrentIndex', 'setSingerCurrentIndex']),
     // 查询综合结果
     async getSearchAll () {
       // 显示加载logo
@@ -261,15 +261,11 @@ export default {
     },
     // 选择歌手
     selectSinger (item) {
-      // 设置为前进页面
-      this.setIsAdvance(true)
       this.setSingerCurrentIndex(0)
       this.$router.push(`/singerInfo/${item.id}`)
     },
     // 选择专辑
     selectAlbum (item) {
-      // 设置为前进页面
-      this.setIsAdvance(true)
       this.$router.push(`/singerAlbum/${item.id}`)
     },
     setCurrentIndex (index) {
@@ -297,6 +293,10 @@ export default {
   padding-right: 0.4rem;
   height: 1.1rem;
   line-height: 1.1rem;
+}
+
+.search-comprehensive-container>>>.album-container {
+  padding: 0.25rem 0.4rem;
 }
 
 .search-comprehensive-container {

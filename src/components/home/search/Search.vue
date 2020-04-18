@@ -15,6 +15,7 @@
                   shape="round"
                   show-action
                   @input="handleInput"
+                  @focus="openSearchList"
                   v-model="searchVal"
                   @search="handleSearch">
         <template #action>
@@ -95,6 +96,8 @@ export default {
     // 返回上一个路由
     routerBack () {
       if (this.$route.path === '/search/searchPage') {
+        // 设置为后退页面
+        this.setIsAdvance(false)
         this.$router.push('/home')
         return
       }
@@ -142,9 +145,6 @@ export default {
       // 将搜索的内容保存在本地
       addLocalSearch(this.searchKeywords)
       if (this.$route.path === '/search/searchPage') {
-        // 设置为前进页面
-        console.log(this)
-        this.setIsAdvance(true)
         this.$router.replace('/search/searchResult')
       } else {
         this.reload()

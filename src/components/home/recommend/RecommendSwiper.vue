@@ -9,7 +9,8 @@
           <div class="image"
                :data-bannerid="item.targetId"
                :data-bannertype="item.targetType">
-            <img :src="item.imageUrl">
+            <img v-lazy="item.imageUrl"
+                 class="animated fadeIn">
             <div class="title"
                  :style="{backgroundColor:item.titleColor}">{{item.typeTitle}}</div>
           </div>
@@ -31,7 +32,7 @@ import {
 import {
   targetType
 } from '@/assets/common/js/config.js'
-import { mapMutations, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import { getData, getParentByClassName } from '@/assets/common/js/dom.js'
 export default {
   props: {
@@ -49,7 +50,6 @@ export default {
     ...mapGetters(['currentSong'])
   },
   methods: {
-    ...mapMutations(['setIsAdvance']),
     selectItem (id, type) {
       type = parseInt(type)
       switch (type) {
@@ -60,8 +60,6 @@ export default {
           this.$router.push(`/videoInfo/${id}`)
           break
         case targetType.album:// 专辑
-          // 设置为前进页面
-          this.setIsAdvance(true)
           this.$router.push(`/singerAlbum/${id}`)
           break
         case targetType.songSheet:// 歌单
@@ -172,6 +170,8 @@ export default {
           position: relative;
           width: 100%;
           height: 100%;
+          background-color: $color-common-b;
+          border-radius: 0.2rem;
 
           img {
             display: block;

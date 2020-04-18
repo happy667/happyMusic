@@ -59,30 +59,20 @@ const routes = [
       {
         path: 'index',
         name: 'index',
-        component: Index,
-        meta: {
-          index: 1
-        }
+        component: Index
       },
       // 跳转到登录页面
       {
         path: 'login',
         name: 'login',
-        component: Login,
-        meta: {
-          index: 2
-        }
-
+        component: Login
       },
 
       // 跳转到注册页面
       {
         path: 'register',
         name: 'register',
-        component: Register,
-        meta: {
-          index: 2
-        }
+        component: Register
       },
       {
         path: 'findPassword',
@@ -95,10 +85,7 @@ const routes = [
   {
     path: '/home',
     name: 'home',
-    component: Home,
-    meta: {
-      index: 0
-    } // meta对象的index用来定义当前路由的层级,由小到大,由低到高
+    component: Home
   },
   // 歌单广场页
   {
@@ -106,9 +93,8 @@ const routes = [
     name: 'songSheetSquare',
     component: SongSheetSquare,
     meta: {
-      index: 1,
       title: '歌单广场'
-    }, // meta对象的index用来定义当前路由的层级,由小到大,由低到高
+    },
     beforeEnter(to, from, next) {
       if (from.name === 'home') {
         // 添加不缓存路由
@@ -127,9 +113,8 @@ const routes = [
     component: SongSheetDisc,
     props: true,
     meta: {
-      index: 4,
       title: '歌单详情'
-    }, // meta对象的index用来定义当前路由的层级,由小到大,由低到高
+    },
     beforeEnter(to, from, next) {
       console.log(from)
       if (from.name === 'home' || from.name === 'searchResult' || from.name === 'songSheetSquare' || from.name === 'user') {
@@ -149,11 +134,9 @@ const routes = [
     component: Search,
     redirect: 'searchPage',
     meta: {
-      index: 1,
       title: '搜索'
-    }, // meta对象的index用来定义当前路由的层级,由小到大,由低到高
+    },
     beforeEnter(to, from, next) {
-      console.log(from, to)
       if (from.name === 'home') {
         // 添加不缓存路由
         store.commit('setAddNoCacheComponents', 'search')
@@ -172,9 +155,8 @@ const routes = [
         name: 'searchPage',
         component: SearchBox,
         meta: {
-          index: 1,
           title: '搜索'
-        } // meta对象的index用来定义当前路由的层级,由小到大,由低到高
+        }
       },
       // 搜索结果
       {
@@ -182,9 +164,8 @@ const routes = [
         name: 'searchResult',
         component: SearchResult,
         meta: {
-          index: 3,
           title: '搜索结果'
-        }, // meta对象的index用来定义当前路由的层级,由小到大,由低到高
+        },
         beforeEnter(to, from, next) {
           if (!store.state.searchKeywords) {
             router.replace('/search/searchPage')
@@ -209,9 +190,8 @@ const routes = [
     component: VideoInfo,
     props: true,
     meta: {
-      index: 4,
       title: '视频详情'
-    }, // meta对象的index用来定义当前路由的层级,由小到大,由低到高
+    },
     beforeEnter(to, from, next) {
       // 如果有歌曲播放就隐藏迷你播放器
       if (store.state.currentPlayIndex !== -1) {
@@ -241,9 +221,8 @@ const routes = [
     component: SongComment,
     props: true,
     meta: {
-      index: 6,
       title: '评论列表'
-    } // meta对象的index用来定义当前路由的层级,由小到大,由低到高
+    }
   },
   // 专辑评论列表
   {
@@ -252,7 +231,6 @@ const routes = [
     component: AlbumComment,
     props: true,
     meta: {
-      isBack: false,
       title: '评论列表'
     },
     beforeEnter(to, from, next) {
@@ -275,7 +253,6 @@ const routes = [
     props: true,
     meta: {
       keepAlive: false, // 不需要缓存
-      index: 5,
       title: '歌手详情'
     },
     beforeEnter(to, from, next) {
@@ -300,7 +277,6 @@ const routes = [
       title: '专辑详情'
     },
     beforeEnter(to, from, next) {
-      console.log(from)
       if (from.name === 'singerInfo' || from.name === 'home' || from.name === 'user' || from.name === 'searchResult') {
         // 添加不缓存路由
         store.commit('setAddNoCacheComponents', 'singerAlbum')
@@ -319,9 +295,6 @@ const routes = [
     path: '/user',
     name: 'user',
     component: User,
-    meta: {
-      index: 0
-    }, // meta对象的index用来定义当前路由的层级,由小到大,由低到高
     beforeEnter(to, from, next) {
       // 如果有歌曲播放就显示迷你播放器
       if (store.state.currentPlayIndex !== -1) {
@@ -345,7 +318,6 @@ const routes = [
     component: MyFollow,
     meta: {
       requireLogin: true, // 当前路由需要校验，不需要就不用写
-      index: 2,
       title: '我的关注'
     },
     beforeEnter(to, from, next) {
@@ -366,7 +338,6 @@ const routes = [
     component: MyLike,
     meta: {
       requireLogin: true, // 当前路由需要校验，不需要就不用写
-      index: 2,
       title: '我的最爱'
     },
     beforeEnter(to, from, next) {
@@ -387,7 +358,6 @@ const routes = [
     component: PlayRanking,
     meta: {
       requireLogin: true, // 当前路由需要校验，不需要就不用写
-      index: 2,
       title: '听歌排行'
     },
     beforeEnter(to, from, next) {
@@ -409,7 +379,6 @@ const routes = [
     component: UserRecommend,
     meta: {
       requireLogin: true, // 当前路由需要校验，不需要就不用写
-      index: 2,
       title: '每日推荐'
     },
     beforeEnter(to, from, next) {
@@ -454,7 +423,6 @@ const routes = [
     component: UserEditNickname,
     meta: {
       requireLogin: true, // 当前路由需要校验，不需要就不用写
-      IsAdvance: true, // 前进页面
       title: '修改昵称',
       isBack: false
     },
@@ -473,7 +441,6 @@ const routes = [
     component: UserEditPassword,
     meta: {
       requireLogin: true, // 当前路由需要校验，不需要就不用写
-      IsAdvance: true, // 前进页面
       title: '修改密码',
       isBack: false
     },
@@ -522,8 +489,6 @@ router.beforeEach((to, from, next) => {
         message: '您还没有登录哦',
         confirmButtonText: '去登陆'
       }).then(() => {
-        // 设置为前进页面
-        store.commit('setIsAdvance', true)
         next({
           name: 'login',
           query: {

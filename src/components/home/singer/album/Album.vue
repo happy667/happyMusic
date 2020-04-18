@@ -204,10 +204,9 @@ export default {
     this.setIsGetAlbumSingerImage(false)
   },
   methods: {
-    ...mapMutations(['setPlayerFullScreen', 'setSingerCurrentIndex', 'setIsAdvance', 'setIsGetAlbumSingerImage', 'setHideMiniPlayer']),
+    ...mapMutations(['setPlayerFullScreen', 'setSingerCurrentIndex', 'setIsGetAlbumSingerImage', 'setHideMiniPlayer']),
     routerBack () {
       this.$route.meta.isBack = true
-      this.setIsAdvance(false)
       this.$utils.routerBack()
     },
     handlePlaylist (playList) {
@@ -314,8 +313,6 @@ export default {
     },
     // 选择歌手
     selectSingers () {
-      // 设置为前进页面
-      this.setIsAdvance(true)
       const list = this.albumObj.album.albumSingersList
       if (list.length === 1) { // 只有一个歌手直接跳转到歌手页面
         this.setSingerCurrentIndex(0)
@@ -367,8 +364,6 @@ export default {
     // 跳转到专辑评论列表
     goToAlbumComment () {
       this.$route.meta.isBack = false
-      // 设置为前进页面
-      this.setIsAdvance(true)
       this.$router.push(`/albumComment/${this.id}`)
     },
     // 打开遮罩层

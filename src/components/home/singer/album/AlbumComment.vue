@@ -77,7 +77,6 @@
 import NoResult from '@/components/common/NoResult'
 import CommentList from '@/components/home/comment/CommentList'
 import singerApi from '@/api/singer.js'
-import { mapMutations } from 'vuex'
 import {
   ERR_OK
 } from '@/api/config.js'
@@ -113,7 +112,6 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setIsAdvance']),
     // 返回上一个路由
     routerBack () {
       this.$route.meta.isBack = true
@@ -121,8 +119,6 @@ export default {
     },
     goToAlbum () {
       this.$route.meta.isBack = false
-      // 设置为前进页面
-      this.setIsAdvance(true)
       this.$router.push(`/singerAlbum/${this.id}`)
     },
     // 获取专辑详情

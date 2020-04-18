@@ -60,7 +60,7 @@ export default {
     this.getSearchSinger()
   },
   methods: {
-    ...mapMutations(['setIsAdvance', 'setSingerCurrentIndex']),
+    ...mapMutations(['setSingerCurrentIndex']),
     // 查询歌手
     async getSearchSinger () {
       // 显示加载logo
@@ -71,7 +71,9 @@ export default {
       if (res.code === ERR_OK) {
         // 没有查询到数据
         if (!res.result.artists || res.result.artistCount === 0) {
-          this.singer.singerCount = 0
+          if (this.singer.singerCount === -1) {
+            this.singer.singerCount = 0
+          }
           this.singer.isNull = true
           return
         }
@@ -125,8 +127,6 @@ export default {
     },
     // 选择歌手
     handleSelect (item) {
-      // 设置为前进页面
-      this.setIsAdvance(true)
       this.setSingerCurrentIndex(0)
       this.$router.push(`/singerInfo/${item.id}`)
     }
