@@ -109,51 +109,10 @@
         </div>
       </div>
     </div>
-    <!-- 视频信息 -->
-    <div class="video-info"
-         v-show="!hideInfo">
-      <div class="info-top van-hairline--bottom"
-           @click="goToVideoInfo">
-        <!-- 视频标题 -->
-        <div class="title">
-          <div class="name">{{videoParams.name}}</div>
-          <div class="right-icon"
-               v-if="moreInfo">
-            <van-icon :name="rightIcon" />
-          </div>
-        </div>
-        <!-- 视频描述 -->
-        <transition-group enter-active-class="animated fadeIn faster">
-          <div class="video-desc"
-               v-show="showMoreInfo"
-               key="video-desc">
-            <div class="top">
-              <div class="video-num">{{videoParams.playCount}} 次观看</div>
-              <div class="video-time">{{videoParams.publishTime}} 发布</div>
-            </div>
-            <div class="bottom">
-              <div class="video-desc">{{videoParams.desc}}</div>
-            </div>
-          </div>
-        </transition-group>
-
-      </div>
-
-      <!-- 视频出处 -->
-      <div class="info-bottom"
-           @click="selectSinger(videoParams.artist)">
-        <div class="play-source-img">
-          <mini-image :avatar="this.videoParams.artist.avatarUrl"></mini-image>
-        </div>
-        <div class="play-source-author">
-          {{videoParams.artist.name}}
-        </div>
-      </div>
-    </div>
+    <slot></slot>
   </div>
 </template>
 <script>
-import MiniImage from '../img/MiniImage'
 import 'common/js/convert.js'
 import { mapMutations, mapState } from 'vuex'
 export default {
@@ -161,18 +120,6 @@ export default {
     videoParams: {
       type: Object,
       default: () => { }
-    },
-    moreInfo: {
-      type: Boolean,
-      default: () => false
-    },
-    showMoreInfo: { // 是否显示更多信息
-      type: Boolean,
-      default: () => false
-    },
-    hideInfo: { // 是否隐藏视频信息
-      type: Boolean,
-      default: () => false
     }
   },
   data () {
@@ -197,9 +144,6 @@ export default {
     ...mapState(['oldVideo', 'playing', 'audio']),
     playIcon () {
       return this.isPlay ? 'pause-circle-o' : 'play-circle-o'
-    },
-    rightIcon () {
-      return this.showMoreInfo ? 'arrow-up' : 'arrow-down'
     }
   },
   watch: {
@@ -219,7 +163,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setOldVideo', 'setSingerCurrentIndex', 'setPlaying']),
+    ...mapMutations(['setOldVideo', 'setPlaying']),
     // 跳转到video详情页
     goToVideoInfo () {
       // 说明不是视频详情页
@@ -337,15 +281,7 @@ export default {
     handleFullScreen () {
       this.isFullScreen = !this.isFullScreen
       this.isFullScreen ? this.$refs.player.webkitRequestFullScreen() : document.webkitCancelFullScreen()
-    },
-    // 选择歌手
-    selectSinger (item) {
-      this.setSingerCurrentIndex(0)
-      this.$router.push(`/singerInfo/${item.id}`)
     }
-  },
-  components: {
-    MiniImage
   }
 }
 </script>
@@ -355,13 +291,11 @@ export default {
 .video-container>>>.van-loading {
   position: absolute;
   width: 100%;
-  height: 5rem;
   z-index: 90;
   background: $color-common-b;
 }
 
 .video-container {
-  margin-bottom: 0.5rem;
   width: 100%;
   box-shadow: 0 0.05rem 1rem rgba(0, 0, 0, 0.1);
   border-radius: 0 0 0.3rem 0.3rem;
@@ -371,7 +305,6 @@ export default {
     position: relative;
     width: 100%;
     height: 5rem;
-    touch-action: none;
 
     video {
       display: block;
@@ -438,59 +371,6 @@ export default {
           border-radius: 50%;
           background: $color-common;
         }
-      }
-    }
-  }
-
-  .video-info {
-    .info-top {
-      padding: 0.1rem 0.2rem;
-
-      .title {
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
-        line-height: 1rem;
-        no-wrap();
-
-        .name {
-          font-size: $font-size-smaller;
-          no-wrap();
-        }
-      }
-
-      .right-icon {
-        width: 1rem;
-        text-align: center;
-      }
-    }
-
-    .video-desc {
-      color: $color-common-b2;
-      font-size: $font-size-mini;
-
-      .top {
-        display: flex;
-        justify-content: space-between;
-        line-height: 0.6rem;
-      }
-
-      .bottom {
-        line-height: 0.5rem;
-      }
-    }
-
-    .info-bottom {
-      padding: 0.2rem;
-      display: flex;
-      align-items: center;
-
-      .play-source-img {
-        margin-right: 0.3rem;
-      }
-
-      .play-source-author {
-        font-size: $font-size-smaller;
       }
     }
   }

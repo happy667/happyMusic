@@ -24,10 +24,9 @@ export default {
 @import '~common/stylus/variable';
 
 .title-container {
-  padding: 0 0.4rem;
   display: flex;
   justify-content: space-between;
-  font-size: $font-size-small-x;
+  font-size: $font-size-smaller-x;
   height: 1.1rem;
   line-height: 1.1rem;
   background: $color-common-background;

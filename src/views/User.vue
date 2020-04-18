@@ -323,6 +323,7 @@ export default {
 .user-container>>>.album-container {
   padding: 0;
   margin-bottom: 0.4rem;
+  color: $color-common-x;
 }
 
 .user-container {

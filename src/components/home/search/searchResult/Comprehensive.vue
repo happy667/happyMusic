@@ -299,6 +299,10 @@ export default {
   padding: 0.25rem 0.4rem;
 }
 
+.search-comprehensive-container>>>.title-container {
+  padding: 0 0.4rem;
+}
+
 .search-comprehensive-container {
   padding-top: 0.25rem;
 

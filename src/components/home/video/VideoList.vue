@@ -23,7 +23,7 @@
   </div>
 </template>
 <script>
-import VideoItem from './Video'
+import VideoItem from './VideoItem'
 import Scroll from '@/components/common/Scroll'
 import videoApi from '@/api/video.js'
 import SingerApi from '@/api/singer.js'

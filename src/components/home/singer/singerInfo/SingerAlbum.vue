@@ -1,22 +1,31 @@
 <template>
   <div class="singer-album-container">
     <!-- loading -->
-    <loading :loading="singerAlbum.length===0" />
-    <template v-if="singerAlbum.length!==0">
+    <loading :loading="loading" />
+    <template v-if="singerAlbum&&singerAlbum.length!==0">
       <div class="singer-album-wrapper">
         <album-list :list="singerAlbum"
                     @select="selectItem"></album-list>
       </div>
     </template>
+    <template v-else-if="singerAlbum&&singerAlbum.length===0">
+      <no-result text="暂无相关专辑"></no-result>
+    </template>
   </div>
 </template>
 <script>
+import NoResult from '@/components/common/NoResult'
 import AlbumList from '@/components/home/singer/albumList/AlbumList'
 export default {
   props: {
     singerAlbum: {
       type: Array,
       default: () => []
+    }
+  },
+  computed: {
+    loading () {
+      return this.singerAlbum === null
     }
   },
   methods: {
@@ -26,7 +35,8 @@ export default {
     }
   },
   components: {
-    AlbumList
+    AlbumList,
+    NoResult
   }
 }
 </script>

@@ -172,6 +172,10 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
+.recommend-container>>>.title-container {
+  padding: 0 0.4rem;
+}
+
 .recommend-container {
   position: absolute;
   width: 100%;

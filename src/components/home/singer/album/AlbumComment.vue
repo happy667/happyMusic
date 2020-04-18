@@ -305,7 +305,7 @@ export default {
 
     .comment {
       .comment-title {
-        font-size: $font-size-smaller;
+        font-size: $font-size-smaller-x;
         font-weight: bold;
         height: 1rem;
         line-height: 1rem;

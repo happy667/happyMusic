@@ -104,8 +104,8 @@ export default {
     return {
       singerDesc: {},
       singerSong: [], // 歌手单曲
-      singerAlbum: [], // 歌手专辑
-      singerMV: [], // 歌手MV
+      singerAlbum: null, // 歌手专辑
+      singerMV: null, // 歌手MV
       singerDetail: null, // 歌手详情
       singerAlbumFinished: false, // 歌手专辑是否加载完成
       singerMVFinished: false, // 歌手mv是否加载完成
@@ -178,10 +178,10 @@ export default {
           if (this.singerSong.length === 0) this.getSingerSong(this.id)
           break
         case 1:// 歌手专辑
-          if (this.singerAlbum.length === 0) this.getSingerAlbum(this.id)
+          if (!this.singerAlbum) this.getSingerAlbum(this.id)
           break
         case 2:// 歌手MV
-          if (this.singerMV.length === 0) this.getSingerMV(this.id)
+          if (!this.singerMV) this.getSingerMV(this.id)
           break
         case 3: // 歌手详情
           if (!this.singerDetail) this.getSingerDetail(this.id)
@@ -221,7 +221,7 @@ export default {
     // 获取歌手专辑
     async getSingerAlbum (id) {
       // 获取歌手专辑
-      const offset = this.singerAlbum.length
+      const offset = this.singerAlbum ? this.singerAlbum.length : 0
       const { data: res } = await singerApi.getSingerAlbum(id, offset)
       if (res.code === ERR_OK) { // 成功获取歌手单曲
         let albumList = []
@@ -235,18 +235,37 @@ export default {
           })
           albumList.push(album)
         })
-        this.singerAlbum = this.singerAlbum.concat(albumList)
+
+        if (this.singerAlbum) {
+          this.singerAlbum = this.singerAlbum.concat(albumList)
+        } else if (res.hotAlbums.length !== 0) {
+          this.singerAlbum = []
+          this.singerAlbum = this.singerAlbum.concat(albumList)
+        } else {
+          this.singerAlbum = []
+        }
+
         this.singerAlbumFinished = !res.more
         this.loadMoreAlbum = false
       }
     },
     // 获取歌手mv
     async getSingerMV (id) {
-      const offset = this.singerMV.length
+      // 获取歌手专辑
+      const offset = this.singerMV ? this.singerMV.length : 0
       // 获取歌手mv
       const { data: res } = await singerApi.getSingerMV(id, offset)
       if (res.code === ERR_OK) { // 成功获取歌手MV
-        this.singerMV = this.singerMV.concat(res.mvs)
+        let mvs = res.mvs
+        if (this.singerMV) {
+          this.singerMV = this.singerMV.concat(mvs)
+        } else if (mvs.length !== 0) {
+          this.singerMV = []
+          this.singerMV = this.singerMV.concat(mvs)
+        } else {
+          this.singerMV = []
+        }
+
         this.singerMVFinished = !res.hasMore
         this.loadMoreMV = false
       }

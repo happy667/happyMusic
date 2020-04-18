@@ -15,42 +15,85 @@
       <van-sticky :offset-top="46">
         <div class="video">
           <video-component :videoParams="video"
-                           @toggleInfo="handleToggleInfo"
-                           :showMoreInfo="showMoreInfo"
-                           :hideInfo="hideVideoInfo"
-                           :moreInfo="true"></video-component>
+                           @toggleInfo="handleToggleInfo" />
         </div>
       </van-sticky>
-      <div class="container">
-        <!-- 相关mv -->
-        <div class="related-mv"
-             v-if="simiMVList">
-          <p>相关视频</p>
-          <video-list :list="simiMVList"
-                      @select="goToVideoInfo"></video-list>
+      <section class="container">
+        <!-- 视频信息 -->
+        <div class="video-info">
+          <div class="info-top van-hairline--bottom"
+               @click="handleToggleInfo">
+            <div class="content">
+              <!-- 视频标题 -->
+
+              <div class="title">
+                <div class="icon">
+                  <van-tag plain
+                           color="#FD4979">mv</van-tag>
+                </div>
+                <div class="name">{{video.name}}</div>
+              </div>
+              <div class="right-icon">
+                <van-icon :name="rightIcon" />
+              </div>
+
+            </div>
+
+            <!-- 视频描述 -->
+            <div class="video-desc-container"
+                 v-show="showMoreInfo">
+              <div class="top">
+                <div class="video-num">{{video.playCount}} 次观看</div>
+                <div class="video-time">{{video.publishTime}} 发布</div>
+              </div>
+              <div class="bottom">
+                <div class="desc">{{video.desc}}</div>
+              </div>
+            </div>
+          </div>
+          <!-- 视频出处 -->
+          <div class="info-bottom"
+               @click="selectSinger(video.artist)">
+            <div class="play-source-img">
+              <mini-image :avatar="video.artist.avatarUrl"></mini-image>
+            </div>
+            <div class="play-source-author">
+              {{video.artist.name}}
+            </div>
+          </div>
         </div>
-        <!-- 评论列表 -->
-        <div class="comment"
-             v-if="commentList">
-          <div class="comment-title">精彩评论{{commentText}}</div>
-          <van-list v-model="loading"
-                    :immediate-check='false'
-                    :finished="finished"
-                    :finished-text="commentCount===0?'':'没有更多了'"
-                    @load="handlePullingUp">
-            <template v-if="commentList.length!==0">
-              <comment-list :commentList="commentList"></comment-list>
-            </template>
-            <template v-else>
-              <no-result text="还没有小伙伴发表评论哦~"></no-result>
-            </template>
-          </van-list>
+        <div class="other-info">
+          <!-- 相关mv -->
+          <div class="related-mv"
+               v-if="simiMVList">
+            <p>相关视频</p>
+            <video-list :list="simiMVList"
+                        @select="goToVideoInfo"></video-list>
+          </div>
+          <!-- 评论列表 -->
+          <div class="comment"
+               v-if="commentList">
+            <div class="comment-title">精彩评论{{commentText}}</div>
+            <van-list v-model="loading"
+                      :immediate-check='false'
+                      :finished="finished"
+                      :finished-text="commentCount===0?'':'没有更多了'"
+                      @load="handlePullingUp">
+              <template v-if="commentList.length!==0">
+                <comment-list :commentList="commentList"></comment-list>
+              </template>
+              <template v-else>
+                <no-result text="还没有小伙伴发表评论哦~"></no-result>
+              </template>
+            </van-list>
+          </div>
         </div>
-      </div>
+      </section>
     </template>
   </div>
 </template>
 <script>
+import MiniImage from '../img/MiniImage'
 import VideoComponent from './Video'
 import CommentList from '@/components/home/comment/CommentList'
 import VideoList from '@/components/common/video/VideoList'
@@ -75,8 +118,7 @@ export default {
       simiMVList: null, // 相似mv列表
       commentList: null, // 评论列表
       commentCount: 0, // 评论数量
-      showMoreInfo: false, // 是否显示更多信息
-      hideVideoInfo: false// 是否隐藏视频信息
+      showMoreInfo: false// 是否显示更多信息
     }
   },
   beforeRouteLeave (to, from, next) {
@@ -92,6 +134,9 @@ export default {
     ...mapState(['currentPlayIndex']),
     commentText () {
       return this.commentCount === 0 ? '' : this.commentCount
+    },
+    rightIcon () {
+      return this.showMoreInfo ? 'arrow-up' : 'arrow-down'
     }
   },
   mounted () {
@@ -100,23 +145,9 @@ export default {
       await this.getSimiMV(this.id)
       await this.getVideoComment(this.id)
     })
-    // 监听页面滚动
-    window.addEventListener('scroll', this.handleScroll)
-  },
-  activated () {
-    // 监听页面滚动
-    window.addEventListener('scroll', this.handleScroll)
-  },
-  deactivated () {
-    // 取消监听页面滚动
-    window.removeEventListener('scroll', this.handleScroll)
-  },
-  destroyed () {
-    // 取消监听页面滚动
-    window.removeEventListener('scroll', this.handleScroll)
   },
   methods: {
-    ...mapMutations(['setHideMiniPlayer']),
+    ...mapMutations(['setHideMiniPlayer', 'setSingerCurrentIndex']),
     // 返回上一个路由
     routerBack () {
       this.$utils.routerBack()
@@ -167,6 +198,14 @@ export default {
         console.log(this.commentList)
       }
     },
+    // 解除监听滚动
+    removeListenerScroll () {
+      window.removeEventListener('scroll', this.handleScroll)
+    },
+    // 添加监听滚动
+    addListenerScroll () {
+      window.addEventListener('scroll', this.handleScroll)
+    },
     // 上拉加载
     handlePullingUp () {
       setTimeout(async () => {
@@ -181,17 +220,14 @@ export default {
       this.reload()
       this.$router.push(`/videoInfo/${mv.id}`)
     },
+    // 选择歌手
+    selectSinger (item) {
+      this.setSingerCurrentIndex(0)
+      this.$router.push(`/singerInfo/${item.id}`)
+    },
     // 切换显示隐藏视频详情信息
     handleToggleInfo () {
       this.showMoreInfo = !this.showMoreInfo
-    },
-    // 监听页面滚动
-    handleScroll () {
-      if (window.scrollY > 0) {
-        this.hideVideoInfo = true
-      } else {
-        this.hideVideoInfo = false
-      }
     }
 
   },
@@ -199,7 +235,8 @@ export default {
     VideoComponent,
     CommentList,
     VideoList,
-    NoResult
+    NoResult,
+    MiniImage
   }
 }
 </script>
@@ -214,23 +251,93 @@ export default {
   .container {
     width: 100%;
     box-sizing: border-box;
-    padding: 0 0.5rem;
-    min-height: cale(1.22667rem + 8.5rem);
+    background: $color-common-b;
 
-    .comment-title {
-      font-size: $font-size-smaller;
-      font-weight: bold;
-      height: 1rem;
-      line-height: 1rem;
+    .video-info {
+      margin-bottom: 0.4rem;
+      background: $color-common-background;
+      display: flex;
+      flex-direction: column;
+
+      .info-top {
+        padding: 0.1rem 0.5rem;
+        line-height: 1rem;
+
+        .content {
+          display: flex;
+          justify-content: space-between;
+
+          .title {
+            display: flex;
+            width: 100%;
+            no-wrap();
+
+            .icon {
+              margin-right: 0.2rem;
+            }
+
+            .name {
+              font-size: $font-size-smaller;
+              no-wrap();
+            }
+          }
+
+          .right-icon {
+            width: 1rem;
+            text-align: center;
+          }
+        }
+
+        .video-desc-container {
+          color: $color-common-b2;
+          font-size: $font-size-mini;
+
+          .top {
+            display: flex;
+            justify-content: space-between;
+            line-height: 0.6rem;
+          }
+
+          .bottom {
+            line-height: 0.5rem;
+          }
+        }
+      }
+
+      .info-bottom {
+        padding: 0.2rem 0.5rem;
+        display: flex;
+        align-items: center;
+
+        .play-source-img {
+          margin-right: 0.3rem;
+        }
+
+        .play-source-author {
+          font-size: $font-size-smaller;
+        }
+      }
     }
-  }
 
-  .related-mv {
-    p {
-      height: 1rem;
-      line-height: 1rem;
-      font-size: $font-size-smaller;
-      font-weight: bold;
+    .other-info {
+      padding: 0 0.5rem;
+      background: $color-common-background;
+
+      .comment-title {
+        font-size: $font-size-smaller-x;
+        font-weight: bold;
+        height: 1rem;
+        line-height: 1rem;
+      }
+
+      .related-mv {
+        p {
+          height: 1rem;
+          line-height: 1rem;
+          font-size: $font-size-smaller-x;
+          font-weight: bold;
+        }
+      }
     }
   }
 }
