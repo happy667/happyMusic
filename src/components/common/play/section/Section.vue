@@ -162,17 +162,21 @@ export default {
   width: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;
 
   .song-index {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
     .song-image {
       .image {
         margin: 0 auto;
         position: relative;
-        width: 5.1rem;
-        height: 5.1rem;
+        width: 4.5rem;
+        height: 4.5rem;
         border-radius: 50%;
-        padding: 1.5rem;
+        padding: 1.35rem;
         background: transparent url('http://s3.music.126.net/mobile-new/img/disc-plus.png?b700b62e1971b351dcb8b8ce1c9ceea3=') center center;
         background-size: 100% 100%;
         border-radius: 50%;

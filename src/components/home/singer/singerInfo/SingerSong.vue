@@ -27,7 +27,7 @@
 import NoResult from '@/components/common/NoResult'
 import SongList from '@/components/home/song/SongList'
 import PlayAll from '@/components/common/PlayAll'
-import { mapMutations, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 export default {
   props: {
     list: {
@@ -48,8 +48,6 @@ export default {
     ...mapGetters(['currentSong'])
   },
   methods: {
-    ...mapMutations(['setPlayerFullScreen']),
-
     selectSong (item, index) {
       // 比较两首歌曲
       let result = this.$utils.compareSong(this.currentSong, item)

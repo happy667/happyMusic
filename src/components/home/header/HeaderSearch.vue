@@ -2,8 +2,9 @@
   <div class="header-search-container">
     <!-- logo -->
     <div class="logo"
+         :class="user?'active':''"
          @click="goToMyHome">
-      <img src="@/assets/images/logo.png">
+      <img v-lazy="image">
     </div>
     <!-- 搜索框 -->
     <div class="search"
@@ -17,8 +18,14 @@
   </div>
 </template>
 <script>
-import { mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 export default {
+  computed: {
+    ...mapState(['user']),
+    image () {
+      return this.user ? this.user.avatarUrl : require('@/assets/images/logo.png')
+    }
+  },
   methods: {
     ...mapMutations(['setSearchKeywords', 'setIsAdvance']),
     // 点击搜索跳转搜索页面
@@ -55,7 +62,24 @@ export default {
     text-align: center;
 
     img {
+      display: block;
       width: 0.7rem;
+    }
+
+    &.active {
+      margin-top: 6px;
+      padding-top: 0;
+      width: 1rem;
+      height: 1rem;
+      border-radius: 50%;
+      background: $color-common-b;
+
+      img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+      }
     }
   }
 

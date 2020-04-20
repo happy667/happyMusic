@@ -73,6 +73,7 @@ export default {
     }
   },
   mounted () {
+    console.log(1231232)
     this.$nextTick(() => {
       this.getSearchDefault()
     })

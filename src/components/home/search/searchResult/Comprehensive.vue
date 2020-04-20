@@ -134,7 +134,7 @@ export default {
     this.getSearchAll()
   },
   methods: {
-    ...mapMutations(['setSearchCurrentIndex', 'setSingerCurrentIndex']),
+    ...mapMutations(['setSearchCurrentIndex', 'setSingerCurrentIndex', 'setPlayerFullScreen']),
     // 查询综合结果
     async getSearchAll () {
       // 显示加载logo
@@ -183,7 +183,7 @@ export default {
             name: item.name
           }))
         })
-        songList.push(new Song({ id: item.id, name: item.name, picUrl: item.al.picUrl, st: item.privilege.st, singers, singersList }))
+        songList.push(new Song({ id: item.id, name: item.name, picUrl: item.al.picUrl, st: item.privilege.st, singers, singersList, mv: item.mv }))
       })
       return songObj
     },
@@ -243,11 +243,13 @@ export default {
     },
     // 播放全部歌曲
     handlePlayAll (item, list) {
+      // 比较两首歌曲
       let result = this.$utils.compareSong(this.currentSong, item)
-      if (!result) {
-        // 引入vue原型上的utils
-        this.$utils.playAllSong(list)
+      if (result) {
+        this.setPlayerFullScreen(true)
       }
+      // 引入vue原型上的utils
+      this.$utils.playAllSong(list)
     },
     // 选择歌曲播放
     async selectSong (item, index) {

@@ -8,7 +8,7 @@
                     @prev="prev"></FullScreenPlay>
 
     <!-- 迷你播放器 -->
-    <mini-play v-show="!playerFullScreen&&!hideMiniPlayer">
+    <mini-play v-show="!hideMiniPlayer">
     </mini-play>
     <div class="audio">
       <audio ref="audio"
@@ -58,13 +58,6 @@ export default {
     }
   },
   watch: {
-    playerFullScreen () {
-      if (this.playerFullScreen) { // 如果为全屏播放器将定位修改为fixed,解决全屏播放器页面不显示问题
-        this.$refs.play.style.position = 'fixed'
-      } else {
-        this.$refs.play.style.position = 'relative'
-      }
-    },
     currentSong (newSong, oldSong) {
       if (!newSong.id) {
         return
@@ -282,15 +275,5 @@ export default {
 
 .play-container>>>.singerList {
   max-height: 6rem;
-}
-
-.play-container {
-  position: relative;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 999;
-  background: $color-common-background;
 }
 </style>

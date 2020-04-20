@@ -97,7 +97,7 @@ export default {
               picUrl: item.picUrl
             }))
           })
-          songList.push(new Song({ id: item.id, name: item.name, singers, singersList }))
+          songList.push(new Song({ id: item.id, name: item.name, singers, singersList, mv: item.mvid }))
         })
         // 将每次查询的歌曲追加到song.songList中
         // 因为可能存在重复数据，所以需要去重处理

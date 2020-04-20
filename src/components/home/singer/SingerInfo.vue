@@ -205,7 +205,7 @@ export default {
                 name: item.name
               }))
             })
-            songList.push(new Song({ id: item.id, name: item.name, singers, singersList, picUrl: item.al.picUrl, st: item.privilege.st }))
+            songList.push(new Song({ id: item.id, name: item.name, singers, singersList, picUrl: item.al.picUrl, st: item.privilege.st, mv: item.mv }))
           })
           this.setSingerInfo(res.artist)
           if (res.artist.accountId) {

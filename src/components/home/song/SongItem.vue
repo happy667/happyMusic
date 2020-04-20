@@ -8,29 +8,41 @@
     <!-- 歌曲图片 -->
     <div class="song-img"
          v-if="showImage">
-      <img v-lazy="picUrl" class="animated fadeIn"
+      <img v-lazy="picUrl"
+           class="animated fadeIn"
            :key="picUrl">
     </div>
-    <div class="song-desc">
-      <!-- 歌曲名称 -->
-      <div class="song-name">{{song.name}}</div>
-      <!-- 歌手名称-专辑名称 -->
-      <div class="sg-info">{{song.singers}}</div>
+    <div class="right-info">
+      <div class="song-desc">
+        <!-- 歌曲名称 -->
+        <div class="song-name">{{song.name}}</div>
+        <!-- 歌手名称-专辑名称 -->
+        <div class="sg-info">{{song.singers}}</div>
+      </div>
+      <div class="icon-container"
+           v-if="song.st>=0">
+        <div v-if="song.mv"
+             class="icon video"
+             @click.stop="selectItemVideo">
+          <van-icon name="tv-o" />
+        </div>
+
+        <div v-if="showPlayCount"
+             class="play-count icon">
+          <div class="icon">
+            <van-icon name="play-circle-o" />
+          </div>
+          <div class="count">{{song.playCount}}</div>
+        </div>
+        <div v-else
+             class="icon love"
+             @click.stop="selectItemLove">
+          <i class="iconfont"
+             :class="loveIcon"></i>
+        </div>
+      </div>
     </div>
 
-    <div v-if="song.st>=0"
-         class="love"
-         @click.stop="selectItemLove">
-      <i class="iconfont"
-         :class="loveIcon"></i>
-    </div>
-    <div v-else-if="showPlayCount"
-         class="play-count">
-      <div class="icon">
-        <van-icon name="play-circle-o" />
-      </div>
-      <div class="count">{{song.playCount}}</div>
-    </div>
   </div>
 </template>
 
@@ -149,6 +161,10 @@ export default {
           })
         }).catch(() => { })
       }
+    },
+    // 选择歌曲视频
+    selectItemVideo () {
+      this.$router.push(`/videoInfo/${this.song.mv}`)
     }
 
   }
@@ -160,7 +176,7 @@ export default {
 .songs-list-item-containter {
   position: relative;
   display: flex;
-  padding: 0.2rem 0;
+  padding: 0.2rem 0.2rem 0.2rem 0;
 
   &.disable {
     color: $color-common-b2;
@@ -168,7 +184,7 @@ export default {
   }
 
   .song-index {
-    width: 1.3rem;
+    width: 1.4rem;
     height: 1.4rem;
     line-height: 1.4rem;
     font-size: $font-size-small;
@@ -181,10 +197,9 @@ export default {
   }
 
   .song-img {
-    width: 1.2rem;
-    height: 1.2rem;
-    margin: 0.1rem;
-    margin-right: 0.4rem;
+    width: 1.1rem;
+    height: 1.1rem;
+    margin: 0.15rem 0.4rem 0.15rem 0;
     background-color: $color-common-b;
     border-radius: 50%;
 
@@ -196,50 +211,47 @@ export default {
     }
   }
 
-  .song-desc {
-    font-size: $font-size-smaller;
-    line-height: 0.7rem;
-
-    .song-name {
-      max-width: 5rem;
-      font-weight: 500;
-      no-wrap();
-    }
-
-    .sg-info {
-      max-width: 4.5rem;
-      color: $color-common-b2;
-      no-wrap();
-    }
-  }
-
-  .love, .play-count {
-    position: absolute;
-    top: 50%;
-    right: 0.6rem;
-    width: 1rem;
-    height: 1rem;
-    margin-top: -0.5rem;
+  .right-info {
+    flex: 1;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    justify-content: space-between;
 
-    i {
-      font-size: 0.55rem;
+    .song-desc {
+      font-size: $font-size-smaller;
+      line-height: 0.7rem;
+      flex: 1;
+
+      .song-name {
+        max-width: 4.7rem;
+        font-weight: 500;
+        no-wrap();
+      }
+
+      .sg-info {
+        max-width: 4.7rem;
+        color: $color-common-b2;
+        no-wrap();
+      }
     }
-  }
 
-  .love {
-    i {
-      color: $color-common;
-    }
-  }
+    .icon-container {
+      height: 1.4rem;
+      display: flex;
+      align-items: center;
 
-  .play-count {
-    color: $color-common-b;
+      .icon {
+        width: 1.1rem;
+        height: 1.1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.6rem;
+        color: $color-common;
 
-    i {
-      margin-right: 0.1rem;
+        i {
+          font-size: 0.6rem;
+        }
+      }
     }
   }
 }

@@ -99,7 +99,7 @@ export default {
               name: item.name
             }))
           })
-          songList.push(new Song({ id: item.id, name: item.name, singers, singersList, picUrl: item.album.picUrl }))
+          songList.push(new Song({ id: item.id, name: item.name, singers, singersList, picUrl: item.album.picUrl, mv: item.mvid }))
         })
         this.recommendSongList = songList
         this.songLoading = false

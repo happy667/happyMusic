@@ -1,18 +1,16 @@
 <template>
   <div class="videoInfo-container">
     <!-- 头部导航栏 -->
-    <van-sticky>
-      <van-nav-bar :title="$route.meta.title"
-                   left-arrow
-                   @click-left="routerBack" />
-    </van-sticky>
+    <van-nav-bar :title="$route.meta.title"
+                 left-arrow
+                 @click-left="routerBack" />
     <!-- 正在加载 -->
     <template v-if="!video">
       <!-- loading -->
       <loading />
     </template>
     <template v-else>
-      <van-sticky :offset-top="46">
+      <van-sticky>
         <div class="video">
           <video-component :videoParams="video"
                            @toggleInfo="handleToggleInfo" />

@@ -44,25 +44,19 @@ export default {
 @import '~common/stylus/variable';
 
 .slide-enter-active, .slide-leave-active {
-  transition: all 0.3s;
+  transition: transform 0.4s;
 }
 
 .slide-enter, .slide-leave-to {
   transform: translate3d(0, 100%, 0);
 }
 
-.full-screen-play-container>>>.van-slider__button {
-  width: 0.25rem;
-  height: 0.25rem;
-  background: $color-common;
-}
-
-.full-screen-play-container>>>.van-slider {
-  background-color: #fff;
-}
-
 .full-screen-play-container {
   position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
   width: 100%;
   height: 100%;
   display: flex;
@@ -70,26 +64,29 @@ export default {
   box-sizing: border-box;
   z-index: 99;
   touch-action: none;
+  background-color: $color-common-background;
 
   .bg {
     position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     z-index: -1;
-    opacity: 0.8;
+    opacity: 0.7;
 
     .filter {
       position: absolute;
       width: 100%;
       height: 100%;
       background: #000;
-      opacity: 0.5;
+      opacity: 0.6;
     }
 
     .image {
       width: 100%;
       height: 100%;
-      transition: background-image 0.4s;
+      transition: background-image 1s;
       background: no-repeat 50% / cover;
       filter: blur(100px);
     }

@@ -10,6 +10,7 @@
                size="1.5rem"
                noValue />
       <video :src="videoParams.url"
+             class="animated fadeIn"
              preload='metadata'
              ref="video"
              muted

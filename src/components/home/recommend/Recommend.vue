@@ -83,7 +83,7 @@ export default {
       let result = this.$utils.compareSong(this.currentSong, item)
       if (!result) {
         // 引入vue原型上的utils
-        this.$utils.playMusic(item, this.list, index)
+        this.$utils.playMusic(item, this.recommendNewSong, index)
       }
     },
     // 选择歌单

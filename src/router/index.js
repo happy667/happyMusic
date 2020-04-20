@@ -136,18 +136,6 @@ const routes = [
     meta: {
       title: '搜索'
     },
-    beforeEnter(to, from, next) {
-      if (from.name === 'home') {
-        // 添加不缓存路由
-        store.commit('setAddNoCacheComponents', 'search')
-        store.commit('setAddNoCacheComponents', 'searchPage')
-      } else {
-        // 移除不缓存路由
-        store.commit('setRemoveNoCacheComponents', 'search')
-        store.commit('setRemoveNoCacheComponents', 'searchPage')
-      }
-      next()
-    },
     children: [
       // 搜索页面
       {
@@ -156,6 +144,17 @@ const routes = [
         component: SearchBox,
         meta: {
           title: '搜索'
+        },
+        beforeEnter(to, from, next) {
+          console.log(from.name)
+          if (from.name === 'home') {
+            // 添加不缓存路由
+            store.commit('setAddNoCacheComponents', 'search')
+          } else {
+            // 移除不缓存路由
+            store.commit('setRemoveNoCacheComponents', 'search')
+          }
+          next()
         }
       },
       // 搜索结果

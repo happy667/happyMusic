@@ -102,7 +102,7 @@ export default {
               name: item.name
             }))
           })
-          let song = new Song({ id: item.id, name: item.name, singers, singersList, picUrl: item.al.picUrl, st: item.st })
+          let song = new Song({ id: item.id, name: item.name, singers, singersList, picUrl: item.al.picUrl, st: item.st, mv: item.mv })
           songList.push(song)
         })
         this.songList = songList
@@ -174,8 +174,11 @@ export default {
 
   section {
     position: relative;
-    padding-top: 0.3rem;
     flex: 1;
+
+    .container {
+      padding-top: 0.3rem;
+    }
   }
 }
 </style>

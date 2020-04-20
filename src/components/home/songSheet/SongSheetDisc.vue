@@ -167,7 +167,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setPlayerFullScreen', 'setRank', 'setHideMiniPlayer']),
+    ...mapMutations(['setRank', 'setHideMiniPlayer']),
     ...mapActions(['setSelectPlay']),
     // 返回上一个路由
     routerBack () {
@@ -199,7 +199,8 @@ export default {
               name: item.name,
               singers: singerName,
               singersList,
-              picUrl: item.al.picUrl
+              picUrl: item.al.picUrl,
+              mv: item.mv
             }))
           })
           res.privileges.map(item => {
@@ -239,6 +240,7 @@ export default {
         this.$utils.playAllSong(list)
       }
     },
+
     // 获取用户收藏的歌单
     async  getUserSongSheet (id) {
       const {

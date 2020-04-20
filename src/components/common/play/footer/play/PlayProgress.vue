@@ -3,6 +3,7 @@
     <!-- 进度条 -->
     <div class="progress">
       <van-slider active-color="#FD4979"
+                  button-size="10"
                   @change="handleSlideChange"
                   v-model="playerParams.width" />
 

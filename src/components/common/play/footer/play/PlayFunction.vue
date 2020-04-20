@@ -5,10 +5,16 @@
       <i class="iconfont"
          :class="loveIcon"></i>
     </div>
-    <div class="recomment icon"
-         @click="handleRecommentClick">
+    <div class="video icon"
+         v-if="currentSong.mv"
+         @click="handleVideoClick">
+      <van-icon name="tv-o" />
+    </div>
+    <div class="recommend icon"
+         @click="handleRecommendClick">
       <van-icon name="more-o" />
     </div>
+
   </div>
 </template>
 <script>
@@ -28,7 +34,7 @@ export default {
   methods: {
     ...mapMutations(['setPlayerFullScreen', 'setAddNoCacheComponents', 'setIsPlayerClick']),
     // 点击评论
-    handleRecommentClick () {
+    handleRecommendClick () {
       // 设置从播放器页面点击
       this.setIsPlayerClick(true)
       // 添加不缓存路由
@@ -37,6 +43,10 @@ export default {
       if (this.$route.path !== `/songComment/${this.currentSong.id}`) {
         this.$router.push(`/songComment/${this.currentSong.id}`)
       }
+    },
+    // 点击tv
+    handleVideoClick () {
+      this.$router.push(`/videoInfo/${this.currentSong.mv}`)
     },
     // 选中歌曲喜欢
     selectItemLove () {

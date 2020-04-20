@@ -194,6 +194,15 @@ export default {
       }
     }
   },
+  watch: {
+    showSingerPopup () {
+      if (this.showSingerPopup) {
+        this.setHideMiniPlayer(true)
+      } else {
+        this.setHideMiniPlayer(false)
+      }
+    }
+  },
   mounted () {
     // 获取专辑详情
     this.getAlbumInfo(this.id)
@@ -204,7 +213,7 @@ export default {
     this.setIsGetAlbumSingerImage(false)
   },
   methods: {
-    ...mapMutations(['setPlayerFullScreen', 'setSingerCurrentIndex', 'setIsGetAlbumSingerImage', 'setHideMiniPlayer']),
+    ...mapMutations(['setSingerCurrentIndex', 'setIsGetAlbumSingerImage', 'setHideMiniPlayer']),
     routerBack () {
       this.$route.meta.isBack = true
       this.$utils.routerBack()
@@ -225,7 +234,7 @@ export default {
       let result = this.$utils.compareSong(this.currentSong, item)
       if (!result) {
         // 引入vue原型上的utils
-        this.$utils.playMusic(item, this.list, index)
+        this.$utils.playMusic(item, this.albumObj.songs, index)
       }
     },
     // 比较两首歌曲
@@ -247,7 +256,7 @@ export default {
             let singers = item.ar.map(item => item.name).join('/')
             // 处理歌手
             let singersList = this.handleSingerList(item.ar)
-            songList.push(new Song({ id: item.id, name: item.name, singers, singersList, picUrl: item.al.picUrl, st: item.privilege.st }))
+            songList.push(new Song({ id: item.id, name: item.name, singers, singersList, picUrl: item.al.picUrl, st: item.privilege.st, mv: item.mv }))
           })
           // 处理专辑歌手名称
           let albumSingers = res.album.artists.map(item => item.name).join('/')
@@ -320,6 +329,8 @@ export default {
       } else {
         console.log(123)
         this.showSingerPopup = true
+        // 打开歌手遮罩层
+        this.openSingerPopup()
         if (!this.isGetAlbumSingerImage) { // 判断是否获取过歌手图片
           list.forEach(async (item, index) => { // 查询该歌手图片
             item.avatar = await this.getSingerImage(item.id)
@@ -345,7 +356,8 @@ export default {
     // 选择歌手列表中歌手
     handleSelectSinger (item) {
       this.setSingerCurrentIndex(0)
-      this.showSingerPopup = false
+      // 关闭歌手遮罩层
+      this.closeSingerPopup()
       this.$router.push(`/singerInfo/${item.id}`)
     },
     // 处理歌手列表
@@ -365,6 +377,14 @@ export default {
     goToAlbumComment () {
       this.$route.meta.isBack = false
       this.$router.push(`/albumComment/${this.id}`)
+    },
+    // 打开歌手遮罩层
+    openSingerPopup () {
+      this.showSingerPopup = true
+    },
+    // 关闭歌手遮罩层
+    closeSingerPopup () {
+      this.showSingerPopup = false
     },
     // 打开遮罩层
     openOverlay () {

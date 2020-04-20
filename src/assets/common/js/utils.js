@@ -19,7 +19,7 @@ const utils = {
   handlePlayList(song, list = null, index) {
     // 同步播放模式
     let mode = store.state.playMode
-
+    console.log(list)
     if (mode === playMode.random) { // 随机播放
       let list = utils.randomList(store.state.sequenceList)
       store.commit('setPlayList', list)
