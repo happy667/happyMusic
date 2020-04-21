@@ -59,7 +59,7 @@ export default {
   },
 
   computed: {
-    ...mapState(['playing', 'playerShowImage', 'currentLyric', 'currentLineNum', 'currentPlayLyric']),
+    ...mapState(['playing', 'playerShowImage', 'currentLyric', 'currentLineNum', 'currentPlayLyric', 'playerFullScreen']),
     ...mapGetters(['currentSong']),
     cdCls () {
       return this.playing ? 'play' : 'play pause'
@@ -72,9 +72,11 @@ export default {
     }
   },
   watch: {
-    playing () {
-      if (this.playing) {
-        this.currentLyric.play()
+    playerFullScreen () {
+      if (this.playerFullScreen) {
+        setTimeout(() => {
+          this.refresh()
+        }, 20)
       }
     }
   },
@@ -101,6 +103,13 @@ export default {
               this.text = '暂无歌词'
               this.setCurrentLyric(null)
             }
+
+            if (this.playing && this.currentLyric) {
+              this.currentLyric.play()
+            }
+            setTimeout(() => {
+              this.refresh()
+            }, 20)
           }
         }
       }).catch(() => {
@@ -123,14 +132,19 @@ export default {
     // lyric-parse中的方法
     handleLyric ({ lineNum, txt }) {
       this.setCurrentLineNum(lineNum)
-      if (lineNum > 5) {
-        let lineEl = this.$refs.lyricLine[lineNum - 5]// 滚动到元素
+      if (lineNum > 4) {
+        let lineEl = this.$refs.lyricLine[lineNum - 4]// 滚动到元素
         this.$refs.lyricList.scrollToElement(lineEl, 1000)
       } else {
         this.$refs.lyricList.scrollTo(0, 0, 1000)// 滚动到顶部
       }
 
       this.setCurrentPlayLyric(txt)
+    },
+    refresh () {
+      this.$nextTick(() => {
+        this.$refs.lyricList.refresh()
+      })
     },
     // 歌词和图片
     toggleImage () {
@@ -212,11 +226,12 @@ export default {
 
     .current-play-lyric {
       position: relative;
-      padding: 0.5rem;
+      padding: 0.6rem 0.5rem 0.6rem 0.5rem;
       height: 0;
       width: 8rem;
       text-align: center;
       font-size: $font-size-smaller;
+      box-sizing: border-box;
 
       .text {
         position: absolute;
@@ -224,9 +239,9 @@ export default {
         right: 0;
         bottom: 0;
         top: 0;
-        height: 1.2rem;
-        line-height: 1.2rem;
-        no-wrap();
+        width: 100%;
+        line-height: 0.6rem;
+        no-wrap2();
         color: $color-common-x;
       }
     }

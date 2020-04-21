@@ -8,7 +8,8 @@
            @click="handleClick">
         <div id="image"
              class="animated fadeIn">
-          <van-image :src="singer.picUrl">
+          <van-image :src="singer.picUrl"
+                     fit="cover">
             <template v-slot:loading>
               <van-loading type="spinner"
                            size="20" />

@@ -18,18 +18,26 @@
 </template>
 <script>
 import 'common/js/convert.js'
-import { mapState } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
   inject: ['playerParams'],
   computed: {
-    ...mapState(['audio', 'currentLyric'])
+    ...mapState(['audio', 'currentLyric', 'playing'])
   },
   methods: {
+    ...mapMutations(['setPlaying']),
+    ...mapActions(['handleTogglePlaying']),
     // 滑动进度条
     handleSlideChange () {
       this.audio.currentTime = this.playerParams.width * this.playerParams.duration / 100
+      console.log(this.currentLyric)
       if (this.currentLyric) {
         this.currentLyric.seek(this.audio.currentTime * 1000)
+      }
+
+      if (!this.playing) {
+        // 开始播放
+        this.setPlaying(true)
       }
     }
   }

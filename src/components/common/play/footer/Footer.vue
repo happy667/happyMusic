@@ -8,8 +8,7 @@
     <!-- 播放进度 -->
     <play-progress></play-progress>
     <!-- 播放控件区域 -->
-    <play-controller ref="playController"
-                     v-on="$listeners"></play-controller>
+    <play-controller ref="playController"></play-controller>
   </footer>
 </template>
 <script>

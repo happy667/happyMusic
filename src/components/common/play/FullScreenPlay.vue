@@ -6,7 +6,7 @@
       <!-- 内容区域 -->
       <play-section ref="playSection"></play-section>
       <!-- 页面底部 -->
-      <play-footer v-on="$listeners"></play-footer>
+      <play-footer></play-footer>
       <!-- 背景 -->
       <div class="bg">
         <div class="filter"></div>

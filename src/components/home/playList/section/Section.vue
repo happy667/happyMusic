@@ -61,6 +61,9 @@ export default {
       if (newList.length === 0) {
         this.setTogglePlayList(false)
       }
+      setTimeout(() => {
+        this.refresh()
+      }, 20)
     },
     togglePlayList: {
       immediate: true,
@@ -100,6 +103,13 @@ export default {
     handleDelete (song) {
       // 移除该歌曲
       this.deleteSong(song)
+    },
+    refresh () {
+      this.$nextTick(() => {
+        if (this.$refs.section_scroll) {
+          this.$refs.section_scroll.refresh()
+        }
+      })
     }
 
   },

@@ -46,7 +46,7 @@ export default {
       url: '', // 播放路径
       playerParams: {// 播放器参数
         currentTime: 0,
-        duration: 1,
+        duration: 0,
         width: 0
       }
     }
@@ -79,22 +79,51 @@ export default {
       // 初始化获取歌手图片（点击歌手弹出歌手框的图片）
       this.setIsGetSingerImage(false)
     },
+
     playing (newPlaying) {
+      let audio = this.audio
+      clearInterval(this.t1)
+      clearInterval(this.t2)
       if (newPlaying) {
-        console.log(this.oldVideo.$data)
         // 如果有视频播放就暂停
         if (this.oldVideo.$data && this.oldVideo.$data.isPlay) {
           this.oldVideo.pauseCurrentVideo()
         }
         this.$nextTick(() => {
-          this.audio.play()
+          audio.play()
+          let v = 0
+          audio.volume = 0
+          // 加音量
+          this.t1 = setInterval(() => {
+            v += 0.1
+            if (v <= 1) {
+              audio.volume = v
+            }
+            if (v >= 1) {
+              clearInterval(this.t1)
+            }
+          }, 100)
         })
       } else {
         this.$nextTick(() => {
-          this.audio.pause()
+          let v = audio.volume
+          clearInterval(this.t2)
+          // 减音量
+          this.t2 = setInterval(() => {
+            v -= 0.1
+            if (v >= 0) {
+              audio.volume = v
+            }
+            if (v <= 0) {
+              audio.pause()
+              audio.volume = 0
+              clearInterval(this.t2)
+            }
+          }, 100)
         })
       }
     },
+
     togglePlayList () {
       if (this.togglePlayList) {
         this.closeScroll()
@@ -102,6 +131,7 @@ export default {
         this.openScroll()
       }
     }
+
   },
   computed: {
     ...mapState(['playerFullScreen', 'songReady', 'playing', 'audio', 'currentPlayIndex', 'playList', 'playMode', 'sequenceList', 'currentLyric', 'isPlay', 'oldVideo', 'hideMiniPlayer']),
@@ -121,8 +151,29 @@ export default {
     this.setAudio(this.$refs.audio)
   },
   methods: {
-    ...mapMutations(['setAudio', 'setTogglePlayList', 'setSongReady', 'setPlaying', 'setPlayMode', 'setPlayList', 'setCurrentPlayIndex', 'setSequenceList', 'setPlayerShowImage', 'setCurrentPlayLyric', 'setCurrentLineNum', 'setIsGetSingerImage', 'setCurrentLyric']),
-    ...mapActions(['deleteSong']),
+    ...mapMutations(
+      [
+        'setAudio',
+        'setTogglePlayList',
+        'setSongReady',
+        'setPlaying',
+        'setPlayMode',
+        'setPlayList',
+        'setCurrentPlayIndex',
+        'setSequenceList',
+        'setPlayerShowImage',
+        'setCurrentPlayLyric',
+        'setCurrentLineNum',
+        'setIsGetSingerImage',
+        'setCurrentLyric'
+      ]),
+    ...mapActions([
+      'deleteSong',
+      'loop',
+      'next',
+      'prev',
+      'handleTogglePlaying'
+    ]),
     ready () {
       this.playerParams.duration = this.audio.duration
       this.setSongReady(true)
@@ -148,6 +199,9 @@ export default {
             } else {
               this.$nextTick(() => {
                 this.setPlaying(true)
+                if (this.currentLyric) {
+                  this.currentLyric.play()
+                }
               })
             }
           }
@@ -180,59 +234,7 @@ export default {
         this.next()
       }
     },
-    // 循环播放
-    loop () {
-      this.audio.currentTime = 0// 重新播放
-      if (this.currentLyric) {
-        this.currentLyric.seek(0)
-        this.setCurrentPlayLyric('')
-        this.setCurrentLineNum(0)
-      }
-      this.$nextTick(() => {
-        this.setPlaying(true)
-        this.audio.play()
-      })
-    },
-    // 上一曲
-    prev () {
-      // 未加载好
-      if (!this.songReady) return
-      // 如果只有一首就循环播放当前歌曲
-      if (this.playList.length === 1) {
-        this.loop()
-        return
-      }
-      // 限制播放索引
-      let index = this.$utils.limitCutIndex(this.currentPlayIndex, this.playList.length - 1)
-      this.setCurrentPlayIndex(index)
-      if (!this.playing) this.handleTogglePlaying()
-      this.setSongReady(false)
-      this.$utils.playMusic(this.currentSong, null, this.currentPlayIndex)
-    },
-    // 切换播放暂停
-    handleTogglePlaying () {
-      if (!this.songReady) return
-      this.setPlaying(!this.playing)
-      if (this.currentLyric) {
-        this.currentLyric.togglePlay()
-      }
-    },
-    // 下一曲
-    next () {
-      // 未加载好
-      if (!this.songReady) return
-      // 如果只有一首就循环播放当前歌曲
-      if (this.playList.length === 1) {
-        this.loop()
-        return
-      }
-      // 限制当前播放索引
-      let index = this.$utils.limitAddIndex(this.currentPlayIndex, this.playList.length)
-      this.setCurrentPlayIndex(index)
-      if (!this.playing) this.handleTogglePlaying()
-      this.setSongReady(false)
-      this.$utils.playMusic(this.currentSong, null, this.currentPlayIndex)
-    },
+
     // 切换播放类型
     changeMode () {
       const mode = (this.playMode + 1) % 3
@@ -252,14 +254,13 @@ export default {
       let index = list.findIndex(item => item.id === this.currentSong.id)
       this.setCurrentPlayIndex(index)
     },
+
     // 禁止背景滚动
     closeScroll () {
-      document.body.style.position = 'absolute'
       document.body.style.overflow = 'hidden'
     },
     // 开启背景滚动
     openScroll () {
-      document.body.style.position = ''
       document.body.style.overflow = ''
     }
   },

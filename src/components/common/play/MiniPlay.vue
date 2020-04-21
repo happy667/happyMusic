@@ -64,7 +64,7 @@
 <script>
 import Swiper from 'swiper'
 import { defaultMusicImage } from 'common/js/config.js'
-import { mapMutations, mapGetters, mapState } from 'vuex'
+import { mapMutations, mapGetters, mapState, mapActions } from 'vuex'
 let vm = null
 export default {
   data () {
@@ -115,21 +115,14 @@ export default {
 
   methods: {
     ...mapMutations(['setPlayerFullScreen', 'setIsPlayerClick', 'setTogglePlayList']),
+    ...mapActions([
+      'next',
+      'prev',
+      'handleTogglePlaying'
+    ]),
     handleShowFullPlay () {
       this.setPlayerFullScreen(true)
       this.setIsPlayerClick(false)
-    },
-    // 切换播放暂停
-    handleTogglePlaying () {
-      this.$parent.handleTogglePlaying()
-    },
-    // 上一曲
-    prev () {
-      this.$parent.prev()
-    },
-    // 下一曲
-    next () {
-      this.$parent.next()
     },
     // 查看歌曲列表
     handlePlayList () {
