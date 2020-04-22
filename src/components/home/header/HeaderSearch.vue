@@ -13,18 +13,31 @@
                   left-icon=""
                   right-icon="search"
                   shape="round"
-                  placeholder="请输入搜索关键词" />
+                  :placeholder="searchDefault" />
     </div>
   </div>
 </template>
 <script>
+import searchApi from '@/api/search.js'
+import { ERR_OK } from '@/api/config.js'
 import { mapState, mapMutations } from 'vuex'
 export default {
+  data: function () {
+    return {
+      searchDefault: '' // 搜索默认关键词
+    }
+  },
   computed: {
     ...mapState(['user']),
     image () {
       return this.user ? this.user.avatarUrl : require('@/assets/images/logo.png')
     }
+  },
+  mounted () {
+    this.getSearchDefault()
+  },
+  activated () {
+    this.getSearchDefault()
   },
   methods: {
     ...mapMutations(['setSearchKeywords', 'setIsAdvance']),
@@ -38,6 +51,13 @@ export default {
       // 不设置为前进页面
       this.setIsAdvance(false)
       this.$router.push('/user')
+    },
+    // 获取默认关键词
+    async  getSearchDefault () {
+      const { data: res } = await searchApi.getSearchDefault()
+      if (res.code === ERR_OK) {
+        this.searchDefault = '正在热搜:' + res.data.realkeyword
+      }
     }
   }
 }
@@ -47,7 +67,6 @@ export default {
 
 .header-search-container {
   width: 100%;
-  height: 1.7rem;
   display: flex;
   padding: 0.2rem 0.4rem 0 0.4rem;
   box-sizing: border-box;

@@ -80,15 +80,8 @@ export default {
     }
   },
   watch: {
-    loadMore () {
-      if (this.currentPlayIndex !== -1) {
-        this.$emit('refreshList')
-      }
-    },
     rankingList () {
-      if (this.currentPlayIndex !== -1) {
-        this.$emit('refreshList')
-      }
+      this.refresh()
     }
   },
   methods: {
