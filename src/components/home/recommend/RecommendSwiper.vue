@@ -9,7 +9,7 @@
           <div class="image"
                :data-bannerid="item.targetId"
                :data-bannertype="item.targetType">
-            <img v-lazy="item.imageUrl"
+            <img :src="item.imageUrl"
                  class="animated fadeIn">
             <div class="title"
                  :style="{backgroundColor:item.titleColor}">{{item.typeTitle}}</div>
@@ -105,6 +105,12 @@ export default {
             delay: 5000
           },
           loop: true,
+          // 使用图片懒加载
+          lazy: {
+            loadPrevNext: true,
+            loadOnTransitionStart: true,
+            loadPrevNextAmount: 1
+          },
           on: {
             touchStart (e) {
               e.stopPropagation()

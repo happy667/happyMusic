@@ -347,10 +347,13 @@ export default {
         })
       }, 300)
     },
+    // 处理定位
     handlePosition () {
       // 说明有歌曲在播放
       if (this.currentSong) {
-        let element = this.$refs.singerSong.$refs.songList.$refs.listGroup[this.currentPlayIndex]
+        // 获取当前歌曲索引
+        let index = this.singerSong.findIndex(item => item.id === this.currentSong.id)
+        let element = this.$refs.singerSong.$refs.songList.$refs.listGroup[index]
         this.$refs.singerInfo_scroll.scrollToElement(element, 0)
         this.$toast('已定位到当前歌曲')
       }

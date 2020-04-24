@@ -659,14 +659,13 @@ export default {
         width: 100%;
         height: 100%;
         background: $color-common-b2;
-        opacity: 0.9;
       }
 
       .image {
         width: 100%;
         height: 100%;
         background: no-repeat 50% / cover;
-        filter: blur(150px);
+        filter: blur(140px);
       }
     }
 

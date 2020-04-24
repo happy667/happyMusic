@@ -116,7 +116,8 @@ export default {
     handlePosition () {
       // 说明有歌曲在播放
       if (this.currentSong) {
-        let element = this.$refs.songList.$refs.songList.$refs.listGroup[this.currentPlayIndex]
+        let index = this.songList.findIndex(item => item.id === this.currentSong.id)
+        let element = this.$refs.songList.$refs.songList.$refs.listGroup[index]
         this.$refs.my_like_scroll.scrollToElement(element, 0)
         this.$refs.my_like_scroll.refresh()
         this.$toast('已定位到当前歌曲')

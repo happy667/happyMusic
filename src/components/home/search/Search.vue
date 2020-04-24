@@ -93,7 +93,7 @@ export default {
     window.removeEventListener('scroll', this.handleScroll)
   },
   methods: {
-    ...mapMutations(['setSearchKeywords', 'setSearchCurrentIndex', 'setShowSearchList', 'setIsAdvance']),
+    ...mapMutations(['setSearchKeywords', 'setSearchCurrentIndex', 'setShowSearchList', 'setIsAdvance', 'setAddNoCacheComponents']),
     // 返回上一个路由
     routerBack () {
       if (this.$route.path === '/search/searchPage') {
@@ -135,21 +135,30 @@ export default {
         }
       }
     },
-    // 搜索
-    async handleSearch () {
+    search () {
       this.closeSearchList()
       // 重置标签页到第一个
       this.setSearchCurrentIndex(0)
-      if (this.searchKeywords.trim().length === 0) {
-        this.setSearchKeywords(this.searchDefault)
-      }// 没有输入按默认搜索关键词搜索
       // 将搜索的内容保存在本地
       addLocalSearch(this.searchKeywords)
       if (this.$route.path === '/search/searchPage') {
         this.$router.replace('/search/searchResult')
       } else {
+        // 添加搜索组件到不需要缓存组件中
+        // 添加不缓存路由
+        this.setAddNoCacheComponents('search')
+        // 设置为前进页面
+        this.setIsAdvance(true)
         this.reload()
       }
+    },
+    // 处理搜索请求
+    async handleSearch () {
+      // 没有输入按默认搜索关键词搜索
+      if (this.searchKeywords.trim().length === 0) {
+        this.setSearchKeywords(this.searchDefault)
+      }
+      this.search()
     },
     // 输入搜索内容
     handleInput: utils.debounce(function () {
@@ -165,16 +174,7 @@ export default {
     // 选择搜索名称
     selectItem (item) {
       this.setSearchKeywords(item)
-      this.closeSearchList()
-      // 重置标签页到第一个
-      this.setSearchCurrentIndex(0)
-      // 将搜索的内容保存在本地
-      addLocalSearch(this.searchKeywords)
-      if (this.$route.path === '/search/searchPage') {
-        this.$router.push('/search/searchResult')
-      } else {
-        this.reload()
-      }
+      this.search()
     },
     // 监听页面滚动
     handleScroll () {
