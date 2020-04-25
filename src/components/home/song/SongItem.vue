@@ -51,7 +51,7 @@ import userApi from '@/api/user.js'
 import {
   ERR_OK
 } from '@/api/config.js'
-import { defaultMusicImage } from 'common/js/config.js'
+import { defaultImage } from 'common/js/config.js'
 import { mapState, mapGetters } from 'vuex'
 export default {
   props: {
@@ -73,7 +73,7 @@ export default {
       return this.song.isLike ? 'icon-aixin' : 'icon-icon-test'
     },
     picUrl () {
-      return this.song.picUrl ? this.song.picUrl : defaultMusicImage
+      return this.song.picUrl ? this.song.picUrl : defaultImage
     },
     disableCls () {
       return this.song.st ? this.song.st < 0 : false

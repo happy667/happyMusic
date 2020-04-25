@@ -19,7 +19,9 @@ module.exports = {
         'vuex': 'Vuex',
         'axios': 'axios',
         'babel-polyfill': 'polyfill',
-        'vant': 'vant'
+        'vant': 'vant',
+        'swiper': 'Swiper',
+        'better-scroll': 'BScroll'
       })
     })
     // 开发模式

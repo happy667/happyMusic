@@ -63,7 +63,7 @@
 </template>
 <script>
 import Swiper from 'swiper'
-import { defaultMusicImage } from 'common/js/config.js'
+import { defaultImage } from 'common/js/config.js'
 import { mapMutations, mapGetters, mapState, mapActions } from 'vuex'
 let vm = null
 export default {
@@ -92,7 +92,7 @@ export default {
       return this.playing ? '#ddd' : '#999'
     },
     picUrl () {
-      return this.currentSong.picUrl ? this.currentSong.picUrl : defaultMusicImage
+      return this.currentSong.picUrl ? this.currentSong.picUrl : defaultImage
     }
   },
   mounted () {
