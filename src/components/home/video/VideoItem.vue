@@ -1,7 +1,34 @@
 <template>
   <div class="video-item-container">
-    <m-video :videoParams="videoParams">
-      <!-- 视频信息 -->
+    <div class="container">
+      <div class="video-image"
+           @click="goToVideoInfo">
+        <div class="cover-image">
+          <img v-lazy="videoParams.coverUrl"
+               class="animated fadeIn">
+        </div>
+        <div class="cover-controller">
+          <div class="top-controller">
+            <div class="controller-box">
+              <div class="play-controller">
+                <div class="play-right">
+                  <!-- 播放次数 -->
+                  <div class="play-count">
+                    <i class="iconfont icon-bofang"></i>
+                    {{videoParams.playCount|convertCount}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 播放按钮 -->
+          <div class="big-btn">
+            <van-icon name="play-circle-o" />
+          </div>
+
+        </div>
+
+      </div>
       <div class="video-info">
         <div class="info-top van-hairline--bottom"
              @click="goToVideoInfo">
@@ -22,13 +49,11 @@
           </div>
         </div>
       </div>
-    </m-video>
-
+    </div>
   </div>
 </template>
 <script>
 import MiniImage from '../img/MiniImage'
-import MVideo from './Video'
 import 'common/js/convert.js'
 import { mapMutations } from 'vuex'
 export default {
@@ -58,8 +83,7 @@ export default {
     }
   },
   components: {
-    MiniImage,
-    MVideo
+    MiniImage
   }
 }
 </script>
@@ -67,35 +91,111 @@ export default {
 @import '~common/stylus/variable';
 
 .video-item-container {
-  margin-bottom: 0.5rem;
+  padding-bottom: 0.3rem;
+  background: $color-common-b;
 
-  .video-info {
-    .info-top {
-      padding: 0.1rem 0.2rem;
+  .container {
+    padding: 0.3rem 0.4rem 0;
+    background: $color-common-background;
 
-      .title {
+    .video-image {
+      position: relative;
+      width: 100%;
+      height: 5rem;
+
+      .cover-image {
         width: 100%;
-        line-height: 1rem;
-        no-wrap();
+        height: 100%;
+        border-radius: 0.2rem;
+        background: $color-common-b;
 
-        .name {
-          font-size: $font-size-smaller;
-          no-wrap();
+        img {
+          display: block;
+          width: 100%;
+          height: 100%;
+          border-radius: 0.2rem;
+        }
+      }
+
+      .cover-controller {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 10;
+
+        .top-controller {
+          position: absolute;
+          width: 100%;
+          top: 0;
+          left: 0;
+
+          .controller-box {
+            width: 100%;
+            height: 1.3rem;
+            padding: 0 0.5rem;
+            box-sizing: border-box;
+
+            .play-controller {
+              text-align: right;
+              line-height: 1.3rem;
+              color: #fff;
+            }
+          }
+        }
+
+        .big-btn {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          margin-left: -1rem;
+          margin-top: -1rem;
+          width: 2rem;
+          height: 2rem;
+          background: rgba(255, 255, 255, 0);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          .van-icon {
+            display: block;
+            color: #fff;
+            font-size: 2rem;
+            opacity: 0.7;
+          }
         }
       }
     }
 
-    .info-bottom {
-      padding: 0.2rem;
-      display: flex;
-      align-items: center;
+    .video-info {
+      .info-top {
+        padding: 0.1rem 0.2rem;
 
-      .play-source-img {
-        margin-right: 0.3rem;
+        .title {
+          width: 100%;
+          line-height: 1rem;
+          no-wrap();
+
+          .name {
+            font-size: $font-size-smaller;
+            no-wrap();
+          }
+        }
       }
 
-      .play-source-author {
-        font-size: $font-size-smaller;
+      .info-bottom {
+        padding: 0.2rem;
+        display: flex;
+        align-items: center;
+
+        .play-source-img {
+          margin-right: 0.3rem;
+        }
+
+        .play-source-author {
+          font-size: $font-size-smaller;
+        }
       }
     }
   }

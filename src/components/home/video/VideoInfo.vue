@@ -10,12 +10,11 @@
       <loading />
     </template>
     <template v-else>
-      <van-sticky>
-        <div class="video">
-          <video-component :videoParams="video"
-                           @toggleInfo="handleToggleInfo" />
-        </div>
-      </van-sticky>
+      <div class="video">
+        <video-component :videoParams="video"
+                         @toggleInfo="handleToggleInfo">
+        </video-component>
+      </div>
       <section class="container">
         <!-- 视频信息 -->
         <div class="video-info">
@@ -23,7 +22,6 @@
                @click="handleToggleInfo">
             <div class="content">
               <!-- 视频标题 -->
-
               <div class="title">
                 <div class="icon">
                   <van-tag plain
@@ -61,30 +59,36 @@
           </div>
         </div>
         <div class="other-info">
-          <!-- 相关mv -->
-          <div class="related-mv"
-               v-if="simiMVList">
-            <p>相关视频</p>
-            <video-list :list="simiMVList"
-                        @select="goToVideoInfo"></video-list>
-          </div>
-          <!-- 评论列表 -->
-          <div class="comment"
-               v-if="commentList">
-            <div class="comment-title">精彩评论{{commentText}}</div>
-            <van-list v-model="loading"
-                      :immediate-check='false'
-                      :finished="finished"
-                      :finished-text="commentCount===0?'':'没有更多了'"
-                      @load="handlePullingUp">
-              <template v-if="commentList.length!==0">
-                <comment-list :commentList="commentList"></comment-list>
-              </template>
-              <template v-else>
-                <no-result text="还没有小伙伴发表评论哦~"></no-result>
-              </template>
-            </van-list>
-          </div>
+          <template v-if="!simiMVList&&!commentList">
+            <!-- loading -->
+            <loading />
+          </template>
+          <template v-else>
+            <!-- 相关mv -->
+            <div class="related-mv"
+                 v-if="simiMVList">
+              <p>相关视频</p>
+              <video-list :list="simiMVList"
+                          @select="goToVideoInfo"></video-list>
+            </div>
+            <!-- 评论列表 -->
+            <div class="comment"
+                 v-if="commentList">
+              <div class="comment-title">精彩评论{{commentText}}</div>
+              <van-list v-model="loading"
+                        :immediate-check='false'
+                        :finished="finished"
+                        :finished-text="commentCount===0?'':'没有更多了'"
+                        @load="handlePullingUp">
+                <template v-if="commentList.length!==0">
+                  <comment-list :commentList="commentList"></comment-list>
+                </template>
+                <template v-else>
+                  <no-result text="还没有小伙伴发表评论哦~"></no-result>
+                </template>
+              </van-list>
+            </div>
+          </template>
         </div>
       </section>
     </template>
@@ -145,7 +149,7 @@ export default {
     })
   },
   methods: {
-    ...mapMutations(['setHideMiniPlayer', 'setSingerCurrentIndex']),
+    ...mapMutations(['setHideMiniPlayer', 'setSingerCurrentIndex', 'setAddNoCacheComponents']),
     // 返回上一个路由
     routerBack () {
       this.$utils.routerBack()
@@ -155,25 +159,39 @@ export default {
       const { data: res } = await videoApi.getVideoDetail(id)
       if (res.code === ERR_OK) {
         const data = res.data
+        let video = new VideoDetail({
+          id: data.id,
+          coverUrl: data.cover,
+          name: data.name,
+          playCount: data.playCount,
+          url: this.handleUrls(data.brs),
+          publishTime: data.publishTime,
+          desc: data.desc,
+          duration: data.duration
+        })
         // 获取歌手信息
         const { data: res2 } = await SingerApi.getSinger(data.artistId)
         if (res2.code === ERR_OK) {
-          let video = new VideoDetail({
-            id: data.id,
-            coverUrl: data.cover,
-            name: data.name,
-            playCount: data.playCount,
-            artist: { id: res2.artist.id, name: res2.artist.name, avatarUrl: res2.artist.picUrl },
-            url: data.brs[1080],
-            publishTime: data.publishTime,
-            desc: data.desc
-          })
-
+          video.artist = { id: res2.artist.id, name: res2.artist.name, avatarUrl: res2.artist.picUrl }
           this.commentCount = data.commentCount
           this.video = video
         }
         console.log(this.video)
       }
+    },
+    // 处理路径
+    handleUrls (urls) {
+      let url = ''
+      if (urls[1024]) {
+        url = urls[1024]
+      } else if (urls[720]) {
+        url = urls[720]
+      } else if (urls[480]) {
+        url = urls[480]
+      } else if (urls[240]) {
+        url = urls[240]
+      }
+      return url
     },
     // 获取相似mv
     async getSimiMV (id) {
@@ -216,6 +234,7 @@ export default {
     },
     goToVideoInfo (mv) {
       this.reload()
+      this.setAddNoCacheComponents('videoInfo')
       this.$router.push(`/videoInfo/${mv.id}`)
     },
     // 选择歌手
@@ -281,7 +300,6 @@ export default {
           }
 
           .right-icon {
-            width: 1rem;
             text-align: center;
           }
         }

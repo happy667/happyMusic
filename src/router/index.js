@@ -196,7 +196,7 @@ const routes = [
       if (store.state.currentPlayIndex !== -1) {
         store.commit('setHideMiniPlayer', true)
       }
-      if (from.name === 'home' || from.name === 'searchResult' || from.name === 'videoInfo') {
+      if (from.name === 'home' || from.name === 'searchResult') {
         // 添加不缓存路由
         store.commit('setAddNoCacheComponents', 'videoInfo')
       } else {

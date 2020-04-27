@@ -41,7 +41,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: $font-size-smaller;
+    font-size: $font-size-smaller-x;
     color: #999;
 
     a {

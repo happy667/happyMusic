@@ -4,14 +4,12 @@ export default class Song {
     coverUrl,
     name,
     playCount,
-    artist,
-    url
+    artist
   }) {
     this.id = id
     this.coverUrl = coverUrl
     this.name = name
     this.playCount = playCount
     this.artist = artist
-    this.url = url
   }
 }

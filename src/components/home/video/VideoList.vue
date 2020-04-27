@@ -13,13 +13,14 @@
             <video-item :videoParams="item"
                         :key="item.id"></video-item>
           </template>
-
-          <!-- loading -->
-          <loading :loading="loadMore"
-                   height="2rem" />
         </template>
+        <!-- loading -->
+        <loading :loading="loadMore"
+                 height="3rem" />
+
       </div>
     </scroll>
+
   </div>
 </template>
 <script>
@@ -91,27 +92,22 @@ export default {
             // 获取歌手信息
             const { data: res2 } = await SingerApi.getSinger(item.artistId)
             if (res2.code === ERR_OK) {
-              // 获取video路径
-              const { data: res3 } = await videoApi.getRecommendVideoUrl(item.id)
-              if (res3.code === ERR_OK) {
-                let video = new Video({
-                  id: item.id,
-                  coverUrl: item.cover,
-                  name: item.name,
-                  playCount: item.playCount,
-                  artist: {
-                    id: res2.artist.id,
-                    name: res2.artist.name,
-                    avatarUrl: res2.artist.img1v1Url
-                  },
-                  url: res3.data.url
-                })
-                length++
-                videoList.push(video)
-                if (length === data.length) { // 说明请求完成
-                  this.loadMore = false
-                  this.videoList = this.videoList.concat(videoList)
+              let video = new Video({
+                id: item.id,
+                coverUrl: item.cover,
+                name: item.name,
+                playCount: item.playCount,
+                artist: {
+                  id: res2.artist.id,
+                  name: res2.artist.name,
+                  avatarUrl: res2.artist.img1v1Url
                 }
+              })
+              length++
+              videoList.push(video)
+              if (length === data.length) { // 说明请求完成
+                this.loadMore = false
+                this.videoList = this.videoList.concat(videoList)
               }
             }
           })
@@ -139,11 +135,9 @@ export default {
 }
 
 .videoList-container {
-  .video-list {
-    width: 100%;
-    padding: 0.5rem;
-    box-sizing: border-box;
-    position: absolute;
-  }
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: $color-common-background;
 }
 </style>
