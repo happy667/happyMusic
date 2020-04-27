@@ -1,20 +1,22 @@
 <template>
   <div class="videoInfo-container">
     <!-- 头部导航栏 -->
-    <van-nav-bar :title="$route.meta.title"
-                 left-arrow
-                 @click-left="routerBack" />
+    <van-sticky>
+      <van-nav-bar :title="$route.meta.title"
+                   left-arrow
+                   @click-left="routerBack" />
+    </van-sticky>
     <!-- 正在加载 -->
     <template v-if="!video">
       <!-- loading -->
       <loading />
     </template>
     <template v-else>
-      <div class="video">
-        <video-component :videoParams="video"
-                         @toggleInfo="handleToggleInfo">
-        </video-component>
-      </div>
+        <div class="video">
+          <video-component :videoParams="video"
+                           @toggleInfo="handleToggleInfo">
+          </video-component>
+        </div>
       <section class="container">
         <!-- 视频信息 -->
         <div class="video-info">

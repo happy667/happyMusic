@@ -2,6 +2,4 @@
 import Vue from 'vue'
 import VueLazyLoad from 'vue-lazyload'
 // 使用懒加载
-Vue.use(VueLazyLoad, {
-  preLoad: 1
-})
+Vue.use(VueLazyLoad)

@@ -221,6 +221,7 @@ export default {
           this.videoLoad = false
           // 更新时间
           this.updateTime()
+          this.handleClickScreen()// 自动播放
         })
 
         this.$forceUpdate()// 由于获取推荐视频中触发了多个异步请求,导致页面无法随时更新，需要刷新才可以重新渲染，使用forceUpdate解决这个问题，使他可以重新渲染
