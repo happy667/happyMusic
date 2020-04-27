@@ -12,11 +12,11 @@
       <loading />
     </template>
     <template v-else>
-        <div class="video">
-          <video-component :videoParams="video"
-                           @toggleInfo="handleToggleInfo">
-          </video-component>
-        </div>
+      <div class="video">
+        <video-component :videoParams="video"
+                         @toggleInfo="handleToggleInfo">
+        </video-component>
+      </div>
       <section class="container">
         <!-- 视频信息 -->
         <div class="video-info">
@@ -177,7 +177,11 @@ export default {
           video.artist = { id: res2.artist.id, name: res2.artist.name, avatarUrl: res2.artist.picUrl }
           this.commentCount = data.commentCount
           this.video = video
+          if (!this.video.url) {
+            this.$toast.fail('暂无视频资源')
+          }
         }
+
         console.log(this.video)
       }
     },

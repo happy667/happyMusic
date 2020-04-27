@@ -25,6 +25,7 @@ service.interceptors.request.use(request => {
 // response拦截器设置
 service.interceptors.response.use(
   response => {
+    console.log(response)
     // 错误信息处理
     if (!response.message && response.msg) {
       response.message = response.msg
@@ -37,28 +38,34 @@ service.interceptors.response.use(
     return response
   },
   error => {
+    console.log(error.response)
     let res = error.response
-    if (res) {
-      let resData = res.data
-      let status = error.response.data.code
-      // 错误信息处理
-      if (resData.msg && !resData.message) {
-        resData.message = resData.msg
-      }
-      switch (status) {
-        case 500:
-          resData.message = '系统出错'
-          break
-      }
-      return Promise.reject(res) // 返回接口返回的错误信息
-    } else {
-      let resData = {
-        data: {
-          message: '加载超时'
+    let resData = res.data
+    try {
+      if (res) {
+        let status = error.response.data.code
+        // 错误信息处理
+        if (resData.msg && !resData.message) {
+          resData.message = resData.msg
         }
+        switch (status) {
+          case 500:
+            resData.message = '系统出错'
+            break
+        }
+        return Promise.reject(res) // 返回接口返回的错误信息
+      } else {
+        let resData = {
+          data: {
+            message: '加载超时'
+          }
 
+        }
+        return Promise.reject(resData) // 返回接口返回的错误信息
       }
-      return Promise.reject(resData) // 返回接口返回的错误信息
+    } catch (err) {
+      console.log(err.response)
+      resData.message = err.response.data.message | err.response.data.msg
     }
   })
 

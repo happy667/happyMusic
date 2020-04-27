@@ -193,6 +193,11 @@ export default {
     // 注册
     handleRegister () {
       if (this.validForm()) { // 验证用户输入
+        this.$toast.loading({
+          message: '正在注册...',
+          duration: 10000,
+          forbidClick: true
+        })
         this.registerForm.password = this.password1
         // 检查手机号是否已经注册
         registerApi.checkRegister(this.registerForm.phone).then(res => {
@@ -205,13 +210,14 @@ export default {
                   registerApi.register(this.registerForm).then(res => {
                     console.log(res)
                     if (res.data.code === ERR_OK) {
-                      this.utils.alert({
-                        message: '注册成功，快去登陆吧'
-                      }).then(() => {
-                        this.$router.push('/appIndex/login')
-                      })
-                      // 清空表单
-                      this.resetForm()
+                      this.$toast.clear()
+                      // this.$utils.alert({
+                      //   message: '注册成功，快去登陆吧'
+                      // }).then(() => {
+                      //   this.$router.push('/appIndex/login')
+                      // })
+                      // // 清空表单
+                      // this.resetForm()
                     }
                   })
                 } else {
@@ -221,7 +227,8 @@ export default {
                 this.$toast('验证码错误,请发送验证码至您的手机')
               })
             } else {
-              this.utils.alert({
+              this.$toast.clear()
+              this.$utils.alert({
                 message: '该手机号已经注册'
               })
               // 清空表单

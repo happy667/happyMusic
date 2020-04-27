@@ -124,7 +124,6 @@
       <div class="progress"
            :style="isFullscreen&&isClickScreen?'bottom:0.13rem':''">
         <van-slider active-color="#FD4979"
-                    inactive-color="#999"
                     @input="handleSlideChange"
                     v-model="slideVal">
           <div slot="button"
@@ -205,15 +204,6 @@ export default {
   },
   methods: {
     ...mapMutations(['setOldVideo', 'setPlaying']),
-    // 跳转到video详情页
-    goToVideoInfo () {
-      // 说明不是视频详情页
-      if (!this.moreInfo) {
-        this.$router.push(`/videoInfo/${this.videoParams.id}`)
-      } else { // 切换显示更多信息
-        this.$emit('toggleInfo')
-      }
-    },
     // 可以播放
     handleCanplay () {
       setTimeout(() => {
@@ -245,16 +235,16 @@ export default {
       this.isClickScreen = false
       this.isFirstPlay = true
       this.showCoverImage = true
-      video.load()
+      // video.load()
     },
     // 暂停上一个视频
-    pauseOldVideo (obj) {
-      if (this.oldVideo && this.oldVideo.video) {
-        if (this !== this.oldVideo) {
-          this.pauseVideo(obj)
-        }
-      }
-    },
+    // pauseOldVideo (obj) {
+    //   if (this.oldVideo && this.oldVideo.video) {
+    //     if (this !== this.oldVideo) {
+    //       this.pauseVideo(obj)
+    //     }
+    //   }
+    // },
     // 暂停视频
     pauseVideo (obj) {
       if (obj.isPlay) {
@@ -311,7 +301,7 @@ export default {
       if (this.videoLoad) return
       if (this.isFirstPlay) {
         // 暂停上一次正在播放的video
-        this.pauseOldVideo(this.oldVideo)
+        // this.pauseOldVideo(this.oldVideo)
         if (this !== this.oldVideo) {
           this.setOldVideo(this)
         }

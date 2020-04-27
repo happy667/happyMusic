@@ -84,11 +84,12 @@ export default {
       let audio = this.audio
       clearInterval(this.t1)
       clearInterval(this.t2)
+      console.log(newPlaying)
       if (newPlaying) {
         // 如果有视频播放就暂停
-        if (this.oldVideo.$data && this.oldVideo.$data.isPlay) {
-          this.oldVideo.pauseCurrentVideo()
-        }
+        // if (this.oldVideo.$data && this.oldVideo.$data.isPlay) {
+        //   this.oldVideo.pauseCurrentVideo()
+        // }
         this.$nextTick(() => {
           audio.play()
           let v = 0
@@ -106,6 +107,7 @@ export default {
         })
       } else {
         this.$nextTick(() => {
+          audio.pause()
           let v = audio.volume
           clearInterval(this.t2)
           // 减音量
@@ -134,7 +136,7 @@ export default {
 
   },
   computed: {
-    ...mapState(['playerFullScreen', 'songReady', 'playing', 'audio', 'currentPlayIndex', 'playList', 'playMode', 'sequenceList', 'currentLyric', 'isPlay', 'oldVideo', 'hideMiniPlayer']),
+    ...mapState(['playerFullScreen', 'songReady', 'playing', 'audio', 'currentPlayIndex', 'playList', 'playMode', 'sequenceList', 'currentLyric', 'isPlay', 'hideMiniPlayer']),
     ...mapGetters(['currentSong']),
     togglePlayList: {
       get () {
@@ -224,13 +226,13 @@ export default {
     },
     // 播放结束
     handleEnd () {
-      this.$nextTick(() => {
-        this.setPlaying(false)
-      })
       // 如果是单曲循环
       if (this.playMode === playMode.loop) {
         this.loop()
       } else {
+        this.$nextTick(() => {
+          this.setPlaying(false)
+        })
         this.next()
       }
     },

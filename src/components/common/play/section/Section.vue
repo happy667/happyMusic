@@ -71,15 +71,6 @@ export default {
       return this.currentLyric
     }
   },
-  watch: {
-    playerFullScreen () {
-      if (this.playerFullScreen) {
-        setTimeout(() => {
-          this.refresh()
-        }, 20)
-      }
-    }
-  },
   methods: {
     ...mapMutations(['setPlayerShowImage', 'setCurrentLyric', 'setCurrentLineNum', 'setCurrentPlayLyric']),
     // 获取歌词

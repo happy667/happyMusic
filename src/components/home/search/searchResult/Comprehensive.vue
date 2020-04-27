@@ -4,7 +4,8 @@
     <loading :loading="loading" />
     <template v-if="!loading&&result">
       <!-- 歌曲 -->
-      <div class="search">
+      <div class="search"
+           v-if="result.song">
         <div class="search-song">
           <song-list @select="selectSong"
                      :songsList="result.song.songList">
@@ -17,6 +18,7 @@
             </template>
           </song-list>
           <div class="more"
+               v-if="result.song.moreText"
                @click="setCurrentIndex(1)">
             <div class="text">
               {{result.song.moreText}}
@@ -29,7 +31,8 @@
         </div>
       </div>
       <!-- 歌手 -->
-      <div class="search">
+      <div class="search"
+           v-if="result.singer">
         <div class="search-singer">
           <Title title="歌手"></Title>
           <ul class="singer-list">
@@ -41,6 +44,7 @@
             </li>
           </ul>
           <div class="more"
+               v-if="result.album.moreText"
                @click="setCurrentIndex(2)">
             <div class="text">
               {{result.singer.moreText}}
@@ -53,7 +57,8 @@
         </div>
       </div>
       <!-- 专辑 -->
-      <div class="search">
+      <div class="search"
+           v-if="result.album">
         <div class="search-album">
           <album-list :list="result.album.albumList"
                       @select="selectAlbum">
@@ -62,6 +67,7 @@
             </template>
           </album-list>
           <div class="more"
+               v-if="result.album.moreText"
                @click="setCurrentIndex(3)">
             <div class="text">
               {{result.album.moreText}}
@@ -74,7 +80,8 @@
         </div>
       </div>
       <!-- 歌单 -->
-      <div class="search">
+      <div class="search"
+           v-if="result.songSheet">
         <div class="search-songSheet">
           <song-sheet-list :list="result.songSheet.songSheetList">
             <template>
@@ -82,6 +89,7 @@
             </template>
           </song-sheet-list>
           <div class="more"
+               v-if="result.songSheet.moreText"
                @click="setCurrentIndex(4)">
             <div class="text">
               {{result.songSheet.moreText}}
@@ -165,6 +173,7 @@ export default {
     },
     // 处理单曲结果
     handleSong (song) {
+      if (!song) return null
       // 用于存放处理后的歌曲列表
       let songList = []
       // 存放歌曲搜索结果信息
@@ -189,6 +198,7 @@ export default {
     },
     // 处理歌手结果
     handleSinger (singer) {
+      if (!singer) return null
       // 用于存放处理后的歌手列表
       let singerList = []
       // 存放歌手搜索结果信息
@@ -210,6 +220,7 @@ export default {
     },
     // 处理专辑结果
     handleAlbum (album) {
+      if (!album) return null
       // 用于存放处理后的专辑列表
       let albumList = []
       // 存放专辑搜索结果信息
@@ -233,6 +244,7 @@ export default {
     },
     // 处理歌单结果
     handleSongSheet (playList) {
+      if (!playList) return null
       // 存放歌单搜索结果信息
       let songSheetObj = {
         more: playList.more,

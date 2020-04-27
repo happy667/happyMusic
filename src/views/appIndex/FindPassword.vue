@@ -150,6 +150,11 @@ export default {
     // 修改
     handleUpdate () {
       if (this.validForm()) { // 验证用户输入
+        this.$toast.loading({
+          message: '修改中...',
+          duration: 10000,
+          forbidClick: true
+        })
         // 检查手机号是否已经注册
         registerApi.checkRegister(this.updateForm.phone).then(res => {
           console.log(res.data)
@@ -163,7 +168,8 @@ export default {
                   registerApi.register(this.updateForm).then(res => {
                     console.log(res)
                     if (res.data.code === ERR_OK) {
-                      this.utils.alert({
+                      this.$toast.clear()
+                      this.$utils.alert({
                         message: '密码修改成功，快去登陆吧'
                       }).then(() => {
                         this.resetForm()
@@ -176,7 +182,8 @@ export default {
                 this.$toast(error.data.message)
               })
             } else {
-              this.utils.alert({
+              this.$toast.clear()
+              this.$utils.alert({
                 message: '该手机号尚未注册'
               }).then(() => {
                 this.$router.push('/appIndex/login')

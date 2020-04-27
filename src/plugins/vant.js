@@ -68,4 +68,5 @@ Vue.use(Collapse)
 Vue.use(CollapseItem)
 Vue.use(Tag)
 Vue.prototype.$Dialog = Dialog
+Vue.prototype.$Dialog = Dialog
 Vue.prototype.$toast = Toast

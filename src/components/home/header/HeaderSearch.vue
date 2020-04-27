@@ -22,6 +22,7 @@ import searchApi from '@/api/search.js'
 import { ERR_OK } from '@/api/config.js'
 import { mapState, mapMutations } from 'vuex'
 export default {
+  name: 'headerSearchContainer',
   data: function () {
     return {
       searchDefault: '' // 搜索默认关键词

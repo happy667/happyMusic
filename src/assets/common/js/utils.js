@@ -154,6 +154,16 @@ const utils = {
     newList = list
     return newList
   },
+  alert({
+    message,
+    title = null
+  }) {
+    return Vue.prototype.$Dialog.alert({
+      message,
+      confirmButtonColor: '#FD4979',
+      width: '265px'
+    })
+  },
   // 确认提示框
   alertConfirm({
     message,
