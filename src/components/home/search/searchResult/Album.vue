@@ -87,7 +87,7 @@ export default {
             id: item.id,
             name: item.name,
             picUrl: item.picUrl,
-            singerName: item.artist.name,
+            singerName: item.artists.map(item => item.name).join('/'),
             publishTime: item.publishTime
           })
           albumList.push(album)

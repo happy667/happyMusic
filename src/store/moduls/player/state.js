@@ -15,5 +15,6 @@ export default {
   currentLyric: null, // 设置一个歌词维护属性
   currentLineNum: 0, // 当前高亮的歌词行
   currentPlayLyric: '', // 当前播放的歌词
-  hideMiniPlayer: false // 隐藏迷你播放器
+  hideMiniPlayer: false, // 隐藏迷你播放器
+  isPlayerClick: false // 是否为播放页面点击的
 }

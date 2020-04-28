@@ -104,7 +104,7 @@ export default {
       follow = follow ? 1 : 0// 1代表收藏，0代表不收藏
 
       this.$utils.alertConfirm({ message: '确定不再收藏该歌手', confirmButtonText: '不再收藏' }).then(() => {
-        userApi.updateFollow(singer.id, follow).then(res => {
+        userApi.updateFollowSinger(singer.id, follow).then(res => {
           if (res.data.code === ERR_OK) {
             // 移除该歌手
             this.$utils.removeItem(this.singerSubList, singer)

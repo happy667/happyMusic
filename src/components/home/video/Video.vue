@@ -333,8 +333,10 @@ export default {
       }
     },
     setVideoStyle () {
-      let video = this.$refs.video
-      video.style.width = '100%'
+      this.$nextTick(() => {
+        let video = this.$refs.video
+        video.style.width = '100%'
+      })
     },
     // 设置打开全屏样式
     setOpenFullScreenStyle () {
@@ -470,6 +472,8 @@ export default {
           }
 
           .title {
+            padding-right:0.4rem;
+            no-wrap();
             font-size: $font-size-smaller;
           }
         }

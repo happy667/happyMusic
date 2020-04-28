@@ -29,7 +29,7 @@ export default {
     })
   },
   // 关注/取消关注歌手
-  updateFollow(id, t) {
+  updateFollowSinger(id, t) {
     const url = `/artist/sub?id=${id}&t=${t}&timestamp=${new Date().getTime()}`
     return request({
       url

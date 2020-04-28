@@ -7,14 +7,8 @@
                 :finished="finished"
                 finished-text="没有更多了"
                 @load="handlePullingUp">
-        <ul class="singer-list">
-          <li class="singer-list-item"
-              v-for="item in singer.singerList"
-              :key="item.id">
-            <singer-item :singer="item"
-                         @select="handleSelect"></singer-item>
-          </li>
-        </ul>
+        <singer-list :list="singer.singerList"
+                     @select="handleSelect"></singer-list>
       </van-list>
     </template>
     <template v-if="singer.singerCount===0">
@@ -24,7 +18,7 @@
   </div>
 </template>
 <script>
-import SingerItem from '@/components/home/singer/SingerItem'
+import SingerList from '@/components/common/singer_desc/SingerList'
 import NoResult from '@/components/common/NoResult'
 import Singer from '@/assets/common/js/singer.js'
 import searchApi from '@/api/search.js'
@@ -88,7 +82,10 @@ export default {
             name: item.name,
             avatar: item.img1v1Url,
             aliaName: item.alias.join(' / '),
-            picUrl: item.picUrl
+            picUrl: item.picUrl,
+            mvSize: item.mvSize,
+            albumSize: item.albumSize,
+            followed: item.followed
           }))
         })
         if (this.singer.singerCount === -1) {
@@ -133,7 +130,7 @@ export default {
   },
 
   components: {
-    SingerItem,
+    SingerList,
     NoResult
   }
 }

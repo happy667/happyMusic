@@ -37,7 +37,7 @@ export default {
   padding: 0.1rem 0.5rem 0.2rem;
   box-shadow: 0 0.25rem 0.6rem rgba(0, 0, 0, 0.1);
   border-radius: 0.3rem;
-  height: 5.3rem;
+  height: 5.2rem;
 
   .sons-img {
     width: 100%;
@@ -45,7 +45,7 @@ export default {
     height: 3rem;
     box-sizing: border-box;
     border-radius: 0.3rem;
-    margin-bottom: 0.2rem;
+    margin-bottom: 0.15rem;
 
     img {
       display: block;
@@ -59,7 +59,7 @@ export default {
   .songs-desc {
     margin-bottom: 0.1rem;
     width: 100%;
-    line-height: 0.5rem;
+    line-height: 0.55rem;
     word-wrap: break-word;
     font-size: $font-size-smaller;
     font-family: $font-common-title;
@@ -67,7 +67,7 @@ export default {
   }
 
   .songs-playCount {
-    line-height: 0.6rem;
+    line-height: 0.5rem;
     width: 100%;
     color: #999;
     font-size: $font-size-smaller-x;

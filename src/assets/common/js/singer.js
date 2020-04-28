@@ -8,7 +8,9 @@ export default class Singer {
     singers,
     singersList,
     followed,
-    followeds
+    followeds,
+    mvSize,
+    albumSize
   }) {
     this.id = id
     this.name = name
@@ -19,5 +21,7 @@ export default class Singer {
     this.singersList = singersList
     this.followed = followed
     this.followeds = followeds
+    this.mvSize = mvSize
+    this.albumSize = albumSize
   }
 }

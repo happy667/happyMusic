@@ -23,6 +23,7 @@
 import MvList from '@/components/common/video/VideoList'
 import NoResult from '@/components/common/NoResult'
 import searchApi from '@/api/search.js'
+import Video from '@/assets/common/js/video.js'
 import { ERR_OK } from '@/api/config.js'
 import { mapState } from 'vuex'
 import {
@@ -80,7 +81,21 @@ export default {
         if (this.mv.mvCount === -1) {
           this.mv.mvCount = res.result.mvCount
         }
-        let list = this.mv.mvList.concat(res.result.mvs)
+        // 用于保存处理后的视频列表
+        let videoList = []
+        res.result.mvs.forEach(item => {
+          let video = new Video({
+            id: item.id,
+            coverUrl: item.cover,
+            name: item.name,
+            playCount: item.playCount,
+            duration: item.duration,
+            creatorName: item.artists.map(item => item.name).join('/')
+          })
+          videoList.push(video)
+        })
+
+        let list = this.mv.mvList.concat(videoList)
         // 将每次查询的mv追加到mv.mvList中
         this.mv.mvList = list
         // 关闭加载logo

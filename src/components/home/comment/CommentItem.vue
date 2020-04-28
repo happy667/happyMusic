@@ -5,10 +5,11 @@
       <div class="comment-left">
         <!-- 用户头像 -->
         <div class="avatar">
-          <mini-image :avatar="comment.user.avatarUrl"></mini-image>
+
+          <my-image :src="comment.user.avatarUrl" />
         </div>
       </div>
-      <div class="comment-right van-hairline--bottom">
+      <article class="comment-right van-hairline--bottom">
         <div class="top">
           <!-- 用户昵称 -->
           <div class="comment-nikeName">{{comment.user.nickname}}</div>
@@ -21,13 +22,13 @@
             {{comment.content}}
           </article>
         </div>
-      </div>
+      </article>
     </section>
   </div>
 </template>
 <script>
 import 'common/js/convert.js'
-import MiniImage from '../img/MiniImage'
+import MyImage from '@/components/common/img/Image'
 export default {
   props: {
     comment: {
@@ -36,7 +37,7 @@ export default {
     }
   },
   components: {
-    MiniImage
+    MyImage
   }
 }
 </script>

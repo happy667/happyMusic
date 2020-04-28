@@ -10,5 +10,9 @@ export default {
   // 设置显示搜索列表
   setShowSearchList(state, showSearchList) {
     state.showSearchList = showSearchList
+  },
+  // 设置执行搜索
+  setSelectSearchWord(state, selectSearchWord) {
+    state.selectSearchWord = selectSearchWord
   }
 }

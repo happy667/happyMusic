@@ -20,6 +20,12 @@ export const searchType = {
   lyric: 1006,
   all: 1018
 }
+
+// 视频类型
+export const videoType = {
+  mv: 0,
+  video: 1
+}
 export const USER_TOKEN = 'token'
 // 需要登录的组件
 export const needLoginComponents = [ // 存放路由name属性

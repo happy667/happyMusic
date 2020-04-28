@@ -11,13 +11,13 @@
         </div>
       </div>
     </div>
-    <div class="info">
+    <article class="info">
       <div class="name">{{item.name}}</div>
       <div class="desc">
         <span class="singer">{{item.singerName}}</span>
         <span class="time">{{item.publishTime|convertDate}}</span>
       </div>
-    </div>
+    </article>
   </div>
 </template>
 <script>

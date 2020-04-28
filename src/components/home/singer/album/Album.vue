@@ -91,18 +91,14 @@
     <no-result v-if="albumObj.songs&&albumObj.songs.length===0"
                text="暂无相关资源"></no-result>
     <!-- 上拉提示框 -->
-    <van-popup v-model="showSingerPopup"
-               round
-               position="bottom"
-               :get-container="getContainer">
-      <div class="singerList"
-           v-if="albumObj.album&&albumObj.album.albumSingersList.length!==0">
-        <singer-item :singer="item"
-                     @select="handleSelectSinger"
-                     v-for="item in albumObj.album.albumSingersList"
-                     :key="item.id"></singer-item>
-      </div>
-    </van-popup>
+    <template v-if="albumObj.album&&albumObj.album.albumSingersList.length!==0">>
+      <singer-popup :list="albumObj.album.albumSingersList"
+                    :showPopup="showSingerPopup"
+                    @closePopup="showSingerPopup=false"
+                    @finishedLoadImage="handleFinished"
+                    @clickListItem="clickListItem"
+                    :isLoadImage="isLoadImage"></singer-popup>
+    </template>
     <!-- 遮罩层 -->
     <van-overlay :show="showOverlay"
                  v-if="albumObj.album"
@@ -154,8 +150,8 @@ import userApi from '@/api/user.js'
 import Song from '@/assets/common/js/song.js'
 import Singer from '@/assets/common/js/singer.js'
 import NoResult from '@/components/common/NoResult'
-import SingerItem from '@/components/home/singer/SingerItem'
 import PlayAll from '@/components/common/PlayAll'
+import SingerPopup from '@/components/common/SingerPopup'
 import {
   ERR_OK
 } from '@/api/config.js'
@@ -177,7 +173,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['user', 'isGetAlbumSingerImage']),
+    ...mapState(['user']),
     ...mapGetters(['currentSong']),
     followIcon () {
       return this.followed ? 'like' : 'like-o'
@@ -191,6 +187,15 @@ export default {
     bgImage () {
       return {
         backgroundImage: `url(${this.albumObj.album.blurPicUrl})`
+      }
+    },
+    // 是否要加载图片
+    isLoadImage: {
+      get () {
+        return this.$store.state.isLoadAlbumInfoImage
+      },
+      set (val) {
+        this.$store.commit('setIsLoadAlbumInfoImage', val)
       }
     }
   },
@@ -210,10 +215,10 @@ export default {
     if (this.user) {
       this.getUserAlbum()
     }
-    this.setIsGetAlbumSingerImage(false)
+    this.isLoadImage = true
   },
   methods: {
-    ...mapMutations(['setSingerCurrentIndex', 'setIsGetAlbumSingerImage', 'setHideMiniPlayer']),
+    ...mapMutations(['setSingerCurrentIndex', 'setHideMiniPlayer']),
     routerBack () {
       this.$route.meta.isBack = true
       this.$utils.routerBack()
@@ -320,46 +325,6 @@ export default {
         }).catch(() => { })
       }
     },
-    // 选择歌手
-    selectSingers () {
-      const list = this.albumObj.album.albumSingersList
-      if (list.length === 1) { // 只有一个歌手直接跳转到歌手页面
-        this.setSingerCurrentIndex(0)
-        this.$router.push(`/singerInfo/${list[0].id}`)
-      } else {
-        console.log(123)
-        this.showSingerPopup = true
-        // 打开歌手遮罩层
-        this.openSingerPopup()
-        if (!this.isGetAlbumSingerImage) { // 判断是否获取过歌手图片
-          list.forEach(async (item, index) => { // 查询该歌手图片
-            item.avatar = await this.getSingerImage(item.id)
-            if (index === list.length - 1) { // 如果index等于当前歌手列表长度-1就说明数据全部获取完毕
-              this.setIsGetAlbumSingerImage(true)// 设置vuex已经获取过歌手图片
-            }
-          })
-        }
-      }
-    },
-    // 获取歌手图片
-    async getSingerImage (id) {
-      // 获取歌手
-      const { data: res } = await singerApi.getSingerSong(id)
-      if (res.code === ERR_OK) { // 成功获取歌手
-        return res.artist.img1v1Url
-      }
-    },
-    // 获取容器
-    getContainer () {
-      return document.querySelector('#app')
-    },
-    // 选择歌手列表中歌手
-    handleSelectSinger (item) {
-      this.setSingerCurrentIndex(0)
-      // 关闭歌手遮罩层
-      this.closeSingerPopup()
-      this.$router.push(`/singerInfo/${item.id}`)
-    },
     // 处理歌手列表
     handleSingerList (list) {
       let newList = []
@@ -378,14 +343,6 @@ export default {
       this.$route.meta.isBack = false
       this.$router.push(`/albumComment/${this.id}`)
     },
-    // 打开歌手遮罩层
-    openSingerPopup () {
-      this.showSingerPopup = true
-    },
-    // 关闭歌手遮罩层
-    closeSingerPopup () {
-      this.showSingerPopup = false
-    },
     // 打开遮罩层
     openOverlay () {
       this.showOverlay = true
@@ -400,12 +357,30 @@ export default {
       this.setHideMiniPlayer(false)
       document.body.style.position = ''
       document.body.style.overflow = ''
+    },
+    // 选择歌手
+    selectSingers () {
+      let list = this.albumObj.album.singers
+      if (list.length === 1) { // 只有一个歌手直接跳转到歌手页面
+        this.setSingerCurrentIndex(0)
+        this.$router.push(`/singerInfo/${list[0].id}`)
+      } else {
+        this.showSingerPopup = true
+      }
+    },
+    // 选择列表中歌手
+    clickListItem () {
+      this.showSingerPopup = false
+    },
+    // 数据获取完成
+    handleFinished () {
+      this.isLoadImage = false
     }
   },
   components: {
     SongsList,
     NoResult,
-    SingerItem,
+    SingerPopup,
     Scroll,
     PlayAll
   }

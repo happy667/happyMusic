@@ -3,9 +3,9 @@
            @click="handleClick">
     <!-- video 图片 -->
     <div class="video-img">
-      <img v-lazy="video.cover"
+      <img v-lazy="video.coverUrl"
            class="animated fadeIn"
-           :key="video.cover" />
+           :key="video.coverUrl" />
       <!-- 播放次数 -->
       <div class="play-num">
         <i class="iconfont icon-bofang"></i>
@@ -13,17 +13,17 @@
       </div>
     </div>
     <!-- video信息 -->
-    <div class="video-info">
+    <article class="video-info">
       <!-- 标题 -->
-      <div class="video-title">{{video.name}}</div>
+      <h4 class="video-title">{{video.name}}</h4>
       <div class="bottom">
         <!-- 时间 -->
         <div class="video-time">{{video.duration/1000|convertTime}}</div>
         <!-- 来源 -->
-        <div class="video-source">{{video.artistName}}</div>
+        <div class="video-source">{{video.creatorName}}</div>
       </div>
 
-    </div>
+    </article>
   </section>
 </template>
 <script>
@@ -51,18 +51,12 @@ export default {
 
   .video-img {
     position: relative;
-    margin-right: 0.4rem;
-    height: 0;
+    height: 1.7rem;
     width: 2.9rem;
-    padding-bottom: 1.7rem;
     background: $color-common-b;
+    flex: none;
 
     img {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
       display: block;
       width: 100%;
       height: 100%;
@@ -78,7 +72,9 @@ export default {
   }
 
   .video-info {
+    margin-left: 0.4rem;
     flex: 1;
+    width: 1%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -103,7 +99,7 @@ export default {
       }
 
       .video-source {
-        width: 3rem;
+        width: 4rem;
         no-wrap();
       }
     }

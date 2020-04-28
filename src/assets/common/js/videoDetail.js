@@ -9,7 +9,9 @@ export default class VideoDetail {
     commentCount,
     publishTime,
     desc,
-    duration
+    duration,
+    creatorName,
+    creatorList
   }) {
     this.id = id
     this.coverUrl = coverUrl
@@ -21,5 +23,7 @@ export default class VideoDetail {
     this.publishTime = publishTime
     this.desc = desc
     this.duration = duration
+    this.creatorName = creatorName
+    this.creatorList = creatorList
   }
 }

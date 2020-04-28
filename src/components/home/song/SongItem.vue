@@ -12,7 +12,7 @@
            class="animated fadeIn"
            :key="picUrl">
     </div>
-    <div class="right-info">
+    <article class="right-info">
       <div class="song-desc">
         <!-- 歌曲名称 -->
         <div class="song-name">{{song.name}}</div>
@@ -41,7 +41,7 @@
              :class="loveIcon"></i>
         </div>
       </div>
-    </div>
+    </article>
 
   </div>
 </template>
@@ -202,6 +202,7 @@ export default {
     margin: 0.15rem 0.4rem 0.15rem 0;
     background-color: $color-common-b;
     border-radius: 50%;
+    flex: none;
 
     img {
       text-align: center;
@@ -213,6 +214,7 @@ export default {
 
   .right-info {
     flex: 1;
+    width: 1%;
     display: flex;
     justify-content: space-between;
 

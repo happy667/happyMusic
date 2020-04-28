@@ -51,12 +51,12 @@
           </div>
           <!-- 视频出处 -->
           <div class="info-bottom"
-               @click="selectSinger(video.artist)">
+               @click="selectCreator(video.creatorList)">
             <div class="play-source-img">
-              <mini-image :avatar="video.artist.avatarUrl"></mini-image>
+              <my-image :src="video.artist.avatarUrl" />
             </div>
             <div class="play-source-author">
-              {{video.artist.name}}
+              {{video.creatorName}}
             </div>
           </div>
         </div>
@@ -93,18 +93,28 @@
           </template>
         </div>
       </section>
+      <singer-popup :list="video.creatorList"
+                    :showPopup="showSingerPopup"
+                    @closePopup="showSingerPopup=false"
+                    @finishedLoadImage="handleFinished"
+                    @clickListItem="clickListItem"
+                    :isLoadImage="isLoadImage"></singer-popup>
     </template>
+
   </div>
 </template>
 <script>
-import MiniImage from '../img/MiniImage'
+import MyImage from '@/components/common/img/Image'
 import VideoComponent from './Video'
 import CommentList from '@/components/home/comment/CommentList'
 import VideoList from '@/components/common/video/VideoList'
 import NoResult from '@/components/common/NoResult'
 import videoApi from '@/api/video.js'
-import SingerApi from '@/api/singer.js'
+import singerApi from '@/api/singer.js'
 import VideoDetail from '@/assets/common/js/videoDetail.js'
+import Video from '@/assets/common/js/video.js'
+import Singer from '@/assets/common/js/singer.js'
+import SingerPopup from '@/components/common/SingerPopup'
 import { mapMutations, mapState } from 'vuex'
 import {
   ERR_OK
@@ -122,7 +132,8 @@ export default {
       simiMVList: null, // 相似mv列表
       commentList: null, // 评论列表
       commentCount: 0, // 评论数量
-      showMoreInfo: false// 是否显示更多信息
+      showMoreInfo: false, // 是否显示更多信息
+      showSingerPopup: false// 显示歌手弹出层
     }
   },
   beforeRouteLeave (to, from, next) {
@@ -130,8 +141,11 @@ export default {
     if (this.currentPlayIndex !== -1) {
       this.setHideMiniPlayer(false)
     }
-
     next()
+  },
+  activated () {
+    // 初始化加载图片
+    this.isLoadImage = true
   },
   inject: ['reload'],
   computed: {
@@ -141,6 +155,15 @@ export default {
     },
     rightIcon () {
       return this.showMoreInfo ? 'arrow-up' : 'arrow-down'
+    },
+    // 是否要加载图片
+    isLoadImage: {
+      get () {
+        return this.$store.state.isLoadVideoInfoImage
+      },
+      set (val) {
+        this.$store.commit('setIsLoadVideoInfoImage', val)
+      }
     }
   },
   mounted () {
@@ -148,6 +171,8 @@ export default {
       await this.getVideoDetail(this.id)
       await this.getSimiMV(this.id)
       await this.getVideoComment(this.id)
+      // 初始化加载图片
+      this.isLoadImage = true
     })
   },
   methods: {
@@ -161,6 +186,7 @@ export default {
       const { data: res } = await videoApi.getVideoDetail(id)
       if (res.code === ERR_OK) {
         const data = res.data
+        let creatorList = []
         let video = new VideoDetail({
           id: data.id,
           coverUrl: data.cover,
@@ -169,10 +195,22 @@ export default {
           url: this.handleUrls(data.brs),
           publishTime: data.publishTime,
           desc: data.desc,
-          duration: data.duration
+          duration: data.duration,
+          creatorName: data.artists.map(item => item.name).join('/'),
+          creatorList
         })
+
+        data.artists.forEach(item => {
+          let creator = new Singer({
+            id: item.id,
+            name: item.name
+          })
+          creatorList.push(creator)
+        })
+
+        console.log(video)
         // 获取歌手信息
-        const { data: res2 } = await SingerApi.getSinger(data.artistId)
+        const { data: res2 } = await singerApi.getSinger(data.artistId)
         if (res2.code === ERR_OK) {
           video.artist = { id: res2.artist.id, name: res2.artist.name, avatarUrl: res2.artist.picUrl }
           this.commentCount = data.commentCount
@@ -205,7 +243,20 @@ export default {
         data: res
       } = await videoApi.getSimiMV(id)
       if (res.code === ERR_OK) {
-        this.simiMVList = res.mvs
+        // 用于保存处理后的视频列表
+        let videoList = []
+        res.mvs.forEach(item => {
+          let video = new Video({
+            id: item.id,
+            coverUrl: item.cover,
+            name: item.name,
+            playCount: item.playCount,
+            duration: item.duration,
+            creatorName: item.artists.map(item => item.name).join('/')
+          })
+          videoList.push(video)
+        })
+        this.simiMVList = videoList
       }
     },
     // 获取该mv评论
@@ -239,18 +290,33 @@ export default {
       }, 500)
     },
     goToVideoInfo (mv) {
-      this.reload()
+      // 初始化加载图片
+      this.isLoadImage = true
       this.setAddNoCacheComponents('videoInfo')
       this.$router.push(`/videoInfo/${mv.id}`)
-    },
-    // 选择歌手
-    selectSinger (item) {
-      this.setSingerCurrentIndex(0)
-      this.$router.push(`/singerInfo/${item.id}`)
     },
     // 切换显示隐藏视频详情信息
     handleToggleInfo () {
       this.showMoreInfo = !this.showMoreInfo
+    },
+    // 选择创作者
+    selectCreator () {
+      console.log(123)
+      let list = this.video.creatorList
+      if (list.length === 1) { // 只有一个歌手直接跳转到歌手页面
+        this.setSingerCurrentIndex(0)
+        this.$router.push(`/singerInfo/${list[0].id}`)
+      } else {
+        this.showSingerPopup = true
+      }
+    },
+    // 选择列表中歌手
+    clickListItem () {
+      this.showSingerPopup = false
+    },
+    // 数据获取完成
+    handleFinished () {
+      this.isLoadImage = false
     }
 
   },
@@ -259,7 +325,8 @@ export default {
     CommentList,
     VideoList,
     NoResult,
-    MiniImage
+    MyImage,
+    SingerPopup
   }
 }
 </script>
@@ -336,7 +403,11 @@ export default {
         }
 
         .play-source-author {
+          flex: 1;
           font-size: $font-size-smaller;
+          height: 0.6rem;
+          line-height: 0.6rem;
+          no-wrap();
         }
       }
     }

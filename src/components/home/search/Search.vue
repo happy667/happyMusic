@@ -11,7 +11,7 @@
     <div class="container">
       <!--搜索框-->
       <van-search left-icon="search"
-                  :placeholder="searchDefault"
+                  :placeholder="searchDefault.showKeyword"
                   shape="round"
                   show-action
                   @input="handleInput"
@@ -51,6 +51,8 @@ import { ERR_OK } from '@/api/config.js'
 import { addLocalSearch } from '@/assets/common/js/localStorage.js'
 import { mapState, mapMutations } from 'vuex'
 import { utils } from '@/assets/common/js/utils.js'
+import { searchType } from '@/assets/common/js/config.js'
+
 export default {
   name: 'search',
   data () {
@@ -61,7 +63,7 @@ export default {
   },
   inject: ['reload'],
   computed: {
-    ...mapState(['searchKeywords', 'showSearchList', 'noCacheComponents']),
+    ...mapState(['searchKeywords', 'showSearchList', 'noCacheComponents', 'selectSearchWord']),
     // 搜索框的值
     searchVal: {
       get () {
@@ -69,6 +71,14 @@ export default {
       },
       set (val) {
         this.setSearchKeywords(val)
+      }
+    }
+  },
+  watch: {
+    selectSearchWord () {
+      if (this.selectSearchWord) {
+        this.setSearchKeywords(this.selectSearchWord)
+        this.search()
       }
     }
   },
@@ -120,7 +130,11 @@ export default {
     async  getSearchDefault () {
       const { data: res } = await searchApi.getSearchDefault()
       if (res.code === ERR_OK) {
-        this.searchDefault = res.data.realkeyword
+        this.searchDefault = {
+          realkeyword: res.data.realkeyword,
+          searchType: res.data.searchType,
+          showKeyword: res.data.showKeyword
+        }
       }
     },
     // 搜索综合内容
@@ -135,10 +149,10 @@ export default {
         }
       }
     },
-    search () {
+    search (searchIndex = 0) {
       this.closeSearchList()
-      // 重置标签页到第一个
-      this.setSearchCurrentIndex(0)
+      // 设置搜索标签页
+      this.setSearchCurrentIndex(searchIndex)
       // 将搜索的内容保存在本地
       addLocalSearch(this.searchKeywords)
       if (this.$route.path === '/search/searchPage') {
@@ -152,13 +166,42 @@ export default {
         this.reload()
       }
     },
+    // 处理搜索索引
+    handleSearchIndex (type) {
+      let index = 0// 默认为索引为0
+      switch (type) {
+        case searchType.all:
+          index = 0
+          break
+        case searchType.song:
+          index = 1
+          break
+        case searchType.singer:
+          index = 2
+          break
+        case searchType.album:
+          index = 3
+          break
+        case searchType.songSheet:
+          index = 4
+          break
+        case searchType.mv:
+          index = 5
+          break
+      }
+      return index
+    },
     // 处理搜索请求
     async handleSearch () {
       // 没有输入按默认搜索关键词搜索
       if (this.searchKeywords.trim().length === 0) {
-        this.setSearchKeywords(this.searchDefault)
+        this.setSearchKeywords(this.searchDefault.realkeyword)
+        // 设置搜索标签页
+        let index = this.handleSearchIndex(this.searchDefault.searchType)
+        this.search(index)
+      } else {
+        this.search()
       }
-      this.search()
     },
     // 输入搜索内容
     handleInput: utils.debounce(function () {

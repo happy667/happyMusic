@@ -41,6 +41,7 @@ export default {
     flex-wrap: wrap;
 
     .list-item {
+      height: 2.9rem;
       padding: 0.22rem;
       background: $color-common-background;
       box-shadow: 0 0.1rem 0.8rem rgba(0, 0, 0, 0.1);
@@ -70,6 +71,7 @@ export default {
 
       .list-item-title {
         width: 2.2rem;
+        line-height: 0.5rem;
         no-wrap();
       }
     }

@@ -8,7 +8,7 @@
            :key="item.coverImgUrl" />
     </div>
     <!-- 信息 -->
-    <div class="info">
+    <article class="info">
       <!-- 标题 -->
       <div class="title">{{item.name}}</div>
       <div class="bottom">
@@ -18,7 +18,7 @@
         <div class="from">来自{{item.creator.nickname}}</div>
       </div>
 
-    </div>
+    </article>
   </div>
 </template>
 <script>
@@ -99,7 +99,8 @@ export default {
       }
 
       .from {
-        width: 3rem;
+        flex: 1;
+        width: 1%;
         no-wrap();
       }
     }

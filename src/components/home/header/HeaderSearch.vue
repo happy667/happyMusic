@@ -57,7 +57,7 @@ export default {
     async  getSearchDefault () {
       const { data: res } = await searchApi.getSearchDefault()
       if (res.code === ERR_OK) {
-        this.searchDefault = '正在热搜:' + res.data.realkeyword
+        this.searchDefault = res.data.showKeyword
       }
     }
   }

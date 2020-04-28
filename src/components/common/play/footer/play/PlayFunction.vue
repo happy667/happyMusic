@@ -79,7 +79,7 @@ export default {
 .function-container {
   display: flex;
   justify-content: space-evenly;
-  height: 1.5rem;
+  height: 1.45rem;
 
   .icon {
     i {

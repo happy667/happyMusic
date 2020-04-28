@@ -46,5 +46,9 @@ export default {
   // 设置是否隐藏迷你播放器
   setHideMiniPlayer(state, hideMiniPlayer) {
     state.hideMiniPlayer = hideMiniPlayer
+  },
+  // 设置是否为播放页面点击的
+  setIsPlayerClick(state, isPlayerClick) {
+    state.isPlayerClick = isPlayerClick
   }
 }

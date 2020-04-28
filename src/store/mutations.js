@@ -51,21 +51,10 @@ export default {
       state.noCacheComponents.splice(index, 1)
     }
   },
-  // 设置是否为播放页面点击的
-  setIsPlayerClick(state, isPlayerClick) {
-    state.isPlayerClick = isPlayerClick
-  },
-  // 设置是否获取歌手图片（播放器页面点击歌手获取）
-  setIsGetSingerImage(state, isGetSingerImage) {
-    state.isGetSingerImage = isGetSingerImage
-  },
+
   // 设置跳转的是否为前进页面
   setIsAdvance(state, isAdvance) {
     state.isAdvance = isAdvance
-  },
-  // 设置是否获取歌手图片（专辑详情点击歌手获取）
-  setIsGetAlbumSingerImage(state, isGetAlbumSingerImage) {
-    state.isGetAlbumSingerImage = isGetAlbumSingerImage
   },
   ...playerMutations,
   ...userMutations,

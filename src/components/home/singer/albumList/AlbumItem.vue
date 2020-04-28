@@ -47,8 +47,9 @@ export default {
   }
 
   .item-name {
-    margin-top: 0.2rem;
     width: 2.1rem;
+    height: 0.6rem;
+    line-height: 0.6rem;
     color: $color-common-x;
     no-wrap();
   }

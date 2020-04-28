@@ -15,15 +15,9 @@
                  @click="clearLocalList">
               <i class="iconfont icon-shanchu"></i>
             </div>
-
           </div>
-          <!-- 搜索列表 -->
-          <ul class="old-search-list">
-            <li class="old-search-list-item"
-                v-for="(item,index) in localSearchList"
-                @click="selectItem(item)"
-                :key="index">{{item}}</li>
-          </ul>
+          <search-list :list="localSearchList"
+                       @select="selectItem"></search-list>
         </div>
         <!-- 热门搜索 -->
         <div class="recommend-Search">
@@ -65,6 +59,7 @@
 </template>
 <script>
 import Scroll from '@/components/common/Scroll'
+import SearchList from './SearchList'
 import searchApi from '@/api/search.js'
 import { ERR_OK } from '@/api/config.js'
 import { mapState, mapMutations } from 'vuex'
@@ -151,7 +146,8 @@ export default {
     if (getLocalList()) { this.localSearchList = getLocalList() }// 如果本地存在历史记录就赋值
   },
   components: {
-    Scroll
+    Scroll,
+    SearchList
   }
 }
 </script>
@@ -189,26 +185,6 @@ export default {
         justify-content: center;
         align-items: center;
         color: #999;
-      }
-    }
-
-    .old-search-list {
-      display: flex;
-      flex-wrap: wrap;
-      max-height: 10rem;
-      font-size: $font-size-smaller-x;
-
-      .old-search-list-item {
-        margin-bottom: 0.3rem;
-        margin-right: 0.2rem;
-        padding: 0 0.2rem;
-        word-break: break-all;
-        height: 0.8rem;
-        border-radius: 0.25rem;
-        line-height: 0.8rem;
-        color: #868e94;
-        background: #f2f2f2;
-        no-wrap();
       }
     }
 

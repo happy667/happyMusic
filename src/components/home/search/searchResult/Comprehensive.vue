@@ -3,104 +3,33 @@
     <!-- loading -->
     <loading :loading="loading" />
     <template v-if="!loading&&result">
+      <component v-for="(item,index) in order"
+                 :is="item"
+                 :key="index"
+                 :song="result.song"
+                 :singer="result.singer"
+                 :album="result.album"
+                 :simQuery="result.simQuery"
+                 :songSheet="result.songSheet"
+                 :video="result.video"
+                 @setIndex="setCurrentIndex"
+                 @closeList="$emit('closeList')"></component>
       <!-- 歌曲 -->
-      <div class="search"
-           v-if="result.song">
-        <div class="search-song">
-          <song-list @select="selectSong"
-                     :songsList="result.song.songList">
-            <template>
-              <div class="header">
-                <Title title="单曲"></Title>
-                <play-all :length="result.song.songList.length"
-                          @play="handlePlayAll(result.song.songList[0],result.song.songList)"></play-all>
-              </div>
-            </template>
-          </song-list>
-          <div class="more"
-               v-if="result.song.moreText"
-               @click="setCurrentIndex(1)">
-            <div class="text">
-              {{result.song.moreText}}
-            </div>
-            <div class="icon">
-              <van-icon name="arrow" />
-            </div>
-
-          </div>
-        </div>
-      </div>
+      <!-- <search-song :song="result.song"
+                   @closeList="$emit('closeList')"
+                   @setIndex="setCurrentIndex" /> -->
       <!-- 歌手 -->
-      <div class="search"
-           v-if="result.singer">
-        <div class="search-singer">
-          <Title title="歌手"></Title>
-          <ul class="singer-list">
-            <li class="singer-list-item"
-                v-for="item in result.singer.singerList"
-                :key="item.id">
-              <singer-item :singer="item"
-                           @select="selectSinger"></singer-item>
-            </li>
-          </ul>
-          <div class="more"
-               v-if="result.album.moreText"
-               @click="setCurrentIndex(2)">
-            <div class="text">
-              {{result.singer.moreText}}
-            </div>
-            <div class="icon">
-              <van-icon name="arrow" />
-            </div>
+      <!-- <search-singer :singer="result.singer"
+                     @setIndex="setCurrentIndex" /> -->
+      <!-- 相关搜索 -->
+      <!-- <search-sim-query :simQuery="result.simQuery" /> -->
 
-          </div>
-        </div>
-      </div>
       <!-- 专辑 -->
-      <div class="search"
-           v-if="result.album">
-        <div class="search-album">
-          <album-list :list="result.album.albumList"
-                      @select="selectAlbum">
-            <template>
-              <Title title="专辑"></Title>
-            </template>
-          </album-list>
-          <div class="more"
-               v-if="result.album.moreText"
-               @click="setCurrentIndex(3)">
-            <div class="text">
-              {{result.album.moreText}}
-            </div>
-            <div class="icon">
-              <van-icon name="arrow" />
-            </div>
-
-          </div>
-        </div>
-      </div>
+      <!-- <search-album :album="result.album"
+                    @setIndex="setCurrentIndex" /> -->
       <!-- 歌单 -->
-      <div class="search"
-           v-if="result.songSheet">
-        <div class="search-songSheet">
-          <song-sheet-list :list="result.songSheet.songSheetList">
-            <template>
-              <Title title="歌单"></Title>
-            </template>
-          </song-sheet-list>
-          <div class="more"
-               v-if="result.songSheet.moreText"
-               @click="setCurrentIndex(4)">
-            <div class="text">
-              {{result.songSheet.moreText}}
-            </div>
-            <div class="icon">
-              <van-icon name="arrow" />
-            </div>
-
-          </div>
-        </div>
-      </div>
+      <!-- <search-song-sheet :songSheet="result.songSheet"
+                         @setIndex="setCurrentIndex" /> -->
     </template>
     <template v-if="isNull">
       <no-result text="暂无搜索结果"
@@ -111,38 +40,44 @@
 <script>
 import {
   searchType
+  ,
+  videoType
 } from '@/assets/common/js/config.js'
 import { ERR_OK } from '@/api/config.js'
 import Song from '@/assets/common/js/song.js'
 import Album from '@/assets/common/js/album.js'
-import PlayAll from '@/components/common/PlayAll'
 import Singer from '@/assets/common/js/singer.js'
-import searchApi from '@/api/search.js'
-import SongList from '@/components/home/song/SongList'
-import AlbumList from '@/components/common/album/AlbumList'
-import SingerItem from '@/components/home/singer/SingerItem'
-import SongSheetList from '@/components/home/songSheet/SongSheetList'
-import Title from '@/components/common/Title'
+import Video from '@/assets/common/js/video.js'
+
 import NoResult from '@/components/common/NoResult'
-import { mapState, mapGetters, mapMutations } from 'vuex'
+import SearchSong from './comprehensive/SearchSong'
+import SearchSinger from './comprehensive/SearchSinger'
+import SearchSimQuery from './comprehensive/SearchSimQuery'
+import SearchAlbum from './comprehensive/SearchAlbum'
+import SearchSongSheet from './comprehensive/SearchSongSheet'
+import SearchVideo from './comprehensive/SearchVideo'
+import searchApi from '@/api/search.js'
+
+import { mapState, mapMutations } from 'vuex'
 export default {
   name: 'searchResultComprehensive',
   data () {
     return {
       result: null,
       loading: true,
-      isNull: false
+      isNull: false,
+      order: [],
+      includeComponents: ['song', 'playList', 'album', 'artist', 'sim_query', 'video']
     }
   },
   computed: {
-    ...mapState(['searchKeywords']),
-    ...mapGetters(['currentSong'])
+    ...mapState(['searchKeywords'])
   },
   mounted () {
     this.getSearchAll()
   },
   methods: {
-    ...mapMutations(['setSearchCurrentIndex', 'setSingerCurrentIndex', 'setPlayerFullScreen']),
+    ...mapMutations(['setSearchCurrentIndex', 'setSingerCurrentIndex', 'setPlayerFullScreen', 'setSelectSearchWord']),
     // 查询综合结果
     async getSearchAll () {
       // 显示加载logo
@@ -166,6 +101,14 @@ export default {
         result.album = this.handleAlbum(res.result.album)
         // 处理歌单结果
         result.songSheet = this.handleSongSheet(res.result.playList)
+        // 处理相关搜索结果
+        result.simQuery = this.handleSimQuery(res.result.sim_query)
+        // 处理视频结果
+        result.video = this.handleVideo(res.result.video)
+        // 处理排序结果
+        console.log(res.result.order)
+        this.order = this.handleOrder(res.result.order)
+        console.log(this.order)
         this.result = result
         // 关闭加载logo
         this.loading = false
@@ -213,7 +156,10 @@ export default {
           name: item.name,
           avatar: item.img1v1Url,
           aliaName: item.alias.join(' / '),
-          picUrl: item.picUrl
+          picUrl: item.picUrl,
+          mvSize: item.mvSize,
+          albumSize: item.albumSize,
+          followed: item.followed
         }))
       })
       return singerObj
@@ -253,99 +199,131 @@ export default {
       }
       return songSheetObj
     },
-    // 播放全部歌曲
-    handlePlayAll (item, list) {
-      // 比较两首歌曲
-      let result = this.$utils.compareSong(this.currentSong, item)
-      if (result) {
-        this.setPlayerFullScreen(true)
+    // 处理相关搜索结果
+    handleSimQuery (simQuery) {
+      console.log(simQuery)
+      if (!simQuery) return null
+      // 存放歌单搜索结果信息
+      let queryList = simQuery.sim_querys.map(item => item.keyword)
+      return queryList
+    },
+    // 处理视频结果
+    handleVideo (video) {
+      if (!video) return null
+      // 用于存放处理后的视频列表
+      let videoList = []
+      // 存放歌单搜索结果信息
+      let videoObj = {
+        more: video.more,
+        moreText: video.moreText,
+        videoList
       }
-      // 引入vue原型上的utils
-      this.$utils.playAllSong(list)
+      // 过滤一遍视频,只需要mv类型视频
+      video.videos.filter(item => item.type === videoType.mv).forEach(item => {
+        let video = new Video({
+          id: item.vid,
+          coverUrl: item.coverUrl,
+          name: item.title,
+          playCount: item.playTime,
+          type: item.type,
+          duration: item.durationms,
+          creatorName: item.creator.map(item => item.userName).join('/')
+        })
+        videoList.push(video)
+      })
+
+      return videoObj
     },
-    // 选择歌曲播放
-    async selectSong (item, index) {
-      this.$emit('closeList')
-      // 比较两首歌曲
-      let result = this.$utils.compareSong(this.currentSong, item)
-      if (!result) {
-        // 引入vue原型上的utils
-        this.$utils.playMusic(item)
+    // 处理排序结果
+    handleOrder (order) {
+      if (!order) return null
+      let filterOrder = order.filter(item => this.includeComponents.includes(item))
+      let songIndex = filterOrder.findIndex(item => item === 'song')
+      let playListIndex = filterOrder.findIndex(item => item === 'playList')
+      let albumIndex = filterOrder.findIndex(item => item === 'album')
+      let artistIndex = filterOrder.findIndex(item => item === 'artist')
+      let simQueryIndex = filterOrder.findIndex(item => item === 'sim_query')
+      let videoIndex = filterOrder.findIndex(item => item === 'video')
+      if (songIndex !== -1) {
+        filterOrder[songIndex] = 'SearchSong'
       }
+      if (playListIndex !== -1) {
+        filterOrder[playListIndex] = 'SearchSongSheet'
+      }
+      if (albumIndex !== -1) {
+        filterOrder[albumIndex] = 'SearchAlbum'
+      }
+      if (artistIndex !== -1) {
+        filterOrder[artistIndex] = 'SearchSinger'
+      }
+      if (simQueryIndex !== -1) {
+        filterOrder[simQueryIndex] = 'SearchSimQuery'
+      }
+      if (videoIndex !== -1) {
+        filterOrder[videoIndex] = 'SearchVideo'
+      }
+      return filterOrder
     },
-    // 选择歌手
-    selectSinger (item) {
-      this.setSingerCurrentIndex(0)
-      this.$router.push(`/singerInfo/${item.id}`)
-    },
-    // 选择专辑
-    selectAlbum (item) {
-      this.$router.push(`/singerAlbum/${item.id}`)
-    },
+
     setCurrentIndex (index) {
       document.documentElement.scrollTop = 0
       this.setSearchCurrentIndex(index)
     }
+
   },
 
   components: {
-    PlayAll,
-    Title,
-    SongList,
-    SingerItem,
-    AlbumList,
-    SongSheetList,
-    NoResult
+    SearchSinger,
+    NoResult,
+    SearchSong,
+    SearchSimQuery,
+    SearchAlbum,
+    SearchSongSheet,
+    SearchVideo
   }
 }
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.search-comprehensive-container>>>.play-all-container {
-  padding-left: 0;
-  padding-right: 0.4rem;
-  height: 1.1rem;
-  line-height: 1.1rem;
-}
-
 .search-comprehensive-container>>>.album-container {
   padding: 0.25rem 0.4rem;
+}
+
+.search-comprehensive-container>>>.video-list-container {
+  padding: 0 0.4rem;
 }
 
 .search-comprehensive-container>>>.title-container {
   padding: 0 0.4rem;
 }
 
-.search-comprehensive-container {
-  padding-top: 0.25rem;
+.search-comprehensive-container>>>.search-list-container .list {
+  padding: 0.15rem 0.4rem;
+}
 
-  .search {
-    .more {
-      margin-bottom: 0.5rem;
-      display: flex;
-      text-align: center;
-      justify-content: center;
+.search-comprehensive-container>>>.search {
+  .more {
+    margin-bottom: 0.5rem;
+    display: flex;
+    text-align: center;
+    justify-content: center;
 
-      .text {
-        height: 1.1rem;
-        line-height: 1.1rem;
-        color: #868e94;
-        font-size: $font-size-smaller-x;
-      }
-
-      .icon {
-        display: flex;
-        align-items: center;
-      }
+    .text {
+      height: 1.1rem;
+      line-height: 1.1rem;
+      color: #868e94;
+      font-size: $font-size-smaller-x;
     }
 
-    .search-song {
-      .header {
-        display: flex;
-        justify-content: space-between;
-      }
+    .icon {
+      display: flex;
+      align-items: center;
     }
   }
+}
+
+.search-comprehensive-container {
+  padding-top: 0.25rem;
 }
 </style>

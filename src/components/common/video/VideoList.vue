@@ -3,8 +3,8 @@
     <div class="video-list">
       <template v-for="item in list">
         <video-item @click="handleClick"
-                 :video="item"
-                 :key="item.id"></video-item>
+                    :video="item"
+                    :key="item.id"></video-item>
       </template>
 
     </div>
@@ -30,6 +30,8 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
+@import '~common/stylus/variable';
+
 .video-list-container>>>.video-list-item-container {
   &:last-child {
     margin-bottom: 0;
@@ -39,5 +41,6 @@ export default {
 .video-list-container {
   width: 100%;
   background: $color-common-background;
+  box-sizing: border-box;
 }
 </style>

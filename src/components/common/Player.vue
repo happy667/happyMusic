@@ -77,7 +77,7 @@ export default {
       // 获取歌词
       this.$refs.FullScreenPlay.$refs.playSection.getLyric(this.currentSong.id)
       // 初始化获取歌手图片（点击歌手弹出歌手框的图片）
-      this.setIsGetSingerImage(false)
+      this.setIsLoadPlayerImage(true)
     },
 
     playing (newPlaying) {
@@ -166,7 +166,7 @@ export default {
         'setPlayerShowImage',
         'setCurrentPlayLyric',
         'setCurrentLineNum',
-        'setIsGetSingerImage',
+        'setIsLoadPlayerImage',
         'setCurrentLyric'
       ]),
     ...mapActions([

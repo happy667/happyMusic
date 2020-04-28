@@ -1,0 +1,156 @@
+<template>
+  <div class="singer-list-item-container"
+       @click="selectItem(_singer)">
+    <div class="singer-list-item">
+      <div class="left">
+        <!-- 歌手头像 -->
+        <div class="singer-avatar">
+          <my-image :src="_singer.avatar"
+                    size="big"></my-image>
+        </div>
+        <!-- 歌手信息 -->
+        <article class="singer-info">
+          <div class="name">{{singerName}}</div>
+          <div class="info">
+            <span v-if="_singer.albumSize"
+                  class="albumSize">专辑:{{_singer.albumSize}}</span>
+            <span v-if="_singer.mvSize"
+                  class="mvSize">视频:{{_singer.mvSize}}</span>
+          </div>
+        </article>
+
+      </div>
+
+      <div class="right"
+           v-if="showFollow">
+        <!-- 收藏 -->
+        <follow @clickFollow="handleClickFollow"
+                :followed="_singer.followed"></follow>
+      </div>
+    </div>
+  </div>
+
+</template>
+<script>
+import MyImage from '@/components/common/img/Image'
+import Follow from '@/components/common/Follow'
+import userApi from '@/api/user.js'
+import { ERR_OK } from '@/api/config.js'
+import { mapState, mapMutations } from 'vuex'
+export default {
+  props: {
+    singer: Object,
+    showFollow: {
+      type: Boolean,
+      default: () => true
+    }
+  },
+  computed: {
+    ...mapState(['user']),
+    _singer () {
+      return this.singer
+    },
+    singerName () {
+      let aliaName = ''
+      if (this._singer.aliaName) {
+        aliaName = ' (' + this._singer.aliaName + ')'
+      }
+      return this._singer.name + aliaName
+    }
+  },
+  components: {
+    MyImage,
+    Follow
+  },
+  methods: {
+    ...mapMutations(['setSingerCurrentIndex']),
+    // 选择歌手
+    selectItem (item) {
+      this.$emit('select', item)
+    },
+    // 点击收藏
+    handleClickFollow () {
+      if (this.user) { // 说明已经登录
+        this.follow() // 收藏/取消收藏歌手
+      } else { // 弹窗提示去登录
+        this.$utils.alertLogin(this.$router.currentRoute.fullPath)
+      }
+    },
+    // 收藏/取消收藏歌手
+    follow () {
+      let singer = this._singer
+      let follow = !singer.followed
+      follow = follow ? 1 : 0// 1代表收藏，0代表不收藏
+      if (!follow) {
+        this.$utils.alertConfirm({ message: '确定不再收藏该歌手', confirmButtonText: '不再收藏' }).then(() => {
+          userApi.updateFollowSinger(singer.id, follow).then(res => {
+            if (res.data.code === ERR_OK) {
+              this.$set(singer, 'followed', false)
+              this.$toast('已不再收藏')
+            }
+          }).catch(err => {
+            this.$toast(err.data.message)
+          })
+        }).catch(() => { })
+      } else {
+        userApi.updateFollowSinger(singer.id, follow).then(res => {
+          if (res.data.code === ERR_OK) {
+            this.$set(singer, 'followed', true)
+          }
+        }).catch(err => {
+          this.$toast(err.data.message)
+        })
+      }
+    }
+  }
+
+}
+</script>
+<style lang="stylus" scoped>
+@import '~common/stylus/variable';
+
+.singer-list-item-container {
+  padding: 0.25rem 0.4rem;
+
+  .singer-list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+
+    .left {
+      display: flex;
+      align-items: center;
+
+      .singer-avatar {
+        margin-right: 0.5rem;
+      }
+
+      .singer-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        .name {
+          height: 0.7rem;
+          line-height: 0.7rem;
+          font-size: $font-size-smaller;
+          max-width: 5rem;
+          no-wrap();
+        }
+
+        .info {
+          color: #777;
+
+          span {
+            display: inline-block;
+            margin-right: 0.2rem;
+            height: 0.6rem;
+            line-height: 0.6rem;
+          }
+        }
+      }
+    }
+  }
+}
+</style>

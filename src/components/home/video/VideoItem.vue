@@ -42,7 +42,7 @@
         <div class="info-bottom"
              @click="selectSinger(videoParams.artist)">
           <div class="play-source-img">
-            <mini-image :avatar="this.videoParams.artist.avatarUrl"></mini-image>
+            <my-image :src="videoParams.artist.avatarUrl"/>
           </div>
           <div class="play-source-author">
             {{videoParams.artist.name}}
@@ -53,7 +53,7 @@
   </div>
 </template>
 <script>
-import MiniImage from '../img/MiniImage'
+import MyImage from '@/components/common/img/Image'
 import 'common/js/convert.js'
 import { mapMutations } from 'vuex'
 export default {
@@ -83,7 +83,7 @@ export default {
     }
   },
   components: {
-    MiniImage
+    MyImage
   }
 }
 </script>
