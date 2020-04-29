@@ -42,9 +42,10 @@ export default {
     }
   },
   mounted () {
-    this.$nextTick(() => {
-      this.initSwiper()
-    })
+    this.initSwiper()
+  },
+  activated () {
+    this.initSwiper()
   },
   computed: {
     ...mapGetters(['currentSong'])

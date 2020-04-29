@@ -5,7 +5,9 @@
     <template v-if="singerAlbum&&singerAlbum.length!==0">
       <div class="singer-album-wrapper">
         <album-list :list="singerAlbum"
-                    @select="selectItem"></album-list>
+                    :showSinger="false"
+                    showSongSize
+                    @select="selectAlbum" />
       </div>
     </template>
     <template v-else-if="singerAlbum&&singerAlbum.length===0">
@@ -15,7 +17,7 @@
 </template>
 <script>
 import NoResult from '@/components/common/NoResult'
-import AlbumList from '@/components/home/singer/albumList/AlbumList'
+import AlbumList from '@/components/common/album/AlbumList'
 export default {
   props: {
     singerAlbum: {
@@ -30,7 +32,7 @@ export default {
   },
   methods: {
     // 选择专辑进入专辑详情
-    selectItem (item) {
+    selectAlbum (item) {
       this.$router.push(`/singerAlbum/${item.id}`)
     }
   },

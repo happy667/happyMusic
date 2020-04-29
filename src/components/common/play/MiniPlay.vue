@@ -251,6 +251,7 @@ export default {
      }
 
      .player-controller {
+       margin-right: 0.15rem;
        flex: 1;
        display: flex;
        justify-content: space-between;
@@ -269,7 +270,7 @@ export default {
        }
 
        .play-list {
-         width: 1.2rem;
+         width: 1.25rem;
          height: 1.5rem;
 
          i {
@@ -279,7 +280,7 @@ export default {
 
        .play {
          position: relative;
-         width: 1.2rem;
+         width: 1.25rem;
          height: 1.5rem;
          display: flex;
          justify-content: center;

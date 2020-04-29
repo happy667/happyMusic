@@ -1,5 +1,10 @@
 <template>
   <div class="appIndex-container">
+    <!-- back -->
+    <div class="back"
+         @click="$utils.routerBack()">
+      <van-icon name="arrow-left" />
+    </div>
     <router-view></router-view>
   </div>
 
@@ -30,6 +35,7 @@ export default {
 @import '~common/stylus/variable';
 
 .appIndex-container {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -37,5 +43,18 @@ export default {
   height: 100vh;
   box-sizing: border-box;
   background: $color-common-background;
+
+  .back {
+    position: absolute;
+    left: 0.2rem;
+    top: 0.25rem;
+    width: 1rem;
+    height: 1rem;
+    font-size: $font-size-large;
+    color: #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }
 </style>

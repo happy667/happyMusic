@@ -42,3 +42,9 @@ export default {
   }
 }
 </script>
+<style lang="stylus" scoped>
+.search-album>>>.albumList-container .album-container .image-container {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+</style>

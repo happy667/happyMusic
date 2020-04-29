@@ -12,8 +12,11 @@
       <loading />
     </template>
     <template v-else>
-      <div class="video">
+      <div class="video"
+           :class="fixed?'fixed':''">
         <video-component :videoParams="video"
+                         @openFullScreen="fixed=false"
+                         @closeFullScreen="fixed=true"
                          @toggleInfo="handleToggleInfo">
         </video-component>
       </div>
@@ -133,7 +136,8 @@ export default {
       commentList: null, // 评论列表
       commentCount: 0, // 评论数量
       showMoreInfo: false, // 是否显示更多信息
-      showSingerPopup: false// 显示歌手弹出层
+      showSingerPopup: false, // 显示歌手弹出层
+      fixed: true// 固定视频
     }
   },
   beforeRouteLeave (to, from, next) {
@@ -337,6 +341,16 @@ export default {
   background: $color-common-background;
   width: 100%;
   min-height: 100vh;
+
+  .video {
+    &.fixed {
+      position: sticky;
+      top: 46px;
+      left: 0;
+      width: 100%;
+      z-index: 10;
+    }
+  }
 
   .container {
     width: 100%;

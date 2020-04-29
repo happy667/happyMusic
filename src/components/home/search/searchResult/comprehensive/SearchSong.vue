@@ -4,6 +4,7 @@
        v-if="song&&song.songList.length!==0">
     <div class="search-song">
       <song-list @select="selectSong"
+                 :showIndex="false"
                  :songsList="song.songList">
         <div class="header">
           <Title title="单曲"></Title>

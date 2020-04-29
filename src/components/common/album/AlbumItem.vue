@@ -14,8 +14,11 @@
     <article class="info">
       <div class="name">{{item.name}}</div>
       <div class="desc">
-        <span class="singer">{{item.singerName}}</span>
+        <span class="singer"
+              v-if="showSinger">{{item.singerName}}</span>
         <span class="time">{{item.publishTime|convertDate}}</span>
+        <span class="song-Size"
+              v-if="showSongSize">歌曲 {{item.size}}</span>
       </div>
     </article>
   </div>
@@ -25,6 +28,14 @@ export default {
   props: {
     item: {
       type: Object
+    },
+    showSinger: {
+      type: Boolean,
+      default: () => true
+    },
+    showSongSize: {
+      type: Boolean,
+      default: () => false
     }
   }
 }
@@ -41,10 +52,12 @@ export default {
 
     .image-container {
       position: relative;
+      width: 1.3rem;
+      height: 1.3rem;
 
       .image {
-        width: 1.3rem;
-        height: 1.3rem;
+        width: 100%;
+        height: 100%;
         background: $color-common-b;
         border-radius: 0.1rem;
 
@@ -58,15 +71,15 @@ export default {
 
       .digital-album {
         position: absolute;
-        top: 0.1rem;
-        left: 0;
-        width: 2.76rem;
-        height: 1.1rem;
+        top: 5%;
+        left: 56%;
+        width: 100%;
+        height: 100%;
 
         img {
           display: block;
           width: 100%;
-          height: 100%;
+          height: 90%;
         }
       }
     }
@@ -93,12 +106,12 @@ export default {
       line-height: 0.6rem;
       no-wrap();
 
-      .singer {
+      span {
         margin-right: 0.3rem;
-      }
 
-      .time {
-        width: 3rem;
+        &:last-child {
+          margin-right: 0;
+        }
       }
     }
   }

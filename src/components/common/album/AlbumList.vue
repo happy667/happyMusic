@@ -7,7 +7,9 @@
             v-for="item in list"
             :key="item.id"
             @click="handleClick(item)">
-          <album :item="item" />
+          <album :item="item"
+                 :showSinger="showSinger"
+                 :showSongSize="showSongSize" />
         </li>
 
       </ul>
@@ -20,6 +22,14 @@ export default {
   props: {
     list: {
       type: Array
+    },
+    showSinger: {
+      type: Boolean,
+      default: () => true
+    },
+    showSongSize: {
+      type: Boolean,
+      default: () => false
     }
   },
   methods: {

@@ -88,7 +88,7 @@ export default {
       if (!this.playerFullScreen && this.currentSong && this.isPlayerClick) {
         this.setPlayerFullScreen(true)
       }
-      this.$router.back()
+      this.$utils.routerBack()
     },
     // 获取该mv评论
     async getSongComment (id) {

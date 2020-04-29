@@ -37,9 +37,6 @@ export default {
   mounted () {
     this.getSearchDefault()
   },
-  activated () {
-    this.getSearchDefault()
-  },
   methods: {
     ...mapMutations(['setSearchKeywords', 'setIsAdvance']),
     // 点击搜索跳转搜索页面

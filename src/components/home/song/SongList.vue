@@ -13,7 +13,8 @@
                    :showImage="showImage"
                    :song="item"
                    :top="index<3&&rank"
-                   :index="index+1"></song-item>
+                   :index="index+1"
+                   :showIndex="showIndex"></song-item>
       </li>
     </ul>
 
@@ -26,6 +27,10 @@ export default {
   props: {
     songsList: Array,
     showImage: {
+      type: Boolean,
+      default: () => false
+    },
+    showIndex: {
       type: Boolean,
       default: () => false
     }

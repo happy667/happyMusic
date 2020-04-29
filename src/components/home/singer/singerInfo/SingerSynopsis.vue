@@ -9,7 +9,8 @@
         <div id="image"
              class="animated fadeIn">
           <van-image :src="singer.picUrl"
-                     fit="cover">
+                     fit="cover"
+                     :key="singer.picUrl">
             <template v-slot:loading>
               <van-loading type="spinner"
                            size="20" />

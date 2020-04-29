@@ -18,11 +18,15 @@
           <div class="container">
             <div class="left-img">
               <div class="album-image">
-                <img v-lazy="albumObj.album.picUrl"
-                     class="animated fadeIn"
-                     :key="albumObj.album.picUrl" />
+                <div class="image">
+                  <img v-lazy="albumObj.album.picUrl"
+                       class="animated fadeIn"
+                       :key="albumObj.album.picUrl" />
+                </div>
+                <div class="digital-album"></div>
+                <div class="public-time">{{albumObj.album.publishTime|convertDate}}</div>
               </div>
-              <div class="public-time">{{albumObj.album.publishTime|convertDate}}</div>
+
             </div>
             <div class="right-info">
               <div class="album-name">{{albumObj.album.name}}</div>
@@ -78,6 +82,7 @@
                           @play="playAllSong(albumObj.songs[0],albumObj.songs)"></play-all>
                 <!-- 歌曲列表 -->
                 <songs-list :songsList="albumObj.songs"
+                            showIndex
                             @select="selectSong"></songs-list>
 
               </div>
@@ -91,8 +96,8 @@
     <no-result v-if="albumObj.songs&&albumObj.songs.length===0"
                text="暂无相关资源"></no-result>
     <!-- 上拉提示框 -->
-    <template v-if="albumObj.album&&albumObj.album.albumSingersList.length!==0">>
-      <singer-popup :list="albumObj.album.albumSingersList"
+    <template v-if="albumObj.album&&albumObj.album.singerList.length!==0">>
+      <singer-popup :list="albumObj.album.singerList"
                     :showPopup="showSingerPopup"
                     @closePopup="showSingerPopup=false"
                     @finishedLoadImage="handleFinished"
@@ -149,6 +154,7 @@ import singerApi from '@/api/singer.js'
 import userApi from '@/api/user.js'
 import Song from '@/assets/common/js/song.js'
 import Singer from '@/assets/common/js/singer.js'
+import AlbumDetail from '@/assets/common/js/albumDetail.js'
 import NoResult from '@/components/common/NoResult'
 import PlayAll from '@/components/common/PlayAll'
 import SingerPopup from '@/components/common/SingerPopup'
@@ -263,15 +269,25 @@ export default {
             let singersList = this.handleSingerList(item.ar)
             songList.push(new Song({ id: item.id, name: item.name, singers, singersList, picUrl: item.al.picUrl, st: item.privilege.st, mv: item.mv }))
           })
+
           // 处理专辑歌手名称
-          let albumSingers = res.album.artists.map(item => item.name).join('/')
+          let singers = res.album.artists.map(item => item.name).join('/')
           // 处理歌手
-          let albumSingersList = this.handleSingerList(res.album.artists)
-          res.album.singers = albumSingers
-          res.album.albumSingersList = albumSingersList
+          let singerList = this.handleSingerList(res.album.artists)
+          let album = new AlbumDetail({
+            id: res.album.id,
+            name: res.album.name,
+            subType: res.album.subType,
+            publishTime: res.album.publishTime,
+            picUrl: res.album.picUrl,
+            blurPicUrl: res.album.blurPicUrl,
+            description: res.album.description,
+            singers,
+            singerList
+          })
           this.$set(this.albumObj, 'songs', songList)
           this.$set(this.albumObj, 'commentCount', res.album.info.commentCount)
-          this.$set(this.albumObj, 'album', res.album)
+          this.$set(this.albumObj, 'album', album)
           // 适配页面底部
           this.handlePlaylist(this.playList)
         }
@@ -360,7 +376,7 @@ export default {
     },
     // 选择歌手
     selectSingers () {
-      let list = this.albumObj.album.singers
+      let list = this.albumObj.album.singerList
       if (list.length === 1) { // 只有一个歌手直接跳转到歌手页面
         this.setSingerCurrentIndex(0)
         this.$router.push(`/singerInfo/${list[0].id}`)
@@ -411,45 +427,61 @@ export default {
 
   .album-header {
     position: relative;
-    height: 0;
-    padding-bottom: 3.1rem;
 
     .album-info {
-      position: absolute;
-      left: 0;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      padding: 0.5rem;
+      padding: 0.9rem 0.5rem 0.5rem 0.5rem;
 
       .container {
         display: flex;
-        height: 2.1rem;
 
         .left-img {
           position: relative;
           margin-right: 0.5rem;
 
           .album-image {
+            position: relative;
             width: 2.1rem;
             height: 2.1rem;
-            border-radius: 0.3rem;
+            border-radius: 0.2rem;
 
-            img {
-              display: block;
+            .image {
+              position: absolute;
+              left: 0;
+              top: 0;
               width: 100%;
               height: 100%;
-              border-radius: 0.3rem;
+              z-index: 3;
               background: $color-common-b;
-            }
-          }
+              border-radius: 0.2rem;
 
-          .public-time {
-            position: absolute;
-            bottom: 0.2rem;
-            right: 0.2rem;
-            color: #fff;
-            font-size: 0.28rem;
+              img {
+                display: block;
+                width: 100%;
+                height: 100%;
+                border-radius: 0.2rem;
+              }
+            }
+
+            .digital-album {
+              position: absolute;
+              top: -17%;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background: #000;
+              border-radius: 50%;
+              z-index: 2;
+            }
+
+            .public-time {
+              position: absolute;
+              bottom: 0rem;
+              right: 0.2rem;
+              color: #fff;
+              font-size: 0.28rem;
+              line-height: 0.5rem;
+              z-index: 3;
+            }
           }
         }
 
@@ -561,6 +593,7 @@ export default {
     bottom: 0;
     overflow-y: scroll;
     overflow-x: hidden;
+    z-index: 99;
 
     &::-webkit-scrollbar {
       display: none;
@@ -575,7 +608,6 @@ export default {
       min-height: 100%;
       box-sizing: border-box;
       color: #fff;
-      z-index: 0;
 
       .top {
         margin-bottom: 0.3rem;

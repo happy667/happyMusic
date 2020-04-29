@@ -4,6 +4,7 @@
     <!-- 播放器区域 -->
     <div class="player"
          ref="player"
+         :class="isFullScreen?'full':''"
          @click.stop="handleClickScreen">
       <!-- loading -->
       <loading :loading="videoLoad"
@@ -39,6 +40,7 @@
             <div class="top-container"
                  v-if="isClickScreen||isFirstPlay">
               <div class="back"
+                   v-show="isFullScreen"
                    @click="routerBack">
                 <van-icon name="arrow-left" />
               </div>
@@ -108,7 +110,8 @@
                       <div class="full"
                            v-show="isClickScreen"
                            @click.stop="handleFullScreen">
-                        <i class="iconfont icon-amplification_icon"></i>
+                        <i class="iconfont"
+                           :class="fullIcon"></i>
                       </div>
                     </div>
                   </div>
@@ -122,7 +125,7 @@
       </div>
       <!-- 进度条-->
       <div class="progress"
-           :style="isFullscreen&&isClickScreen?'bottom:0.13rem':''">
+           :style="progressStyle">
         <van-slider active-color="#FD4979"
                     @input="handleSlideChange"
                     v-model="slideVal">
@@ -156,7 +159,7 @@ export default {
       currenTime: 0, // 当前播放时长
       videoLoad: true, // video是否加载
       showCoverImage: true, // 是否显示封面
-      isFullscreen: false// 是否全屏
+      isFullScreen: false// 是否全屏
     }
   },
   mounted () {
@@ -176,6 +179,19 @@ export default {
     },
     duration () {
       return this.videoParams.duration / 1000
+    },
+    fullIcon () {
+      return this.isFullScreen ? 'icon-suoxiao' : 'icon-fangda'
+    },
+    progressStyle () {
+      let transform = ''
+      // 全屏并且点击屏幕
+      if (this.isFullScreen && this.isClickScreen) {
+        transform = `translate3d(0,-0.2rem,0)`
+      }
+      return {
+        transform
+      }
     }
   },
   watch: {
@@ -194,11 +210,13 @@ export default {
         })
       }
     },
-    isFullscreen () {
-      if (this.isFullscreen) {
+    isFullScreen () {
+      if (this.isFullScreen) {
         this.setOpenFullScreenStyle()
+        this.$emit('openFullScreen')
       } else {
         this.setCloseFullScreenStyle()
+        this.$emit('closeFullScreen')
       }
     }
   },
@@ -211,7 +229,11 @@ export default {
           this.videoLoad = false
           // 更新时间
           this.updateTime()
-          this.handleClickScreen()// 自动播放
+          // 如果网络为wifi则自动播放
+          let netWork = this.$utils.getNetworkType()
+          if (netWork === 'wifi') {
+            this.handleClickScreen()// 自动播放
+          }
         })
 
         this.$forceUpdate()// 由于获取推荐视频中触发了多个异步请求,导致页面无法随时更新，需要刷新才可以重新渲染，使用forceUpdate解决这个问题，使他可以重新渲染
@@ -278,7 +300,7 @@ export default {
             // 判断是否为播放状态,如果是就隐藏
             if (this.isPlay) this.isClickScreen = false
           }
-        }, 3000)
+        }, 5000)
       } else {
         if (this.isClickScreen) {
           // 判断是否为播放状态,如果是就隐藏
@@ -324,11 +346,11 @@ export default {
           type: 'fail'
         })
       } else {
-        if (!this.isFullscreen) {
-          this.isFullscreen = true
+        if (!this.isFullScreen) {
+          this.isFullScreen = true
           this.hideBtn(false)
         } else {
-          this.isFullscreen = false
+          this.isFullScreen = false
         }
       }
     },
@@ -346,26 +368,20 @@ export default {
       let cha = Math.abs(h - w) / 2
       player.style.width = h + 'px'
       player.style.height = w + 'px'
-      player.style.position = 'absolute'
-      player.style.zIndex = 2000
-      player.style.left = 0
-      player.style.top = 0
       player.style.transform = 'translate(-' + cha + 'px,' + cha + 'px) rotate(90deg)'
       document.body.style.overflow = 'hidden'
     },
     // 设置关闭全屏样式
     setCloseFullScreenStyle () {
       let player = this.$refs.player
-      player.style.position = 'relative'
       player.style.width = '100%'
-      player.style.zIndex = ''
-      player.style.transform = ``
       player.style.height = '5rem'
+      player.style.transform = ''
       document.body.style.overflow = ''
     },
     routerBack () {
-      if (this.isFullscreen) {
-        this.isFullscreen = false
+      if (this.isFullScreen) {
+        this.isFullScreen = false
       } else {
         this.$utils.routerBack()
       }
@@ -392,6 +408,13 @@ export default {
     position: relative;
     width: 100%;
     height: 5rem;
+
+    &.full {
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: 999;
+    }
 
     .cover-image {
       position: absolute;
@@ -463,7 +486,7 @@ export default {
           color: #fff;
 
           .back {
-            width: 1rem;
+            width: 1.2rem;
             height: 1rem;
             display: flex;
             justify-content: center;
@@ -472,7 +495,7 @@ export default {
           }
 
           .title {
-            padding-right:0.4rem;
+            padding: 0 0.4rem;
             no-wrap();
             font-size: $font-size-smaller;
           }
@@ -483,21 +506,26 @@ export default {
           width: 100%;
           bottom: 0;
           left: 0;
+          padding: 0 0.3rem 0.3rem 0.6rem;
+          box-sizing: border-box;
 
           .controller-box {
             width: 100%;
-            height: 1.3rem;
-            padding: 0 0.5rem;
+            height: 1.2rem;
+            line-height: 1.2rem;
             box-sizing: border-box;
+            transition: all 0.5s;
 
             .play-controller {
               display: flex;
               justify-content: space-between;
-              line-height: 1.3rem;
               color: #fff;
 
               .play-right {
+                text-align: center;
+
                 .full {
+                  width: 1rem;
                   font-size: $font-size-small;
                 }
               }

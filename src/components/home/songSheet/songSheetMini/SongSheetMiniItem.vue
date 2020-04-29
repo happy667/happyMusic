@@ -48,8 +48,8 @@ export default {
     position: relative;
     margin-right: 0.4rem;
     height: 0;
-    width: 1.8rem;
-    padding-bottom: 1.5rem;
+    width: 1.3rem;
+    padding-bottom: 1.3rem;
     background: $color-common-b;
     border-radius: 0.2rem;
 

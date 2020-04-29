@@ -11,7 +11,7 @@ export default {
   isScroll: false, // 是否是滚动状态
   oldVideo: {}, // 上一次的video
   audio: null, // 音频对象
-  noCacheComponents: ['headerSearchContainer'], // 不缓存的组件
+  noCacheComponents: [], // 不缓存的组件
   isAdvance: true, // 跳转的是否为前进页面
   ...playerState,
   ...userState,

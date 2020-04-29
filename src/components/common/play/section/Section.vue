@@ -4,11 +4,12 @@
     <div class="song-index"
          v-show="playerShowImage">
       <div class="song-image">
-        <div class="image"
+        <div class="image-box"
              :class="cdCls">
-          <img :src="picUrl"
-               :key="picUrl">
-          <div class="img-linght"></div>
+          <div class="image">
+            <img v-lazy="picUrl"
+                 :key="picUrl">
+          </div>
         </div>
       </div>
       <div class="current-play-lyric">
@@ -55,6 +56,7 @@ export default {
     return {
       nolyric: true,
       text: ''
+
     }
   },
 
@@ -175,16 +177,26 @@ export default {
     justify-content: space-around;
 
     .song-image {
-      .image {
+      .image-box {
         margin: 0 auto;
-        position: relative;
         width: 4.5rem;
         height: 4.5rem;
-        border-radius: 50%;
         padding: 1.35rem;
-        background: transparent url('http://s3.music.126.net/mobile-new/img/disc-plus.png?b700b62e1971b351dcb8b8ce1c9ceea3=') center center;
+        background: transparent url('../../../../../src/assets/images/cover-bg.svg') center center;
         background-size: 100% 100%;
-        border-radius: 50%;
+
+        .image {
+          width: 4.5rem;
+          height: 4.5rem;
+          border-radius: 50%;
+
+          img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+          }
+        }
 
         &.play {
           animation: rotate 20s linear infinite;
@@ -192,25 +204,6 @@ export default {
 
         &.pause {
           animation-play-state: paused;
-        }
-
-        img {
-          display: block;
-          width: 100%;
-          height: 100%;
-          border-radius: 50%;
-          background: $color-common-b;
-        }
-
-        .img-linght {
-          position: absolute;
-          left: 0;
-          top: 0;
-          width: 100%;
-          height: 100%;
-          border-radius: 50%;
-          background: transparent url('http://s3.music.126.net/mobile-new/img/disc_light-plus.png?4392c8c9a8a33d4b2b2c33d3995503c9=') center center;
-          background-size: 100% 100%;
         }
       }
     }

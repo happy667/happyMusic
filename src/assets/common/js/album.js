@@ -4,6 +4,7 @@ export default class Album {
     name,
     picUrl,
     singerName,
+    size,
     publishTime
   }) {
     this.id = id
@@ -11,5 +12,6 @@ export default class Album {
     this.picUrl = picUrl
     this.singerName = singerName
     this.publishTime = publishTime
+    this.size = size
   }
 }

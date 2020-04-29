@@ -175,18 +175,11 @@ export default {
 
     .logo {
       position: relative;
-      height: 0;
-      padding-bottom: 5.5rem;
-      margin: 0.7rem auto 0.5rem;
-      width: 4rem;
+      margin: 1.5rem auto 0.9rem;
+      width: 3.2rem;
       text-align: center;
 
       img {
-        position: absolute;
-        left: 0;
-        top: 0;
-        right: 0;
-        bottom: 0;
         width: 100%;
         height: 100%;
       }
@@ -202,8 +195,10 @@ export default {
       padding: 0.4rem 0.5rem;
 
       .login {
+        padding: 0 1rem;
         margin-bottom: 0.45rem;
         width: 100%;
+        box-sizing: border-box;
       }
     }
 

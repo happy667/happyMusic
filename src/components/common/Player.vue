@@ -107,7 +107,6 @@ export default {
         })
       } else {
         this.$nextTick(() => {
-          audio.pause()
           let v = audio.volume
           clearInterval(this.t2)
           // 减音量

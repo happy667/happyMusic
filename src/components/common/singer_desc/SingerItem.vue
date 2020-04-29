@@ -123,7 +123,7 @@ export default {
       align-items: center;
 
       .singer-avatar {
-        margin-right: 0.5rem;
+        margin-right: 0.4rem;
       }
 
       .singer-info {

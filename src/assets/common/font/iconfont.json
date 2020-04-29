@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "4425891",
+      "name": "缩小",
+      "font_class": "suoxiao",
+      "unicode": "e7af",
+      "unicode_decimal": 59311
+    },
+    {
       "icon_id": "228983",
       "name": "退出",
       "font_class": "tuichu",
@@ -32,13 +39,6 @@
       "font_class": "zanting",
       "unicode": "e79f",
       "unicode_decimal": 59295
-    },
-    {
-      "icon_id": "6207819",
-      "name": "播放中",
-      "font_class": "ziyuanldpi",
-      "unicode": "e61c",
-      "unicode_decimal": 58908
     },
     {
       "icon_id": "386337",
@@ -92,7 +92,7 @@
     {
       "icon_id": "2119410",
       "name": "放大",
-      "font_class": "amplification_icon",
+      "font_class": "fangda",
       "unicode": "e666",
       "unicode_decimal": 58982
     },

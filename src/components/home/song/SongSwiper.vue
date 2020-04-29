@@ -8,6 +8,7 @@
              :key="item.id"
              @click="handleSelect(item,index)">
           <song-item :showImage="true"
+                     :showIndex="false"
                      :song="item"></song-item>
         </div>
       </div>

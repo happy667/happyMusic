@@ -86,7 +86,7 @@ export default {
     .image {
       width: 100%;
       height: 100%;
-      transition: background-image 1s;
+      transition: background-image 0.6s;
       background: no-repeat 50% / cover;
       filter: blur(100px);
     }

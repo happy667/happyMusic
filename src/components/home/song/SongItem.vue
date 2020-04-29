@@ -4,7 +4,7 @@
     <!-- 索引 -->
     <div class="song-index"
          :class="top?'rank':''"
-         v-if="index">{{index}}</div>
+         v-if="showIndex">{{index}}</div>
     <!-- 歌曲图片 -->
     <div class="song-img"
          v-if="showImage">
@@ -36,6 +36,7 @@
         </div>
         <div v-else
              class="icon love"
+             :class="song.isLike ? 'active' : ''"
              @click.stop="selectItemLove">
           <i class="iconfont"
              :class="loveIcon"></i>
@@ -62,6 +63,11 @@ export default {
       default: () => false
     },
     top: {
+      type: Boolean,
+      default: () => false
+    },
+    // 是否显示索引
+    showIndex: {
       type: Boolean,
       default: () => false
     }
@@ -176,7 +182,7 @@ export default {
 .songs-list-item-containter {
   position: relative;
   display: flex;
-  padding: 0.2rem 0.2rem 0.2rem 0;
+  padding: 0.2rem 0.4rem;
 
   &.disable {
     color: $color-common-b2;
@@ -184,7 +190,7 @@ export default {
   }
 
   .song-index {
-    width: 1.4rem;
+    margin-right: 0.4rem;
     height: 1.4rem;
     line-height: 1.4rem;
     font-size: $font-size-small;
@@ -222,15 +228,14 @@ export default {
       font-size: $font-size-smaller;
       line-height: 0.7rem;
       flex: 1;
+      width: 1%;
 
       .song-name {
-        max-width: 4.7rem;
         font-weight: 500;
         no-wrap();
       }
 
       .sg-info {
-        max-width: 4.7rem;
         color: $color-common-b2;
         no-wrap();
       }
@@ -248,7 +253,11 @@ export default {
         align-items: center;
         justify-content: center;
         font-size: 0.6rem;
-        color: $color-common;
+        color: $color-common-b2;
+
+        &.active {
+          color: $color-common;
+        }
 
         i {
           font-size: 0.6rem;

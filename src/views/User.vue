@@ -14,7 +14,7 @@
                  class="animated fadeIn">
           </div>
           <div class="icon"
-               @click="$router.push({name:'login'})"
+               @click="$router.push({name:'index'})"
                v-else>
             <van-icon name="user-o" />
           </div>

@@ -51,11 +51,15 @@ export default {
     handleClick () {
       let list = this.currentSong.singersList
       if (list.length === 1) { // 只有一个歌手直接跳转到歌手页面
-        this.setSingerCurrentIndex(0)
-        this.$router.push(`/singerInfo/${list[0].id}`)
+        let currentPath = `/singerInfo/${this.currentSong.singersList[0].id}`
+        if (this.$route.path !== currentPath) { // 如果当前歌手详情页就是所选歌手直接隐藏全屏播放器
+          this.setSingerCurrentIndex(0)
+          this.$router.push(`/singerInfo/${this.currentSong.singersList[0].id}`)
+        }
+        this.setIsPlayerClick(true)
+        this.setPlayerFullScreen(false)
       } else {
         this.showSingerPopup = true
-        console.log(this.showSingerPopup)
       }
       this.setIsPlayerClick(true)
     },

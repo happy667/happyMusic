@@ -231,6 +231,7 @@ export default {
             name: item.name,
             picUrl: item.picUrl,
             singerName: item.artist.name,
+            size: item.size,
             publishTime: item.publishTime
           })
           albumList.push(album)
