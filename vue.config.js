@@ -38,5 +38,17 @@ module.exports = {
   },
   assetsDir: 'static',
   parallel: false,
-  publicPath: './'
+  publicPath: './',
+  devServer: {
+    // 解决跨域问题
+    proxy: {
+      '/api': {
+        target: 'http://120.77.183.150:3000',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': ''
+        }
+      }
+    }
+  }
 }

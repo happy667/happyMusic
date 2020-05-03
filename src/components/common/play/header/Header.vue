@@ -2,12 +2,21 @@
   <header class="header-container">
     <div class="back"
          @click="handleBack">
-      <van-icon name="arrow-down" />
+      <div class="icon">
+        <van-icon name="arrow-down" />
+      </div>
     </div>
     <div class="song-info">
       <div class="song-name">{{currentSong.name}}</div>
       <div class="singer"
            @click="handleClick">{{currentSong.singers}}</div>
+    </div>
+    <div class="share"
+         ref="share"
+         @click="handleClickShare()">
+      <div class="icon">
+        <i class="iconfont icon-fenxiang"></i>
+      </div>
     </div>
     <singer-popup :list="currentSong.singersList"
                   :showPopup="showSingerPopup"
@@ -20,8 +29,9 @@
 
 </template>
 <script>
+import Clipboard from 'clipboard'
 import SingerPopup from '@/components/common/SingerPopup'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapState, mapGetters, mapMutations } from 'vuex'
 export default {
   data () {
     return {
@@ -30,6 +40,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['currentPlayIndex', 'user']),
     ...mapGetters(['currentSong']),
     // 是否要加载图片
     isLoadImage: {
@@ -41,6 +52,14 @@ export default {
       }
     }
 
+  },
+  watch: {
+    currentPlayIndex () {
+      if (this.currentPlayIndex !== -1) {
+        // 初始化分享
+        this.initShare()
+      }
+    }
   },
   methods: {
     ...mapMutations(['setPlayerFullScreen', 'setSinger', 'setSingerCurrentIndex', 'setIsPlayerClick', 'setAddNoCacheComponents', 'setIsGetSingerImage']),
@@ -69,6 +88,28 @@ export default {
       this.setPlayerFullScreen(false)
       this.showSingerPopup = false
     },
+    // 分享
+    handleClickShare () {
+      this.clipboard.on('success', e => {
+        this.$toast('已复制到剪贴板')
+      })
+      this.clipboard.on('error', e => {
+        this.$toast('浏览器不支持自动复制')
+      })
+    },
+    // 初始化分享
+    initShare () {
+      // 分享
+      this.clipboard = new Clipboard(this.$refs.share, {
+        text: () => {
+          if (this.user) {
+            return `分享${this.currentSong.singers}的单曲《${this.currentSong.name}》:\rhttps://music.163.com/#/song/${this.currentSong.id}/?userid=${this.user.userId}(来自@网易云音乐)`
+          } else {
+            return `分享${this.currentSong.singers}的单曲《${this.currentSong.name}》:\rhttps://music.163.com/#/song/${this.currentSong.id}(来自@网易云音乐)`
+          }
+        }
+      })
+    },
     // 数据获取完成
     handleFinished () {
       this.isLoadImage = false
@@ -85,20 +126,28 @@ export default {
 @import '~common/stylus/variable';
 
 .header-container {
-  margin: 0.3rem 0.3rem 0.1rem 0.3rem;
+  margin: 0.2rem 0.1rem 0.1rem;
   position: relative;
   display: flex;
   font-size: $font-size-small;
 
-  .back {
+  .back, .share {
     position: absolute;
     top: 0;
-    left: 0;
     width: 1rem;
-    height: 0.7rem;
-    line-height: 0.7rem;
+    height: 1rem;
+    line-height: 1rem;
     color: $color-common;
     z-index: 999;
+    text-align: center;
+
+    i {
+      font-size: $font-size-small;
+    }
+  }
+
+  .back {
+    left: 0;
   }
 
   .song-info {
@@ -124,6 +173,10 @@ export default {
       no-wrap();
       color: $color-common-x;
     }
+  }
+
+  .share {
+    right: 0;
   }
 }
 </style>

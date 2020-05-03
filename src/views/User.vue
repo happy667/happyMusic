@@ -91,7 +91,7 @@
 
           </div>
 
-          <template v-if="userSongSheet&&userAlbum">
+          <template v-if="userSongSheet&&userAlbum&&userVideo">
             <div class="my-follow">
               <van-collapse v-model="activeNames"
                             @change="changeCollapse"
@@ -125,6 +125,22 @@
                     <no-result text="还没有专辑,快去收藏吧"></no-result>
                   </template>
                 </van-collapse-item>
+
+                <van-collapse-item name="3"
+                                   ref="collapseItem3">
+                  <template #title>
+                    <div class="title">
+                      <div class="text">收藏的视频</div>
+                      <span class="count">({{videoCount}}个)</span>
+                    </div>
+
+                  </template>
+                  <video-list @select="goToVideoInfo"
+                              :list="userVideo"></video-list>
+                  <template v-if="userVideo.length===0">
+                    <no-result text="还没有视频,快去收藏吧"></no-result>
+                  </template>
+                </van-collapse-item>
               </van-collapse>
             </div>
           </template>
@@ -139,6 +155,8 @@
   </div>
 </template>
 <script>
+import videoList from '@/components/common/video/VideoList'
+import Video from '@/assets/common/js/video.js'
 import Album from '@/assets/common/js/album.js'
 import Scroll from '@/components/common/Scroll'
 import NoResult from '@/components/common/NoResult'
@@ -157,7 +175,8 @@ export default {
       userCount: null,
       userSongSheet: null, // 用户歌单
       userAlbum: null, // 用户专辑
-      activeNames: ['1', '2']
+      userVideo: null, // 用户视频
+      activeNames: ['1', '2', '3']
     }
   },
   mixins: [playlistMixin],
@@ -175,9 +194,12 @@ export default {
     albumCount () {
       return this.userAlbum ? this.userAlbum.length : 0
     },
+    videoCount () {
+      return this.userVideo ? this.userVideo.length : 0
+    },
     load () {
       if (this.user) { // 判断是否登录
-        if (!this.userSongSheet || !this.userAlbum) { // 判断是否加载完收藏专辑和歌单
+        if (!this.userSongSheet || !this.userAlbum || !this.userVideo) { // 判断是否加载完收藏专辑和歌单、视频
           return true
         } else {
           return false
@@ -207,6 +229,8 @@ export default {
       this.getUserAlbum()
       // 获取用户收藏的歌单
       this.getUserSongSheet(this.user.userId)
+      // 获取用户收藏的视频
+      this.getUserVideo()
     }
   },
 
@@ -260,6 +284,27 @@ export default {
         this.userAlbum = albumList
       }
     },
+    async getUserVideo () {
+      const {
+        data: res
+      } = await userApi.getUserVideo()
+      if (res.code === ERR_OK) {
+        let videoList = []
+        res.data.forEach(item => {
+          let video = new Video({
+            id: item.vid,
+            coverUrl: item.coverUrl,
+            name: item.title,
+            playCount: item.playTime,
+            type: item.type,
+            duration: item.durationms,
+            creatorName: item.creator.map(item => item.userName).join('/')
+          })
+          videoList.push(video)
+        })
+        this.userVideo = videoList
+      }
+    },
 
     // 点击跳转到编辑页面
     handleEdit () {
@@ -294,11 +339,17 @@ export default {
         case '2':
           element = this.$refs.collapseItem2.$el
           break
+        case '3':
+          element = this.$refs.collapseItem3.$el
+          break
       }
       if (element) {
         this.$refs.user_scroll.scrollToElement(element, 0)
       }
       this.$refs.user_scroll.refresh()
+    },
+    goToVideoInfo (video) {
+      this.$router.push(`/videoInfo/${video.id}`)
     }
 
   },
@@ -306,7 +357,8 @@ export default {
     SongSheetMiniList,
     AlbumList,
     NoResult,
-    Scroll
+    Scroll,
+    videoList
   }
 }
 </script>

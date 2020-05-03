@@ -8,7 +8,7 @@ const service = axios.create({
   withCredentials: true
 })
 // 配置请求根路径
-service.defaults.baseURL = ' http://120.77.183.150:3000'
+service.defaults.baseURL = 'api'
 // request拦截器设置
 service.interceptors.request.use(request => {
   // 判断是否连接网络,如果连接则发送请求，否则提示用户连接

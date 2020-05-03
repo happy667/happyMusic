@@ -2,7 +2,8 @@
   <div class="videoInfo-container">
     <!-- 头部导航栏 -->
     <van-sticky>
-      <van-nav-bar :title="$route.meta.title"
+      <van-nav-bar ref="navBar"
+                   :title="$route.meta.title"
                    left-arrow
                    @click-left="routerBack" />
     </van-sticky>
@@ -13,6 +14,7 @@
     </template>
     <template v-else>
       <div class="video"
+           ref="video"
            :class="fixed?'fixed':''">
         <video-component :videoParams="video"
                          @openFullScreen="fixed=false"
@@ -23,7 +25,7 @@
       <section class="container">
         <!-- 视频信息 -->
         <div class="video-info">
-          <div class="info-top van-hairline--bottom"
+          <div class="info-top"
                @click="handleToggleInfo">
             <div class="content">
               <!-- 视频标题 -->
@@ -52,6 +54,39 @@
               </div>
             </div>
           </div>
+          <!-- 视频收藏、分享、点赞、评论 -->
+          <div class="info-center van-hairline--bottom">
+            <div class="item"
+                 @click="handleClickLove">
+              <div class="love icon">
+                <i class="iconfont icon-dianzan"></i>
+              </div>
+              <p class="text">{{video.likeCount|convertCount}}</p>
+            </div>
+            <div class="item"
+                 :class="video.followed?'active':''"
+                 @click="handleClickFollow">
+              <div class="follow icon">
+                <van-icon :name="followIcon" />
+              </div>
+              <p class="text">{{video.subCount|convertCount}}</p>
+            </div>
+            <div class="item"
+                 @click="handleClickComment">
+              <div class="comment icon">
+                <van-icon name="more-o" />
+              </div>
+              <p class="text">{{video.commentCount|convertCount}}</p>
+            </div>
+            <div class="item"
+                 ref="share"
+                 @click="handleClickShare()">
+              <div class="share icon">
+                <i class="iconfont icon-fenxiang"></i>
+              </div>
+              <p class="text">{{video.shareCount|convertCount}}</p>
+            </div>
+          </div>
           <!-- 视频出处 -->
           <div class="info-bottom"
                @click="selectCreator(video.creatorList)">
@@ -78,6 +113,7 @@
             </div>
             <!-- 评论列表 -->
             <div class="comment"
+                 ref="commentContainer"
                  v-if="commentList">
               <div class="comment-title">精彩评论{{commentText}}</div>
               <van-list v-model="loading"
@@ -107,6 +143,7 @@
   </div>
 </template>
 <script>
+import Clipboard from 'clipboard'
 import MyImage from '@/components/common/img/Image'
 import VideoComponent from './Video'
 import CommentList from '@/components/home/comment/CommentList'
@@ -118,6 +155,7 @@ import VideoDetail from '@/assets/common/js/videoDetail.js'
 import Video from '@/assets/common/js/video.js'
 import Singer from '@/assets/common/js/singer.js'
 import SingerPopup from '@/components/common/SingerPopup'
+import userApi from '@/api/user.js'
 import { mapMutations, mapState } from 'vuex'
 import {
   ERR_OK
@@ -153,12 +191,15 @@ export default {
   },
   inject: ['reload'],
   computed: {
-    ...mapState(['currentPlayIndex']),
+    ...mapState(['currentPlayIndex', 'user']),
     commentText () {
       return this.commentCount === 0 ? '' : this.commentCount
     },
     rightIcon () {
       return this.showMoreInfo ? 'arrow-up' : 'arrow-down'
+    },
+    followIcon () {
+      return this.video.followed ? 'like' : 'like-o'
     },
     // 是否要加载图片
     isLoadImage: {
@@ -177,6 +218,8 @@ export default {
       await this.getVideoComment(this.id)
       // 初始化加载图片
       this.isLoadImage = true
+      // 初始化分享
+      this.initShare()
     })
   },
   methods: {
@@ -196,12 +239,17 @@ export default {
           coverUrl: data.cover,
           name: data.name,
           playCount: data.playCount,
+          subCount: data.subCount,
+          commentCount: data.commentCount,
+          shareCount: data.shareCount,
+          likeCount: data.likeCount,
           url: this.handleUrls(data.brs),
           publishTime: data.publishTime,
           desc: data.desc,
           duration: data.duration,
           creatorName: data.artists.map(item => item.name).join('/'),
-          creatorList
+          creatorList,
+          followed: res.subed
         })
 
         data.artists.forEach(item => {
@@ -318,6 +366,69 @@ export default {
     clickListItem () {
       this.showSingerPopup = false
     },
+    handleClickFollow () {
+      if (this.user) { // 说明已经登录
+        this.follow() // 收藏/取消收藏专辑
+      } else { // 弹窗提示去登录
+        this.$utils.alertLogin(this.$router.currentRoute.fullPath)
+      }
+    },
+    // 收藏/取消收藏专辑
+    follow () {
+      let follow = !this.video.followed
+      follow = follow ? 1 : 0// 1代表收藏，0代表不收藏
+      if (follow) { // 收藏
+        userApi.updateFollowVideo(this.video.id, follow).then(res => {
+          if (res.data.code === ERR_OK) {
+            this.video.followed = true
+          }
+        }).catch(err => {
+          this.$toast(err.data.message)
+        })
+      } else {
+        this.$utils.alertConfirm({ message: '确定不再收藏该视频', confirmButtonText: '不再收藏' }).then(async () => {
+          userApi.updateFollowVideo(this.id, follow).then(res => {
+            if (res.data.code === ERR_OK) {
+              this.video.followed = false
+              this.$toast('已不再收藏')
+            }
+          }).catch(err => {
+            this.$toast(err.data.message)
+          })
+        }).catch(() => { })
+      }
+    },
+    handleClickLove () {
+      this.$toast('因api原因暂未实现')
+    },
+    // 点击评论
+    handleClickComment () {
+      let element = this.$refs.commentContainer
+      let otherHeight = this.$refs.navBar.$el.offsetHeight + this.$refs.video.offsetHeight
+      this.$utils.positionToElement(element, otherHeight)
+    },
+    // 分享
+    handleClickShare () {
+      this.clipboard.on('success', e => {
+        this.$toast('已复制到剪贴板')
+      })
+      this.clipboard.on('error', e => {
+        this.$toast('浏览器不支持自动复制')
+      })
+    },
+    // 初始化分享
+    initShare () {
+      // 分享
+      this.clipboard = new Clipboard(this.$refs.share, {
+        text: () => {
+          if (this.user) {
+            return `${this.video.creatorName}的视频《${this.video.name}》:\rhttps://music.163.com/#/mv/${this.video.id}/?userid=${this.user.userId}(来自@网易云音乐)`
+          } else {
+            return `${this.video.creatorName}的视频《${this.video.name}》:\rhttps://music.163.com/#/mv/${this.video.id}(来自@网易云音乐)`
+          }
+        }
+      })
+    },
     // 数据获取完成
     handleFinished () {
       this.isLoadImage = false
@@ -364,7 +475,7 @@ export default {
       flex-direction: column;
 
       .info-top {
-        padding: 0.1rem 0.5rem;
+        padding: 0.1rem 0.5rem 0;
         line-height: 1rem;
 
         .content {
@@ -403,6 +514,36 @@ export default {
 
           .bottom {
             line-height: 0.5rem;
+          }
+        }
+      }
+
+      .info-center {
+        padding: 0.3rem 0;
+        display: flex;
+
+        .item {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          text-align: center;
+          color: $color-common-b2;
+
+          .icon {
+            height: 0.7rem;
+            line-height: 0.7rem;
+            margin-bottom: 0.2rem;
+
+            i {
+              font-size: $font-size-large;
+            }
+          }
+
+          &.active {
+            .icon {
+              color: $color-common;
+            }
           }
         }
       }

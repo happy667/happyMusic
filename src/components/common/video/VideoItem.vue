@@ -81,6 +81,7 @@ export default {
     font-size: $font-size-mini;
 
     .video-title {
+      color: $color-common-x;
       line-height: 0.5rem;
       font-weight: bold;
       no-wrap2();

@@ -72,6 +72,14 @@ export default {
       url
     })
   },
+  // 获取用户收藏的视频
+  getUserVideo() {
+    const url = `/mv/sublist?timestamp=${new Date().getTime()}`
+    return request({
+      url
+    })
+  },
+
   // 收藏/取消关注歌单
   updateFollowSongSheet(id, t) {
     const url = `/playlist/subscribe?t=${t}&id=${id}&timestamp=${new Date().getTime()}`
@@ -90,6 +98,14 @@ export default {
   // 收藏/取消关注专辑
   updateFollowAlbum(id, t) {
     const url = `/album/sub?timestamp=${new Date().getTime()}`
+    return request.post(url, {
+      id,
+      t
+    })
+  },
+  // 收藏/取消关注视频
+  updateFollowVideo(id, t) {
+    const url = `/mv/sub?mvid=${id}&t=${t}&timestamp=${new Date().getTime()}`
     return request.post(url, {
       id,
       t

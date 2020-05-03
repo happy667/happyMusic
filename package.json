@@ -13,6 +13,7 @@
     "babel-polyfill": "^6.26.0",
     "babel-runtime": "^6.26.0",
     "better-scroll": "^1.15.2",
+    "clipboard": "^2.0.6",
     "fastclick": "^1.0.6",
     "lib-flexible": "^0.3.2",
     "lyric-parser": "^1.0.1",

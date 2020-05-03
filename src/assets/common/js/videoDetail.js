@@ -7,11 +7,15 @@ export default class VideoDetail {
     artist,
     url,
     commentCount,
+    likeCount,
+    shareCount,
+    subCount,
     publishTime,
     desc,
     duration,
     creatorName,
-    creatorList
+    creatorList,
+    followed
   }) {
     this.id = id
     this.coverUrl = coverUrl
@@ -20,10 +24,14 @@ export default class VideoDetail {
     this.artist = artist
     this.url = url
     this.commentCount = commentCount
+    this.likeCount = likeCount
+    this.shareCount = shareCount
+    this.subCount = subCount
     this.publishTime = publishTime
     this.desc = desc
     this.duration = duration
     this.creatorName = creatorName
     this.creatorList = creatorList
+    this.followed = followed
   }
 }
