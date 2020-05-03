@@ -27,7 +27,7 @@ import Album from '@/assets/common/js/album.js'
 import { ERR_OK } from '@/api/config.js'
 import { mapState } from 'vuex'
 import {
-  searchType
+  SEARCH_TYPE
 } from '@/assets/common/js/config.js'
 export default {
   name: 'searchResultMV',
@@ -66,7 +66,7 @@ export default {
       this.loading = true
       // 设置偏移量=album列表长度
       let offset = this.album.albumList.length
-      const { data: res } = await searchApi.getSearchResult(this.searchKeywords, searchType.album, offset, 12)
+      const { data: res } = await searchApi.getSearchResult(this.searchKeywords, SEARCH_TYPE.album, offset, 12)
       if (res.code === ERR_OK) {
         // 没有查询到数据
         if (!res.result.albums || res.result.albumCount === 0) {

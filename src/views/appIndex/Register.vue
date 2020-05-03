@@ -295,6 +295,10 @@ export default {
 
     .register-form>>>.van-cell {
       margin-bottom: 0.35rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
 
     .register-form {
@@ -304,7 +308,7 @@ export default {
 
       .register {
         padding: 0 1rem;
-        margin-bottom: 0.45rem;
+        margin: 0.45rem 0;
         width: 100%;
         box-sizing: border-box;
       }

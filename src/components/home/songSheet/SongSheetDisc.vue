@@ -78,7 +78,9 @@
             <!-- 歌曲列表 -->
             <songs-list :songsList="songSheetDisc.songs"
                         ref="songList"
-                        :showImage="true"
+                        :showImage="!rank"
+                        :showIndex="rank"
+                        :top="rank"
                         @select="selectSong" />
 
             <no-result v-if="songSheetDisc.songs.length===0"
@@ -150,13 +152,8 @@ export default {
       }
     }
   },
-  destroyed () {
-    if (this.rank) {
-      this.setRank(false)
-    }
-  },
   computed: {
-    ...mapState(['user', 'rank', 'hideMiniPlayer', 'currentPlayIndex']),
+    ...mapState(['user', 'hideMiniPlayer', 'currentPlayIndex']),
     ...mapGetters(['currentSong']),
     // 是否显示定位
     isShowPosition () {
@@ -164,6 +161,9 @@ export default {
       // 判断当前歌曲列表是否有正在播放的歌曲（-1表示没有)
       let index = this.$utils.findIndex(this.songSheetDisc.songs, this.currentSong)
       return this.showPosition && index !== -1
+    },
+    rank () {
+      return Boolean(this.$route.query.rank)
     }
   },
   methods: {

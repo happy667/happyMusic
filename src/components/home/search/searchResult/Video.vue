@@ -27,7 +27,7 @@ import Video from '@/assets/common/js/video.js'
 import { ERR_OK } from '@/api/config.js'
 import { mapState } from 'vuex'
 import {
-  searchType
+  SEARCH_TYPE
 } from '@/assets/common/js/config.js'
 export default {
   name: 'searchResultMV',
@@ -66,7 +66,7 @@ export default {
       this.loading = true
       // 设置偏移量=mv列表长度
       let offset = this.mv.mvList.length
-      const { data: res } = await searchApi.getSearchResult(this.searchKeywords, searchType.mv, offset, 8)
+      const { data: res } = await searchApi.getSearchResult(this.searchKeywords, SEARCH_TYPE.mv, offset, 8)
       if (res.code === ERR_OK) {
         // 没有查询到数据
         if (!res.result.mvs || res.result.mvCount === 0) {

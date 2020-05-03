@@ -17,8 +17,9 @@ export default {
   // 喜欢音乐
   likeMusic(id, like) {
     const url = `/like?id=${id}&like=${like}&timestamp=${new Date().getTime()}`
-    return request({
-      url
+    return request.post(url, {
+      id,
+      like
     })
   },
   // 获取用户关注的歌手
@@ -31,8 +32,9 @@ export default {
   // 关注/取消关注歌手
   updateFollowSinger(id, t) {
     const url = `/artist/sub?id=${id}&t=${t}&timestamp=${new Date().getTime()}`
-    return request({
-      url
+    return request.post(url, {
+      id,
+      t
     })
   },
   // 获取用户播放记录
@@ -73,8 +75,9 @@ export default {
   // 收藏/取消关注歌单
   updateFollowSongSheet(id, t) {
     const url = `/playlist/subscribe?t=${t}&id=${id}&timestamp=${new Date().getTime()}`
-    return request({
-      url
+    return request.post(url, {
+      id,
+      t
     })
   },
   // 获取用户收藏的专辑
@@ -86,9 +89,10 @@ export default {
   },
   // 收藏/取消关注专辑
   updateFollowAlbum(id, t) {
-    const url = `/album/sub?t=${t}&id=${id}&timestamp=${new Date().getTime()}`
-    return request({
-      url
+    const url = `/album/sub?timestamp=${new Date().getTime()}`
+    return request.post(url, {
+      id,
+      t
     })
   },
   // 更改用户信息

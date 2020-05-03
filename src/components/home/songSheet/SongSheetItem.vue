@@ -62,7 +62,6 @@ export default {
     line-height: 0.55rem;
     word-wrap: break-word;
     font-size: $font-size-smaller;
-    font-family: $font-common-title;
     no-wrap2();
   }
 

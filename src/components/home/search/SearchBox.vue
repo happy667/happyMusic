@@ -39,13 +39,13 @@
                 <div class="index">{{index+1}}</div>
                 <div class="search-info">
                   <div class="top">
-                    <div class="name">{{item.searchWord}}</div>
-                    <div class="icon"
-                         v-if="item.iconUrl">
+                    <span class="name">{{item.searchWord}}</span>
+                    <span class="icon"
+                          v-if="item.iconUrl">
                       <img :src="item.iconUrl">
-                    </div>
+                    </span>
                   </div>
-                  <div class="bottom">{{item.content}}</div>
+                  <p class="bottom">{{item.content}}</p>
                 </div>
               </div>
               <div class="right">{{item.score}}</div>
@@ -200,6 +200,8 @@ export default {
           color: $color-common-b2;
 
           .left {
+            width: 1%;
+            flex: 1;
             display: flex;
 
             &.top {
@@ -223,10 +225,11 @@ export default {
             }
 
             .search-info {
+              flex: 1;
               display: flex;
               flex-direction: column;
               line-height: 0.5rem;
-              no-wrap();
+              overflow: hidden;
 
               .top {
                 display: flex;
@@ -235,6 +238,7 @@ export default {
                   color: $color-common-x;
                   font-size: $font-size-smaller-x;
                   margin-right: 0.15rem;
+                  no-wrap();
                 }
 
                 .icon {
@@ -250,6 +254,7 @@ export default {
               }
 
               .bottom {
+                no-wrap();
               }
             }
           }

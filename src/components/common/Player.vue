@@ -37,7 +37,7 @@ import FullScreenPlay from './play/FullScreenPlay'
 import MiniPlay from './play/MiniPlay'
 import PlayList from '@/components/home/playList/PlayList'
 import {
-  playMode
+  PLAY_MODE
 } from '@/assets/common/js/config.js'
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 export default {
@@ -226,7 +226,7 @@ export default {
     // 播放结束
     handleEnd () {
       // 如果是单曲循环
-      if (this.playMode === playMode.loop) {
+      if (this.playMode === PLAY_MODE.loop) {
         this.loop()
       } else {
         this.$nextTick(() => {
@@ -241,14 +241,14 @@ export default {
       const mode = (this.playMode + 1) % 3
       this.setPlayMode(mode)
       let list = null
-      if (mode === playMode.random) { // 随机播放
+      if (mode === PLAY_MODE.random) { // 随机播放
         list = this.$utils.randomList(this.sequenceList)
       } else {
         list = this.sequenceList
       }
       this.resetCurrentIndex(list)
       this.setPlayList(list)
-      this.$toast(this.playMode === playMode.sequence ? '列表循环' : this.playMode === playMode.loop ? '单曲循环' : '随机播放')
+      this.$toast(this.playMode === PLAY_MODE.sequence ? '列表循环' : this.playMode === PLAY_MODE.loop ? '单曲循环' : '随机播放')
     },
     // 重置当前索引
     resetCurrentIndex (list) {

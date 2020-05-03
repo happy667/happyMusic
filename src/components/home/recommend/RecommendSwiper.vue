@@ -30,7 +30,7 @@ import {
   ERR_OK
 } from '@/api/config.js'
 import {
-  targetType
+  TARGET_TYPE
 } from '@/assets/common/js/config.js'
 import { mapGetters } from 'vuex'
 import { getData, getParentByClassName } from '@/assets/common/js/dom.js'
@@ -54,16 +54,16 @@ export default {
     selectItem (id, type) {
       type = parseInt(type)
       switch (type) {
-        case targetType.song:// 歌曲
+        case TARGET_TYPE.song:// 歌曲
           this.selectSong(id)
           break
-        case targetType.video:// 视频
+        case TARGET_TYPE.video:// 视频
           this.$router.push(`/videoInfo/${id}`)
           break
-        case targetType.album:// 专辑
+        case TARGET_TYPE.album:// 专辑
           this.$router.push(`/singerAlbum/${id}`)
           break
-        case targetType.songSheet:// 歌单
+        case TARGET_TYPE.songSheet:// 歌单
           this.$router.push(`/songSheetDisc/${id}`)
           break
       }

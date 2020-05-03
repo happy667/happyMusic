@@ -12,7 +12,7 @@
         <song-item @noLike="handleNoLike"
                    :showImage="showImage"
                    :song="item"
-                   :top="index<3&&rank"
+                   :top="index<3&&top"
                    :index="index+1"
                    :showIndex="showIndex"></song-item>
       </li>
@@ -22,7 +22,7 @@
 </template>
 <script>
 import SongItem from './SongItem'
-import { mapState, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 export default {
   props: {
     songsList: Array,
@@ -33,10 +33,13 @@ export default {
     showIndex: {
       type: Boolean,
       default: () => false
+    },
+    top: {
+      type: Boolean,
+      default: () => false
     }
   },
   computed: {
-    ...mapState(['rank']),
     ...mapGetters(['currentSong'])
   },
 

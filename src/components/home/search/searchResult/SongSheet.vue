@@ -22,7 +22,7 @@ import NoResult from '@/components/common/NoResult'
 import searchApi from '@/api/search.js'
 import { ERR_OK } from '@/api/config.js'
 import {
-  searchType
+  SEARCH_TYPE
 } from '@/assets/common/js/config.js'
 import { mapState } from 'vuex'
 export default {
@@ -58,7 +58,7 @@ export default {
       this.loading = true
       // 设置偏移量=歌单列表长度
       let offset = this.songSheet.songSheetList.length
-      const { data: res } = await searchApi.getSearchResult(this.searchKeywords, searchType.songSheet, offset, 12)
+      const { data: res } = await searchApi.getSearchResult(this.searchKeywords, SEARCH_TYPE.songSheet, offset, 12)
       if (res.code === ERR_OK) {
         // 没有查询到数据
 

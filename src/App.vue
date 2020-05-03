@@ -16,7 +16,7 @@ import {
   ERR_OK
 } from '@/api/config.js'
 import {
-  USER_TOKEN, needLoginComponents
+  USER_TOKEN, NEED_LOGIN_COMPONENTS
 } from '@/assets/common/js/config.js'
 import {
   getItem, clearItem
@@ -103,7 +103,7 @@ export default {
           this.setUserLikeList(null)
           let name = this.$route.name
           // 判断当前路由是否为需要登录，如果是的话就刷新页面,否则跳转到用户首页
-          if (needLoginComponents.includes(this.$route.name)) {
+          if (NEED_LOGIN_COMPONENTS.includes(this.$route.name)) {
             // 添加不缓存路由
             this.$store.commit('setAddNoCacheComponents', 'user')
             if (name === 'user') {

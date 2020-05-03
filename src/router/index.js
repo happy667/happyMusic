@@ -19,7 +19,7 @@ const SearchResult = () => import(/* webpackChunkName:"search_searchBox_searchRe
 const Player = () => import('../components/common/Player')
 const SongComment = () => import('../components/home/song/SongComment')
 const SingerInfo = () => import('../components/home/singer/SingerInfo')
-const Album = () => import('../components/home/singer/album/Album')
+const Album = () => import('../components/home/singer/album/AlbumInfo')
 const AlbumComment = () => import('../components/home/singer/album/AlbumComment')
 
 const User = () => import(/* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend_userEdit" */ '../views/User')
@@ -491,7 +491,7 @@ router.beforeEach((to, from, next) => {
         next({
           name: 'login',
           query: {
-            redirect: to.fullPath // 未登录则跳转到登陆界面，query:{ Rurl: to.fullPath}表示把当前路由信息传递过去方便登录后跳转回来；
+            redirect: to.fullPath // 未登录则跳转到登陆界面，query:{ redirect: to.fullPath}表示把当前路由信息传递过去方便登录后跳转回来；
           }
         })
       }).catch(() => {

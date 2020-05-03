@@ -7,22 +7,6 @@ export default {
   setHomeCurrentIndex(state, index) {
     state.homeCurrentIndex = index
   },
-  // 设置字母表滚动索引
-  setScrollIndex(state, index) {
-    state.scrollIndex = index
-  },
-  // 设置rank
-  setRank(state, rank) {
-    state.rank = rank
-  },
-  // 设置滚动停止
-  setStop(state, stop) {
-    state.stop = stop
-  },
-  // 设置歌手页是否在滚动
-  setIsScroll(state, isScroll) {
-    state.isScroll = isScroll
-  },
   // 设置上次播放的video
   setOldVideo(state, video) {
     state.oldVideo = video

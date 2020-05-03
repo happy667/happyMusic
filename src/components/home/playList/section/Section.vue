@@ -140,10 +140,11 @@ export default {
 
         .left {
           display: flex;
+          flex: 1;
+          overflow: hidden;
 
           .song-desc {
             display: flex;
-            width: 6.5rem;
 
             .text {
               no-wrap();
@@ -192,7 +193,7 @@ export default {
             color: $color-common;
 
             .song-desc {
-              margin-right: 0.3rem;
+              margin-right: 0.5rem;
               overflow: hidden;
 
               .text {

@@ -2,7 +2,7 @@
   <!-- 关注 -->
   <div class="follow-container"
        @click.stop="handleClick"
-       :class="followCls">
+       :class="[followCls,plainCls]">
     <div class="icon">
       <van-icon :name="icon" />
     </div>
@@ -16,11 +16,19 @@ export default {
     followed: {
       type: Boolean,
       default: () => false
+    },
+    plain: {
+      type: Boolean,
+      default: () => false
     }
+
   },
   computed: {
     followCls () {
       return this.followed ? 'followed' : ''
+    },
+    plainCls () {
+      return this.plain ? 'plain' : ''
     },
     text () {
       return this.followed ? '已收藏' : '收藏'
@@ -53,9 +61,17 @@ export default {
     margin-right: 0.1rem;
   }
 
+  &.plain {
+    color: $color-common;
+    background: $color-common-background;
+    border: 1px solid $color-common;
+  }
+
   &.followed {
+    color: #fff;
     background: #e3e3e3;
     opacity: 0.9;
+    border: none;
   }
 }
 </style>

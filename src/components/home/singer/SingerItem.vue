@@ -5,7 +5,7 @@
       <div class="left">
         <!-- 歌手头像 -->
         <div class="singer-avatar">
-          <my-image :src="singer.avatar" />
+          <my-image :src="avatar" />
         </div>
         <!-- 歌手姓名 -->
         <div class="singer-name">{{singer.name}}</div>
@@ -25,6 +25,9 @@
 <script>
 import MyImage from '@/components/common/img/Image'
 import Follow from '@/components/common/Follow'
+import {
+  DEFAULT_SINGER_IMAGE
+} from '@/assets/common/js/config.js'
 import { mapMutations } from 'vuex'
 export default {
   props: {
@@ -37,6 +40,11 @@ export default {
   components: {
     MyImage,
     Follow
+  },
+  computed: {
+    avatar () {
+      return this.singer.avatar ? this.singer.avatar : DEFAULT_SINGER_IMAGE
+    }
   },
   methods: {
     ...mapMutations(['setSingerCurrentIndex']),

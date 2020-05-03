@@ -71,8 +71,8 @@ export default {
             this.$refs.ranking.refresh()
             break
           case 2:
-            this.$refs.singer.$refs.list.$refs.container.style.paddingBottom = bottom
-            this.$refs.singer.$refs.list.refresh()
+            this.$refs.singer.$refs.container.style.paddingBottom = bottom
+            this.$refs.singer.refresh()
             break
           case 3:
             this.$refs.mv.$refs.container.style.paddingBottom = bottom

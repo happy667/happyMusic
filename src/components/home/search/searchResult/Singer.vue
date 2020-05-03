@@ -25,7 +25,7 @@ import searchApi from '@/api/search.js'
 import { ERR_OK } from '@/api/config.js'
 import { mapState, mapMutations } from 'vuex'
 import {
-  searchType
+  SEARCH_TYPE
 } from '@/assets/common/js/config.js'
 export default {
   name: 'searchResultSinger',
@@ -38,6 +38,13 @@ export default {
       },
       loading: false,
       finished: false
+    }
+  },
+  watch: {
+    loadMore () {
+      this.$nextTick(() => {
+        this.refresh()
+      })
     }
   },
   computed: {
@@ -61,7 +68,7 @@ export default {
       this.loading = true
       // 设置偏移量=歌手列表长度
       let offset = this.singer.singerList.length
-      const { data: res } = await searchApi.getSearchResult(this.searchKeywords, searchType.singer, offset, 15)
+      const { data: res } = await searchApi.getSearchResult(this.searchKeywords, SEARCH_TYPE.singer, offset, 15)
       if (res.code === ERR_OK) {
         // 没有查询到数据
         if (!res.result.artists || res.result.artistCount === 0) {

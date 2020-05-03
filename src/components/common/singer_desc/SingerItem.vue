@@ -5,13 +5,15 @@
       <div class="left">
         <!-- 歌手头像 -->
         <div class="singer-avatar">
-          <my-image :src="_singer.avatar"
-                    size="big"></my-image>
+          <my-image :src="avatar"
+                    :size="imageSize"></my-image>
         </div>
         <!-- 歌手信息 -->
         <article class="singer-info">
           <div class="name">{{singerName}}</div>
           <div class="info">
+            <span v-if="_singer.songSize"
+                  class="songSize">单曲:{{_singer.songSize}}</span>
             <span v-if="_singer.albumSize"
                   class="albumSize">专辑:{{_singer.albumSize}}</span>
             <span v-if="_singer.mvSize"
@@ -25,6 +27,7 @@
            v-if="showFollow">
         <!-- 收藏 -->
         <follow @clickFollow="handleClickFollow"
+                plain
                 :followed="_singer.followed"></follow>
       </div>
     </div>
@@ -36,6 +39,9 @@ import MyImage from '@/components/common/img/Image'
 import Follow from '@/components/common/Follow'
 import userApi from '@/api/user.js'
 import { ERR_OK } from '@/api/config.js'
+import {
+  DEFAULT_SINGER_IMAGE
+} from '@/assets/common/js/config.js'
 import { mapState, mapMutations } from 'vuex'
 export default {
   props: {
@@ -43,6 +49,10 @@ export default {
     showFollow: {
       type: Boolean,
       default: () => true
+    },
+    imageSize: {
+      type: String,
+      default: () => 'big'
     }
   },
   computed: {
@@ -56,6 +66,9 @@ export default {
         aliaName = ' (' + this._singer.aliaName + ')'
       }
       return this._singer.name + aliaName
+    },
+    avatar () {
+      return this._singer.avatar ? this._singer.avatar : DEFAULT_SINGER_IMAGE
     }
   },
   components: {

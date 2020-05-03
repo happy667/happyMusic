@@ -25,15 +25,19 @@
  .van-tabs__line{
    z-index:0 !important;
 }
+
  html,body{
   position: absolute;
   top:0;
   left:0;
   width :100%;
+  height: 100%;
   -webkit-overflow-scrolling: touch;
   z-index:1;
-  -webkit-user-select:none;
-  background-attachment: fixed;/* 确保滚动条滚动时，元素不闪动*/
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  color: $color-common-x;
+  -webkit-overflow-scrolling: touch;//这个属性可以实现，手指离开屏幕会惯性滑动一段距离
 }
 
 

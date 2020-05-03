@@ -24,7 +24,7 @@ import NoResult from '@/components/common/NoResult'
 import searchApi from '@/api/search.js'
 import { ERR_OK } from '@/api/config.js'
 import {
-  searchType
+  SEARCH_TYPE
 } from '@/assets/common/js/config.js'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 import Song from '@/assets/common/js/song.js'
@@ -66,7 +66,7 @@ export default {
       this.loading = true
       // 设置偏移量=歌曲列表长度
       let offset = this.song.songList.length
-      const { data: res } = await searchApi.getSearchResult(this.searchKeywords, searchType.song, offset, 20)
+      const { data: res } = await searchApi.getSearchResult(this.searchKeywords, SEARCH_TYPE.song, offset, 20)
       if (res.code === ERR_OK) {
         console.log(res)
         // 没有查询到数据

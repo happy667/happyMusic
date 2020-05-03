@@ -477,6 +477,7 @@ export default {
 
         .top-container {
           position: absolute;
+          padding: 0 0.4rem;
           width: 100%;
           top: 0;
           left: 0;
@@ -484,10 +485,12 @@ export default {
           height: 1rem;
           line-height: 1rem;
           color: #fff;
+          box-sizing: border-box;
 
           .back {
-            width: 1.2rem;
+            width: 1rem;
             height: 1rem;
+            margin-right: 0.2rem;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -495,7 +498,6 @@ export default {
           }
 
           .title {
-            padding: 0 0.4rem;
             no-wrap();
             font-size: $font-size-smaller;
           }

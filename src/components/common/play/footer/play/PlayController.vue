@@ -31,7 +31,7 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 import {
-  playMode
+  PLAY_MODE
 } from '@/assets/common/js/config.js'
 export default {
   computed: {
@@ -40,7 +40,7 @@ export default {
       return this.playing ? 'pause' : 'play'
     },
     playModeIcon () {
-      return this.playMode === playMode.sequence ? 'icon-xunhuanbofang' : this.playMode === playMode.loop ? 'icon-danquxunhuan' : 'icon-suijibofang'
+      return this.playMode === PLAY_MODE.sequence ? 'icon-xunhuanbofang' : this.playMode === PLAY_MODE.loop ? 'icon-danquxunhuan' : 'icon-suijibofang'
     }
   },
   methods: {

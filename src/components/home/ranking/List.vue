@@ -16,17 +16,14 @@
   </div>
 </template>
 <script>
-import { mapMutations } from 'vuex'
 export default {
   props: {
     rankingList: Array
   },
   methods: {
-    ...mapMutations(['setRank']),
     // 选择排行榜进入歌单详情
     selectItem (item) {
-      this.setRank(true)
-      this.$router.push({ path: `/songSheetDisc/${item.id}` })
+      this.$router.push({ path: `/songSheetDisc/${item.id}`, query: { rank: true } })
     }
   }
 }

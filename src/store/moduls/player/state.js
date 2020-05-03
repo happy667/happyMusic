@@ -1,5 +1,5 @@
 import {
-  playMode
+  PLAY_MODE
 } from '@/assets/common/js/config.js'
 
 export default {
@@ -7,7 +7,7 @@ export default {
   playList: [], // 播放列表
   playerFullScreen: false, // 是否展开播放
   sequenceList: [], // 顺序播放列表
-  playMode: playMode.sequence, // 播放模式
+  playMode: PLAY_MODE.sequence, // 播放模式
   currentPlayIndex: -1, // 当前播放索引
   togglePlayList: false, // 显示隐藏播放列表
   songReady: false, // 歌曲是否加载完毕

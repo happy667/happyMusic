@@ -1,15 +1,16 @@
 import request from '@/axios/request.js'
 export default {
   // 获取歌手列表
-  getSingerList() {
-    const url = 'top/artists?limit=100'
-    return request({
-      url
-    })
-  },
-  // 获取热门歌手列表
-  getRecommendSingerList() {
-    const url = '/top/artists?offset=0&limit=30'
+  getSingerList({
+    cat,
+    initial,
+    offset = 0,
+    limit = 20
+  }) {
+    let url = `/artist/list?cat=${cat}&offset=${offset}&limit=${limit}&timestamp=${new Date().getTime()}`
+    if (initial) {
+      url = `/artist/list?cat=${cat}&initial=${initial}&offset=${offset}&limit=${limit}&timestamp=${new Date().getTime()}`
+    }
     return request({
       url
     })

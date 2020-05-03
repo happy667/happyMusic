@@ -39,9 +39,9 @@
 </template>
 <script>
 import {
-  searchType
+  SEARCH_TYPE
   ,
-  videoType
+  VIDEO_TYPE
 } from '@/assets/common/js/config.js'
 import { ERR_OK } from '@/api/config.js'
 import Song from '@/assets/common/js/song.js'
@@ -82,7 +82,7 @@ export default {
     async getSearchAll () {
       // 显示加载logo
       this.loading = true
-      const { data: res } = await searchApi.getSearchResult(this.searchKeywords, searchType.all)
+      const { data: res } = await searchApi.getSearchResult(this.searchKeywords, SEARCH_TYPE.all)
       if (res.code === ERR_OK) {
         // 未查询到结果
         if (Object.keys(res.result).length === 0) {
@@ -219,7 +219,7 @@ export default {
         videoList
       }
       // 过滤一遍视频,只需要mv类型视频
-      video.videos.filter(item => item.type === videoType.mv).forEach(item => {
+      video.videos.filter(item => item.type === VIDEO_TYPE.mv).forEach(item => {
         let video = new Video({
           id: item.vid,
           coverUrl: item.coverUrl,

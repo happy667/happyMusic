@@ -2,11 +2,11 @@ import Vue from 'vue'
 import router from '@/router/index.js'
 import store from '@/store/index.js'
 // import songApi from '@/api/song.js'
+// import {
+//   getPositionTop
+// } from '@/assets/common/js/dom.js'
 import {
-  getPositionTop
-} from '@/assets/common/js/dom.js'
-import {
-  playMode
+  PLAY_MODE
 } from '@/assets/common/js/config.js'
 const utils = {
   playMusic(song, list = null, index) {
@@ -20,7 +20,7 @@ const utils = {
     // 同步播放模式
     let mode = store.state.playMode
     console.log(list)
-    if (mode === playMode.random) { // 随机播放
+    if (mode === PLAY_MODE.random) { // 随机播放
       let list = utils.randomList(store.state.sequenceList)
       store.commit('setPlayList', list)
     }
@@ -133,20 +133,20 @@ const utils = {
       return item.id === song.id
     })
   },
-  positionSong({
-    listNode,
-    list,
-    song,
-    otherHeight = 0
-  }) {
-    // 获取当前播放列表节点
-    // 再找到当前播放歌曲的索引
-    let index = utils.findIndex(list, song)
-    const element = listNode.childNodes[index]
-    // 获取元素的top值
-    let top = getPositionTop(element)
-    window.scrollTo(0, top - otherHeight) // 减去其他高度
-  },
+  // positionSong({
+  //   listNode,
+  //   list,
+  //   song,
+  //   otherHeight = 0
+  // }) {
+  //   // 获取当前播放列表节点
+  //   // 再找到当前播放歌曲的索引
+  //   let index = utils.findIndex(list, song)
+  //   const element = listNode.childNodes[index]
+  //   // 获取元素的top值
+  //   let top = getPositionTop(element)
+  //   window.scrollTo(0, top - otherHeight) // 减去其他高度
+  // },
   removeItem(list, item) {
     let newList = list.slice()
     let index = utils.findIndex(list, item)

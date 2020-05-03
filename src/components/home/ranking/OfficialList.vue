@@ -26,17 +26,14 @@
 </template>
 <script>
 import 'common/js/convert.js'
-import { mapMutations } from 'vuex'
 export default {
   props: {
     rankingObj: Object
   },
   methods: {
-    ...mapMutations(['setRank']),
     // 选择排行榜进入歌单详情
     selectItem (item) {
-      this.setRank(true)
-      this.$router.push({ path: `/songSheetDisc/${item.id}` })
+      this.$router.push({ path: `/songSheetDisc/${item.id}`, query: { rank: true } })
     }
   }
 }
@@ -71,7 +68,8 @@ export default {
     }
 
     .official-list-info {
-      width: 5.5rem;
+      flex: 1;
+      overflow: hidden;
 
       .official-list-item {
         color: #000;

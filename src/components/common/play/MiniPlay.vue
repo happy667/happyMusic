@@ -212,6 +212,9 @@ export default {
          }
 
          .right {
+           flex: 1;
+           overflow: hidden;
+
            .song-info {
              display: flex;
              flex-direction: column;
@@ -220,7 +223,6 @@ export default {
 
              .song-name {
                margin-top: 0.2rem;
-               width: 5.7rem;
                line-height: 0.55rem;
                font-size: $font-size-smaller;
                font-weight: 400;
@@ -239,7 +241,6 @@ export default {
 
              .singer {
                margin-bottom: 0.2rem;
-               width: 5.7rem;
                line-height: 0.55rem;
                font-size: $font-size-smaller-x;
                color: $color-common-b2;

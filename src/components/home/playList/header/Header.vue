@@ -21,17 +21,17 @@
 <script>
 import { mapState, mapMutations, mapGetters, mapActions } from 'vuex'
 import {
-  playMode
+  PLAY_MODE
 } from '@/assets/common/js/config.js'
 export default {
   computed: {
     ...mapState(['playMode', 'sequenceList', 'currentPlayIndex']),
     ...mapGetters(['currentSong']),
     playModeIcon () {
-      return this.playMode === playMode.sequence ? 'icon-xunhuanbofang' : this.playMode === playMode.loop ? 'icon-danquxunhuan' : 'icon-suijibofang'
+      return this.playMode === PLAY_MODE.sequence ? 'icon-xunhuanbofang' : this.playMode === PLAY_MODE.loop ? 'icon-danquxunhuan' : 'icon-suijibofang'
     },
     playModeText () {
-      return this.playMode === playMode.sequence ? '列表循环' : this.playMode === playMode.loop ? '单曲循环' : '随机播放'
+      return this.playMode === PLAY_MODE.sequence ? '列表循环' : this.playMode === PLAY_MODE.loop ? '单曲循环' : '随机播放'
     }
   },
   methods: {
@@ -53,7 +53,7 @@ export default {
       const mode = (this.playMode + 1) % 3
       this.setPlayMode(mode)
       let list = null
-      if (mode === playMode.random) { // 随机播放
+      if (mode === PLAY_MODE.random) { // 随机播放
         list = this.$utils.randomList(this.sequenceList)
       } else {
         list = this.sequenceList
