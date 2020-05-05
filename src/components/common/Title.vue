@@ -1,10 +1,11 @@
 <template>
-  <div class="title-container">
-    <h2 class="songs-title">{{title}}</h2>
+  <div class="title-container"
+       :class="borderLeft?'border-left':''">
+    <h2 class="title">{{title}}</h2>
     <router-link tag="div"
                  :to="path"
                  class="viewMore"
-                 v-if="isShowLoadMore">
+                 v-if="loadMore">
       更多
       <van-icon name="arrow" />
     </router-link>
@@ -15,7 +16,15 @@
 export default {
   props: {
     title: String,
-    isShowLoadMore: Boolean, // 是否显示更多
+    // 显示更多
+    loadMore: {
+      type: Boolean,
+      default: () => false
+    },
+    borderLeft: {
+      type: Boolean,
+      default: () => false
+    },
     path: String
   }
 }
@@ -23,18 +32,21 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
+.border-left {
+  padding-left: 0.2rem;
+  border-left: 0.08rem solid $color-common;
+}
+
 .title-container {
   display: flex;
   justify-content: space-between;
-  font-size: $font-size-smaller-x;
-  height: 1.1rem;
-  line-height: 1.1rem;
   background: $color-common-background;
 
-  .songs-title {
-    height: 1.1rem;
-    line-height: 1.1rem;
+  .title {
+    height: 1rem;
+    line-height: 1rem;
     font-weight: bold;
+    font-size: $font-size-smaller-x;
   }
 
   .viewMore {

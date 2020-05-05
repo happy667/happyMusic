@@ -8,21 +8,32 @@
         <no-result text="暂无歌手简介"></no-result>
       </template>
       <template v-else>
-        <div class="singer-synopsis-title">
-          <h2 class="title">歌手简介</h2>
+        <div class="singer-synopsis-container">
+          <div class="title">
+            <Title title="歌手简介"
+                   borderLeft
+                   loadMore
+                   :path="`/singerIntroduce/${singerDetail.singerId}`"
+                   @click="handleClickTitle"></Title>
+          </div>
+          <div class="singer-synopsis">
+            <article class="context">
+              {{singerDetail.briefDesc}}
+            </article>
+          </div>
         </div>
-        <div class="singer-synopsis">
-          <p class="context">
-            {{singerDetail.briefDesc}}
-          </p>
+        <div class="sim-singer-container"
+             v-if="simSingerList.length!==0">
+          <div class="title">
+            <Title title="相似歌手"
+                   borderLeft></Title>
+          </div>
+          <div class="sim-singer-list-container">
+            <singer-swiper-list :list="simSingerList"
+                                @selectItem="selectItem" />
+          </div>
         </div>
-        <div class="singer-introduction"
-             v-for="item in singerDetail.introduction"
-             :key="item.ti">
-          <h2 class="title">{{item.ti}}</h2>
-          <p class="context"
-             v-html="item.txt"></p>
-        </div>
+
       </template>
     </template>
   </article>
@@ -30,12 +41,18 @@
 </template>
 <script>
 import NoResult from '@/components/common/NoResult'
-
+import Title from '@/components/common/Title'
+import SingerSwiperList from '@/components/common/singerSwiper/SingerList'
+import { mapMutations } from 'vuex'
 export default {
   props: {
     singerDetail: {
       type: Object,
       default: () => { }
+    },
+    simSingerList: {
+      type: Array,
+      default: () => []
     }
   },
   computed: {
@@ -43,8 +60,20 @@ export default {
       return !this.singerDetail
     }
   },
+  methods: {
+    ...mapMutations(['setSingerCurrentIndex']),
+    handleClickTitle () {
+      this.$emit('goToIntroduce')
+    },
+    selectItem (item) {
+      this.setSingerCurrentIndex(0)
+      this.$router.replace(`/singerInfo/${item.id}`)
+    }
+  },
   components: {
-    NoResult
+    NoResult,
+    Title,
+    SingerSwiperList
   }
 }
 </script>
@@ -52,26 +81,21 @@ export default {
 .singer-detail-container {
   @import '~common/stylus/variable';
 
-  padding: 0 0.4rem 0.4rem 0.4rem;
-  box-sizing: border-box;
-
-  .title {
-    margin-bottom: 0.2rem;
-    height: 0.7rem;
-    line-height: 0.7rem;
-    font-size: $font-size-smaller;
-    font-weight: bold;
-    padding-left: 0.2rem;
-    border-left: 0.08rem solid $color-common;
-  }
-
   .context {
+    margin: 0.4rem 0;
     line-height: 0.5rem;
     white-space: pre-wrap;
   }
 
-  .singer-introduction {
-    margin-top: 0.4rem;
+  .singer-synopsis-container {
+    padding: 0 0.4rem;
+    box-sizing: border-box;
+  }
+
+  .sim-singer-container {
+    .title {
+      margin: 0 0.4rem 0.4rem;
+    }
   }
 }
 </style>

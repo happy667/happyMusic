@@ -54,8 +54,10 @@
                        height="2rem" />
             </van-tab>
             <!-- 歌手详情 -->
-            <van-tab title="详情">
+            <van-tab title="关于">
               <singer-detail ref="singerDetail"
+                             :goToIntroduce="goToIntroduce"
+                             :simSingerList="simSingerList"
                              :singerDetail="singerDetail" />
             </van-tab>
           </van-tabs>
@@ -103,6 +105,7 @@ export default {
   data () {
     return {
       singerDesc: {},
+      simSingerList: [], // 相似
       singerSong: [], // 歌手单曲
       singerAlbum: null, // 歌手专辑
       singerMV: null, // 歌手MV
@@ -184,7 +187,13 @@ export default {
           if (!this.singerMV) this.getSingerMV(this.id)
           break
         case 3: // 歌手详情
-          if (!this.singerDetail) this.getSingerDetail(this.id)
+          if (!this.singerDetail) {
+            this.getSingerDetail(this.id)
+          }
+          if (this.simSingerList.length === 0) {
+            this.getSimilarSinger(this.id)
+          }
+
           break
       }
     },
@@ -277,12 +286,38 @@ export default {
       const { data: res } = await singerApi.getSingerDetail(id)
       if (res.code === ERR_OK) { // 成功 获取歌手详情
         this.singerDetail = {
+          singerId: this.id,
           briefDesc: res.briefDesc,
           introduction: res.introduction,
           topicData: res.topicData
         }
       }
     },
+    // 获取相似歌手
+    async getSimilarSinger (id) {
+      const { data: res } = await singerApi.getSimilarSinger(id)
+      if (res.code === ERR_OK) { // 成功 获取歌手详情
+        let singerList = []
+        // 处理歌手
+        res.artists.forEach(item => {
+          singerList.push(new Singer({
+            id: item.id,
+            name: item.name,
+            avatar: item.img1v1Url,
+            aliaName: item.alias.join(' / '),
+            picUrl: item.picUrl,
+            mvSize: item.mvSize,
+            albumSize: item.albumSize,
+            followed: item.followed
+          }))
+        })
+        this.simSingerList = singerList
+        this.$nextTick(() => {
+          this.refresh()
+        })
+      }
+    },
+
     // 获取歌手用户详情
     async getUserDetail (id) {
       const { data: res } = await userApi.getUserDetail(id)
@@ -375,6 +410,9 @@ export default {
     // 隐藏定位
     handleHidePosition () {
       this.showPosition = false
+    },
+    goToIntroduce () {
+      this.$router.push(`/singerIntroduce/${this.id}`)
     },
     handlePlaylist (playList) {
       // 适配播放器与页面底部距离

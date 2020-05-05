@@ -20,6 +20,7 @@ const SearchResult = () => import(/* webpackChunkName:"search_searchBox_searchRe
 const Player = () => import('../components/common/Player')
 const SongComment = () => import('../components/home/song/SongComment')
 const SingerInfo = () => import('../components/home/singer/SingerInfo')
+const SingerIntroduce = () => import('../components/home/singer/SingerIntroduce')
 
 const Album = () => import('../components/home/singer/album/AlbumInfo')
 const AlbumComment = () => import('../components/home/singer/album/AlbumComment')
@@ -290,6 +291,27 @@ const routes = [
       next()
     }
   },
+  // 歌收更多详情
+  {
+    path: '/singerIntroduce/:id',
+    name: 'singerIntroduce',
+    component: SingerIntroduce,
+    props: true,
+    meta: {
+      title: '歌手介绍'
+    },
+    beforeEnter(to, from, next) {
+      if (from.name === 'singerInfo') {
+        // 添加不缓存路由
+        store.commit('setAddNoCacheComponents', 'singerIntroduce')
+      } else {
+        // 移除不缓存路由
+        store.commit('setRemoveNoCacheComponents', 'singerIntroduce')
+      }
+      next()
+    }
+  },
+
   // 歌手专辑详情页
   {
     path: '/singerAlbum/:id',

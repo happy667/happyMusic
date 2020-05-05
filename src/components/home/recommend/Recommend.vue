@@ -21,7 +21,7 @@
         <song-sheet-list @select="selectSongSheet"
                          :list="recommendSongSheet">
           <template>
-            <Title :isShowLoadMore="true"
+            <Title loadMore
                    path='/SongSheetSquare'
                    title="推荐歌单"></Title>
           </template>
