@@ -140,11 +140,9 @@ export default {
           observeParents: true,
           initialSlide: index,
           centeredSlides: true,
+          slidesPerView: 'auto',
           on: {
-            touchStart (e) {
-              e.stopPropagation()
-            },
-            touchEnd (e) {
+            sliderMove (e) {
               e.stopPropagation()
             },
             slidePrevTransitionEnd () {
@@ -179,72 +177,76 @@ export default {
      background: $color-common-background;
      box-shadow: 0 -0.15rem 1rem rgba(0, 0, 0, 0.2);
 
-     .swiper-slide {
-       .swiper-list-item {
-         display: flex;
-         width: 100%;
-         height: 100%;
+     .player-swiper {
+       flex: 1;
 
-         .left {
-           margin: 0 0.3rem;
-           height: 100%;
+       .swiper-slide {
+         .swiper-list-item {
            display: flex;
-           flex-direction: column;
-           justify-content: center;
+           width: 100%;
+           height: 100%;
 
-           .image {
-             width: 1.1rem;
-             height: 1.1rem;
-
-             .van-image {
-               width: 100%;
-               height: 100%;
-             }
-
-             &.play {
-               animation: rotate 10s linear infinite;
-             }
-
-             &.pause {
-               animation-play-state: paused;
-             }
-           }
-         }
-
-         .right {
-           flex: 1;
-           overflow: hidden;
-
-           .song-info {
+           .left {
+             margin: 0 0.3rem;
+             height: 100%;
              display: flex;
              flex-direction: column;
-             justify-content: space-around;
-             height: 100%;
+             justify-content: center;
 
-             .song-name {
-               margin-top: 0.2rem;
-               line-height: 0.55rem;
-               font-size: $font-size-smaller;
-               font-weight: 400;
-               no-wrap();
-             }
+             .image {
+               width: 1.1rem;
+               height: 1.1rem;
 
-             &.active {
-               overflow: hidden;
+               .van-image {
+                 width: 100%;
+                 height: 100%;
+               }
 
-               .song-name {
-                 overflow: visible;
-                 color: $color-common;
-                 animation: 10s wordsLoop linear infinite normal;
+               &.play {
+                 animation: rotate 10s linear infinite;
+               }
+
+               &.pause {
+                 animation-play-state: paused;
                }
              }
+           }
 
-             .singer {
-               margin-bottom: 0.2rem;
-               line-height: 0.55rem;
-               font-size: $font-size-smaller-x;
-               color: $color-common-b2;
-               no-wrap();
+           .right {
+             flex: 1;
+             overflow: hidden;
+
+             .song-info {
+               display: flex;
+               flex-direction: column;
+               justify-content: space-around;
+               height: 100%;
+
+               .song-name {
+                 margin-top: 0.2rem;
+                 line-height: 0.55rem;
+                 font-size: $font-size-smaller;
+                 font-weight: 400;
+                 no-wrap();
+               }
+
+               &.active {
+                 overflow: hidden;
+
+                 .song-name {
+                   overflow: visible;
+                   color: $color-common;
+                   animation: 10s wordsLoop linear infinite normal;
+                 }
+               }
+
+               .singer {
+                 margin-bottom: 0.2rem;
+                 line-height: 0.55rem;
+                 font-size: $font-size-smaller-x;
+                 color: $color-common-b2;
+                 no-wrap();
+               }
              }
            }
          }
@@ -253,7 +255,6 @@ export default {
 
      .player-controller {
        margin-right: 0.15rem;
-       flex: 1;
        display: flex;
        justify-content: space-between;
        align-items: center;

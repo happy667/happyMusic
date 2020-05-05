@@ -51,7 +51,7 @@ import { ERR_OK } from '@/api/config.js'
 import { addLocalSearch } from '@/assets/common/js/localStorage.js'
 import { mapState, mapMutations } from 'vuex'
 import { utils } from '@/assets/common/js/utils.js'
-import { searchType } from '@/assets/common/js/config.js'
+import { SEARCH_TYPE } from '@/assets/common/js/config.js'
 
 export default {
   name: 'search',
@@ -83,24 +83,23 @@ export default {
     }
   },
   mounted () {
-    console.log(1231232)
     this.$nextTick(() => {
       this.getSearchDefault()
     })
     // 监听页面滚动
-    window.addEventListener('scroll', this.handleScroll)
+    this.addScrollListner()
   },
   activated () {
     // 监听页面滚动
-    window.addEventListener('scroll', this.handleScroll)
+    this.addScrollListner()
   },
   deactivated () {
     // 取消监听页面滚动
-    window.removeEventListener('scroll', this.handleScroll)
+    this.removeScrollListner()
   },
   destroyed () {
     // 取消监听页面滚动
-    window.removeEventListener('scroll', this.handleScroll)
+    this.removeScrollListner()
   },
   methods: {
     ...mapMutations(['setSearchKeywords', 'setSearchCurrentIndex', 'setShowSearchList', 'setIsAdvance', 'setAddNoCacheComponents']),
@@ -170,22 +169,22 @@ export default {
     handleSearchIndex (type) {
       let index = 0// 默认为索引为0
       switch (type) {
-        case searchType.all:
+        case SEARCH_TYPE.all:
           index = 0
           break
-        case searchType.song:
+        case SEARCH_TYPE.song:
           index = 1
           break
-        case searchType.singer:
+        case SEARCH_TYPE.singer:
           index = 2
           break
-        case searchType.album:
+        case SEARCH_TYPE.album:
           index = 3
           break
-        case searchType.songSheet:
+        case SEARCH_TYPE.songSheet:
           index = 4
           break
-        case searchType.mv:
+        case SEARCH_TYPE.mv:
           index = 5
           break
       }
@@ -225,6 +224,14 @@ export default {
       if (scrollTop > 0) { // 滚动大于0的时候关闭搜索框
         this.closeSearchList()
       }
+    },
+    // 监听页面滚动
+    addScrollListner () {
+      window.addEventListener('scroll', this.handleScroll)
+    },
+    // 取消监听页面滚动
+    removeScrollListner () {
+      window.removeEventListener('scroll', this.handleScroll)
     }
   }
 }

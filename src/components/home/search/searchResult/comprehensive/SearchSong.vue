@@ -9,7 +9,7 @@
         <div class="header">
           <Title title="单曲"></Title>
           <play-all :length="song.songList.length"
-                    @play="handlePlayAll(song.songList[0],song.songList)"></play-all>
+                    @play="handlePlayAll(song.songList)"></play-all>
         </div>
       </song-list>
       <div class="more"
@@ -30,7 +30,7 @@
 import Title from '@/components/common/Title'
 import PlayAll from '@/components/common/PlayAll'
 import SongList from '@/components/home/song/SongList'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters } from 'vuex'
 export default {
   props: {
     song: Object
@@ -39,11 +39,8 @@ export default {
     ...mapGetters(['currentSong'])
   },
   methods: {
-    ...mapMutations(['setPlayerFullScreen']),
     // 播放全部歌曲
-    handlePlayAll (item, list) {
-      // 比较两首歌曲
-      this.$utils.compareSong(this.currentSong, item)
+    handlePlayAll (list) {
       // 引入vue原型上的utils
       this.$utils.playAllSong(list)
     },

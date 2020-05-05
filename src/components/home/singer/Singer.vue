@@ -1,25 +1,25 @@
 <template>
   <div class="singer-container"
        ref="container">
+    <div class="singer-cat-container">
+      <ul class="area-list list">
+        <li class="item"
+            @click="selectAreaTypeList(item.typeId)"
+            :class="item.typeId===area?'active':''"
+            v-for="item in areaTypeList"
+            :key="item.typeId">{{item.name}}</li>
+      </ul>
+      <ul class="singer-type-list list">
+        <li class="item"
+            @click="selectSingerTypeList(item.typeId)"
+            :class="item.typeId===singerType?'active':''"
+            v-for="item in singerTypeList"
+            :key="item.typeId">{{item.name}}</li>
+      </ul>
+
+    </div>
     <!-- 歌手列表 -->
     <div class="container">
-      <div class="singer-cat-container">
-        <ul class="area-list list">
-          <li class="item"
-              @click="selectAreaTypeList(item.typeId)"
-              :class="item.typeId===area?'active':''"
-              v-for="item in areaTypeList"
-              :key="item.typeId">{{item.name}}</li>
-        </ul>
-        <ul class="singer-type-list list">
-          <li class="item"
-              @click="selectSingerTypeList(item.typeId)"
-              :class="item.typeId===singerType?'active':''"
-              v-for="item in singerTypeList"
-              :key="item.typeId">{{item.name}}</li>
-        </ul>
-
-      </div>
       <scroll :data="singerList"
               :pullUp="pullUp"
               @pullingUpLoad="handlePullingUp"
@@ -199,47 +199,51 @@ export default {
   position: absolute;
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
 
-  .container {
-    position: absolute;
-    width: 100%;
-    height: 100%;
+  .singer-cat-container {
+    padding: 0.25rem 0.4rem 0.25rem;
+    position: sticky;
+    left: 0;
+    top: 0;
 
-    .singer-cat-container {
-      padding: 0.25rem 0.4rem 0.25rem;
-      position: sticky;
-      left: 0;
-      top: 0;
+    .list {
+      display: flex;
+      margin-bottom: 0.3rem;
 
-      .list {
-        display: flex;
-        margin-bottom: 0.3rem;
+      &:last-child {
+        margin-bottom: 0;
+      }
 
-        &:last-child {
-          margin-bottom: 0;
+      .item {
+        margin-right: 0.3rem;
+        padding: 0 0.25rem;
+        height: 0.7rem;
+        border-radius: 0.5rem;
+        line-height: 0.7rem;
+        color: #868e94;
+        background: #f2f2f2;
+        font-size: $font-size-smaller-x;
+
+        &.active {
+          color: #fff;
+          background: $color-common;
         }
 
-        .item {
-          margin-right: 0.3rem;
-          padding: 0 0.25rem;
-          height: 0.7rem;
-          border-radius: 0.5rem;
-          line-height: 0.7rem;
-          color: #868e94;
-          background: #f2f2f2;
-          font-size: $font-size-smaller-x;
-
-          &.active {
-            color: #fff;
-            background: $color-common;
-          }
-
-          &:last-child {
-            margin-right: 0;
-          }
+        &:last-child {
+          margin-right: 0;
         }
       }
     }
+  }
+
+  .container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 
     .box {
       .list-wrapper {

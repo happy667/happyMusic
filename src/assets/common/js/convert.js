@@ -2,7 +2,14 @@ import Vue from 'vue'
 // 过滤次数
 export function convertCount(num) {
   let number = num.toString()
-  return number.length <= 4 ? number : parseFloat(number / 10000).toFixed(1) + '万'
+  console.log(number)
+  if (number.length > 8) { // 转换成亿
+    number = parseFloat(number / 100000000).toFixed(1) + '亿'
+  } else if (number.length > 4) { // 转换成万
+    number = parseFloat(number / 10000).toFixed(1) + '万'
+  }
+
+  return number
 }
 Vue.filter('convertCount', convertCount)
 

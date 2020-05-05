@@ -103,7 +103,7 @@ export default {
             if (v >= 1) {
               clearInterval(this.t1)
             }
-          }, 100)
+          }, 50)
         })
       } else {
         this.$nextTick(() => {
@@ -120,7 +120,7 @@ export default {
               audio.volume = 0
               clearInterval(this.t2)
             }
-          }, 100)
+          }, 50)
         })
       }
     },

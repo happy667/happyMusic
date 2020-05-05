@@ -434,6 +434,12 @@ export default {
 
 .singer-info-container>>>.van-tabs__content {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.singer-info-container>>>.van-tabs__track {
+  flex: 1;
 }
 
 .singer-info-container {

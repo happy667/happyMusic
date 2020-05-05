@@ -8,7 +8,7 @@
     <!-- 歌曲数量 -->
     <template v-else-if="list&&list.length!==0">
       <play-all :length="list.length"
-                @play="playAllSong(list[0],list)"></play-all>
+                @play="playAllSong(list)"></play-all>
       <!-- 歌曲列表 -->
       <song-list @noLike="handleNoLike"
                  @select="selectSong"
@@ -57,13 +57,9 @@ export default {
       }
     },
 
-    playAllSong (item, list) {
-      // 比较两首歌曲
-      let result = this.$utils.compareSong(this.currentSong, item)
-      if (!result) {
-        // 引入vue原型上的utils
-        this.$utils.playAllSong(list)
-      }
+    playAllSong (list) {
+      // 引入vue原型上的utils
+      this.$utils.playAllSong(list)
     },
     handleNoLike (song) {
       this.$emit('noLike', song)

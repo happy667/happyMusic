@@ -51,9 +51,19 @@ const utils = {
       })
     }
   },
+  // 重置播放进度
+  resetPlayProgress() {
+    let state = store.state
+    state.audio.currentTime = 0 // 重新播放
+    if (state.currentLyric) {
+      state.currentLyric.seek(0)
+    }
+  },
   // 播放所有歌曲
   playAllSong(list) {
     utils.handlePlayList(null, list, 0)
+    utils.resetPlayProgress()
+    store.commit('setPlayerFullScreen', true)
   },
   // 比较歌曲
   compareSong(item1, item2) {
@@ -133,15 +143,26 @@ const utils = {
       return item.id === song.id
     })
   },
-  positionToElement(
+  positionToElement({
+    listNode,
+    list,
+    song,
     element,
     otherHeight = 0
-  ) {
-    // 获取元素的top值
-    console.log(element)
-    let top = getPositionTop(element)
-    console.log(otherHeight)
-    window.scrollTo(0, top - otherHeight) // 减去其他高度
+  }) {
+    console.log(song)
+    if (!list) {
+      // 获取元素的top值
+      let top = getPositionTop(element)
+      window.scrollTo(0, top - otherHeight) // 减去其他高度
+    } else {
+      // 找到当前播放歌曲的索引
+      let index = utils.findIndex(list, song)
+      const element = listNode.childNodes[index]
+      // 获取元素的top值
+      let top = getPositionTop(element)
+      window.scrollTo(0, top - otherHeight) // 减去其他高度
+    }
   },
   removeItem(list, item) {
     let newList = list.slice()

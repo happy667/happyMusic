@@ -1,14 +1,16 @@
 import axios from 'axios'
 import Vue from 'vue'
+import apiConfig from './api.config.js'
+
 // 创建axios实例
 const service = axios.create({
-  // baseURL:"http://novel.juhe.im/",代理服务器请求接口地址
   timeout: 10000,
   method: 'get',
   withCredentials: true
 })
 // 配置请求根路径
-service.defaults.baseURL = 'api'
+service.defaults.baseURL = apiConfig.baseUrl
+axios.defaults.withCredentials = true
 // request拦截器设置
 service.interceptors.request.use(request => {
   // 判断是否连接网络,如果连接则发送请求，否则提示用户连接

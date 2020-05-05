@@ -10,6 +10,7 @@ const AppIndex = () => import(/* webpackChunkName:"login_index_register_findPass
 const Home = () => import('../views/Home')
 const SongSheetSquare = () => import('../components/home/songSheet/SongSheetSquare')
 const SongSheetDisc = () => import('../components/home/songSheet/SongSheetDisc')
+const SongSheetComment = () => import('../components/home/songSheet/SongSheetComment')
 const VideoInfo = () => import('../components/home/video/VideoInfo')
 
 const Search = () => import(/* webpackChunkName:"search_searchBox_searchResult" */ '../components/home/search/Search')
@@ -19,6 +20,7 @@ const SearchResult = () => import(/* webpackChunkName:"search_searchBox_searchRe
 const Player = () => import('../components/common/Player')
 const SongComment = () => import('../components/home/song/SongComment')
 const SingerInfo = () => import('../components/home/singer/SingerInfo')
+
 const Album = () => import('../components/home/singer/album/AlbumInfo')
 const AlbumComment = () => import('../components/home/singer/album/AlbumComment')
 
@@ -113,11 +115,14 @@ const routes = [
     component: SongSheetDisc,
     props: true,
     meta: {
+      isBack: false,
       title: '歌单详情'
     },
     beforeEnter(to, from, next) {
-      console.log(from)
       if (from.name === 'home' || from.name === 'searchResult' || from.name === 'songSheetSquare' || from.name === 'user') {
+        // 添加不缓存路由
+        store.commit('setAddNoCacheComponents', 'songSheetDisc')
+      } else if (from.name === 'songSheetComment' && !from.meta.isBack) {
         // 添加不缓存路由
         store.commit('setAddNoCacheComponents', 'songSheetDisc')
       } else {
@@ -126,6 +131,27 @@ const routes = [
       }
       next()
     }
+  },
+  // 歌单评论列表
+  {
+    path: '/songSheetComment/:id',
+    name: 'songSheetComment',
+    component: SongSheetComment,
+    props: true,
+    meta: {
+      title: '评论列表'
+    },
+    beforeEnter(to, from, next) {
+      if (from.name === 'songSheetDisc' && !from.meta.isBack) {
+        // 添加不缓存路由
+        store.commit('setAddNoCacheComponents', 'songSheetComment')
+      } else {
+        // 移除不缓存路由
+        store.commit('setRemoveNoCacheComponents', 'songSheetComment')
+      }
+      next()
+    }
+
   },
   // 搜索页
   {
@@ -251,7 +277,6 @@ const routes = [
     component: SingerInfo,
     props: true,
     meta: {
-      keepAlive: false, // 不需要缓存
       title: '歌手详情'
     },
     beforeEnter(to, from, next) {

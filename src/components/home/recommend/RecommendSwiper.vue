@@ -3,12 +3,10 @@
     <div class="swiper-container sw-banner">
       <div class="swiper-wrapper">
         <div class="swiper-slide"
-             @click="selectItem(item)"
+             @click.stop="selectItem(item)"
              v-for="(item,index) in banners"
              :key="index">
-          <div class="image"
-               :data-bannerid="item.targetId"
-               :data-bannertype="item.targetType">
+          <div class="image">
             <img :src="item.imageUrl"
                  class="animated fadeIn">
             <div class="title"
@@ -33,7 +31,6 @@ import {
   TARGET_TYPE
 } from '@/assets/common/js/config.js'
 import { mapGetters } from 'vuex'
-import { getData, getParentByClassName } from '@/assets/common/js/dom.js'
 export default {
   props: {
     // 轮播图数据
@@ -51,8 +48,9 @@ export default {
     ...mapGetters(['currentSong'])
   },
   methods: {
-    selectItem (id, type) {
-      type = parseInt(type)
+    selectItem (item) {
+      let id = item.targetId
+      let type = parseInt(item.targetType)
       switch (type) {
         case TARGET_TYPE.song:// 歌曲
           this.selectSong(id)
@@ -91,8 +89,6 @@ export default {
     },
     // 初始化轮播图组件
     initSwiper () {
-      // 这里的this是vue对象，提前声明(需要在swiper中应用)
-      let _this = this
       // 通过settimeout 解决数据还没有完全加载的时候就已经渲染swiper，导致loop失效。
       setTimeout(() => {
         // eslint-disable-next-line no-unused-vars
@@ -113,21 +109,8 @@ export default {
             loadPrevNextAmount: 1
           },
           on: {
-            touchStart (e) {
+            sliderMove (e) {
               e.stopPropagation()
-            },
-            touchEnd (e) {
-              e.stopPropagation()
-            },
-            // 解决阻止事件传播点击事件失效
-            // 利用自定义属性获取轮播图id和type
-            click (e) {
-              let target = getParentByClassName(e.target, 'image')
-              // 获取id
-              let id = getData(target, 'bannerid')
-              // 获取type
-              let type = getData(target, 'bannertype')
-              _this.selectItem(id, type)
             }
 
           }

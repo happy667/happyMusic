@@ -5,13 +5,26 @@ export default class Singer {
     songs,
     name,
     trackUpdateTime,
-    tags
+    tags,
+    commentCount,
+    playCount,
+    description,
+    creator,
+    updateTime,
+    followed,
+    backgroundCoverUrl
   }) {
     this.id = id
     this.name = name
     this.songs = songs
     this.picUrl = picUrl
-    this.trackUpdateTime = trackUpdateTime
     this.tags = tags
+    this.commentCount = commentCount
+    this.playCount = playCount
+    this.description = description
+    this.creator = creator
+    this.updateTime = updateTime
+    this.followed = followed
+    this.backgroundCoverUrl = backgroundCoverUrl
   }
 }

@@ -14,13 +14,23 @@
     </template>
     <template v-else>
       <div class="video"
-           ref="video"
-           :class="fixed?'fixed':''">
-        <video-component :videoParams="video"
-                         @openFullScreen="fixed=false"
-                         @closeFullScreen="fixed=true"
-                         @toggleInfo="handleToggleInfo">
-        </video-component>
+           ref="video">
+        <template v-if="fixed">
+          <van-sticky :offset-top="46">
+            <video-component :videoParams="video"
+                             @openFullScreen="fixed=false"
+                             @closeFullScreen="fixed=true"
+                             @toggleInfo="handleToggleInfo">
+            </video-component>
+          </van-sticky>
+        </template>
+        <template v-else>
+          <video-component :videoParams="video"
+                           @openFullScreen="fixed=false"
+                           @closeFullScreen="fixed=true"
+                           @toggleInfo="handleToggleInfo">
+          </video-component>
+        </template>
       </div>
       <section class="container">
         <!-- 视频信息 -->
@@ -405,7 +415,7 @@ export default {
     handleClickComment () {
       let element = this.$refs.commentContainer
       let otherHeight = this.$refs.navBar.$el.offsetHeight + this.$refs.video.offsetHeight
-      this.$utils.positionToElement(element, otherHeight)
+      this.$utils.positionToElement({ element, otherHeight })
     },
     // 分享
     handleClickShare () {
@@ -452,16 +462,6 @@ export default {
   background: $color-common-background;
   width: 100%;
   min-height: 100vh;
-
-  .video {
-    &.fixed {
-      position: sticky;
-      top: 46px;
-      left: 0;
-      width: 100%;
-      z-index: 10;
-    }
-  }
 
   .container {
     width: 100%;

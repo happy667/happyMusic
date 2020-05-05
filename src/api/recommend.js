@@ -49,6 +49,13 @@ export default {
       url
     })
   },
+  // 获取歌单评论
+  getSongSheetComment(id, offset = 0) {
+    let url = `comment/playlist?id=${id}&offset=${offset}`
+    return request({
+      url
+    })
+  },
   // 根据id获取音乐url
   getSongUrl(ids) {
     const url = `/song/url?id=${ids}`

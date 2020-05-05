@@ -16,7 +16,8 @@
       <div class="album-header">
         <section class="album-info">
           <div class="container">
-            <div class="left-img">
+            <div class="left-img"
+                 @click="openOverlay">
               <div class="album-image">
                 <div class="image">
                   <img v-lazy="albumObj.album.picUrl"
@@ -48,7 +49,7 @@
                   <div class="icon">
                     <van-icon name="more-o" />
                   </div>
-                  <div class="num">{{albumObj.commentCount}}</div>
+                  <div class="num">{{albumObj.commentCount|convertCount}}</div>
                 </div>
               </div>
             </div>
@@ -79,7 +80,7 @@
                  v-if="albumObj.songs&&albumObj.songs.length!==0">
               <div class="play">
                 <play-all :length="albumObj.songs.length"
-                          @play="playAllSong(albumObj.songs[0],albumObj.songs)"></play-all>
+                          @play="playAllSong(albumObj.songs)"></play-all>
                 <!-- 歌曲列表 -->
                 <songs-list :songsList="albumObj.songs"
                             showIndex
@@ -249,12 +250,9 @@ export default {
       }
     },
     // 比较两首歌曲
-    playAllSong (item, list) {
-      let result = this.$utils.compareSong(this.currentSong, item)
-      if (!result) {
-        // 引入vue原型上的utils
-        this.$utils.playAllSong(list)
-      }
+    playAllSong (list) {
+      // 引入vue原型上的utils
+      this.$utils.playAllSong(list)
     },
 
     // 获取专辑详情
@@ -603,35 +601,36 @@ export default {
       position: absolute;
       top: 0;
       left: 0;
-      padding: 1.4rem 0.5rem 1rem;
+      padding: 1.2rem 0.5rem 1rem;
       width: 100%;
       min-height: 100%;
       box-sizing: border-box;
       color: #fff;
 
       .top {
-        margin-bottom: 0.3rem;
+        margin-bottom: 0.5rem;
         width: 100%;
 
         .image-container {
-          margin-bottom: 0.3rem;
+          margin-bottom: 0.5rem;
 
           .image {
             margin: 0 auto;
-            width: 4rem;
-            height: 4rem;
-            border-radius: 0.3rem;
+            width: 4.7rem;
+            height: 4.7rem;
+            border-radius: 0.1rem;
 
             img {
               display: block;
               width: 100%;
               height: 100%;
-              border-radius: 0.3rem;
+              border-radius: 0.1rem;
             }
           }
         }
 
         .title {
+          font-weight: bold;
           line-height: 0.7rem;
           text-align: center;
           font-size: $font-size-smaller-x;
