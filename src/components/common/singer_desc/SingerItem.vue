@@ -1,7 +1,6 @@
 <template>
   <div class="singer-list-item-container"
-       @click.stop="selectItem(_singer)"
-       v-fb>
+       @click.stop="selectItem(_singer)">
     <div class="singer-list-item">
       <div class="left">
         <!-- 歌手头像 -->

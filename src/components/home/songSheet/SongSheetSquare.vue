@@ -4,8 +4,7 @@
     <van-sticky>
       <van-nav-bar :title="$route.meta.title"
                    left-arrow
-                   @click-left="routerBack"
-                   v-fb />
+                   @click-left="routerBack" />
     </van-sticky>
 
     <!-- loading -->

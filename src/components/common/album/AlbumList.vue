@@ -6,7 +6,6 @@
         <li class="item"
             v-for="item in list"
             :key="item.id"
-            v-fb
             @click="handleClick(item)">
           <album :item="item"
                  :showSinger="showSinger"

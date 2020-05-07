@@ -17,8 +17,7 @@
         <section class="album-info">
           <div class="container">
             <div class="left-img"
-                 @click="openOverlay"
-                 v-fb>
+                 @click="openOverlay">
               <div class="album-image">
                 <div class="image">
                   <img v-lazy="albumObj.album.picUrl"
@@ -33,13 +32,11 @@
             <div class="right-info">
               <div class="album-name">{{albumObj.album.name}}</div>
               <div class="album-singer"
-                   v-fb
                    @click="selectSingers">歌手:{{albumObj.album.singers}}
 
               </div>
               <div class="func">
                 <div class="func-item"
-                     v-fb
                      @click="handleClickFollow">
                   <div class="icon"
                        :class="followCls">
@@ -48,8 +45,7 @@
                   {{followText}}
                 </div>
                 <div class="func-item"
-                     @click="goToAlbumComment"
-                     v-fb>
+                     @click="goToAlbumComment">
                   <div class="icon">
                     <van-icon name="more-o" />
                   </div>
@@ -73,8 +69,7 @@
             <!-- 专辑简介 -->
             <div class="album-desc"
                  v-if="albumObj.album.description"
-                 @click="openOverlay"
-                 v-fb>
+                 @click="openOverlay">
               <section class="content">
                 <p>简介:</p>
                 <p v-html="albumObj.album.description"></p>
@@ -144,8 +139,7 @@
              :style="bgImage"></div>
       </div>
       <div class="close"
-           @click="closeOverlay"
-           v-fb>
+           @click="closeOverlay">
         <div class="icon">
           <i class="iconfont icon-cha"></i>
         </div>

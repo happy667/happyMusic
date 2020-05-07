@@ -3,8 +3,6 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import 'lib-flexible/flexible'
-// 插件
-import './plugins/feedBack.js'
 import 'common/stylus/index.styl'
 import '@/assets/common/font/iconfont.css'
 import '@/assets/common/js/utils.js'

@@ -3,7 +3,6 @@
     <div class="video-list">
       <template v-for="item in list">
         <video-item @click="handleClick"
-                    v-fb
                     :video="item"
                     :key="item.id"></video-item>
       </template>

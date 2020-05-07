@@ -20,8 +20,7 @@
           <div class="section">
             <!-- 专辑头部 -->
             <div class="album-header"
-                 @click="goToAlbum"
-                 v-fb>
+                 @click="goToAlbum">
               <div class="album-info">
                 <div class="container">
                   <div class="left-img">

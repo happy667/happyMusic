@@ -19,8 +19,7 @@
         <!-- 视频信息 -->
         <div class="video-info">
           <div class="info-top"
-               @click="handleToggleInfo"
-               v-fb>
+               @click="handleToggleInfo">
             <div class="content">
               <!-- 视频标题 -->
               <div class="title">
@@ -52,8 +51,7 @@
           <div class="info-center van-hairline--bottom">
             <div class="item"
                  :class="video.liked?'active':''"
-                 @click="handleClickLike"
-                 v-fb>
+                 @click="handleClickLike">
               <div class="love icon">
                 <i class="iconfont icon-dianzan"></i>
               </div>
@@ -61,16 +59,14 @@
             </div>
             <div class="item"
                  :class="video.followed?'active':''"
-                 @click="handleClickFollow"
-                 v-fb>
+                 @click="handleClickFollow">
               <div class="follow icon">
                 <van-icon :name="followIcon" />
               </div>
               <p class="text">{{video.subCount|convertCount}}</p>
             </div>
             <div class="item"
-                 @click="handleClickComment"
-                 v-fb>
+                 @click="handleClickComment">
               <div class="comment icon">
                 <van-icon name="more-o" />
               </div>
@@ -78,8 +74,7 @@
             </div>
             <div class="item"
                  ref="share"
-                 @click="handleClickShare()"
-                 v-fb>
+                 @click="handleClickShare()">
               <div class="share icon">
                 <i class="iconfont icon-fenxiang"></i>
               </div>
@@ -88,8 +83,7 @@
           </div>
           <!-- 视频出处 -->
           <div class="info-bottom"
-               @click="selectCreator(video.creatorList)"
-               v-fb>
+               @click="selectCreator(video.creatorList)">
             <div class="play-source-img">
               <my-image :src="video.artist.avatarUrl" />
             </div>

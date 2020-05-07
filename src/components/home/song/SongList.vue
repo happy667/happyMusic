@@ -8,7 +8,6 @@
           :class="currentSong.id === item.id ? 'active' : ''"
           v-for="(item,index) in songsList"
           @click.stop="selectItem(item,index)"
-          v-fb
           :key="item.id">
         <song-item @noLike="handleNoLike"
                    :showImage="showImage"

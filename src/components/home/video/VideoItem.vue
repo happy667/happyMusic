@@ -2,8 +2,7 @@
   <div class="video-item-container">
     <div class="container">
       <div class="video-image"
-           @click="goToVideoInfo"
-           v-fb>
+           @click="goToVideoInfo">
         <div class="cover-image">
           <img v-lazy="videoParams.coverUrl"
                class="animated fadeIn">
@@ -32,8 +31,7 @@
       </div>
       <div class="video-info">
         <div class="info-top van-hairline--bottom"
-             @click="goToVideoInfo"
-             v-fb>
+             @click="goToVideoInfo">
           <!-- 视频标题 -->
           <div class="title">
             <div class="name">{{videoParams.name}}</div>
@@ -42,8 +40,7 @@
 
         <!-- 视频出处 -->
         <div class="info-bottom"
-             @click="selectSinger(videoParams.artist)"
-             v-fb>
+             @click="selectSinger(videoParams.artist)">
           <div class="play-source-img">
             <my-image :src="videoParams.artist.avatarUrl" />
           </div>

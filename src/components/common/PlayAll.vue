@@ -4,8 +4,7 @@
       <van-icon name="play-circle-o" />
     </div>
     <div class="play-all"
-         @click="$emit('play')"
-         v-fb>
+         @click="$emit('play')">
       播放全部({{length}})
     </div>
   </div>

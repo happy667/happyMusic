@@ -8,8 +8,7 @@
                   :list="video.videoList"></video-list>
       <div class="more"
            v-if="video.moreText"
-           @click="$emit('setIndex',5)"
-           v-fb>
+           @click="$emit('setIndex',5)">
         <div class="text">
           {{video.moreText}}
         </div>

@@ -7,8 +7,7 @@
              v-for="item in list"
              :key="item.id">
           <div class="swiper-list-item"
-               @click="selectItem(item)"
-               v-fb>
+               @click="selectItem(item)">
             <song-Sheet-swiper-item :item="item"
                                     :key="item.id"></song-Sheet-swiper-item>
           </div>

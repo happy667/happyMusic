@@ -7,8 +7,7 @@
                    @select="selectSinger"></singer-list>
       <div class="more"
            v-if="singer.moreText"
-           @click="$emit('setIndex',2)"
-           v-fb>
+           @click="$emit('setIndex',2)">
         <div class="text">
           {{singer.moreText}}
         </div>

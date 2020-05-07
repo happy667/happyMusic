@@ -5,7 +5,6 @@
       <ul class="area-list list">
         <li class="item"
             @click="selectAreaTypeList(item.typeId)"
-            v-fb
             :class="item.typeId===area?'active':''"
             v-for="item in areaTypeList"
             :key="item.typeId">{{item.name}}</li>
@@ -13,7 +12,6 @@
       <ul class="singer-type-list list">
         <li class="item"
             @click="selectSingerTypeList(item.typeId)"
-            v-fb
             :class="item.typeId===singerType?'active':''"
             v-for="item in singerTypeList"
             :key="item.typeId">{{item.name}}</li>

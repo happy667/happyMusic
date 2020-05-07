@@ -9,8 +9,7 @@
       </song-sheet-list>
       <div class="more"
            v-if="songSheet.moreText"
-           @click="$emit('setIndex',4)"
-           v-fb>
+           @click="$emit('setIndex',4)">
         <div class="text">
           {{songSheet.moreText}}
         </div>

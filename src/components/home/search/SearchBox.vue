@@ -12,8 +12,7 @@
           <div class="search-list-header">
             <p class="title">历史搜索</p>
             <div class="icon"
-                 @click="clearLocalList"
-                 v-fb>
+                 @click="clearLocalList">
               <i class="iconfont icon-shanchu"></i>
             </div>
           </div>
@@ -33,7 +32,6 @@
               v-if="this.hotSearchList.length!==0">
             <li class="hot-search-list-item"
                 @click="selectItem(item)"
-                v-fb
                 v-for="(item,index) in hotSearchList"
                 :key="item.searchWord">
               <div class="left"

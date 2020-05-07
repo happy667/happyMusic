@@ -33,8 +33,7 @@
         <div class="edit"
              v-if="user">
           <div class="icon"
-               @click="handleEdit"
-               v-fb>
+               @click="handleEdit">
             <van-icon name="setting-o"
                       size="25" />
           </div>
@@ -47,8 +46,7 @@
              ref="container">
           <div class="my-list">
             <router-link to="/user/myFollow">
-              <div class="my-follow my-list-item"
-                   v-fb>
+              <div class="my-follow my-list-item">
                 <div class="left-image">
                   <van-icon name="star" />
                 </div>
@@ -59,8 +57,7 @@
               </div>
             </router-link>
             <router-link to="/user/myLike">
-              <div class="my-like my-list-item"
-                   v-fb>
+              <div class="my-like my-list-item">
                 <div class="left-image">
                   <van-icon name="like" />
                 </div>
@@ -72,8 +69,7 @@
               </div>
             </router-link>
             <router-link to="/user/recommend">
-              <div class="my-recommend my-list-item"
-                   v-fb>
+              <div class="my-recommend my-list-item">
                 <div class="left-image">
                   <van-icon name="gem" />
                 </div>
@@ -83,8 +79,7 @@
               </div>
             </router-link>
             <router-link to="/user/playRanking">
-              <div class="play-music-ranking my-list-item"
-                   v-fb>
+              <div class="play-music-ranking my-list-item">
                 <div class="left-image">
                   <van-icon name="medal" />
                 </div>

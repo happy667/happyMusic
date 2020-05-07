@@ -4,7 +4,6 @@
     <h2 class="title">{{title}}</h2>
     <router-link tag="div"
                  :to="path"
-                 v-fb
                  class="viewMore"
                  v-if="loadMore">
       更多

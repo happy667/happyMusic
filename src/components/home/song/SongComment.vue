@@ -17,7 +17,7 @@
         <section class="section">
           <div class="song"
                @click="selectSong(song)"
-               v-fb>
+               >
             <song-item :song="song"
                        :showImage="true"></song-item>
           </div>

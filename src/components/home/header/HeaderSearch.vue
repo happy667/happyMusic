@@ -3,14 +3,12 @@
     <!-- logo -->
     <div class="logo"
          :class="user?'active':''"
-         @click="goToMyHome"
-         v-fb>
+         @click="goToMyHome">
       <img v-lazy="image">
     </div>
     <!-- 搜索框 -->
     <div class="search"
-         @click="handleSearchClick"
-         v-fb>
+         @click="handleSearchClick">
       <van-search disabled
                   left-icon=""
                   right-icon="search"

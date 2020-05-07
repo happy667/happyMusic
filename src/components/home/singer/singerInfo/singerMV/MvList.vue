@@ -3,7 +3,6 @@
     <ul class="list">
       <li class="item"
           @click="handleClick(item)"
-          v-fb
           v-for="item in list"
           :key="item.id">
         <mv-item :item="item" />
