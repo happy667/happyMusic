@@ -1,24 +1,26 @@
-# vue-happymusic
+HappyMusic
 
-## Project setup
-```
-npm install
-```
+一个基于VUE全家桶+NeteaseCloudMusicApi(网易云API)+Vant开发的移动端音乐app。
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+预览地址:http://happy6year.com
 
-### Compiles and minifies for production
-```
-npm run build
-```
 
-### Lints and fixes files
-```
-npm run lint
-```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+点击获取源码
+
+主要技术栈
+
+- vue
+- vue-cli
+- vuex
+- vue-router
+- vue-lazyLoad
+- vant
+- es6
+- axios
+- swiper
+- better-scroll
+- animate
+- 网易云音乐api
+
+
