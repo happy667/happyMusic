@@ -1,6 +1,6 @@
 ## HappyMusic
 
-# 一个基于VUE全家桶+NeteaseCloudMusicApi(网易云API)+Vant开发的移动端音乐app。
+一个基于VUE全家桶+NeteaseCloudMusicApi(网易云API)+Vant开发的移动端音乐app。
 
 主要技术栈
 
