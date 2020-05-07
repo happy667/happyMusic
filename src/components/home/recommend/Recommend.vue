@@ -47,6 +47,7 @@ import AlbumSwiper from '@/components/common/miniSwiper/MiniSwiper'
 import Title from '@/components/common/Title'
 import recommendApi from '@/api/recommend.js'
 import Song from '@/assets/common/js/song.js'
+import Album from '@/assets/common/js/album.js'
 import Singer from '@/assets/common/js/singer.js'
 import {
   ERR_OK
@@ -122,10 +123,12 @@ export default {
           })
           songList.push(new Song({
             id: item.id,
-            name: item.name,
+            name: item.song.alias.length > 0 ? `${item.name} (${item.song.alias.join('/')})` : item.name,
             singers,
             picUrl: item.picUrl,
+            album: new Album({ id: item.song.album.id, name: item.song.album.name, picUrl: item.song.album.picUrl }),
             singersList
+
           }))
         })
         this.recommendNewSong = songList

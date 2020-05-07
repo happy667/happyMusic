@@ -7,7 +7,8 @@ export default class Song {
     picUrl,
     playCount,
     st = 0,
-    mv
+    mv,
+    album
   }) {
     this.id = id
     this.name = name
@@ -18,5 +19,6 @@ export default class Song {
     this.playCount = playCount
     this.st = st
     this.mv = mv
+    this.album = album
   }
 }

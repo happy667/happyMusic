@@ -4,7 +4,6 @@ export default class Singer {
     picUrl,
     songs,
     name,
-    trackUpdateTime,
     tags,
     commentCount,
     playCount,

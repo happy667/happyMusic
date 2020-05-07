@@ -2,14 +2,15 @@ import request from '@/axios/request.js'
 export default {
   // 获取歌手列表
   getSingerList({
-    cat,
+    type,
+    area,
     initial,
     offset = 0,
     limit = 20
   }) {
-    let url = `/artist/list?cat=${cat}&offset=${offset}&limit=${limit}&timestamp=${new Date().getTime()}`
+    let url = `/artist/list?type=${type}&area=${area}&offset=${offset}&limit=${limit}`
     if (initial) {
-      url = `/artist/list?cat=${cat}&initial=${initial}&offset=${offset}&limit=${limit}&timestamp=${new Date().getTime()}`
+      url = `/artist/list?type=${type}&area=${area}&initial=${initial}&offset=${offset}&limit=${limit}`
     }
     return request({
       url

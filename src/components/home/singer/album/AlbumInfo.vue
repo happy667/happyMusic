@@ -17,7 +17,8 @@
         <section class="album-info">
           <div class="container">
             <div class="left-img"
-                 @click="openOverlay">
+                 @click="openOverlay"
+                 v-fb>
               <div class="album-image">
                 <div class="image">
                   <img v-lazy="albumObj.album.picUrl"
@@ -32,11 +33,13 @@
             <div class="right-info">
               <div class="album-name">{{albumObj.album.name}}</div>
               <div class="album-singer"
+                   v-fb
                    @click="selectSingers">歌手:{{albumObj.album.singers}}
 
               </div>
               <div class="func">
                 <div class="func-item"
+                     v-fb
                      @click="handleClickFollow">
                   <div class="icon"
                        :class="followCls">
@@ -45,7 +48,8 @@
                   {{followText}}
                 </div>
                 <div class="func-item"
-                     @click="goToAlbumComment">
+                     @click="goToAlbumComment"
+                     v-fb>
                   <div class="icon">
                     <van-icon name="more-o" />
                   </div>
@@ -69,7 +73,8 @@
             <!-- 专辑简介 -->
             <div class="album-desc"
                  v-if="albumObj.album.description"
-                 @click="openOverlay">
+                 @click="openOverlay"
+                 v-fb>
               <section class="content">
                 <p>简介:</p>
                 <p v-html="albumObj.album.description"></p>
@@ -139,7 +144,8 @@
              :style="bgImage"></div>
       </div>
       <div class="close"
-           @click="closeOverlay">
+           @click="closeOverlay"
+           v-fb>
         <div class="icon">
           <i class="iconfont icon-cha"></i>
         </div>
@@ -154,6 +160,7 @@ import SongsList from '@/components/home/song/SongList'
 import singerApi from '@/api/singer.js'
 import userApi from '@/api/user.js'
 import Song from '@/assets/common/js/song.js'
+import Album from '@/assets/common/js/album.js'
 import Singer from '@/assets/common/js/singer.js'
 import AlbumDetail from '@/assets/common/js/albumDetail.js'
 import NoResult from '@/components/common/NoResult'
@@ -265,7 +272,16 @@ export default {
             let singers = item.ar.map(item => item.name).join('/')
             // 处理歌手
             let singersList = this.handleSingerList(item.ar)
-            songList.push(new Song({ id: item.id, name: item.name, singers, singersList, picUrl: item.al.picUrl, st: item.privilege.st, mv: item.mv }))
+            songList.push(new Song({
+              id: item.id,
+              name: item.alia.length > 0 ? `${item.name} (${item.alia.join('/')})` : item.name,
+              singers,
+              singersList,
+              picUrl: item.al.picUrl,
+              st: item.privilege.st,
+              mv: item.mv,
+              album: new Album({ id: item.al.id, name: item.al.name, picUrl: item.al.picUrl })
+            }))
           })
 
           // 处理专辑歌手名称
@@ -274,7 +290,7 @@ export default {
           let singerList = this.handleSingerList(res.album.artists)
           let album = new AlbumDetail({
             id: res.album.id,
-            name: res.album.name,
+            name: res.album.alias.length > 0 ? `${res.album.name} (${res.album.alias.join('/')})` : res.album.name,
             subType: res.album.subType,
             publishTime: res.album.publishTime,
             picUrl: res.album.picUrl,
@@ -322,6 +338,7 @@ export default {
         userApi.updateFollowAlbum(this.id, follow).then(res => {
           if (res.data.code === ERR_OK) {
             this.followed = true
+            this.$toast('收藏成功')
           }
         }).catch(err => {
           this.$toast(err.data.message)

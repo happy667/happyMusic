@@ -40,6 +40,7 @@ import SongSheetList from '@/components/home/songSheet/SongSheetList'
 import SongList from '@/components/home/singer/singerInfo/SingerSong'
 import Singer from '@/assets/common/js/singer.js'
 import Song from '@/assets/common/js/song.js'
+import Album from '@/assets/common/js/album.js'
 import userApi from '@/api/user.js'
 import {
   ERR_OK
@@ -99,7 +100,15 @@ export default {
               name: item.name
             }))
           })
-          songList.push(new Song({ id: item.id, name: item.name, singers, singersList, picUrl: item.album.picUrl, mv: item.mvid }))
+          songList.push(new Song({
+            id: item.id,
+            name: item.alias.length > 0 ? `${item.name} (${item.alias.join('/')})` : item.name,
+            singers,
+            singersList,
+            picUrl: item.album.picUrl,
+            mv: item.mvid,
+            album: new Album({ id: item.album.id, name: item.album.name, picUrl: item.album.picUrl })
+          }))
         })
         this.recommendSongList = songList
         this.songLoading = false

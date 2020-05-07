@@ -17,6 +17,7 @@
           <template #right>
             <div class="share"
                  @click="handleClickShare"
+                 v-fb
                  ref="share">
               <div class="icon">
                 <i class="iconfont icon-fenxiang"></i>
@@ -44,7 +45,8 @@
           <div class="song-sheet-info">
             <div class="container header">
               <div class="left-img"
-                   @click="openOverlay">
+                   @click="openOverlay"
+                   v-fb>
                 <div class="song-sheet-image">
                   <div class="image">
                     <img v-lazy="songSheetDisc.picUrl"
@@ -66,7 +68,9 @@
                 </div>
                 <div class="func">
                   <div class="func-item"
-                       @click="handleClickFollow">
+                       v-if="songSheetDisc.creator.userId!==user.userId"
+                       @click="handleClickFollow"
+                       v-fb>
                     <div class="icon"
                          :class="followCls">
                       <van-icon :name="followIcon" />
@@ -74,7 +78,8 @@
                     {{followText}}
                   </div>
                   <div class="func-item"
-                       @click="goToSongSheetComment">
+                       @click="goToSongSheetComment"
+                       v-fb>
                     <div class="icon">
                       <van-icon name="more-o" />
                     </div>
@@ -99,7 +104,8 @@
            ref="sectionBox">
         <!-- 歌单描述 -->
         <article class="songs-desc"
-                 @click="openOverlay">
+                 @click="openOverlay"
+                 v-fb>
           <p class="desc">{{songSheetDisc.description}}</p>
           <div class="songs-nt">
             <span class="songs-num">{{songSheetDisc.songs.length}}首</span>
@@ -108,7 +114,8 @@
           </div>
           <!-- 播放按钮 -->
           <div class="playBtn"
-               @click.stop="playAllSong(songSheetDisc.songs)">
+               @click.stop="playAllSong(songSheetDisc.songs)"
+               v-fb>
             <i class="iconfont icon-bofang"></i>
           </div>
         </article>
@@ -128,7 +135,8 @@
     </div>
     <!-- 定位 -->
     <position v-show="isShowPosition"
-              @click="handlePosition"></position>
+              @click="handlePosition"
+              v-fb></position>
     <!-- 遮罩层 -->
     <van-overlay :show="showOverlay"
                  v-if="songSheetDisc"
@@ -188,6 +196,7 @@ import Singer from '@/assets/common/js/singer.js'
 import SongsList from '@/components/home/song/SongList'
 import SongSheetDetail from '@/assets/common/js/songSheetDetail.js'
 import User from '@/assets/common/js/user.js'
+import Album from '@/assets/common/js/album.js'
 import NoResult from '@/components/common/NoResult'
 import Position from '@/components/common/Position'
 import TagList from '@/components/common/Tag'
@@ -292,16 +301,18 @@ export default {
               singersList.push(new Singer({
                 id: item.id,
                 name: item.name,
+                aliaName: item.alias.join(' / '),
                 avatar: item.img1v1Url,
                 picUrl: item.picUrl
               }))
             })
             songList.push(new Song({
               id: item.id,
-              name: item.name,
+              name: item.alia.length > 0 ? `${item.name} (${item.alia.join('/')})` : item.name,
               singers: singerName,
               singersList,
               picUrl: item.al.picUrl,
+              album: new Album({ id: item.al.id, name: item.al.name, picUrl: item.al.picUrl }),
               mv: item.mv
             }))
           })
@@ -367,6 +378,7 @@ export default {
         userApi.updateFollowSongSheet(this.id, follow).then(res => {
           if (res.data.code === ERR_OK) {
             this.songSheetDisc.followed = true
+            this.$toast('收藏成功')
           }
         }).catch(err => {
           this.$toast(err.data.message)
@@ -410,7 +422,7 @@ export default {
       this.clipboard = new Clipboard(this.$refs.share, {
         text: () => {
           if (this.user) {
-            return `分享${this.songSheetDisc.creator.nickname}的歌单《${this.songSheetDisc.name}》:\rhttps://music.163.com/#/playlist/${this.songSheetDisc.id}/?userid=${this.user.userId}(来自@网易云音乐)`
+            return `分享${this.songSheetDisc.creator.nickname}的歌单《${this.songSheetDisc.name}》: \rhttps://music.163.com/#/playlist/${this.songSheetDisc.id}/?userid=${this.user.userId}(来自@网易云音乐)`
           } else {
             return `分享${this.songSheetDisc.creator.nickname}的歌单《${this.songSheetDisc.name}》:\rhttps://music.163.com/#/playlist/${this.songSheetDisc.id}(来自@网易云音乐)`
           }

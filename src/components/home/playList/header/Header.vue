@@ -2,7 +2,8 @@
   <header class="header">
     <!-- 左侧播放类型 -->
     <div class="left"
-         @click="changeMode">
+         @click="changeMode"
+         v-fb>
       <div class="play-type icon">
         <i class="iconfont"
            :class="playModeIcon"></i>
@@ -11,7 +12,8 @@
       <div class="list-num">({{sequenceList.length}}首)</div>
     </div>
     <div class="right"
-         @click="clearPlayList">
+         @click="clearPlayList"
+         v-fb>
       <div class="play-type icon">
         <i class="iconfont icon-shanchu"></i>
       </div>

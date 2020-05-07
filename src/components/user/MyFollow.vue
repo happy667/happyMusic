@@ -84,6 +84,7 @@ export default {
           let singer = new Singer({
             id: item.id,
             name: item.name,
+            aliaName: item.alias.join(' / '),
             avatar: item.img1v1Url,
             picUrl: item.picUrl
           })

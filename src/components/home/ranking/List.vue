@@ -3,6 +3,7 @@
     <ul class="list">
       <li class="list-item"
           @click="selectItem(item)"
+          v-fb
           v-for="(item,index) in rankingList"
           :key="index">
         <div class="list-item-img">

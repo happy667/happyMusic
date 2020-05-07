@@ -1,6 +1,7 @@
 <template>
   <div class="song-sheet-mini-item-container"
-       @click="goToSongSheetInfo">
+       @click="goToSongSheetInfo"
+       v-fb>
     <!--  图片 -->
     <div class="img">
       <img v-lazy="item.coverImgUrl"
@@ -78,6 +79,7 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    font-size: $font-size-mini;
 
     .title {
       line-height: 0.5rem;

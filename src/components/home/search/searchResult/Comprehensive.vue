@@ -135,7 +135,16 @@ export default {
             name: item.name
           }))
         })
-        songList.push(new Song({ id: item.id, name: item.name, picUrl: item.al.picUrl, st: item.privilege.st, singers, singersList, mv: item.mv }))
+        songList.push(new Song({
+          id: item.id,
+          name: item.alia.length > 0 ? `${item.name} (${item.alia.join('/')})` : item.name,
+          picUrl: item.al.picUrl,
+          st: item.privilege.st,
+          singers,
+          singersList,
+          mv: item.mv,
+          album: new Album({ id: item.al.id, name: item.al.name, picUrl: item.al.picUrl })
+        }))
       })
       return songObj
     },
@@ -178,7 +187,7 @@ export default {
       album.albums.forEach(item => {
         let album = new Album({
           id: item.id,
-          name: item.name,
+          name: item.alias.length > 0 ? `${item.name} (${item.alias.join('/')})` : item.name,
           picUrl: item.picUrl,
           singerName: item.artist.name,
           publishTime: item.publishTime
@@ -237,13 +246,16 @@ export default {
     // 处理排序结果
     handleOrder (order) {
       if (!order) return null
+      // 过滤包含的组件
       let filterOrder = order.filter(item => this.includeComponents.includes(item))
+      // 获取索引
       let songIndex = filterOrder.findIndex(item => item === 'song')
       let playListIndex = filterOrder.findIndex(item => item === 'playList')
       let albumIndex = filterOrder.findIndex(item => item === 'album')
       let artistIndex = filterOrder.findIndex(item => item === 'artist')
       let simQueryIndex = filterOrder.findIndex(item => item === 'sim_query')
       let videoIndex = filterOrder.findIndex(item => item === 'video')
+      // 根据索引重命名（因为后台数据与组件定义名称不一致）
       if (songIndex !== -1) {
         filterOrder[songIndex] = 'SearchSong'
       }

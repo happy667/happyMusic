@@ -17,7 +17,7 @@
         <!-- 歌曲名称 -->
         <div class="song-name">{{song.name}}</div>
         <!-- 歌手名称-专辑名称 -->
-        <div class="sg-info">{{song.singers}}</div>
+        <div class="sg-info">{{sgName}}</div>
       </div>
       <div class="icon-container"
            v-if="song.st>=0">
@@ -32,7 +32,7 @@
           <div class="icon">
             <van-icon name="play-circle-o" />
           </div>
-          <div class="count">{{song.playCount}}</div>
+          <div class="count">{{song.playCount}}次</div>
         </div>
         <div v-else
              class="icon love"
@@ -83,6 +83,10 @@ export default {
     },
     disableCls () {
       return this.song.st ? this.song.st < 0 : false
+    },
+    // 歌手名称-专辑名称
+    sgName () {
+      return this.song.album ? this.song.singers + ' - ' + this.song.album.name : this.song.singers
     }
   },
   watch: {
@@ -182,7 +186,7 @@ export default {
 .songs-list-item-containter {
   position: relative;
   display: flex;
-  padding: 0.2rem 0.4rem;
+  padding: 0.2rem 0.2rem 0.2rem 0.4rem;
 
   &.disable {
     color: $color-common-b2;
@@ -225,17 +229,19 @@ export default {
     justify-content: space-between;
 
     .song-desc {
-      font-size: $font-size-smaller;
-      line-height: 0.7rem;
       flex: 1;
       width: 1%;
 
       .song-name {
+        line-height: 0.7rem;
+        font-size: $font-size-smaller;
         font-weight: 500;
         no-wrap();
       }
 
       .sg-info {
+        line-height: 0.6rem;
+        font-size: $font-size-smaller-x;
         color: $color-common-b2;
         no-wrap();
       }
@@ -243,16 +249,17 @@ export default {
 
     .icon-container {
       height: 1.4rem;
+      line-height: 1.4rem;
       display: flex;
       align-items: center;
 
       .icon {
-        width: 1.1rem;
-        height: 1.1rem;
+        width: 1rem;
+        height: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 0.6rem;
+        font-size: $font-size-large-x;
         color: $color-common-b2;
 
         &.active {
@@ -260,7 +267,26 @@ export default {
         }
 
         i {
-          font-size: 0.6rem;
+          font-size: $font-size-large-x;
+        }
+      }
+
+      .play-count {
+        margin-right: 0.2rem;
+        width: auto;
+        font-size: $font-size-smaller;
+
+        .icon {
+          width: auto;
+          margin-right: 0.1rem;
+        }
+
+        i {
+          font-size: $font-size-smaller-x;
+        }
+
+        .count {
+          font-size: $font-size-smaller-x;
         }
       }
     }

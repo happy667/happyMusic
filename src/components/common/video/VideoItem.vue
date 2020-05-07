@@ -1,6 +1,7 @@
 <template>
   <section class="video-list-item-container"
-           @click="handleClick">
+           @click="handleClick"
+           v-fb>
     <!-- video 图片 -->
     <div class="video-img">
       <img v-lazy="video.coverUrl"

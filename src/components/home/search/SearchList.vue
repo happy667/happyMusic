@@ -5,6 +5,7 @@
       <li class="list-item"
           v-for="(item,index) in list"
           @click="handleSearch(item)"
+          v-fb
           :key="index">{{item}}</li>
     </ul>
   </div>

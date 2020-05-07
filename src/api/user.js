@@ -121,6 +121,18 @@ export default {
       province: user.province,
       city: user.city
     })
+  },
+  // 资源点赞(MV,电台,视频点赞)
+  resourceLike({
+    id,
+    type,
+    t
+  }) {
+    const url = `/resource/like?timestamp=${new Date().getTime()}`
+    return request.post(url, {
+      id,
+      type,
+      t
+    })
   }
-
 }

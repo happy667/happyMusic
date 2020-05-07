@@ -5,6 +5,7 @@
       <ul class="area-list list">
         <li class="item"
             @click="selectAreaTypeList(item.typeId)"
+            v-fb
             :class="item.typeId===area?'active':''"
             v-for="item in areaTypeList"
             :key="item.typeId">{{item.name}}</li>
@@ -12,6 +13,7 @@
       <ul class="singer-type-list list">
         <li class="item"
             @click="selectSingerTypeList(item.typeId)"
+            v-fb
             :class="item.typeId===singerType?'active':''"
             v-for="item in singerTypeList"
             :key="item.typeId">{{item.name}}</li>
@@ -75,8 +77,8 @@ export default {
       singerList: [], // 歌手列表
       singerTypeList: SINGER_TYPE_LIST, // 歌手类型列表
       areaTypeList: AREA_TYPE_LIST, // 地区类型列表
-      area: AREA_TYPE.chinese, // 地区类型
-      singerType: SINGER_TYPE.maleSinger, // 歌手类型
+      area: AREA_TYPE.all, // 地区类型
+      singerType: SINGER_TYPE.all, // 歌手类型
       loadMore: false,
       more: false
     }
@@ -91,19 +93,14 @@ export default {
       })
     }
   },
-  computed: {
-    cat () {
-      return this.area + '' + this.singerType
-    }
-  },
   methods: {
     ...mapMutations(['setSingerCurrentIndex']),
     // 获取歌手列表
-    async getSingerList (cat) {
+    async getSingerList (type, area) {
       const offset = this.singerList.length
       const {
         data: res
-      } = await singerApi.getSingerList({ cat, offset })
+      } = await singerApi.getSingerList({ type, area, offset })
       if (res.code === ERR_OK) {
         let singerList = []
         this.more = res.more
@@ -134,7 +131,7 @@ export default {
       this.singerType = typeId
       // 清空歌手列表
       this.singerList = []
-      this.getSingerList(this.cat)
+      this.getSingerList(this.singerType, this.area)
     },
     // 选择地区类型
     selectAreaTypeList (typeId) {
@@ -145,7 +142,7 @@ export default {
       this.area = typeId
       // 清空歌手列表
       this.singerList = []
-      this.getSingerList(this.cat)
+      this.getSingerList(this.singerType, this.area)
     },
     // 选择歌手
     handleSelect (item) {
@@ -161,7 +158,7 @@ export default {
         clearTimeout(this.loadTimer)
         this.loadMore = true
         this.loadTimer = setTimeout(async () => {
-          await this.getSingerList(this.cat)
+          await this.getSingerList(this.singerType, this.area)
           this.$nextTick(() => {
             this.finishPullUp()
           })
@@ -179,7 +176,7 @@ export default {
     this.refresh()
   },
   mounted () {
-    this.getSingerList(this.cat)
+    this.getSingerList(this.singerType, this.area)
   },
   components: {
     SingerItem,

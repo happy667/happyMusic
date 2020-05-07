@@ -6,7 +6,7 @@
         <div class="swiper-slide"
              v-for="(item,index) in recommendNewSong"
              :key="item.id"
-             @click="handleSelect(item,index)">
+             @click.stop="handleSelect(item,index)">
           <song-item :showImage="true"
                      :showIndex="false"
                      :song="item"></song-item>

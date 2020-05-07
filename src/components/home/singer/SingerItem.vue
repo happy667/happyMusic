@@ -1,6 +1,7 @@
 <template>
   <div class="singer-list-item-container"
-       @click="selectItem(singer)">
+       @click.stop="selectItem(singer)"
+       v-fb>
     <div class="singer-list-item">
       <div class="left">
         <!-- 歌手头像 -->
@@ -8,7 +9,7 @@
           <my-image :src="avatar" />
         </div>
         <!-- 歌手姓名 -->
-        <div class="singer-name">{{singer.name}}</div>
+        <div class="singer-name">{{singerName}}</div>
       </div>
 
       <div class="right"
@@ -44,6 +45,13 @@ export default {
   computed: {
     avatar () {
       return this.singer.avatar ? this.singer.avatar : DEFAULT_SINGER_IMAGE
+    },
+    singerName () {
+      let aliaName = ''
+      if (this.singer.aliaName) {
+        aliaName = ' (' + this.singer.aliaName + ')'
+      }
+      return this.singer.name + aliaName
     }
   },
   methods: {

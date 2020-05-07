@@ -85,7 +85,7 @@ export default {
         res.result.albums.forEach(item => {
           let album = new Album({
             id: item.id,
-            name: item.name,
+            name: item.alias.length > 0 ? `${item.name} (${item.alias.join('/')})` : item.name,
             picUrl: item.picUrl,
             singerName: item.artists.map(item => item.name).join('/'),
             publishTime: item.publishTime

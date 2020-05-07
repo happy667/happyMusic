@@ -28,6 +28,7 @@ import {
 } from '@/assets/common/js/config.js'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 import Song from '@/assets/common/js/song.js'
+import Album from '@/assets/common/js/album.js'
 import Singer from '@/assets/common/js/singer.js'
 import songApi from '@/api/song.js'
 
@@ -97,7 +98,14 @@ export default {
               picUrl: item.picUrl
             }))
           })
-          songList.push(new Song({ id: item.id, name: item.name, singers, singersList, mv: item.mvid }))
+          songList.push(new Song({
+            id: item.id,
+            name: item.alias.length > 0 ? `${item.name} (${item.alias.join('/')})` : item.name,
+            singers,
+            singersList,
+            mv: item.mvid,
+            album: new Album({ id: item.album.id, name: item.album.name, picUrl: item.album.picUrl })
+          }))
         })
         // 将每次查询的歌曲追加到song.songList中
         // 因为可能存在重复数据，所以需要去重处理

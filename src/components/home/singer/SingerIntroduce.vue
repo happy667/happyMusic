@@ -1,52 +1,56 @@
 <template>
-  <article class="singer-introduce-container"
-           ref="container">
+  <article class="singer-introduce-container">
     <!-- 头部导航栏 -->
     <van-sticky>
       <van-nav-bar :title="$route.meta.title"
-                   ref="navBar"
                    left-arrow
                    :z-index="99"
                    @click-left="routerBack" />
     </van-sticky>
     <!-- loading -->
     <loading :loading="loading"></loading>
-    <template v-if="!loading">
-      <div class="container">
-        <div class="singer-synopsis-title">
-          <div class="title">
-            <Title title="歌手简介"
-                   borderLeft></Title>
-          </div>
+    <section class="section-container">
+      <scroll ref="singer_introduce_scroll">
+        <div class="container"
+             ref="container">
+          <template v-if="!loading">
+            <div class="singer-synopsis-title">
+              <div class="title">
+                <Title title="歌手简介"
+                       borderLeft></Title>
+              </div>
 
+            </div>
+            <div class="singer-synopsis">
+              <article class="context">
+                {{articleObj.briefDesc}}
+              </article>
+            </div>
+            <div class="singer-introduction"
+                 v-for="item in articleObj.introduction"
+                 :key="item.ti">
+              <div class="title">
+                <Title :title="item.ti"
+                       borderLeft></Title>
+              </div>
+              <article class="context"
+                       v-html="item.txt"></article>
+            </div>
+          </template>
         </div>
-        <div class="singer-synopsis">
-          <article class="context">
-            {{articleObj.briefDesc}}
-          </article>
-        </div>
-        <div class="singer-introduction"
-             v-for="item in articleObj.introduction"
-             :key="item.ti">
-          <div class="title">
-            <Title :title="item.ti"
-                   borderLeft></Title>
-          </div>
-          <article class="context"
-                   v-html="item.txt"></article>
-        </div>
-      </div>
-    </template>
+      </scroll>
+    </section>
   </article>
 </template>
 
 <script>
+import Scroll from '@/components/common/Scroll'
+import { playlistMixin } from '@/assets/common/js/mixin.js'
 import Title from '@/components/common/Title'
 import singerApi from '@/api/singer.js'
 import {
   ERR_OK
 } from '@/api/config.js'
-import { playlistMixin } from '@/assets/common/js/mixin.js'
 export default {
   name: 'singerIntroduce',
   props: {
@@ -76,39 +80,61 @@ export default {
           topicData: res.topicData
         }
         this.loading = false
+        this.handlePlaylist(this.playList)
       }
     },
     handlePlaylist (playList) {
-      // 适配播放器与页面底部距离
-      const bottom = playList.length > 0 ? '1.6rem' : ''
+      if (!this.loading) {
+        // 适配播放器与页面底部距离
+        const bottom = playList.length > 0 ? '1.6rem' : ''
+        this.$nextTick(() => {
+          this.$refs.container.style.paddingBottom = bottom
+          this.refresh()
+        })
+      }
+    },
+    refresh () {
       this.$nextTick(() => {
-        this.$refs.container.style.paddingBottom = bottom
+        this.$refs.singer_introduce_scroll.refresh()
       })
     }
   },
   components: {
-    Title
+    Title,
+    Scroll
   }
 }
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.singer-introduce-container {
+.singer-introduce-container >>> .scroll {
   position: absolute;
-  left: 0;
-  top: 0;
   width: 100%;
   height: 100%;
+  overflow: hidden;
+}
+
+.singer-introduce-container {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   background: $color-common-background;
 
-  .container {
-    padding: 0.4rem;
+  section {
+    position: relative;
+    flex: 1;
 
-    .context {
-      margin: 0.4rem 0;
-      line-height: 0.5rem;
-      white-space: pre-wrap;
+    .container {
+      padding: 0.4rem;
+
+      .context {
+        margin: 0.4rem 0;
+        line-height: 0.5rem;
+        white-space: pre-wrap;
+      }
     }
   }
 }

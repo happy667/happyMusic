@@ -4,7 +4,8 @@
 
     <template v-if="list&&list.length!==0">
       <ul class="songs-sheet-list">
-        <li @click="selectItem(item)"
+        <li @click.stop="selectItem(item)"
+            v-fb
             class="songs-sheet-list-item"
             v-for="item in list"
             :key="item.id">

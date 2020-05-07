@@ -34,5 +34,13 @@ export default {
     return request({
       url
     })
+  },
+  // 听歌打卡
+  scrobble(id, sourceId) {
+    const url = `/scrobble?timestamp=${new Date().getTime()}`
+    return request.post(url, {
+      id,
+      sourceid: sourceId
+    })
   }
 }

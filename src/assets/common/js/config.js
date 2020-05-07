@@ -28,55 +28,73 @@ export const VIDEO_TYPE = {
 }
 // 歌手类型
 export const SINGER_TYPE = {
-  maleSinger: '01',
-  femaleSinger: '02',
-  band: '03'
+  all: -1,
+  maleSinger: 1,
+  femaleSinger: 2,
+  band: 3
 }
 // 歌手类型列表（带名称）
-export const SINGER_TYPE_LIST = [{
-  typeId: SINGER_TYPE.maleSinger,
-  name: '男歌手'
-},
-{
-  typeId: SINGER_TYPE.femaleSinger,
-  name: '女歌手'
-},
-{
-  typeId: SINGER_TYPE.band,
-  name: '乐队'
-}
+export const SINGER_TYPE_LIST = [
+  {
+    typeId: SINGER_TYPE.all,
+    name: '全部'
+  },
+  {
+    typeId: SINGER_TYPE.maleSinger,
+    name: '男歌手'
+  },
+  {
+    typeId: SINGER_TYPE.femaleSinger,
+    name: '女歌手'
+  },
+  {
+    typeId: SINGER_TYPE.band,
+    name: '乐队'
+  }
 ]
 // 地区类型
 export const AREA_TYPE = {
-  chinese: 10,
-  western: 20,
-  japan: 60,
-  han: 70,
-  other: 40
+  all: -1,
+  chinese: 7,
+  western: 96,
+  japan: 8,
+  han: 16,
+  other: 0
 }
 // 地区类型列表（带名称）
-export const AREA_TYPE_LIST = [{
-  typeId: AREA_TYPE.chinese,
-  name: '华语'
-},
-{
-  typeId: AREA_TYPE.western,
-  name: '欧美'
-},
-{
-  typeId: AREA_TYPE.japan,
-  name: '日本'
-},
-{
-  typeId: AREA_TYPE.han,
-  name: '韩国'
-},
-{
-  typeId: AREA_TYPE.other,
-  name: '其他'
-}
+export const AREA_TYPE_LIST = [
+  {
+    typeId: AREA_TYPE.all,
+    name: '全部'
+  },
+  {
+    typeId: AREA_TYPE.chinese,
+    name: '华语'
+  },
+  {
+    typeId: AREA_TYPE.western,
+    name: '欧美'
+  },
+  {
+    typeId: AREA_TYPE.japan,
+    name: '日本'
+  },
+  {
+    typeId: AREA_TYPE.han,
+    name: '韩国'
+  },
+  {
+    typeId: AREA_TYPE.other,
+    name: '其他'
+  }
 ]
-
+// 资源类型
+export const RECOURCE_TYPE = {
+  mv: 1,
+  radioStation: 4,
+  video: 5,
+  dynamic: 6
+}
 export const USER_TOKEN = 'token'
 // 需要登录的组件
 

@@ -76,6 +76,8 @@ export default {
       this.getSong(this.currentSong)
       // 获取歌词
       this.$refs.FullScreenPlay.$refs.playSection.getLyric(this.currentSong.id)
+      // 听歌打卡（刷新听歌排行）
+      this.scrobble(this.currentSong.id, this.currentSong.album.id)
       // 初始化获取歌手图片（点击歌手弹出歌手框的图片）
       this.setIsLoadPlayerImage(true)
     },
@@ -249,6 +251,10 @@ export default {
       this.resetCurrentIndex(list)
       this.setPlayList(list)
       this.$toast(this.playMode === PLAY_MODE.sequence ? '列表循环' : this.playMode === PLAY_MODE.loop ? '单曲循环' : '随机播放')
+    },
+    // 听歌打卡
+    scrobble (id, sourceId) {
+      songApi.scrobble(id, sourceId)
     },
     // 重置当前索引
     resetCurrentIndex (list) {

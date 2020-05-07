@@ -9,6 +9,7 @@
           <li class="play-list-item"
               ref="listGroup"
               @click.stop="selectItem($event,item,index)"
+              v-fb
               :class="item.id===currentSong.id ? 'active':''"
               v-for="(item,index) in playList"
               :key="item.id">
@@ -25,7 +26,8 @@
             </div>
 
             <div class="right delete"
-                 @click.stop="handleDelete(item)">
+                 @click.stop="handleDelete(item)"
+                 v-fb>
               <div class="icon">
                 <i class="iconfont icon-cha"></i>
               </div>

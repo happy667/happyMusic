@@ -37,6 +37,7 @@ import Scroll from '@/components/common/Scroll'
 import SongList from '@/components/home/singer/singerInfo/SingerSong'
 import Singer from '@/assets/common/js/singer.js'
 import Song from '@/assets/common/js/song.js'
+import Album from '@/assets/common/js/album.js'
 import userApi from '@/api/user.js'
 import {
   ERR_OK
@@ -91,7 +92,16 @@ export default {
               name: item.name
             }))
           })
-          songList.push(new Song({ id: item.song.id, name: item.song.name, singers, singersList, picUrl: item.song.al.picUrl, playCount: item.playCount }))
+          let song = item.song
+          songList.push(new Song({
+            id: song.id,
+            name: song.alia.length > 0 ? `${song.name} (${song.alia.join('/')})` : song.name,
+            singers,
+            singersList,
+            picUrl: song.al.picUrl,
+            playCount: item.playCount,
+            album: new Album({ id: song.al.id, name: song.al.name, picUrl: song.al.picUrl })
+          }))
         })
         this.loading = false
         return songList

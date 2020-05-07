@@ -73,6 +73,7 @@ export default {
 @import '~common/stylus/variable';
 
 .play-controller-container {
+  margin: 0 0.65rem;
   display: flex;
   justify-content: space-between;
   align-items: center;

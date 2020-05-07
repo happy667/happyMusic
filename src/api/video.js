@@ -7,8 +7,8 @@ export default {
       url
     })
   },
-  // 获取推荐视频路径
-  getRecommendVideoUrl(id) {
+  // 获取视频路径
+  getVideoUrl(id) {
     const url = `/mv/url?id=${id}`
     return request({
       url
@@ -16,15 +16,21 @@ export default {
   },
   // 获取视频详情
   getVideoDetail(id) {
-    console.log(id)
-    const url = `/mv/detail?mvid=${id}`
+    const url = `/mv/detail?mvid=${id}&timestamp=${new Date().getTime()}`
+    return request({
+      url
+    })
+  },
+  // 获取视频点赞数评论数
+  getVideoDetailInfo(id) {
+    const url = `/mv/detail/info?mvid=${id}&timestamp=${new Date().getTime()}`
     return request({
       url
     })
   },
   // 获取mv评论
   getVideoComment(id, offset = 0) {
-    let url = `comment/mv?id=${id}&offset=${offset}`
+    let url = `comment/mv?id=${id}&offset=${offset}&timestamp=${new Date().getTime()}`
     return request({
       url
     })

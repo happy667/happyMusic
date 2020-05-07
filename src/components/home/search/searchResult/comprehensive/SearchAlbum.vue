@@ -10,7 +10,7 @@
       </album-list>
       <div class="more"
            v-if="album.moreText"
-           @click="$emit('setIndex',3)">
+           @click="$emit('setIndex',3)" v-fb>
         <div class="text">
           {{album.moreText}}
         </div>

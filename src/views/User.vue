@@ -33,7 +33,8 @@
         <div class="edit"
              v-if="user">
           <div class="icon"
-               @click="handleEdit">
+               @click="handleEdit"
+               v-fb>
             <van-icon name="setting-o"
                       size="25" />
           </div>
@@ -46,7 +47,8 @@
              ref="container">
           <div class="my-list">
             <router-link to="/user/myFollow">
-              <div class="my-follow my-list-item">
+              <div class="my-follow my-list-item"
+                   v-fb>
                 <div class="left-image">
                   <van-icon name="star" />
                 </div>
@@ -57,7 +59,8 @@
               </div>
             </router-link>
             <router-link to="/user/myLike">
-              <div class="my-like my-list-item">
+              <div class="my-like my-list-item"
+                   v-fb>
                 <div class="left-image">
                   <van-icon name="like" />
                 </div>
@@ -69,7 +72,8 @@
               </div>
             </router-link>
             <router-link to="/user/recommend">
-              <div class="my-recommend my-list-item">
+              <div class="my-recommend my-list-item"
+                   v-fb>
                 <div class="left-image">
                   <van-icon name="gem" />
                 </div>
@@ -79,7 +83,8 @@
               </div>
             </router-link>
             <router-link to="/user/playRanking">
-              <div class="play-music-ranking my-list-item">
+              <div class="play-music-ranking my-list-item"
+                   v-fb>
                 <div class="left-image">
                   <van-icon name="medal" />
                 </div>
@@ -120,7 +125,9 @@
                   </template>
 
                   <album-list :list="userAlbum"
-                              @select="selectItem"></album-list>
+                              @select="selectItem"
+                              showSongSize
+                              :showTime="false"></album-list>
                   <template v-if="userAlbum.length===0">
                     <no-result text="还没有专辑,快去收藏吧"></no-result>
                   </template>
@@ -218,6 +225,8 @@ export default {
         this.getUserAlbum()
         // 获取用户收藏的歌单
         this.getUserSongSheet(this.user.userId)
+        // 获取用户收藏的视频
+        this.getUserVideo()
       }
     }
   },
@@ -274,7 +283,8 @@ export default {
         res.data.forEach(item => {
           let album = new Album({
             id: item.id,
-            name: item.name,
+            name: item.alias.length > 0 ? `${item.name} (${item.alias.join('/')})` : item.name,
+            size: item.size,
             picUrl: item.picUrl,
             singerName: item.artists.map(item => item.name).join('/'),
             publishTime: item.subTime

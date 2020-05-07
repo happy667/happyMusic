@@ -20,7 +20,8 @@
           <div class="section">
             <!-- 专辑头部 -->
             <div class="album-header"
-                 @click="goToAlbum">
+                 @click="goToAlbum"
+                 v-fb>
               <div class="album-info">
                 <div class="container">
                   <div class="left-img">
@@ -76,6 +77,7 @@
 <script>
 import NoResult from '@/components/common/NoResult'
 import CommentList from '@/components/home/comment/CommentList'
+import AlbumDetail from '@/assets/common/js/albumDetail.js'
 import singerApi from '@/api/singer.js'
 import {
   ERR_OK
@@ -127,9 +129,14 @@ export default {
       if (res.code === ERR_OK) {
         // 处理专辑歌手名称
         let singers = res.album.artists.map(item => item.name).join('/')
-        let album = res.album
-        album.singers = singers
-        console.log(album)
+        let album = new AlbumDetail({
+          id: res.album.id,
+          name: res.album.alias.length > 0 ? `${res.album.name} (${res.album.alias.join('/')})` : res.album.name,
+          publishTime: res.album.publishTime,
+          picUrl: res.album.picUrl,
+          blurPicUrl: res.album.blurPicUrl,
+          singers
+        })
         this.album = album
         this.commentCount = res.album.info.commentCount
       }

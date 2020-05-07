@@ -4,7 +4,8 @@
     <van-sticky>
       <van-nav-bar :title="$route.meta.title"
                    left-arrow
-                   @click-left="routerBack" />
+                   @click-left="routerBack"
+                   v-fb />
     </van-sticky>
 
     <!-- loading -->
@@ -111,6 +112,7 @@ export default {
       if (res.code === ERR_OK) { // 成功获取推荐歌单
         this.recommendSongSheet = res.result
         this.loading = false
+        this.handlePlaylist(this.playList)
       }
     },
     handleChange (name, title) {
@@ -121,15 +123,21 @@ export default {
       }
     },
     handlePlaylist (playList) {
-      // 适配播放器与页面底部距离
-      const bottom = playList.length > 0 ? '1.6rem' : ''
-      this.$nextTick(() => {
-        if (!this.loading) {
+      if (!this.loading) {
+        // 适配播放器与页面底部距离
+        const bottom = playList.length > 0 ? '1.6rem' : ''
+        this.$nextTick(() => {
           this.$refs.container.style.paddingBottom = bottom
-          this.$refs.song_sheet_square_scroll.refresh()
-        }
+          this.refresh()
+        })
+      }
+    },
+    refresh () {
+      this.$nextTick(() => {
+        this.$refs.song_sheet_square_scroll.refresh()
       })
     }
+
   },
   components: {
     SwiperList,

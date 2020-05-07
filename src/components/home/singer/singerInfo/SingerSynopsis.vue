@@ -88,6 +88,7 @@ export default {
         userApi.updateFollowSinger(singer.id, follow).then(res => {
           if (res.data.code === ERR_OK) {
             this.$set(singer, 'followed', true)
+            this.$toast('收藏成功')
           }
         }).catch(err => {
           this.$toast(err.data.message)

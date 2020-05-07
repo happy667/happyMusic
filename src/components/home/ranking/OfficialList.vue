@@ -1,6 +1,7 @@
 <template>
   <div class="official-list-container"
-       @click="selectItem(rankingObj)">
+       @click="selectItem(rankingObj)"
+       v-fb>
     <router-link to="/songSheetInfo"
                  tab="div"
                  class="official-list">

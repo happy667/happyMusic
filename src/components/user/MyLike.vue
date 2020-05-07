@@ -34,6 +34,7 @@ import Position from '@/components/common/Position'
 import SongList from '@/components/home/singer/singerInfo/SingerSong'
 import Singer from '@/assets/common/js/singer.js'
 import Song from '@/assets/common/js/song.js'
+import Album from '@/assets/common/js/album.js'
 import songApi from '@/api/song.js'
 import {
   ERR_OK
@@ -102,7 +103,16 @@ export default {
               name: item.name
             }))
           })
-          let song = new Song({ id: item.id, name: item.name, singers, singersList, picUrl: item.al.picUrl, st: item.st, mv: item.mv })
+          let song = new Song({
+            id: item.id,
+            name: item.alia.length > 0 ? `${item.name} (${item.alia.join('/')})` : item.name,
+            singers,
+            singersList,
+            picUrl: item.al.picUrl,
+            st: item.st,
+            mv: item.mv,
+            album: new Album({ id: item.al.id, name: item.al.name, picUrl: item.al.picUrl })
+          })
           songList.push(song)
         })
         this.songList = songList

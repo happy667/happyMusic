@@ -16,7 +16,8 @@
       <template v-else>
         <section class="section">
           <div class="song"
-               @click="selectSong(song)">
+               @click="selectSong(song)"
+               v-fb>
             <song-item :song="song"
                        :showImage="true"></song-item>
           </div>
@@ -49,6 +50,7 @@ import SongItem from '@/components/home/song/SongItem'
 import CommentList from '@/components/home/comment/CommentList'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 import Song from '@/assets/common/js/song.js'
+import Album from '@/assets/common/js/album.js'
 import Singer from '@/assets/common/js/singer.js'
 import songApi from '@/api/song.js'
 import {
@@ -140,7 +142,14 @@ export default {
             name: item.name
           }))
         })
-        let song = new Song({ id: item.id, name: item.name, singers, singersList, picUrl: item.al.picUrl })
+        let song = new Song({
+          id: item.id,
+          name: item.alia.length > 0 ? `${item.name} (${item.alia.join('/')})` : item.name,
+          singers,
+          singersList,
+          picUrl: item.al.picUrl,
+          album: new Album({ id: item.al.id, name: item.al.name, picUrl: item.al.picUrl })
+        })
         this.song = song
         console.log(song)
       }

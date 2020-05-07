@@ -214,7 +214,7 @@ export default {
                 name: item.name
               }))
             })
-            songList.push(new Song({ id: item.id, name: item.name, singers, singersList, picUrl: item.al.picUrl, st: item.privilege.st, mv: item.mv }))
+            songList.push(new Song({ id: item.id, name: item.alia.length > 0 ? `${item.name} (${item.alia.join('/')})` : item.name, singers, singersList, picUrl: item.al.picUrl, st: item.privilege.st, mv: item.mv }))
           })
           this.setSingerInfo(res.artist)
           if (res.artist.accountId) {
@@ -237,7 +237,7 @@ export default {
         res.hotAlbums.forEach(item => {
           let album = new Album({
             id: item.id,
-            name: item.name,
+            name: item.alias.length > 0 ? `${item.name} (${item.alias.join('/')})` : item.name,
             picUrl: item.picUrl,
             singerName: item.artist.name,
             size: item.size,

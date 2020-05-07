@@ -15,7 +15,8 @@ export default class VideoDetail {
     duration,
     creatorName,
     creatorList,
-    followed
+    followed,
+    liked
   }) {
     this.id = id
     this.coverUrl = coverUrl
@@ -33,5 +34,6 @@ export default class VideoDetail {
     this.creatorName = creatorName
     this.creatorList = creatorList
     this.followed = followed
+    this.liked = liked
   }
 }

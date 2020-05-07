@@ -16,7 +16,8 @@
       <div class="desc">
         <span class="singer"
               v-if="showSinger">{{item.singerName}}</span>
-        <span class="time">{{item.publishTime|convertDate}}</span>
+        <span class="time"
+              v-if="showTime">{{item.publishTime|convertDate}}</span>
         <span class="song-Size"
               v-if="showSongSize">歌曲 {{item.size}}</span>
       </div>
@@ -36,6 +37,10 @@ export default {
     showSongSize: {
       type: Boolean,
       default: () => false
+    },
+    showTime: {
+      type: Boolean,
+      default: () => true
     }
   }
 }
@@ -91,7 +96,7 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    font-size: 0.3rem;
+    font-size: $font-size-mini;
 
     .name {
       line-height: 0.5rem;

@@ -15,6 +15,7 @@ import '@/assets/common/js/globalComponents.js'
 // 插件
 import './plugins/vant.js'
 import './plugins/vueLazyLoad.js'
+import './plugins/feedBack.js'
 // 解决移动端300ms延迟
 import fastclick from 'fastclick'
 

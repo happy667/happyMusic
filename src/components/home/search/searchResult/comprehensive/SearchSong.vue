@@ -14,7 +14,8 @@
       </song-list>
       <div class="more"
            v-if="song.moreText"
-           @click="$emit('setIndex',1)">
+           @click="$emit('setIndex',1)"
+           v-fb>
         <div class="text">
           {{song.moreText}}
         </div>

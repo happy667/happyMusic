@@ -67,7 +67,7 @@ export default {
     },
     selectItem (item) {
       this.setSingerCurrentIndex(0)
-      this.$router.replace(`/singerInfo/${item.id}`)
+      this.$router.push(`/singerInfo/${item.id}`)
     }
   },
   components: {

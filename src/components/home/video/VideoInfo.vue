@@ -36,7 +36,8 @@
         <!-- 视频信息 -->
         <div class="video-info">
           <div class="info-top"
-               @click="handleToggleInfo">
+               @click="handleToggleInfo"
+               v-fb>
             <div class="content">
               <!-- 视频标题 -->
               <div class="title">
@@ -67,7 +68,9 @@
           <!-- 视频收藏、分享、点赞、评论 -->
           <div class="info-center van-hairline--bottom">
             <div class="item"
-                 @click="handleClickLove">
+                 :class="video.liked?'active':''"
+                 @click="handleClickLike"
+                 v-fb>
               <div class="love icon">
                 <i class="iconfont icon-dianzan"></i>
               </div>
@@ -75,14 +78,16 @@
             </div>
             <div class="item"
                  :class="video.followed?'active':''"
-                 @click="handleClickFollow">
+                 @click="handleClickFollow"
+                 v-fb>
               <div class="follow icon">
                 <van-icon :name="followIcon" />
               </div>
               <p class="text">{{video.subCount|convertCount}}</p>
             </div>
             <div class="item"
-                 @click="handleClickComment">
+                 @click="handleClickComment"
+                 v-fb>
               <div class="comment icon">
                 <van-icon name="more-o" />
               </div>
@@ -90,7 +95,8 @@
             </div>
             <div class="item"
                  ref="share"
-                 @click="handleClickShare()">
+                 @click="handleClickShare()"
+                 v-fb>
               <div class="share icon">
                 <i class="iconfont icon-fenxiang"></i>
               </div>
@@ -99,7 +105,8 @@
           </div>
           <!-- 视频出处 -->
           <div class="info-bottom"
-               @click="selectCreator(video.creatorList)">
+               @click="selectCreator(video.creatorList)"
+               v-fb>
             <div class="play-source-img">
               <my-image :src="video.artist.avatarUrl" />
             </div>
@@ -170,6 +177,10 @@ import { mapMutations, mapState } from 'vuex'
 import {
   ERR_OK
 } from '@/api/config.js'
+import {
+  RECOURCE_TYPE
+} from '@/assets/common/js/config.js'
+
 export default {
   name: 'videoInfo',
   props: {
@@ -240,65 +251,74 @@ export default {
     },
     // 获取视频详情
     async getVideoDetail (id) {
-      const { data: res } = await videoApi.getVideoDetail(id)
-      if (res.code === ERR_OK) {
-        const data = res.data
-        let creatorList = []
-        let video = new VideoDetail({
-          id: data.id,
-          coverUrl: data.cover,
-          name: data.name,
-          playCount: data.playCount,
-          subCount: data.subCount,
-          commentCount: data.commentCount,
-          shareCount: data.shareCount,
-          likeCount: data.likeCount,
-          url: this.handleUrls(data.brs),
-          publishTime: data.publishTime,
-          desc: data.desc,
-          duration: data.duration,
-          creatorName: data.artists.map(item => item.name).join('/'),
-          creatorList,
-          followed: res.subed
-        })
-
-        data.artists.forEach(item => {
-          let creator = new Singer({
-            id: item.id,
-            name: item.name
-          })
-          creatorList.push(creator)
-        })
-
-        console.log(video)
-        // 获取歌手信息
-        const { data: res2 } = await singerApi.getSinger(data.artistId)
-        if (res2.code === ERR_OK) {
-          video.artist = { id: res2.artist.id, name: res2.artist.name, avatarUrl: res2.artist.picUrl }
-          this.commentCount = data.commentCount
-          this.video = video
-          if (!this.video.url) {
-            this.$toast.fail('暂无视频资源')
+      try {
+        const { data: res } = await videoApi.getVideoDetail(id)
+        if (res.code === ERR_OK) {
+          // 获取视频url
+          const { data: res2 } = await videoApi.getVideoUrl(id)
+          if (res2.code === ERR_OK) {
+            // 获取点赞数评论数
+            const { data: res3 } = await videoApi.getVideoDetailInfo(id)
+            if (res2.code === ERR_OK) {
+              // 获取歌手信息
+              const { data: res4 } = await singerApi.getSinger(res.data.artistId)
+              if (res4.code === ERR_OK) {
+                const data = res.data
+                let creatorList = []
+                let video = new VideoDetail({
+                  id: data.id,
+                  coverUrl: data.cover,
+                  name: data.name,
+                  playCount: data.playCount,
+                  subCount: data.subCount,
+                  commentCount: data.commentCount,
+                  shareCount: data.shareCount,
+                  publishTime: data.publishTime,
+                  desc: data.desc,
+                  duration: data.duration,
+                  creatorName: data.artists.map(item => item.name).join('/'),
+                  creatorList,
+                  followed: res.subed,
+                  url: res2.data.url,
+                  liked: res3.liked,
+                  likeCount: res3.likedCount,
+                  artist: { id: res4.artist.id, name: res4.artist.name, avatarUrl: res4.artist.picUrl }
+                })
+                data.artists.forEach(item => {
+                  let creator = new Singer({
+                    id: item.id,
+                    name: item.name
+                  })
+                  creatorList.push(creator)
+                })
+                this.commentCount = data.commentCount
+                this.video = video
+                if (!this.video.url) {
+                  this.$toast.fail('暂无视频资源')
+                }
+              }
+            }
           }
         }
-
-        console.log(this.video)
+      } catch (e) {
+        this.$toast(e.data.message)
+        this.$router.replace('/')
       }
     },
     // 处理路径
-    handleUrls (urls) {
-      let url = ''
-      if (urls[1024]) {
-        url = urls[1024]
-      } else if (urls[720]) {
-        url = urls[720]
-      } else if (urls[480]) {
-        url = urls[480]
-      } else if (urls[240]) {
-        url = urls[240]
-      }
-      return url
-    },
+    // handleUrls (urls) {
+    //   let url = ''
+    //   if (urls[1024]) {
+    //     url = urls[1024]
+    //   } else if (urls[720]) {
+    //     url = urls[720]
+    //   } else if (urls[480]) {
+    //     url = urls[480]
+    //   } else if (urls[240]) {
+    //     url = urls[240]
+    //   }
+    //   return url
+    // },
     // 获取相似mv
     async getSimiMV (id) {
       const {
@@ -363,7 +383,6 @@ export default {
     },
     // 选择创作者
     selectCreator () {
-      console.log(123)
       let list = this.video.creatorList
       if (list.length === 1) { // 只有一个歌手直接跳转到歌手页面
         this.setSingerCurrentIndex(0)
@@ -391,6 +410,8 @@ export default {
         userApi.updateFollowVideo(this.video.id, follow).then(res => {
           if (res.data.code === ERR_OK) {
             this.video.followed = true
+            this.video.subCount += 1
+            this.$toast('收藏成功')
           }
         }).catch(err => {
           this.$toast(err.data.message)
@@ -400,6 +421,7 @@ export default {
           userApi.updateFollowVideo(this.id, follow).then(res => {
             if (res.data.code === ERR_OK) {
               this.video.followed = false
+              this.video.subCount -= 1
               this.$toast('已不再收藏')
             }
           }).catch(err => {
@@ -408,8 +430,32 @@ export default {
         }).catch(() => { })
       }
     },
-    handleClickLove () {
-      this.$toast('因api原因暂未实现')
+    // 选中歌曲喜欢
+    handleClickLike () {
+      let video = this.video
+      if (this.user) { // 说明已经登录
+        this.likeVideo(video)// 点赞视频
+      } else { // 弹窗提示去登录
+        this.$utils.alertLogin(this.$router.currentRoute.fullPath)
+      }
+    },
+    likeVideo (video) {
+      let like = !video.liked
+      userApi.resourceLike({ id: video.id, type: RECOURCE_TYPE.mv, t: like }).then(res => {
+        if (res.data.code === ERR_OK) {
+          // 同步点赞状态
+          this.video.liked = like
+          if (like) { // 点赞加1
+            this.video.likeCount += 1
+            this.$toast('点赞成功')
+          } else { // 取消点赞加1
+            this.video.likeCount -= 1
+            this.$toast('已取消点赞')
+          }
+        }
+      }).catch(err => {
+        this.$toast(err.data.message)
+      })
     },
     // 点击评论
     handleClickComment () {

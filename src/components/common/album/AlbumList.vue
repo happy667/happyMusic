@@ -6,10 +6,12 @@
         <li class="item"
             v-for="item in list"
             :key="item.id"
+            v-fb
             @click="handleClick(item)">
           <album :item="item"
                  :showSinger="showSinger"
-                 :showSongSize="showSongSize" />
+                 :showSongSize="showSongSize"
+                 :showTime="showTime" />
         </li>
 
       </ul>
@@ -30,6 +32,10 @@ export default {
     showSongSize: {
       type: Boolean,
       default: () => false
+    },
+    showTime: {
+      type: Boolean,
+      default: () => true
     }
   },
   methods: {

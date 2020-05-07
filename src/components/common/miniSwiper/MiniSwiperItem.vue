@@ -1,6 +1,7 @@
 <template>
   <div class="mini-swiper-item-container"
-       @click="handleClick">
+       @click.stop="handleClick"
+       v-fb>
     <div class="mini-swiper-item">
       <div class="image-wrapper">
         <div class="image animated fadeIn">
