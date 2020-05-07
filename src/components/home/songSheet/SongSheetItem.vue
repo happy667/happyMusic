@@ -61,7 +61,7 @@ export default {
     width: 100%;
     line-height: 0.55rem;
     word-wrap: break-word;
-    font-size: $font-size-smaller;
+    font-size: $font-size-smaller-x;
     no-wrap2();
   }
 

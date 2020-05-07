@@ -734,14 +734,14 @@ export default {
 
         .desc {
           margin-right: 2.3rem;
-          line-height: 0.8rem;
+          line-height: 0.65rem;
           font-weight: 500;
-          font-size: $font-size-small;
+          font-size: $font-size-small-x;
           no-wrap2();
         }
 
         .songs-nt {
-          margin-top: 0.4rem;
+          margin-top: 0.3rem;
           display: flex;
           justify-content: space-between;
           color: $color-common-b2;
@@ -847,7 +847,7 @@ export default {
         }
 
         .content {
-          line-height: 0.5rem;
+          line-height: 0.55rem;
           white-space: pre-wrap;
         }
       }

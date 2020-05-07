@@ -33,8 +33,8 @@ export default {
         }
       } else if (this.size === 'big') {
         style = {
-          width: '1.6rem',
-          height: '1.6rem'
+          width: '1.5rem',
+          height: '1.5rem'
         }
       }
       return style

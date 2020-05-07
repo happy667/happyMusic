@@ -1,12 +1,5 @@
 <template>
   <div class="videoInfo-container">
-    <!-- 头部导航栏 -->
-    <van-sticky>
-      <van-nav-bar ref="navBar"
-                   :title="$route.meta.title"
-                   left-arrow
-                   @click-left="routerBack" />
-    </van-sticky>
     <!-- 正在加载 -->
     <template v-if="!video">
       <!-- loading -->
@@ -15,22 +8,12 @@
     <template v-else>
       <div class="video"
            ref="video">
-        <template v-if="fixed">
-          <van-sticky :offset-top="46">
-            <video-component :videoParams="video"
-                             @openFullScreen="fixed=false"
-                             @closeFullScreen="fixed=true"
-                             @toggleInfo="handleToggleInfo">
-            </video-component>
-          </van-sticky>
-        </template>
-        <template v-else>
-          <video-component :videoParams="video"
-                           @openFullScreen="fixed=false"
-                           @closeFullScreen="fixed=true"
-                           @toggleInfo="handleToggleInfo">
-          </video-component>
-        </template>
+        <video-component :videoParams="video"
+                         :class="fixed?'fixed':''"
+                         @openFullScreen="fixed=false"
+                         @closeFullScreen="fixed=true"
+                         @toggleInfo="handleToggleInfo">
+        </video-component>
       </div>
       <section class="container">
         <!-- 视频信息 -->
@@ -509,7 +492,16 @@ export default {
   width: 100%;
   min-height: 100vh;
 
+  .fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+  }
+
   .container {
+    margin-top: 5rem;
     width: 100%;
     box-sizing: border-box;
     background: $color-common-b;

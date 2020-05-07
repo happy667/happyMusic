@@ -214,7 +214,16 @@ export default {
                 name: item.name
               }))
             })
-            songList.push(new Song({ id: item.id, name: item.alia.length > 0 ? `${item.name} (${item.alia.join('/')})` : item.name, singers, singersList, picUrl: item.al.picUrl, st: item.privilege.st, mv: item.mv }))
+            songList.push(new Song({
+              id: item.id,
+              name: item.alia.length > 0 ? `${item.name} (${item.alia.join('/')})` : item.name,
+              singers,
+              singersList,
+              picUrl: item.al.picUrl,
+              st: item.privilege.st,
+              mv: item.mv,
+              album: new Album({ id: item.al.id, name: item.al.name, picUrl: item.al.picUrl })
+            }))
           })
           this.setSingerInfo(res.artist)
           if (res.artist.accountId) {

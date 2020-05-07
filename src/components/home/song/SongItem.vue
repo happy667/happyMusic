@@ -234,14 +234,13 @@ export default {
 
       .song-name {
         line-height: 0.7rem;
-        font-size: $font-size-smaller;
-        font-weight: 500;
+        font-size: $font-size-smaller-x;
         no-wrap();
       }
 
       .sg-info {
         line-height: 0.6rem;
-        font-size: $font-size-smaller-x;
+        font-size: $font-size-mini;
         color: $color-common-b2;
         no-wrap();
       }
@@ -259,7 +258,6 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: $font-size-large-x;
         color: $color-common-b2;
 
         &.active {
@@ -267,7 +265,7 @@ export default {
         }
 
         i {
-          font-size: $font-size-large-x;
+          font-size: $font-size-small;
         }
       }
 

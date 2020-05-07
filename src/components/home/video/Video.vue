@@ -40,7 +40,6 @@
             <div class="top-container"
                  v-if="isClickScreen||isFirstPlay">
               <div class="back"
-                   v-show="isFullScreen"
                    @click="routerBack">
                 <van-icon name="arrow-left" />
               </div>
@@ -368,6 +367,7 @@ export default {
       let cha = Math.abs(h - w) / 2
       player.style.width = h + 'px'
       player.style.height = w + 'px'
+      player.style.top = window.scrollY + 'px'
       player.style.transform = 'translate(-' + cha + 'px,' + cha + 'px) rotate(90deg)'
       document.body.style.overflow = 'hidden'
     },
@@ -376,6 +376,7 @@ export default {
       let player = this.$refs.player
       player.style.width = '100%'
       player.style.height = '5rem'
+      player.style.top = 0
       player.style.transform = ''
       document.body.style.overflow = ''
     },
@@ -477,19 +478,18 @@ export default {
 
         .top-container {
           position: absolute;
-          padding: 0 0.4rem;
           width: 100%;
           top: 0;
           left: 0;
           display: flex;
-          height: 1rem;
-          line-height: 1rem;
+          height: 1.2rem;
+          line-height: 1.2rem;
           color: #fff;
           box-sizing: border-box;
 
           .back {
             width: 1rem;
-            height: 1rem;
+            height: 100%;
             margin-right: 0.2rem;
             display: flex;
             justify-content: center;
@@ -508,7 +508,7 @@ export default {
           width: 100%;
           bottom: 0;
           left: 0;
-          padding: 0 0.3rem 0.3rem 0.6rem;
+          padding: 0 0.3rem;
           box-sizing: border-box;
 
           .controller-box {

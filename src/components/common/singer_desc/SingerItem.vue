@@ -123,6 +123,10 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
+.singer-list-item-container>>>.follow-container {
+  font-size: $font-size-mini-x;
+}
+
 .singer-list-item-container {
   padding: 0.25rem 0.4rem;
 

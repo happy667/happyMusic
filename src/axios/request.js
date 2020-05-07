@@ -58,7 +58,7 @@ service.interceptors.response.use(
             resData.message = '请求超时'
             break
           default:
-            resData.message = '系统出错'
+            resData.message = error.response.data.message ? error.response.data.message : '系统出错'
             break
         }
         return Promise.reject(res) // 返回接口返回的错误信息
