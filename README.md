@@ -1,24 +1,27 @@
-# vue-happymusic
+## HappyMusic
 
-## Project setup
-```
-npm install
-```
+一个基于VUE全家桶+NeteaseCloudMusicApi(网易云API)+Vant开发的移动端音乐app。
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+主要技术栈
 
-### Compiles and minifies for production
-```
-npm run build
-```
+- vue
+- vue-cli
+- vuex
+- vue-router
+- vue-lazyLoad
+- vant
+- es6
+- axios
+- swiper
+- better-scroll
+- animate
+- 网易云音乐api
 
-### Lints and fixes files
-```
-npm run lint
-```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## 安装
+`npm install`
+
+## 运行
+`npm dev`
+
+## 感谢 [Binaryify](https://github.com/Binaryify) 提供的[NeteaseCloudMusicApi](https://binaryify.github.io/NeteaseCloudMusicApi)   
