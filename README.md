@@ -24,3 +24,4 @@
 ## 运行
 `npm dev`
 
+## 感谢 [Binaryify](https://github.com/Binaryify) 提供的[NeteaseCloudMusicApi](https://binaryify.github.io/NeteaseCloudMusicApi)   
