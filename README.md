@@ -17,3 +17,10 @@
 - animate
 - 网易云音乐api
 
+
+#安装
+`npm install`
+
+#运行
+`npm dev`
+
