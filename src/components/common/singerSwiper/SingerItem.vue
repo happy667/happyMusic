@@ -1,7 +1,6 @@
 <template>
   <div class="singer-swiper-item-container"
-       @click="handleClick"
-       v-fb>
+       @click="handleClick">
     <div class="singer-swiper-item">
       <div class="image">
         <img :data-src="item.avatar"

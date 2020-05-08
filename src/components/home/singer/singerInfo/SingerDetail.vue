@@ -11,7 +11,6 @@
         <div class="singer-synopsis-container">
           <div class="title">
             <Title title="歌手简介"
-                   borderLeft
                    loadMore
                    :path="`/singerIntroduce/${singerDetail.singerId}`"
                    @click="handleClickTitle"></Title>
@@ -25,8 +24,7 @@
         <div class="sim-singer-container"
              v-if="simSingerList.length!==0">
           <div class="title">
-            <Title title="相似歌手"
-                   borderLeft></Title>
+            <Title title="相似歌手"></Title>
           </div>
           <div class="sim-singer-list-container">
             <singer-swiper-list :list="simSingerList"

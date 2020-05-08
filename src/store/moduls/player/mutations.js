@@ -43,6 +43,10 @@ export default {
   setCurrentPlayLyric(state, currentPlayLyric) {
     state.currentPlayLyric = currentPlayLyric
   },
+  // 设置切换歌曲列表
+  setTogglePlayList(state, togglePlayList) {
+    state.togglePlayList = togglePlayList
+  },
   // 设置是否隐藏迷你播放器
   setHideMiniPlayer(state, hideMiniPlayer) {
     state.hideMiniPlayer = hideMiniPlayer

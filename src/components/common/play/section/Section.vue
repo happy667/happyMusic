@@ -135,9 +135,11 @@ export default {
       this.setCurrentPlayLyric(txt)
     },
     refresh () {
-      this.$nextTick(() => {
-        this.$refs.lyricList.refresh()
-      })
+      if (this.$refs.lyricList) {
+        this.$nextTick(() => {
+          this.$refs.lyricList.refresh()
+        })
+      }
     },
     // 歌词和图片
     toggleImage () {

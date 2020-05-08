@@ -17,7 +17,6 @@
           <template #right>
             <div class="share"
                  @click="handleClickShare"
-                 v-fb
                  ref="share">
               <div class="icon">
                 <i class="iconfont icon-fenxiang"></i>
@@ -45,8 +44,7 @@
           <div class="song-sheet-info">
             <div class="container header">
               <div class="left-img"
-                   @click="openOverlay"
-                   v-fb>
+                   @click="openOverlay">
                 <div class="song-sheet-image">
                   <div class="image">
                     <img v-lazy="songSheetDisc.picUrl"
@@ -68,9 +66,8 @@
                 </div>
                 <div class="func">
                   <div class="func-item"
-                       v-if="songSheetDisc.creator.userId!==user.userId"
-                       @click="handleClickFollow"
-                       v-fb>
+                       v-if="songSheetDisc.creator.userId!==userId"
+                       @click="handleClickFollow">
                     <div class="icon"
                          :class="followCls">
                       <van-icon :name="followIcon" />
@@ -78,8 +75,7 @@
                     {{followText}}
                   </div>
                   <div class="func-item"
-                       @click="goToSongSheetComment"
-                       v-fb>
+                       @click="goToSongSheetComment">
                     <div class="icon">
                       <van-icon name="more-o" />
                     </div>
@@ -104,8 +100,7 @@
            ref="sectionBox">
         <!-- 歌单描述 -->
         <article class="songs-desc"
-                 @click="openOverlay"
-                 v-fb>
+                 @click="openOverlay">
           <p class="desc">{{songSheetDisc.description}}</p>
           <div class="songs-nt">
             <span class="songs-num">{{songSheetDisc.songs.length}}首</span>
@@ -114,8 +109,7 @@
           </div>
           <!-- 播放按钮 -->
           <div class="playBtn"
-               @click.stop="playAllSong(songSheetDisc.songs)"
-               v-fb>
+               @click.stop="playAllSong(songSheetDisc.songs)">
             <i class="iconfont icon-bofang"></i>
           </div>
         </article>
@@ -135,8 +129,7 @@
     </div>
     <!-- 定位 -->
     <position v-show="isShowPosition"
-              @click="handlePosition"
-              v-fb></position>
+              @click="handlePosition"></position>
     <!-- 遮罩层 -->
     <van-overlay :show="showOverlay"
                  v-if="songSheetDisc"
@@ -273,6 +266,9 @@ export default {
     },
     title () {
       return this.songSheetDisc ? this.songSheetDisc.name : ''
+    },
+    userId () {
+      return this.user ? this.user.userId : null
     }
   },
   methods: {
@@ -403,7 +399,7 @@ export default {
         let listNode = this.$refs.songList.$refs.list
         let song = this.currentSong
         let otherHeight = this.$refs.navBar.offsetHeight
-        this.$utils.positionToElement({ listNode, list: this.songSheetDisc.songs, song, otherHeight })
+        this.$utils.positionSong({ listNode, list: this.songSheetDisc.songs, song, otherHeight })
         this.$toast('已定位到当前歌曲')
       }
     },
@@ -573,7 +569,7 @@ export default {
           width: 100%;
           height: 100%;
           background-image: linear-gradient(transparent, #000);
-          opacity: 0.2;
+          opacity: 0.4;
           z-index: 1;
         }
 
@@ -583,6 +579,10 @@ export default {
           height: 100%;
           z-index: 0;
           overflow: hidden;
+          background-size: cover;
+          background-position: 50%;
+          filter: blur(20px);
+          transform: scale(1.5);
 
           img {
             transform: translate3d(0, -20%, 0);

@@ -15,10 +15,6 @@ export default {
   setAudio(state, audio) {
     state.audio = audio
   },
-  // 设置切换歌曲列表
-  setTogglePlayList(state, togglePlayList) {
-    state.togglePlayList = togglePlayList
-  },
   // 设置添加不缓存的路由
   setAddNoCacheComponents(state, name) {
     console.log(state.noCacheComponents)

@@ -54,20 +54,13 @@ export default {
       recommendSongList: null, // 推荐歌曲
       recommendSongSheet: null, // 推荐歌单
       songLoading: false,
-      songSheetloading: false
+      songSheetloading: false,
+      index: 0
     }
   },
   mixins: [playlistMixin],
   computed: {
-    ...mapState(['userRecommendIndex', 'user']),
-    index: {
-      get () {
-        return this.userRecommendIndex
-      },
-      set (index) {
-        this.setUserRecommendIndex(index)
-      }
-    }
+    ...mapState(['user'])
   },
   watch: {
     user () {

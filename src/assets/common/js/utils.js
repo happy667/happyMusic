@@ -143,26 +143,19 @@ const utils = {
       return item.id === song.id
     })
   },
-  positionToElement({
+  // 定位歌曲
+  positionSong({
     listNode,
     list,
     song,
-    element,
     otherHeight = 0
   }) {
-    console.log(song)
-    if (!list) {
-      // 获取元素的top值
-      let top = getPositionTop(element)
-      window.scrollTo(0, top - otherHeight) // 减去其他高度
-    } else {
-      // 找到当前播放歌曲的索引
-      let index = utils.findIndex(list, song)
-      const element = listNode.childNodes[index]
-      // 获取元素的top值
-      let top = getPositionTop(element)
-      window.scrollTo(0, top - otherHeight) // 减去其他高度
-    }
+    // 找到当前播放歌曲的索引
+    let index = utils.findIndex(list, song)
+    const element = listNode.childNodes[index]
+    // 获取元素的top值
+    let top = getPositionTop(element)
+    window.scrollTo(0, top - otherHeight) // 减去其他高度
   },
   removeItem(list, item) {
     let newList = list.slice()

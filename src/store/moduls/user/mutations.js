@@ -7,10 +7,6 @@ export default {
   setUserLikeList(state, userLikeList) {
     state.userLikeList = userLikeList
   },
-  // 设置用户每日推荐页当前索引
-  setUserRecommendIndex(state, index) {
-    state.userRecommendIndex = index
-  },
   // 设置token
   setToken(state, token) {
     state.token = token

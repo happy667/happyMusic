@@ -14,90 +14,87 @@
                          @closeFullScreen="fixed=true"
                          @toggleInfo="handleToggleInfo">
         </video-component>
+        <div class="fixed-box"></div>
       </div>
-      <section class="container">
-        <!-- 视频信息 -->
-        <div class="video-info">
-          <div class="info-top"
-               @click="handleToggleInfo">
-            <div class="content">
-              <!-- 视频标题 -->
-              <div class="title">
-                <div class="icon">
-                  <van-tag plain
-                           color="#FD4979">mv</van-tag>
+      <template v-if="simiMVList&&commentList">
+        <section class="container">
+          <!-- 视频信息 -->
+          <div class="video-info">
+            <div class="info-top"
+                 @click="handleToggleInfo">
+              <div class="content">
+                <!-- 视频标题 -->
+                <div class="title">
+                  <div class="icon">
+                    <van-tag plain
+                             color="#FD4979">mv</van-tag>
+                  </div>
+                  <div class="name">{{video.name}}</div>
                 </div>
-                <div class="name">{{video.name}}</div>
-              </div>
-              <div class="right-icon">
-                <van-icon :name="rightIcon" />
+                <div class="right-icon">
+                  <van-icon :name="rightIcon" />
+                </div>
+
               </div>
 
-            </div>
-
-            <!-- 视频描述 -->
-            <div class="video-desc-container"
-                 v-show="showMoreInfo">
-              <div class="top">
-                <div class="video-num">{{video.playCount}} 次观看</div>
-                <div class="video-time">{{video.publishTime}} 发布</div>
+              <!-- 视频描述 -->
+              <div class="video-desc-container"
+                   v-show="showMoreInfo">
+                <div class="top">
+                  <div class="video-num">{{video.playCount}} 次观看</div>
+                  <div class="video-time">{{video.publishTime}} 发布</div>
+                </div>
+                <div class="bottom">
+                  <div class="desc">{{video.desc}}</div>
+                </div>
               </div>
-              <div class="bottom">
-                <div class="desc">{{video.desc}}</div>
+            </div>
+            <!-- 视频收藏、分享、点赞、评论 -->
+            <div class="info-center van-hairline--bottom">
+              <div class="item"
+                   :class="video.liked?'active':''"
+                   @click="handleClickLike">
+                <div class="love icon">
+                  <i class="iconfont icon-dianzan"></i>
+                </div>
+                <p class="text">{{video.likeCount|convertCount}}</p>
+              </div>
+              <div class="item"
+                   :class="video.followed?'active':''"
+                   @click="handleClickFollow">
+                <div class="follow icon">
+                  <van-icon :name="followIcon" />
+                </div>
+                <p class="text">{{video.subCount|convertCount}}</p>
+              </div>
+              <div class="item"
+                   @click="handleClickComment">
+                <div class="comment icon">
+                  <van-icon name="more-o" />
+                </div>
+                <p class="text">{{video.commentCount|convertCount}}</p>
+              </div>
+              <div class="item"
+                   ref="share"
+                   @click="handleClickShare()">
+                <div class="share icon">
+                  <i class="iconfont icon-fenxiang"></i>
+                </div>
+                <p class="text">{{video.shareCount|convertCount}}</p>
+              </div>
+            </div>
+            <!-- 视频出处 -->
+            <div class="info-bottom"
+                 @click="selectCreator(video.creatorList)">
+              <div class="play-source-img">
+                <my-image :src="video.artist.avatarUrl" />
+              </div>
+              <div class="play-source-author">
+                {{video.creatorName}}
               </div>
             </div>
           </div>
-          <!-- 视频收藏、分享、点赞、评论 -->
-          <div class="info-center van-hairline--bottom">
-            <div class="item"
-                 :class="video.liked?'active':''"
-                 @click="handleClickLike">
-              <div class="love icon">
-                <i class="iconfont icon-dianzan"></i>
-              </div>
-              <p class="text">{{video.likeCount|convertCount}}</p>
-            </div>
-            <div class="item"
-                 :class="video.followed?'active':''"
-                 @click="handleClickFollow">
-              <div class="follow icon">
-                <van-icon :name="followIcon" />
-              </div>
-              <p class="text">{{video.subCount|convertCount}}</p>
-            </div>
-            <div class="item"
-                 @click="handleClickComment">
-              <div class="comment icon">
-                <van-icon name="more-o" />
-              </div>
-              <p class="text">{{video.commentCount|convertCount}}</p>
-            </div>
-            <div class="item"
-                 ref="share"
-                 @click="handleClickShare()">
-              <div class="share icon">
-                <i class="iconfont icon-fenxiang"></i>
-              </div>
-              <p class="text">{{video.shareCount|convertCount}}</p>
-            </div>
-          </div>
-          <!-- 视频出处 -->
-          <div class="info-bottom"
-               @click="selectCreator(video.creatorList)">
-            <div class="play-source-img">
-              <my-image :src="video.artist.avatarUrl" />
-            </div>
-            <div class="play-source-author">
-              {{video.creatorName}}
-            </div>
-          </div>
-        </div>
-        <div class="other-info">
-          <template v-if="!simiMVList&&!commentList">
-            <!-- loading -->
-            <loading />
-          </template>
-          <template v-else>
+          <div class="other-info">
             <!-- 相关mv -->
             <div class="related-mv"
                  v-if="simiMVList">
@@ -123,9 +120,14 @@
                 </template>
               </van-list>
             </div>
-          </template>
-        </div>
-      </section>
+
+          </div>
+
+        </section>
+      </template>
+      <template v-else>
+        <loading />
+      </template>
       <singer-popup :list="video.creatorList"
                     :showPopup="showSingerPopup"
                     @closePopup="showSingerPopup=false"
@@ -330,14 +332,6 @@ export default {
         console.log(this.commentList)
       }
     },
-    // 解除监听滚动
-    removeListenerScroll () {
-      window.removeEventListener('scroll', this.handleScroll)
-    },
-    // 添加监听滚动
-    addListenerScroll () {
-      window.addEventListener('scroll', this.handleScroll)
-    },
     // 上拉加载
     handlePullingUp () {
       setTimeout(async () => {
@@ -437,8 +431,9 @@ export default {
     // 点击评论
     handleClickComment () {
       let element = this.$refs.commentContainer
-      let otherHeight = this.$refs.navBar.$el.offsetHeight + this.$refs.video.offsetHeight
-      this.$utils.positionToElement({ element, otherHeight })
+      let player = this.$refs.video
+      let top = element.offsetTop - player.offsetHeight
+      window.scrollTo(0, top)
     },
     // 分享
     handleClickShare () {
@@ -494,8 +489,12 @@ export default {
     z-index: 999;
   }
 
+  .fixed-box {
+    width: 100%;
+    height: 5rem;
+  }
+
   .container {
-    margin-top: 5rem;
     width: 100%;
     box-sizing: border-box;
     background: $color-common-b;

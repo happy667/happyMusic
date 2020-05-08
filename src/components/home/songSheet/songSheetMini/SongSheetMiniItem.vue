@@ -1,7 +1,6 @@
 <template>
   <div class="song-sheet-mini-item-container"
-       @click="goToSongSheetInfo"
-       v-fb>
+       @click="goToSongSheetInfo">
     <!--  图片 -->
     <div class="img">
       <img v-lazy="item.coverImgUrl"
