@@ -211,13 +211,13 @@ export default {
                     console.log(res)
                     if (res.data.code === ERR_OK) {
                       this.$toast.clear()
-                      // this.$utils.alert({
-                      //   message: '注册成功，快去登陆吧'
-                      // }).then(() => {
-                      //   this.$router.push('/appIndex/login')
-                      // })
-                      // // 清空表单
-                      // this.resetForm()
+                      this.$utils.alert({
+                        message: '注册成功，快去登陆吧'
+                      }).then(() => {
+                        this.$router.push('/appIndex/login')
+                      })
+                      // 清空表单
+                      this.resetForm()
                     }
                   })
                 } else {

@@ -129,11 +129,6 @@ export default {
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
-
-[v-cloak] {
-  display: none;
-}
-
 .videoList-container {
   position: absolute;
   width: 100%;
