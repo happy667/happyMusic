@@ -102,12 +102,10 @@ export default {
     this.removeScrollListner()
   },
   methods: {
-    ...mapMutations(['setSearchKeywords', 'setSearchCurrentIndex', 'setShowSearchList', 'setIsAdvance', 'setAddNoCacheComponents']),
+    ...mapMutations(['setSearchKeywords', 'setSearchCurrentIndex', 'setShowSearchList', 'setAddNoCacheComponents']),
     // 返回上一个路由
     routerBack () {
       if (this.$route.path === '/search/searchPage') {
-        // 设置为后退页面
-        this.setIsAdvance(false)
         this.$router.push('/home')
         return
       }
@@ -160,8 +158,6 @@ export default {
         // 添加搜索组件到不需要缓存组件中
         // 添加不缓存路由
         this.setAddNoCacheComponents('search')
-        // 设置为前进页面
-        this.setIsAdvance(true)
         this.reload()
       }
     },

@@ -21,11 +21,9 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setSelectSearchWord', 'setIsAdvance']),
+    ...mapMutations(['setSelectSearchWord']),
     // 处理相关查询
     handleSimSearch (item) {
-      // 设置为前进页面
-      this.setIsAdvance(true)
       this.setSelectSearchWord(item)
     }
   },

@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <transition :name="transitionName">
+    <transition name="fade"
+                mode="out-in">
       <keep-alive :exclude="noCacheComponents">
         <router-view v-if="isRouterAlive"
                      :key="$route.fullPath"></router-view>
@@ -36,7 +37,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['user', 'token', 'noCacheComponents', 'isAdvance']),
+    ...mapState(['user', 'token', 'noCacheComponents']),
     ...mapGetters(['currentSong'])
   },
   mounted () {
@@ -53,25 +54,8 @@ export default {
     this.removeListener()
     this.removeListenerNetWork()
   },
-  watch: {// 使用watch 监听$router的变化
-    $route (to, from) {
-      // 如果from不是登录首页并且to不是登录首页并且from和to不包含appIndex(登录注册部分不用动画)就显示动画
-      if (from.name !== 'index' && to.name !== 'index' && from.path.includes('appIndex') && to.path.includes('appIndex')) {
-        this.transitionName = ''
-        return
-      }
-      if (this.isAdvance) {
-        // 设置动画名称
-        this.transitionName = 'slide-left'
-      } else {
-        this.transitionName = 'slide-right'
-      }
-      // 重置isAdvance
-      this.setIsAdvance(true)
-    }
-  },
   methods: {
-    ...mapMutations(['setToken', 'setLoginUser', 'setUserLikeList', 'setIsAdvance']),
+    ...mapMutations(['setToken', 'setLoginUser', 'setUserLikeList']),
     ...mapActions(['getLoginUserInfo', 'getUserLikeList']),
     reload () {
       this.isRouterAlive = false
@@ -142,23 +126,12 @@ export default {
 }
 
 // 转场动画
-.slide-right-enter-active, .slide-right-leave-active, .slide-left-enter-active, .slide-left-leave-active {
-  will-change: transform, opacity;
-  transition: transform 300ms, opacity 300ms;
-  position: absolute;
-  background-attachment: fixed;
-  opacity: 1;
-  transform: translate3d(0, 0, 0);
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.15s;
 }
 
-.slide-right-enter {
+.fade-enter, .fade-leave-to {
   opacity: 0;
-  transform: translate3d(-100%, 0, 0);
-}
-
-.slide-left-enter {
-  opacity: 0;
-  transform: translate3d(100%, 0, 0);
 }
 
 #app>>>.van-popup .singerList {

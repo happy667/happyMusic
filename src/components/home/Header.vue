@@ -21,6 +21,5 @@ export default {
   top: 0;
   z-index: 99;
   box-shadow: 0 0.1rem #fff;
-  transform: translateZ(0);
 }
 </style>

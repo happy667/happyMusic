@@ -238,8 +238,6 @@ const utils = {
     }
   },
   routerBack() {
-    store.commit('setIsAdvance', false)
-    console.log(store.isAdvance)
     console.log(window.history.length)
     if (window.history.length <= 1) {
       router.push('/')

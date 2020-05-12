@@ -38,7 +38,7 @@ export default {
     this.getSearchDefault()
   },
   methods: {
-    ...mapMutations(['setSearchKeywords', 'setIsAdvance']),
+    ...mapMutations(['setSearchKeywords']),
     // 点击搜索跳转搜索页面
     handleSearchClick () {
       // 清空搜索内容
@@ -46,8 +46,6 @@ export default {
       this.$router.push('/search/searchPage')
     },
     goToMyHome () {
-      // 不设置为前进页面
-      this.setIsAdvance(false)
       this.$router.push('/user')
     },
     // 获取默认关键词

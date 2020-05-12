@@ -8,7 +8,6 @@ export default {
   oldVideo: {}, // 上一次的video
   audio: null, // 音频对象
   noCacheComponents: [], // 不缓存的组件
-  isAdvance: true, // 跳转的是否为前进页面
   ...playerState,
   ...userState,
   ...searchState,

@@ -31,11 +31,6 @@ export default {
       state.noCacheComponents.splice(index, 1)
     }
   },
-
-  // 设置跳转的是否为前进页面
-  setIsAdvance(state, isAdvance) {
-    state.isAdvance = isAdvance
-  },
   ...playerMutations,
   ...userMutations,
   ...searchMutations,

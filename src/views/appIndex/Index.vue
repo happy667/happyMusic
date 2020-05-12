@@ -33,15 +33,11 @@
 </template>
 <script>
 import Btn from '@/components/common/Button'
-import { mapMutations } from 'vuex'
 export default {
   name: 'index',
   methods: {
-    ...mapMutations(['setIsAdvance']),
     // 显示隐藏密码
     handleVisitorLogin () {
-      // 设置为前进页面
-      this.setIsAdvance(true)
       this.$router.replace('/home')
     }
   },
