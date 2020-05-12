@@ -186,7 +186,7 @@ export default {
 .songs-list-item-containter {
   position: relative;
   display: flex;
-  padding: 0.2rem 0.2rem 0.2rem 0.4rem;
+  padding: 0.2rem 0.3rem 0.2rem 0.4rem;
 
   &.disable {
     color: $color-common-b2;
@@ -207,8 +207,8 @@ export default {
   }
 
   .song-img {
-    width: 1.1rem;
-    height: 1.1rem;
+    width: 1rem;
+    height: 1rem;
     margin: 0.15rem 0.4rem 0.15rem 0;
     background-color: $color-common-b;
     border-radius: 50%;
@@ -225,6 +225,7 @@ export default {
   .right-info {
     flex: 1;
     width: 1%;
+    height: 100%;
     display: flex;
     justify-content: space-between;
 
@@ -247,8 +248,6 @@ export default {
     }
 
     .icon-container {
-      height: 1.4rem;
-      line-height: 1.4rem;
       display: flex;
       align-items: center;
 

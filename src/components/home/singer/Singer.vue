@@ -197,6 +197,7 @@ export default {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  background: $color-common-background;
 
   .singer-cat-container {
     padding: 0.25rem 0.4rem 0.25rem;

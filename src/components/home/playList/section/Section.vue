@@ -145,18 +145,19 @@ export default {
 
           .song-desc {
             display: flex;
+            overflow: hidden;
 
             .text {
               no-wrap();
               color: $color-common-b2;
 
               .song-name {
-                font-size: $font-size-smaller;
+                font-size: $font-size-smaller-x;
                 color: $color-common-x;
                 animation: 5s wordsLoop linear infinite normal;
 
                 .song-singer {
-                  font-size: $font-size-smaller-x;
+                  font-size: $font-size-mini;
                   color: $color-common-b2;
                 }
               }
@@ -164,8 +165,9 @@ export default {
           }
 
           .icon {
-            width: 0.6rem;
+            width: 0.7rem;
             height: 100%;
+            margin: 0 0.2rem 0 0.5rem;
 
             img {
               display: block;
@@ -177,8 +179,9 @@ export default {
 
         .right {
           .icon {
-            width: 0.8rem;
+            width: 1rem;
             height: 100%;
+            text-align: center;
 
             img {
               display: block;
@@ -190,15 +193,8 @@ export default {
 
         &.active {
           .left {
-            color: $color-common;
-
             .song-desc {
-              margin-right: 0.5rem;
-              overflow: hidden;
-
               .text {
-                color: $color-common;
-                overflow: visible;
                 animation: 10s wordsLoop linear infinite normal;
 
                 .song-name {

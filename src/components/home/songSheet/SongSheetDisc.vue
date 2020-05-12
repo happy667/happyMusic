@@ -453,11 +453,11 @@ export default {
       let height = this.$refs.headerContainer.offsetHeight - navBar.offsetHeight
       if (scrollTop >= 0 && scrollTop <= height) { // 滚动大于0的时候
         let opacity = scrollTop / height
-        if (opacity <= 0.75) {
+        if (opacity <= 0.8) {
           bgLayer.style.opacity = opacity
         }
       } else {
-        bgLayer.style.opacity = 0.75
+        bgLayer.style.opacity = 0.8
       }
     },
     // 监听页面滚动

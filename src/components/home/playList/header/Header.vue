@@ -82,7 +82,7 @@ export default {
   border-bottom: 0.02rem solid #efefef;
 
   i {
-    font-size: $font-size-small-x;
+    font-size: $font-size-smaller-x;
   }
 
   .left {

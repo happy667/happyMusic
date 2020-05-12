@@ -137,22 +137,24 @@ export default {
 
     .left {
       display: flex;
+      flex: 1;
       align-items: center;
+      overflow: hidden;
 
       .singer-avatar {
-        margin-right: 0.4rem;
       }
 
       .singer-info {
+        margin: 0 0.3rem 0 0.4rem;
         display: flex;
         flex-direction: column;
         justify-content: center;
+        overflow: hidden;
 
         .name {
           height: 0.7rem;
           line-height: 0.7rem;
           font-size: $font-size-smaller;
-          max-width: 5rem;
           no-wrap();
         }
 
@@ -164,6 +166,10 @@ export default {
             margin-right: 0.2rem;
             height: 0.6rem;
             line-height: 0.6rem;
+
+            &:last-child {
+              margin-right: 0;
+            }
           }
         }
       }

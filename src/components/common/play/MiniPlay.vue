@@ -224,8 +224,8 @@ export default {
 
                .song-name {
                  margin-top: 0.2rem;
-                 line-height: 0.55rem;
-                 font-size: $font-size-smaller;
+                 line-height: 0.7rem;
+                 font-size: $font-size-smaller-x;
                  font-weight: 400;
                  no-wrap();
                }
@@ -242,8 +242,8 @@ export default {
 
                .singer {
                  margin-bottom: 0.2rem;
-                 line-height: 0.55rem;
-                 font-size: $font-size-smaller-x;
+                 line-height: 0.6rem;
+                 font-size: $font-size-mini;
                  color: $color-common-b2;
                  no-wrap();
                }
@@ -254,7 +254,7 @@ export default {
      }
 
      .player-controller {
-       margin-right: 0.15rem;
+       margin: 0 0.15rem;
        display: flex;
        justify-content: space-between;
        align-items: center;
@@ -272,8 +272,8 @@ export default {
        }
 
        .play-list {
-         width: 1.25rem;
-         height: 1.5rem;
+         width: 1.1rem;
+         height: 100%;
 
          i {
            font-size: 0.8rem;
@@ -282,8 +282,8 @@ export default {
 
        .play {
          position: relative;
-         width: 1.25rem;
-         height: 1.5rem;
+         width: 1.1rem;
+         height: 100%;
          display: flex;
          justify-content: center;
          align-items: center;

@@ -27,11 +27,11 @@ export function clearLocalList() {
 export function getLocalList() {
   return JSON.parse(window.localStorage.getItem(LOCAL_LIST_NAME))
 }
-// 获取本地存储搜索列表
+// 获取本地存储
 export function getItem(item) {
   return JSON.parse(window.localStorage.getItem(item))
 }
-// 设置本地存储搜索列表
+// 设置本地存储
 export function setItem(item, value) {
   window.localStorage.setItem(item, JSON.stringify(value))
 }
