@@ -6,14 +6,19 @@ import {
 
 export default {
   // 获取登录用户信息
-  getLoginUserInfo(context) {
-    loginApi.loginStatus().then(res => {
-      if (res.data.code === ERR_OK) {
-        let user = res.data.profile
+  async getLoginUserInfo(context) {
+    try {
+      const {
+        data: res
+      } = await loginApi.loginStatus()
+      if (res.code === ERR_OK) {
+        let user = res.profile
         context.commit('setLoginUser', user)
         context.dispatch('getUserLikeList', user.userId)
       }
-    }).catch(err => console.log(err.data.message))
+    } catch (error) {
+      console.log(error)
+    }
   },
   // 获取用户喜欢列表
   async getUserLikeList(context, id) {

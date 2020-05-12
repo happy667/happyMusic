@@ -71,6 +71,7 @@ export default {
       url
     })
   },
+  // 获取专辑评论
   getAlbumComment(id, offset = 0) {
     const url = `/comment/album?id=${id}&offset=${offset}`
     return request({

@@ -187,7 +187,7 @@ const utils = {
     })
   },
   isLogin() {
-    if (store.state.token) {
+    if (store.state.token && store.state.user) {
       return true
     } else {
       return false

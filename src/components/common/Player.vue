@@ -74,8 +74,6 @@ export default {
       }
       this.setPlaying(false)
       this.getSong(this.currentSong)
-      // 获取歌词
-      this.$refs.FullScreenPlay.$refs.playSection.getLyric(this.currentSong.id)
       // 听歌打卡（刷新听歌排行）
       this.scrobble(this.currentSong.id, this.currentSong.album.id)
       // 初始化获取歌手图片（点击歌手弹出歌手框的图片）
@@ -186,36 +184,27 @@ export default {
     },
     // 获取歌曲
     async getSong (song) {
-      // 检查音乐是否可用
-      songApi.checkMusic(song.id).then(async res => {
-        if (res.data.success) {
-          // 获取音乐播放路径
-          const { data: res } = await songApi.getMusicUrl(song.id)
-          if (res.code === ERR_OK) {
-            this.url = res.data[0].url
-            if (!this.url) { // 判断是否为空
-              song.st = -1
-              // 移除该歌曲
-              this.deleteSong(song)
-              this.setSongReady(true)
-              this.$toast('该歌曲暂时不能播放')
-            } else {
-              this.$nextTick(() => {
-                this.setPlaying(true)
-                if (this.currentLyric) {
-                  this.currentLyric.play()
-                }
-              })
+      // 获取音乐播放路径
+      const { data: res } = await songApi.getMusicUrl(song.id)
+      if (res.code === ERR_OK) {
+        this.url = res.data[0].url
+        if (!this.url) { // 判断是否为空
+          song.st = -1
+          // 移除该歌曲
+          this.deleteSong(song)
+          this.setSongReady(true)
+          this.$toast('该歌曲暂时不能播放')
+        } else {
+          this.$nextTick(() => {
+            this.setPlaying(true)
+            // 获取歌词
+            this.$refs.FullScreenPlay.$refs.playSection.getLyric(this.currentSong.id)
+            if (this.currentLyric) {
+              this.currentLyric.play()
             }
-          }
+          })
         }
-      }).catch((res) => {
-        song.st = -1
-        // 移除该歌曲
-        this.deleteSong(song)
-        this.setSongReady(true)
-        this.$toast(res.data.message)
-      })
+      }
     },
 
     // 更新时间

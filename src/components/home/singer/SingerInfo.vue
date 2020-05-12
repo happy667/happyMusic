@@ -118,7 +118,8 @@ export default {
       scrollY: 0,
       loadMoreAlbum: false,
       loadMoreMV: false,
-      showImage: false
+      showImage: false,
+      currentIndex: 0
     }
   },
   created () {
@@ -150,16 +151,16 @@ export default {
     this.handleTabsChange(this.currentIndex)
   },
   computed: {
-    ...mapState(['singerCurrentIndex', 'singer', 'currentPlayIndex', 'isPlayerClick', 'hideMiniPlayer']),
+    ...mapState(['user', 'singerCurrentIndex', 'singer', 'currentPlayIndex', 'isPlayerClick', 'hideMiniPlayer']),
     ...mapGetters(['currentSong']),
-    currentIndex: {
-      get () {
-        return this.singerCurrentIndex
-      },
-      set (index) {
-        this.setSingerCurrentIndex(index)
-      }
-    },
+    // currentIndex: {
+    //   get () {
+    //     return this.singerCurrentIndex
+    //   },
+    //   set (index) {
+    //     this.setSingerCurrentIndex(index)
+    //   }
+    // },
     // 是否显示定位
     isShowPosition () {
       // 判断当前歌曲列表是否有正在播放的歌曲（-1表示没有，currentIndex表示当前tab切换页是否在歌曲列表页）
@@ -190,7 +191,7 @@ export default {
           if (!this.singerDetail) {
             this.getSingerDetail(this.id)
           }
-          if (this.simSingerList.length === 0) {
+          if (this.simSingerList.length === 0 && this.user) {
             this.getSimilarSinger(this.id)
           }
 
