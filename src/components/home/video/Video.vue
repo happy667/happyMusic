@@ -40,7 +40,7 @@
             <div class="top-container"
                  v-if="isClickScreen||isFirstPlay">
               <div class="back"
-                   @click="routerBack">
+                   @click.stop="routerBack">
                 <van-icon name="arrow-left" />
               </div>
               <div class="title">

@@ -71,10 +71,11 @@ export default {
       let list = this.currentSong.singersList
       if (list.length === 1) { // 只有一个歌手直接跳转到歌手页面
         let currentPath = `/singerInfo/${this.currentSong.singersList[0].id}`
-        if (this.$route.path !== currentPath) { // 如果当前歌手详情页就是所选歌手直接隐藏全屏播放器
+        if (this.$route.path !== currentPath) {
           this.setSingerCurrentIndex(0)
           this.$router.push(`/singerInfo/${this.currentSong.singersList[0].id}`)
         }
+        // 如果当前歌手详情页就是所选歌手直接隐藏全屏播放器
         this.setIsPlayerClick(true)
         this.setPlayerFullScreen(false)
       } else {

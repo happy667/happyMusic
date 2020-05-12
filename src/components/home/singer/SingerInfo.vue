@@ -58,7 +58,8 @@
               <singer-detail ref="singerDetail"
                              :goToIntroduce="goToIntroduce"
                              :simSingerList="simSingerList"
-                             :singerDetail="singerDetail" />
+                             :singerDetail="singerDetail"
+                             @selectSimSinger="selectSimSinger" />
             </van-tab>
           </van-tabs>
         </div>
@@ -118,8 +119,7 @@ export default {
       scrollY: 0,
       loadMoreAlbum: false,
       loadMoreMV: false,
-      showImage: false,
-      currentIndex: 0
+      showImage: false
     }
   },
   created () {
@@ -149,18 +149,19 @@ export default {
   mounted () {
     // 根据歌手id获取歌手单曲
     this.handleTabsChange(this.currentIndex)
+    console.log(123)
   },
   computed: {
     ...mapState(['user', 'singerCurrentIndex', 'singer', 'currentPlayIndex', 'isPlayerClick', 'hideMiniPlayer']),
     ...mapGetters(['currentSong']),
-    // currentIndex: {
-    //   get () {
-    //     return this.singerCurrentIndex
-    //   },
-    //   set (index) {
-    //     this.setSingerCurrentIndex(index)
-    //   }
-    // },
+    currentIndex: {
+      get () {
+        return this.singerCurrentIndex
+      },
+      set (index) {
+        this.setSingerCurrentIndex(index)
+      }
+    },
     // 是否显示定位
     isShowPosition () {
       // 判断当前歌曲列表是否有正在播放的歌曲（-1表示没有，currentIndex表示当前tab切换页是否在歌曲列表页）
@@ -169,7 +170,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setSingerCurrentIndex', 'setSinger', 'setPlayerFullScreen', 'setIsPlayerClick', 'setHideMiniPlayer']),
+    ...mapMutations(['setSingerCurrentIndex', 'setSinger', 'setPlayerFullScreen', 'setIsPlayerClick', 'setHideMiniPlayer', 'setAddNoCacheComponents']),
     routerBack () {
       if (this.isPlayerClick) {
         this.setPlayerFullScreen(true)
@@ -446,6 +447,12 @@ export default {
       if (this.currentPlayIndex !== -1) {
         this.setHideMiniPlayer(!this.hideMiniPlayer)
       }
+    },
+    // 选择相似歌手
+    selectSimSinger (item) {
+      this.setSingerCurrentIndex(0)
+      this.setAddNoCacheComponents('singerInfo')
+      this.$router.push(`/singerInfo/${item.id}`)
     }
   },
   components: {

@@ -4,7 +4,7 @@
     <loading :loading="loading" />
     <!-- 歌手简介 -->
     <template v-if="!loading">
-      <template v-if="!singerDetail.briefDesc&&singerDetail.introduction.length===0">
+      <template v-if="!singerDetail.briefDesc">
         <no-result text="暂无歌手简介"></no-result>
       </template>
       <template v-else>
@@ -64,8 +64,7 @@ export default {
       this.$emit('goToIntroduce')
     },
     selectItem (item) {
-      this.setSingerCurrentIndex(0)
-      this.$router.push(`/singerInfo/${item.id}`)
+      this.$emit('selectSimSinger', item)
     }
   },
   components: {

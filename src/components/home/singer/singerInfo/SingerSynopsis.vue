@@ -9,8 +9,7 @@
         <div id="image"
              class="animated fadeIn">
           <van-image :src="singer.picUrl"
-                     fit="cover"
-                     :key="singer.picUrl">
+                     fit="cover">
             <template v-slot:loading>
               <van-loading type="spinner"
                            size="20" />
@@ -47,6 +46,7 @@ import {
 import Follow from '@/components/common/Follow'
 import { mapState } from 'vuex'
 export default {
+  name: 'singerSynopsis',
   props: {
     singer: Object
   },
