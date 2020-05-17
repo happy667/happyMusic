@@ -118,16 +118,9 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-#app {
-  // position: fixed;
-  width: 100%;
-  height: 100%;
-  box-shadow: none;
-}
-
 // 转场动画
 .fade-enter-active, .fade-leave-active {
-  transition: opacity 0.15s;
+  transition: opacity 0.1s;
 }
 
 .fade-enter, .fade-leave-to {

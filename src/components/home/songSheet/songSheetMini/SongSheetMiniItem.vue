@@ -45,20 +45,13 @@ export default {
   margin-bottom: 0.3rem;
 
   .img {
-    position: relative;
     margin-right: 0.4rem;
-    height: 0;
     width: 1.3rem;
-    padding-bottom: 1.3rem;
+    height: 1.3rem;
     background: $color-common-b;
     border-radius: 0.2rem;
 
     img {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
       display: block;
       width: 100%;
       height: 100%;
@@ -78,21 +71,21 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    font-size: $font-size-mini;
+    overflow: hidden;
 
     .title {
       line-height: 0.5rem;
-      font-weight: bold;
       color: $color-common-x;
-      no-wrap2();
+      font-size: $font-size-smaller-x;
+      no-wrap();
     }
 
     .bottom {
-      max-width: 6rem;
       display: flex;
       color: #999;
       height: 0.6rem;
       line-height: 0.6rem;
+      font-size: $font-size-mini;
       no-wrap();
 
       .number {

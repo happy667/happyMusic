@@ -97,7 +97,7 @@
     <no-result v-if="albumObj.songs&&albumObj.songs.length===0"
                text="暂无相关资源"></no-result>
     <!-- 上拉提示框 -->
-    <template v-if="albumObj.album&&albumObj.album.singerList.length!==0">>
+    <template v-if="albumObj.album&&albumObj.album.singerList.length!==0">
       <singer-popup :list="albumObj.album.singerList"
                     :showPopup="showSingerPopup"
                     @closePopup="showSingerPopup=false"
@@ -373,14 +373,12 @@ export default {
       this.showOverlay = true
       this.setHideMiniPlayer(true)
       // 不让页面滚动
-      document.body.style.position = 'absolute'
       document.body.style.overflow = 'hidden'
     },
     // 关闭遮罩层
     closeOverlay () {
       this.showOverlay = false
       this.setHideMiniPlayer(false)
-      document.body.style.position = ''
       document.body.style.overflow = ''
     },
     // 选择歌手

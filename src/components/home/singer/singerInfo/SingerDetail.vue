@@ -11,7 +11,7 @@
         <div class="singer-synopsis-container">
           <div class="title">
             <Title title="歌手简介"
-                   loadMore
+                   :loadMore="moreInfo"
                    :path="`/singerIntroduce/${singerDetail.singerId}`"
                    @click="handleClickTitle"></Title>
           </div>
@@ -56,6 +56,9 @@ export default {
   computed: {
     loading () {
       return !this.singerDetail
+    },
+    moreInfo () {
+      return this.singerDetail.introduction && this.singerDetail.introduction.length > 0
     }
   },
   methods: {

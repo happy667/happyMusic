@@ -82,16 +82,14 @@ export default {
     .left {
       display: flex;
       align-items: center;
-
-      .singer-avatar {
-        margin-right: 0.5rem;
-      }
+      flex: 1;
+      overflow: hidden;
 
       .singer-name {
+        margin: 0 0.5rem;
         height: 0.7rem;
         line-height: 0.7rem;
-        font-size: $font-size-smaller;
-        max-width: 5rem;
+        font-size: $font-size-smaller-x;
         no-wrap();
       }
     }

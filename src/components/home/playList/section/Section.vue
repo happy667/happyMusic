@@ -19,7 +19,7 @@
                 </div>
               </div>
               <div class="icon"
-                   v-show="item.id===currentSong.id">
+                   v-if="item.id===currentSong.id">
                 <img src="@/assets/images/loading.svg">
               </div>
             </div>
@@ -144,7 +144,6 @@ export default {
           overflow: hidden;
 
           .song-desc {
-            display: flex;
             overflow: hidden;
 
             .text {
@@ -154,7 +153,6 @@ export default {
               .song-name {
                 font-size: $font-size-smaller-x;
                 color: $color-common-x;
-                animation: 5s wordsLoop linear infinite normal;
 
                 .song-singer {
                   font-size: $font-size-mini;
@@ -165,9 +163,9 @@ export default {
           }
 
           .icon {
-            width: 0.7rem;
+            width: 0.6rem;
             height: 100%;
-            margin: 0 0.2rem 0 0.5rem;
+            padding-left: 0.2rem;
 
             img {
               display: block;
@@ -195,8 +193,6 @@ export default {
           .left {
             .song-desc {
               .text {
-                animation: 10s wordsLoop linear infinite normal;
-
                 .song-name {
                   color: $color-common;
 
@@ -210,16 +206,6 @@ export default {
         }
       }
     }
-  }
-}
-
-@keyframes wordsLoop {
-  0% {
-    transform: translate3d(100%, 0, 0);
-  }
-
-  100% {
-    transform: translate3d(-100%, 0, 0);
   }
 }
 </style>

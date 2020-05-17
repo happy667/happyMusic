@@ -187,11 +187,7 @@ const utils = {
     })
   },
   isLogin() {
-    if (store.state.token && store.state.user) {
-      return true
-    } else {
-      return false
-    }
+    return store.state.token
   },
   // 弹出跳转登录页面对话框
   alertLogin(redirectPath) {

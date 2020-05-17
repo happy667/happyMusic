@@ -96,21 +96,19 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    font-size: $font-size-mini;
 
     .name {
       line-height: 0.5rem;
-      font-weight: bold;
-      no-wrap2();
+      no-wrap();
+      font-size: $font-size-smaller-x;
     }
 
     .desc {
-      max-width: 6rem;
       display: flex;
       color: #999;
       height: 0.6rem;
       line-height: 0.6rem;
-      no-wrap();
+      font-size: $font-size-mini;
 
       span {
         margin-right: 0.3rem;

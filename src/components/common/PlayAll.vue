@@ -29,7 +29,7 @@ export default {
   line-height: 0.8rem;
 
   .play-icon {
-    font-size: $font-size-small;
+    font-size: $font-size-large-x;
     color: $color-common;
     margin-right: 0.2rem;
 

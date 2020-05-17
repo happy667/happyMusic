@@ -154,12 +154,13 @@ export default {
         .name {
           height: 0.7rem;
           line-height: 0.7rem;
-          font-size: $font-size-smaller;
+          font-size: $font-size-smaller-x;
           no-wrap();
         }
 
         .info {
           color: #777;
+          font-size: $font-size-mini;
 
           span {
             display: inline-block;

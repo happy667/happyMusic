@@ -1,5 +1,6 @@
 <template>
-  <transition name="slide">
+  <transition enter-active-class="animated fadeIn faster"
+              leave-active-class="animated fadeOut faster">
     <div class="full-screen-play-container">
       <!-- 头部导航栏 -->
       <play-header></play-header>
@@ -42,14 +43,6 @@ export default {
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
-
-.slide-enter-active, .slide-leave-active {
-  transition: transform 0.4s;
-}
-
-.slide-enter, .slide-leave-to {
-  transform: translate3d(0, 100%, 0);
-}
 
 .full-screen-play-container {
   position: fixed;

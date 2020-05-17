@@ -144,6 +144,8 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
+@import '~common/stylus/variable';
+
 .ranking-container .list-container>>>.official-list-container:last-child {
   margin-bottom: 0;
 }

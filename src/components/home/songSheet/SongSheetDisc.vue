@@ -1,4 +1,5 @@
 <template>
+
   <div class="song-sheet-desc-container"
        @touchstart="handleTouchStart"
        @touchmove="handleTouchMove"
@@ -435,14 +436,12 @@ export default {
       this.showOverlay = true
       this.setHideMiniPlayer(true)
       // 不让页面滚动
-      document.body.style.position = 'absolute'
       document.body.style.overflow = 'hidden'
     },
     // 关闭遮罩层
     closeOverlay () {
       this.showOverlay = false
       this.setHideMiniPlayer(false)
-      document.body.style.position = ''
       document.body.style.overflow = ''
     },
     // 监听页面滚动

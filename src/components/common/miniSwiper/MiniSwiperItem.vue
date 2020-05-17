@@ -34,7 +34,6 @@ export default {
 @import '~common/stylus/variable';
 
 .mini-swiper-item-container {
-  background: $color-common-b;
   position: relative;
   width: 2.8rem;
   height: 0;
@@ -73,6 +72,7 @@ export default {
           width: 100%;
           height: 100%;
           border-radius: 0.3rem;
+          // background: $color-common-b;
         }
       }
 
@@ -89,8 +89,7 @@ export default {
       width: 100%;
       line-height: 0.5rem;
       word-wrap: break-word;
-      font-size: $font-size-smaller;
-      font-family: $font-common-title;
+      font-size: $font-size-smaller-x;
       text-align: center;
       no-wrap();
     }

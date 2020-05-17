@@ -64,7 +64,7 @@ export default {
   &.plain {
     color: $color-common;
     background: $color-common-background;
-    border: 1px solid $color-common;
+    border: 0.02rem solid $color-common;
   }
 
   &.followed {

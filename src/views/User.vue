@@ -445,7 +445,7 @@ export default {
           font-size: 1rem;
           color: $color-common;
           border-radius: 50%;
-          border: 1px solid #fff;
+          border: 0.02rem solid #fff;
           background: #fff;
         }
       }
@@ -528,6 +528,7 @@ export default {
             display: flex;
             justify-content: center;
             flex-direction: column;
+            font-size: $font-size-mini;
 
             .title {
               height: 0.7rem;
@@ -536,6 +537,7 @@ export default {
 
             .num {
               color: $color-common-b2;
+              line-height: 0.6rem;
             }
           }
         }

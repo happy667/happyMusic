@@ -78,29 +78,27 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    font-size: $font-size-mini;
 
     .video-title {
       color: $color-common-x;
       line-height: 0.5rem;
-      font-weight: bold;
       no-wrap2();
+      font-size: $font-size-smaller-x;
     }
 
     .bottom {
-      max-width: 6rem;
       display: flex;
       color: #999;
       height: 0.6rem;
       line-height: 0.6rem;
       no-wrap();
+      font-size: $font-size-mini;
 
       .video-time {
         margin-right: 0.3rem;
       }
 
       .video-source {
-        width: 4rem;
         no-wrap();
       }
     }
