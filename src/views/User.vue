@@ -100,465 +100,441 @@
                                    ref="collapseItem1">
                   <template #title>
                     <div class="title">
-                      <div class="text">收藏的歌单</div>
-                      <span class="count">({{songSheetCount}}个)</span>
+                      <div class="text">我的歌单</div>
+                      <span class="count">({{userSongSheet.length}}个)</span>
                     </div>
                   </template>
-                  <song-sheet-mini-list :list="userSongSheet"></song-sheet-mini-list>
-                  <template v-if="userSongSheet.length===0">
+<song-sheet-mini-list :list="userSongSheet"></song-sheet-mini-list>
+<template v-if="userSongSheet.length===0">
                     <no-result text="还没有歌单,快去收藏吧"></no-result>
                   </template>
-                </van-collapse-item>
-                <van-collapse-item name="2"
-                                   ref="collapseItem2">
-                  <template #title>
+</van-collapse-item>
+<van-collapse-item name="2" ref="collapseItem2">
+    <template #title>
                     <div class="title">
-                      <div class="text">收藏的专辑</div>
+                      <div class="text">我的专辑</div>
                       <span class="count">({{albumCount}}个)</span>
                     </div>
 
                   </template>
 
-                  <album-list :list="userAlbum"
-                              @select="selectItem"
-                              showSongSize
-                              :showTime="false"></album-list>
-                  <template v-if="userAlbum.length===0">
+    <album-list :list="userAlbum" @select="selectItem" showSongSize :showTime="false"></album-list>
+    <template v-if="userAlbum.length===0">
                     <no-result text="还没有专辑,快去收藏吧"></no-result>
                   </template>
-                </van-collapse-item>
+</van-collapse-item>
 
-                <van-collapse-item name="3"
-                                   ref="collapseItem3">
-                  <template #title>
+<van-collapse-item name="3" ref="collapseItem3">
+    <template #title>
                     <div class="title">
-                      <div class="text">收藏的视频</div>
+                      <div class="text">我的视频</div>
                       <span class="count">({{videoCount}}个)</span>
                     </div>
 
                   </template>
-                  <video-list @select="goToVideoInfo"
-                              :list="userVideo"></video-list>
-                  <template v-if="userVideo.length===0">
+    <video-list @select="goToVideoInfo" :list="userVideo"></video-list>
+    <template v-if="userVideo.length===0">
                     <no-result text="还没有视频,快去收藏吧"></no-result>
                   </template>
-                </van-collapse-item>
-              </van-collapse>
-            </div>
-          </template>
-          <template v-if="load">
+</van-collapse-item>
+</van-collapse>
+</div>
+</template>
+<template v-if="load">
             <!-- loading -->
             <loading />
           </template>
-        </div>
-      </scroll>
-    </section>
+</div>
+</scroll>
+</section>
 
-  </div>
+</div>
 </template>
 <script>
-import videoList from '@/components/common/video/VideoList'
-import Video from '@/assets/common/js/video.js'
-import Album from '@/assets/common/js/album.js'
-import Scroll from '@/components/common/Scroll'
-import NoResult from '@/components/common/NoResult'
-import AlbumList from '@/components/common/album/AlbumList'
-import SongSheetMiniList from '@/components/home/songSheet/songSheetMini/SongSheetMiniList'
-import userApi from '@/api/user.js'
-import { playlistMixin } from '@/assets/common/js/mixin.js'
-import {
-  ERR_OK
-} from '@/api/config.js'
-import { mapState, mapMutations } from 'vuex'
-export default {
-  name: 'user',
-  data () {
-    return {
-      userCount: null,
-      userSongSheet: null, // 用户歌单
-      userAlbum: null, // 用户专辑
-      userVideo: null, // 用户视频
-      activeNames: ['1', '2', '3']
-    }
-  },
-  mixins: [playlistMixin],
-  computed: {
-    ...mapState(['user', 'userLikeList', 'currentPlayIndex']),
-    myLikeCount () {
-      return this.userLikeList ? this.userLikeList.length + '首' : ''
-    },
-    followCount () {
-      return this.userCount ? this.userCount.artistCount + '个收藏' : ''
-    },
-    songSheetCount () {
-      return this.userCount ? this.userCount.subPlaylistCount : 0
-    },
-    albumCount () {
-      return this.userAlbum ? this.userAlbum.length : 0
-    },
-    videoCount () {
-      return this.userVideo ? this.userVideo.length : 0
-    },
-    load () {
-      if (this.user) { // 判断是否登录
-        if (!this.userSongSheet || !this.userAlbum || !this.userVideo) { // 判断是否加载完收藏专辑和歌单、视频
-          return true
-        } else {
-          return false
+    import videoList from '@/components/common/video/VideoList'
+    import Video from '@/assets/common/js/video.js'
+    import Album from '@/assets/common/js/album.js'
+    import Scroll from '@/components/common/Scroll'
+    import NoResult from '@/components/common/NoResult'
+    import AlbumList from '@/components/common/album/AlbumList'
+    import SongSheetMiniList from '@/components/home/songSheet/songSheetMini/SongSheetMiniList'
+    import userApi from '@/api/user.js'
+    import {
+        playlistMixin
+    } from '@/assets/common/js/mixin.js'
+    import {
+        ERR_OK
+    } from '@/api/config.js'
+    import {
+        mapState,
+        mapMutations
+    } from 'vuex'
+    export default {
+        name: 'user',
+        data() {
+            return {
+                userCount: null,
+                userSongSheet: null, // 用户歌单
+                userAlbum: null, // 用户专辑
+                userVideo: null, // 用户视频
+                activeNames: ['1', '2', '3']
+            }
+        },
+        mixins: [playlistMixin],
+        computed: {
+            ...mapState(['user', 'userLikeList', 'currentPlayIndex']),
+            myLikeCount() {
+                return this.userLikeList ? this.userLikeList.length + '首' : ''
+            },
+            followCount() {
+                return this.userCount ? this.userCount.artistCount + '个收藏' : ''
+            },
+            songSheetCount() {
+                return this.userCount ? this.userCount.subPlaylistCount : 0
+            },
+            albumCount() {
+                return this.userAlbum ? this.userAlbum.length : 0
+            },
+            videoCount() {
+                return this.userVideo ? this.userVideo.length : 0
+            },
+            load() {
+                if (this.user) { // 判断是否登录
+                    if (!this.userSongSheet || !this.userAlbum || !this.userVideo) { // 判断是否加载完收藏专辑和歌单、视频
+                        return true
+                    } else {
+                        return false
+                    }
+                } else {
+                    return false
+                }
+            }
+        },
+        watch: {
+            user() {
+                if (this.user) {
+                    // 获取用户专辑歌单数量
+                    this.getUserCount()
+                        // 获取用户专辑
+                    this.getUserAlbum()
+                        // 获取用户收藏的歌单
+                    this.getUserSongSheet(this.user.userId)
+                        // 获取用户收藏的视频
+                    this.getUserVideo()
+                }
+            }
+        },
+        mounted() {
+            if (this.user) {
+                // 获取用户专辑歌单数量
+                this.getUserCount()
+                    // 获取用户专辑
+                this.getUserAlbum()
+                    // 获取用户收藏的歌单
+                this.getUserSongSheet(this.user.userId)
+                    // 获取用户收藏的视频
+                this.getUserVideo()
+            }
+        },
+
+        methods: {
+            ...mapMutations(['setHideMiniPlayer']),
+            // 返回上一个路由
+            routerBack() {
+                this.$router.push('/home')
+            },
+            // 选择专辑进入专辑详情
+            selectItem(item) {
+                this.$router.push(`/singerAlbum/${item.id}`)
+            },
+            // 获取用户信息 , 歌单，收藏，mv, dj 数量
+            async getUserCount() {
+                const {
+                    data: res
+                } = await userApi.getUserCount()
+                if (res.code === ERR_OK) {
+                    this.userCount = res
+                }
+            },
+            // 获取用户收藏的歌单
+            async getUserSongSheet(id) {
+                const {
+                    data: res
+                } = await userApi.getUserSongSheet(id)
+                if (res.code === ERR_OK) {
+                    this.userSongSheet = res.playlist
+                }
+            },
+            // 获取用户收藏专辑
+            async getUserAlbum() {
+                const {
+                    data: res
+                } = await userApi.getUserAlbum()
+                if (res.code === ERR_OK) {
+                    let albumList = []
+                    res.data.forEach(item => {
+                        let album = new Album({
+                            id: item.id,
+                            name: item.alias.length > 0 ? `${item.name} (${item.alias.join('/')})` : item.name,
+                            size: item.size,
+                            picUrl: item.picUrl,
+                            singerName: item.artists.map(item => item.name).join('/'),
+                            publishTime: item.subTime
+                        })
+                        albumList.push(album)
+                    })
+                    this.userAlbum = albumList
+                }
+            },
+            async getUserVideo() {
+                const {
+                    data: res
+                } = await userApi.getUserVideo()
+                if (res.code === ERR_OK) {
+                    let videoList = []
+                    res.data.forEach(item => {
+                        let video = new Video({
+                            id: item.vid,
+                            coverUrl: item.coverUrl,
+                            name: item.title,
+                            playCount: item.playTime,
+                            type: item.type,
+                            duration: item.durationms,
+                            creatorName: item.creator.map(item => item.userName).join('/')
+                        })
+                        videoList.push(video)
+                    })
+                    this.userVideo = videoList
+                }
+            },
+
+            // 点击跳转到编辑页面
+            handleEdit() {
+                // 如果有歌曲播放就隐藏迷你播放器
+                if (this.currentPlayIndex !== -1) {
+                    this.setHideMiniPlayer(true)
+                }
+                this.$router.push('/user/edit')
+            },
+            handlePlaylist(playList) {
+                // 适配播放器与页面底部距离
+                const bottom = playList.length > 0 ? '1.6rem' : ''
+                this.$nextTick(() => {
+                    this.$refs.container.style.paddingBottom = bottom
+                    this.$refs.user_scroll.refresh()
+                })
+            },
+            // 切换面板
+            changeCollapse(activeNames) {
+                let element = null
+                let index = null
+                if (activeNames.length > 1) {
+                    index = activeNames[activeNames.length - 1]
+                } else {
+                    index = activeNames[0]
+                }
+                console.log(index)
+                switch (index) {
+                    case '1':
+                        element = this.$refs.collapseItem1.$el
+                        break
+                    case '2':
+                        element = this.$refs.collapseItem2.$el
+                        break
+                    case '3':
+                        element = this.$refs.collapseItem3.$el
+                        break
+                }
+                if (element) {
+                    this.$refs.user_scroll.scrollToElement(element, 0)
+                }
+                this.$refs.user_scroll.refresh()
+            },
+            goToVideoInfo(video) {
+                this.$router.push(`/videoInfo/${video.id}`)
+            }
+
+        },
+        components: {
+            SongSheetMiniList,
+            AlbumList,
+            NoResult,
+            Scroll,
+            videoList
         }
-      } else {
-        return false
-      }
     }
-  },
-  watch: {
-    user () {
-      if (this.user) {
-        // 获取用户专辑歌单数量
-        this.getUserCount()
-        // 获取用户专辑
-        this.getUserAlbum()
-        // 获取用户收藏的歌单
-        this.getUserSongSheet(this.user.userId)
-        // 获取用户收藏的视频
-        this.getUserVideo()
-      }
-    }
-  },
-  mounted () {
-    if (this.user) {
-      // 获取用户专辑歌单数量
-      this.getUserCount()
-      // 获取用户专辑
-      this.getUserAlbum()
-      // 获取用户收藏的歌单
-      this.getUserSongSheet(this.user.userId)
-      // 获取用户收藏的视频
-      this.getUserVideo()
-    }
-  },
-
-  methods: {
-    ...mapMutations(['setHideMiniPlayer']),
-    // 返回上一个路由
-    routerBack () {
-      this.$router.push('/home')
-    },
-    // 选择专辑进入专辑详情
-    selectItem (item) {
-      this.$router.push(`/singerAlbum/${item.id}`)
-    },
-    // 获取用户信息 , 歌单，收藏，mv, dj 数量
-    async getUserCount () {
-      const {
-        data: res
-      } = await userApi.getUserCount()
-      if (res.code === ERR_OK) {
-        this.userCount = res
-      }
-    },
-    // 获取用户收藏的歌单
-    async  getUserSongSheet (id) {
-      const {
-        data: res
-      } = await userApi.getUserSongSheet(id)
-      if (res.code === ERR_OK) {
-        this.userSongSheet = res.playlist
-      }
-    },
-    // 获取用户收藏专辑
-    async getUserAlbum () {
-      const {
-        data: res
-      } = await userApi.getUserAlbum()
-      if (res.code === ERR_OK) {
-        let albumList = []
-        res.data.forEach(item => {
-          let album = new Album({
-            id: item.id,
-            name: item.alias.length > 0 ? `${item.name} (${item.alias.join('/')})` : item.name,
-            size: item.size,
-            picUrl: item.picUrl,
-            singerName: item.artists.map(item => item.name).join('/'),
-            publishTime: item.subTime
-          })
-          albumList.push(album)
-        })
-        this.userAlbum = albumList
-      }
-    },
-    async getUserVideo () {
-      const {
-        data: res
-      } = await userApi.getUserVideo()
-      if (res.code === ERR_OK) {
-        let videoList = []
-        res.data.forEach(item => {
-          let video = new Video({
-            id: item.vid,
-            coverUrl: item.coverUrl,
-            name: item.title,
-            playCount: item.playTime,
-            type: item.type,
-            duration: item.durationms,
-            creatorName: item.creator.map(item => item.userName).join('/')
-          })
-          videoList.push(video)
-        })
-        this.userVideo = videoList
-      }
-    },
-
-    // 点击跳转到编辑页面
-    handleEdit () {
-      // 如果有歌曲播放就隐藏迷你播放器
-      if (this.currentPlayIndex !== -1) {
-        this.setHideMiniPlayer(true)
-      }
-      this.$router.push('/user/edit')
-    },
-    handlePlaylist (playList) {
-      // 适配播放器与页面底部距离
-      const bottom = playList.length > 0 ? '1.6rem' : ''
-      this.$nextTick(() => {
-        this.$refs.container.style.paddingBottom = bottom
-        this.$refs.user_scroll.refresh()
-      })
-    },
-    // 切换面板
-    changeCollapse (activeNames) {
-      let element = null
-      let index = null
-      if (activeNames.length > 1) {
-        index = activeNames[activeNames.length - 1]
-      } else {
-        index = activeNames[0]
-      }
-      console.log(index)
-      switch (index) {
-        case '1':
-          element = this.$refs.collapseItem1.$el
-          break
-        case '2':
-          element = this.$refs.collapseItem2.$el
-          break
-        case '3':
-          element = this.$refs.collapseItem3.$el
-          break
-      }
-      if (element) {
-        this.$refs.user_scroll.scrollToElement(element, 0)
-      }
-      this.$refs.user_scroll.refresh()
-    },
-    goToVideoInfo (video) {
-      this.$router.push(`/videoInfo/${video.id}`)
-    }
-
-  },
-  components: {
-    SongSheetMiniList,
-    AlbumList,
-    NoResult,
-    Scroll,
-    videoList
-  }
-}
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
-.user-container>>> .scroll {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
-
-.user-container>>>.album-container {
-  padding: 0;
-  margin-bottom: 0.4rem;
-  color: $color-common-x;
-}
-
-.user-container {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  background-color: $color-common-background;
-
-  header {
-    position: relative;
-    width: 100%;
-    padding-bottom: 6rem;
-    height: 0;
-    box-sizing: border-box;
-    background-image: linear-gradient(-20deg, #f794a4 0%, #fdd6bd 100%);
-
-    .header-container {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 6rem;
-      padding: 1.5rem 0 1rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-      box-sizing: border-box;
-
-      .avatar {
-        position: relative;
-        width: 2rem;
-        height: 0;
-        padding-bottom: 2rem;
-        background: #f4f4f4;
-        border-radius: 50%;
-
-        .image, .icon {
-          position: absolute;
-          left: 0;
-          top: 0;
-          right: 0;
-          bottom: 0;
-
-          img {
-            display: block;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-          }
-        }
-
-        .image {
-          background: $color-common-b;
-          border-radius: 50%;
-        }
-
-        .icon {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 1rem;
-          color: $color-common;
-          border-radius: 50%;
-          border: 0.02rem solid #fff;
-          background: #fff;
-        }
-      }
-
-      .nikeName {
-        max-width: 8rem;
-        height: 0.9rem;
-        line-height: 0.9rem;
-        no-wrap();
-
-        .text {
-          color: #fff;
-          font-weight: bold;
-          font-size: $font-size-large-x;
-        }
-      }
-
-      .edit {
+    @import '~common/stylus/variable';
+    .user-container>>>.scroll {
         position: absolute;
-        right: 0.5rem;
-        top: 0.5rem;
-        color: #fff;
-      }
-
-      .back {
-        position: absolute;
-        left: 0.2rem;
-        top: 0.25rem;
-        width: 1rem;
-        height: 1rem;
-        font-size: $font-size-large;
-        color: #fff;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+    
+    .user-container>>>.album-container {
+        padding: 0;
+        margin-bottom: 0.4rem;
+        color: $color-common-x;
+    }
+    
+    .user-container {
+        position: fixed;
+        width: 100%;
+        height: 100%;
         display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .no-login {
-        margin-top: 0.5rem;
-
-        a {
-          display: block;
-          height: 1rem;
-          line-height: 1rem;
-          font-size: $font-size-small-x;
-          color: #fff;
-        }
-      }
-    }
-  }
-
-  section {
-    position: relative;
-    flex: 1;
-
-    .user-index {
-      .my-list {
-        padding: 0.4rem;
-
-        .my-list-item {
-          display: flex;
-          width: 100%;
-          height: 1.7rem;
-          margin-bottom: 0.3rem;
-          box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.1);
-          border-radius: 0.1rem;
-          color: $color-common-x;
-
-          .left-image {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 1.6rem;
-            height: 1.7rem;
-            font-size: $font-size-large;
-            color: $color-common;
-          }
-
-          .right-info {
-            display: flex;
-            justify-content: center;
-            flex-direction: column;
-            font-size: $font-size-mini;
-
-            .title {
-              height: 0.7rem;
-              line-height: 0.7rem;
+        flex-direction: column;
+        background-color: $color-common-background;
+        header {
+            position: relative;
+            width: 100%;
+            padding-bottom: 6rem;
+            height: 0;
+            box-sizing: border-box;
+            background-image: linear-gradient(-20deg, #f794a4 0%, #fdd6bd 100%);
+            .header-container {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 6rem;
+                padding: 1.5rem 0 1rem;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                align-items: center;
+                box-sizing: border-box;
+                .avatar {
+                    position: relative;
+                    width: 2rem;
+                    height: 0;
+                    padding-bottom: 2rem;
+                    background: #f4f4f4;
+                    border-radius: 50%;
+                    .image,
+                    .icon {
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        right: 0;
+                        bottom: 0;
+                        img {
+                            display: block;
+                            width: 100%;
+                            height: 100%;
+                            border-radius: 50%;
+                        }
+                    }
+                    .image {
+                        background: $color-common-b;
+                        border-radius: 50%;
+                    }
+                    .icon {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 1rem;
+                        color: $color-common;
+                        border-radius: 50%;
+                        border: 0.02rem solid #fff;
+                        background: #fff;
+                    }
+                }
+                .nikeName {
+                    max-width: 8rem;
+                    height: 0.9rem;
+                    line-height: 0.9rem;
+                    no-wrap();
+                    .text {
+                        color: #fff;
+                        font-weight: bold;
+                        font-size: $font-size-large-x;
+                    }
+                }
+                .edit {
+                    position: absolute;
+                    right: 0.5rem;
+                    top: 0.5rem;
+                    color: #fff;
+                }
+                .back {
+                    position: absolute;
+                    left: 0.2rem;
+                    top: 0.25rem;
+                    width: 1rem;
+                    height: 1rem;
+                    font-size: $font-size-large;
+                    color: #fff;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+                .no-login {
+                    margin-top: 0.5rem;
+                    a {
+                        display: block;
+                        height: 1rem;
+                        line-height: 1rem;
+                        font-size: $font-size-small-x;
+                        color: #fff;
+                    }
+                }
             }
-
-            .num {
-              color: $color-common-b2;
-              line-height: 0.6rem;
+        }
+        section {
+            position: relative;
+            flex: 1;
+            .user-index {
+                .my-list {
+                    padding: 0.4rem;
+                    .my-list-item {
+                        display: flex;
+                        width: 100%;
+                        height: 1.7rem;
+                        margin-bottom: 0.3rem;
+                        box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.1);
+                        border-radius: 0.1rem;
+                        color: $color-common-x;
+                        .left-image {
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            width: 1.6rem;
+                            height: 1.7rem;
+                            font-size: $font-size-large;
+                            color: $color-common;
+                        }
+                        .right-info {
+                            display: flex;
+                            justify-content: center;
+                            flex-direction: column;
+                            font-size: $font-size-mini;
+                            .title {
+                                height: 0.7rem;
+                                line-height: 0.7rem;
+                            }
+                            .num {
+                                color: $color-common-b2;
+                                line-height: 0.6rem;
+                            }
+                        }
+                    }
+                }
+                .my-follow {
+                    .title {
+                        display: flex;
+                        .text {
+                            font-size: $font-size-smaller;
+                            font-weight: bold;
+                            margin-right: 0.1rem;
+                        }
+                        .count {
+                            color: $color-common-b2;
+                        }
+                    }
+                }
             }
-          }
         }
-      }
-
-      .my-follow {
-        .title {
-          display: flex;
-
-          .text {
-            font-size: $font-size-smaller;
-            font-weight: bold;
-            margin-right: 0.1rem;
-          }
-
-          .count {
-            color: $color-common-b2;
-          }
-        }
-      }
     }
-  }
-}
 </style>

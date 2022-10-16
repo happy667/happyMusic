@@ -1,13 +1,10 @@
 <template>
   <div class="song-sheet-item-container">
     <div class="sons-img">
-      <img v-lazy="picUrl"
-          class="animated fadeIn"
-           :key="picUrl">
+      <img v-lazy="picUrl" class="animated fadeIn" :key="picUrl">
     </div>
     <div class="songs-desc">{{songSheet.name}}</div>
-    <div class="songs-playCount"
-         v-if="playCount">
+    <div class="songs-playCount" v-if="playCount">
       <i class="iconfont icon-bofang"></i> {{playCount|convertCount}}
     </div>
   </div>
@@ -31,9 +28,12 @@
 <style lang="stylus" scoped>
     @import '~common/stylus/variable';
     .song-sheet-item-container {
+        display: flex;
+        align-content: space-between;
+        flex-wrap: wrap;
         width: 100%;
         box-sizing: border-box;
-        padding: 0.1rem 0.5rem 0.2rem;
+        padding: 0.1rem 0.46rem 0.2rem;
         box-shadow: 0 0.25rem 0.6rem rgba(0, 0, 0, 0.1);
         border-radius: 0.3rem;
         height: 5.2rem;
@@ -61,6 +61,7 @@
             no-wrap2();
         }
         .songs-playCount {
+            height: 0.5rem;
             line-height: 0.5rem;
             width: 100%;
             color: #999;

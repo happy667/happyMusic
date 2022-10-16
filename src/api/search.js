@@ -32,7 +32,7 @@ export default {
     },
     // 获取所有搜索结果
     getSearchAll(keywords) {
-        const url = `/search/suggest?keywords=${keywords}&type=mobile`
+        const url = `/search/suggest?keywords=${keywords}`
         return request({
             url
         })
