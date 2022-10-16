@@ -18,10 +18,14 @@
 - 网易云音乐api
 
 
+## 预览地址
+[www.happy6year.com ](http://www.happy6year.com)
+
+
 ## 安装
 `npm install`
 
 ## 运行
-`npm dev`
+`npm run serve`
 
 ## 感谢 [Binaryify](https://github.com/Binaryify) 提供的[NeteaseCloudMusicApi](https://binaryify.github.io/NeteaseCloudMusicApi)   
