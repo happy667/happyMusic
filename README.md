@@ -18,6 +18,10 @@
 - 网易云音乐api
 
 
+## 预览地址
+[www.happy6year.com ](http://www.happy6year.com)
+
+
 ## 安装
 `npm install`
 
