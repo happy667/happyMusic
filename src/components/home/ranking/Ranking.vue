@@ -18,25 +18,41 @@
                              :rankingObj="rankingObj"></official-list>
             </div>
           </template>
-          <!-- 推荐榜 -->
-          <template v-else-if="item.title==='recommend'">
-            <ranking-title title="推荐榜"
+          <!-- 精选榜 -->
+          <template v-else-if="item.title==='selected'">
+            <ranking-title title="精选榜"
                            :key="item.name"></ranking-title>
             <common-list :rankingList="item.rankingList"
                          :key="item.name">
             </common-list>
           </template>
-          <!-- 流行榜 -->
-          <template v-else-if="item.title==='popular'">
-            <ranking-title title="流行榜"
+          <!-- 曲风榜 -->
+          <template v-else-if="item.title==='genre'">
+            <ranking-title title="曲风榜"
                            :key="item.name"></ranking-title>
             <common-list :rankingList="item.rankingList"
                          :key="item.name">
             </common-list>
           </template>
-          <!-- 其他榜 -->
-          <template v-else-if="item.title==='other'">
-            <ranking-title title="其他榜"
+          <!-- 全球榜-->
+          <template v-else-if="item.title==='global'">
+            <ranking-title title="全球榜"
+                           :key="item.name"></ranking-title>
+            <common-list :rankingList="item.rankingList"
+                         :key="item.name">
+            </common-list>
+          </template>
+          <!-- 语种榜-->
+          <template v-else-if="item.title==='languages'">
+            <ranking-title title="语种榜"
+                           :key="item.name"></ranking-title>
+            <common-list :rankingList="item.rankingList"
+                         :key="item.name">
+            </common-list>
+          </template>
+          <!-- 特色榜-->
+          <template v-else-if="item.title==='characteristic'">
+            <ranking-title title="特色榜"
                            :key="item.name"></ranking-title>
             <common-list :rankingList="item.rankingList"
                          :key="item.name">
@@ -71,7 +87,7 @@ export default {
       return !this.rankingList[0]
     },
     loadMore () {
-      return this.rankingList[0] & !this.rankingList[1] || !this.rankingList[2] || !this.rankingList[3]
+      return this.rankingList[0] & !this.rankingList[1] || !this.rankingList[2] || !this.rankingList[3] || !this.rankingList[4] || !this.rankingList[5]
     }
   },
   data () {
@@ -88,12 +104,14 @@ export default {
     // 获取排行榜
     async getRankingList () {
       // 根据id获取对应排行榜,首先根据接口将排行榜进行分类
-      // 分为官方榜，流行榜，推荐榜，其他榜
+      // 分为官方榜，精选榜，曲风榜，全球榜,语种榜,特色榜
       const rankingListIds = {
-        'official': [0, 1, 2, 3, 4], // 存放官方榜下所有排行榜id
-        'recommend': [23, 25, 26, 31, 32, 17, 22], // 存放推荐榜榜下所有排行榜id
-        'popular': [5, 14, 15, 27, 30, 24, 28], // 存放流行榜下所有排行榜id
-        'other': [6, 7, 8, 9, 10, 11, 12, 13, 16, 19, 20, 21, 29, 33] // 存放其他榜下所有排行榜id
+        'official': [19723756, 3779629, 3778678, 2884035], // 存放官方榜下所有排行榜id
+        'selected': [7657858751, 5453912201, 6723173524, 7356827205,991319590,3001890046], // 存放精选榜榜下所有排行榜id
+        'genre': [1978921795, 3001835560, 5059633707, 5059661515, 10520166, 71384707, 5059642708, 6886768100], // 存放曲风榜下所有排行榜id
+        'global': [60198, 180106, 60131, 27135204, 3812895, 6939992364], // 存放全球榜下所有排行榜id
+        'languages': [2809513713, 2809577409, 5059644681, 745956260, 6732051320, 7095271308, 6732014811], // 存放语种榜下所有排行榜id
+        'characteristic': [7603212484, 6688069460, 5338990334, 21845217, 3112516681] // 存放特色榜下所有排行榜id
       }
       // 存放榜单列表
       const rankingList = []
@@ -144,23 +162,15 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
-.ranking-container .list-container>>>.official-list-container:last-child {
-  margin-bottom: 0;
-}
-
-.ranking-container {
-  width: 100%;
-  background: $color-common-background;
-
-  .ranking-list-wrapper {
-    padding: 0 0.5rem;
-    box-sizing: border-box;
-
-    .list-container {
-      padding-bottom: 0.5rem;
-    }
-  }
-}
+@import '~common/stylus/variable'
+.ranking-container .list-container>>>.official-list-container:last-child
+  margin-bottom 0
+.ranking-container
+  width 100%
+  background $color-common-background
+  .ranking-list-wrapper
+    padding 0 0.5rem
+    box-sizing border-box
+    .list-container
+      padding-bottom 0.5rem
 </style>

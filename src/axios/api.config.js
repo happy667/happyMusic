@@ -1,5 +1,5 @@
-const isPro = Object.is(process.env.NODE_ENV, 'production')
-console.log(isPro)
+const isPro = Object.is(process.env.NODE_ENV, "production");
+console.log(isPro);
 module.exports = {
-  baseUrl: isPro ? 'http://120.77.183.150:3000' : 'api'
+    baseUrl: isPro ? 'http://www.happy6year.com:3000' : 'api',
 }

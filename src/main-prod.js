@@ -7,10 +7,11 @@ import 'common/stylus/index.styl'
 import '@/assets/common/font/iconfont.css'
 import '@/assets/common/js/utils.js'
 import '@/assets/common/js/globalComponents.js'
+import './plugins/vueLazyLoad.js'
 Vue.config.productionTip = false
 
 new Vue({
-  router,
-  store,
-  render: h => h(App)
+    router,
+    store,
+    render: h => h(App)
 }).$mount('#app')

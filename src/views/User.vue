@@ -518,7 +518,7 @@ export default {
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 1.7rem;
+            width: 1.6rem;
             height: 1.7rem;
             font-size: $font-size-large;
             color: $color-common;

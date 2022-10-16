@@ -1,54 +1,70 @@
 var path = require('path')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 function resolve(dir) {
-  console.log(__dirname)
-  return path.join(__dirname, dir)
+    console.log(__dirname)
+    return path.join(__dirname, dir)
 }
 module.exports = {
-  chainWebpack: config => {
-    // 发布模式
-    config.when(process.env.NODE_ENV === 'production', config => {
-      // entry找到默认的打包入口，调用clear则是删除默认的打包入口
-      // add添加新的打包入口
-      config.entry('app').clear().add('./src/main-prod.js')
+    chainWebpack: config => {
+        // 发布模式
+        config.when(process.env.NODE_ENV === 'production', config => {
+                // entry找到默认的打包入口，调用clear则是删除默认的打包入口
+                // add添加新的打包入口
+                config.entry('app').clear().add('./src/main-prod.js')
 
-      // 使用externals设置排除项
-      config.set('externals', {
-        'vue': 'Vue',
-        'vue-router': 'VueRouter',
-        'vuex': 'Vuex',
-        'axios': 'axios',
-        'babel-polyfill': 'polyfill',
-        'vant': 'vant',
-        'swiper': 'Swiper',
-        'better-scroll': 'BScroll'
-      })
-    })
-    // 开发模式
-    config.when(process.env.NODE_ENV === 'development', config => {
-      config.entry('app').clear().add('./src/main-dev.js')
-    })
-    // 设置别名
-    config.resolve.alias
-      .set('@', resolve('src')) // key,value自行定义，比如.set('@@', resolve('src/components'))
-      .set('common', resolve('src/assets/common'))
-  },
-  css: {
-    extract: false
-  },
-  assetsDir: 'static',
-  parallel: false,
-  publicPath: './',
-  devServer: {
-    // 解决跨域问题
-    proxy: {
-      '/api': {
-        target: 'http://120.77.183.150:3000',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/api': ''
+                // 使用externals设置排除项
+                config.set('externals', {
+                    'vue': 'Vue',
+                    'vue-router': 'VueRouter',
+                    'vuex': 'Vuex',
+                    'axios': 'axios',
+                    'babel-polyfill': 'polyfill',
+                    'vant': 'vant',
+                    'swiper': 'Swiper'
+                })
+                plugins: [
+                    new UglifyJsPlugin({
+                        uglifyOptions: {
+                            output: {
+                                comments: false, // 去掉注释
+                            },
+                            warnings: false,
+                            compress: {
+                                drop_console: true,
+                                drop_debugger: false,
+                                pure_funcs: ['console.log'] //移除console
+                            }
+                        }
+                    })
+                ]
+            })
+            // 开发模式
+        config.when(process.env.NODE_ENV === 'development', config => {
+                config.entry('app').clear().add('./src/main-dev.js')
+            })
+            // 设置别名
+        config.resolve.alias
+            .set('@', resolve('src')) // key,value自行定义，比如.set('@@', resolve('src/components'))
+            .set('common', resolve('src/assets/common'))
+    },
+    css: {
+        extract: false
+    },
+    assetsDir: 'static',
+    parallel: false,
+    publicPath: './',
+    productionSourceMap: false, //去除.map文件
+    devServer: {
+        // 解决跨域问题
+        proxy: {
+            '/api': {
+                target: 'http://8.130.20.143:3000',
+                changeOrigin: true,
+                pathRewrite: {
+                    '^/api': ''
+                }
+            }
         }
-      }
     }
-  }
 }

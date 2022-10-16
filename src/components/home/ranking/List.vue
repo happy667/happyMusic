@@ -55,7 +55,7 @@ export default {
         width: 2.2rem;
         height: 2.2rem;
         border-radius: 0.2rem;
-        margin-bottom: 0.2rem;
+        margin-bottom: 0.22rem;
         background-color: $color-common-b;
 
         img {
@@ -70,6 +70,7 @@ export default {
         width: 2.2rem;
         line-height: 0.5rem;
         no-wrap();
+        text-align: center;
       }
     }
   }
