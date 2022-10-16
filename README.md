@@ -22,6 +22,6 @@
 `npm install`
 
 ## 运行
-`npm dev`
+`npm run serve`
 
 ## 感谢 [Binaryify](https://github.com/Binaryify) 提供的[NeteaseCloudMusicApi](https://binaryify.github.io/NeteaseCloudMusicApi)   
