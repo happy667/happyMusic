@@ -158,7 +158,7 @@
             console.log(123)
         },
         computed: {
-            ...mapState(['user', 'singerCurrentIndex', 'singer', 'currentPlayIndex', 'isPlayerClick', 'hideMiniPlayer']),
+            ...mapState(['user', 'singerCurrentIndex', 'playerFullScreen', 'singer', 'currentPlayIndex', 'isPlayerClick', 'hideMiniPlayer']),
             ...mapGetters(['currentSong']),
             currentIndex: {
                 get() {
@@ -178,6 +178,9 @@
         methods: {
             ...mapMutations(['setSingerCurrentIndex', 'setSinger', 'setPlayerFullScreen', 'setIsPlayerClick', 'setHideMiniPlayer', 'setAddNoCacheComponents']),
             routerBack() {
+                if (!this.playerFullScreen && this.isPlayerClick) {
+                    this.setPlayerFullScreen(true)
+                }
                 this.$utils.routerBack()
 
             },

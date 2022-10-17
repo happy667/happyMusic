@@ -273,7 +273,7 @@
                             })
                             songList.push(new Song({
                                 id: item.id,
-                                name: item.alia.length > 0 ? `${item.name} (${item.alia.join('/')})` : item.name,
+                                name: item.name,
                                 singers: singerName,
                                 singersList,
                                 picUrl: item.al.picUrl,

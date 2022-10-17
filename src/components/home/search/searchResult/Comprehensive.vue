@@ -148,7 +148,7 @@
                         picUrl: item.album.picUrl,
                         singers,
                         singersList,
-                        mv: item.mv,
+                        mv: item.mvid,
                         album: new Album({
                             id: item.album.id,
                             name: item.album.name,

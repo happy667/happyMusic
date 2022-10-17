@@ -60,6 +60,7 @@
         methods: {
             ...mapMutations(['setPlayerFullScreen', 'setSinger', 'setSingerCurrentIndex', 'setIsPlayerClick', 'setAddNoCacheComponents', 'setIsGetSingerImage']),
             handleBack() {
+                this.$store.commit('setIsPlayerClick', false)
                 this.setPlayerFullScreen(false)
             },
             // 选择歌手

@@ -3,22 +3,18 @@
     <!-- loading -->
     <loading :loading="pageLoading" />
     <template v-if="song.songList.length!==0">
-      <van-list v-model="loading"
-                :finished="finished"
-                finished-text="没有更多了"
-                @load="handlePullingUp">
-        <song-list @select="selectSong"
-                   ref="songList"
-                   :songsList="song.songList"></song-list>
+      <play-all :length="song.songList.length" @play="handlePlayAll(song.songList)"></play-all>
+      <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="handlePullingUp">
+        <song-list @select="selectSong" ref="songList" :songsList="song.songList"></song-list>
       </van-list>
     </template>
 <template v-if="song.songCount===0">
-      <no-result text="暂无相关歌曲"
-                 image="search"></no-result>
+      <no-result text="暂无相关歌曲" image="search"></no-result>
     </template>
 </div>
 </template>
 <script>
+    import PlayAll from '@/components/common/PlayAll'
     import SongList from '@/components/home/song/SongList'
     import NoResult from '@/components/common/NoResult'
     import searchApi from '@/api/search.js'
@@ -67,6 +63,11 @@
         },
         methods: {
             ...mapMutations(['setPlayerFullScreen']),
+            // 播放全部歌曲
+            handlePlayAll(list) {
+                // 引入vue原型上的utils
+                this.$utils.playAllSong(list)
+            },
             // 查询单曲
             async getSearchSong() {
                 // 显示加载logo
@@ -172,13 +173,15 @@
 
         components: {
             SongList,
-            NoResult
+            NoResult,
+            PlayAll
         }
     }
 </script>
 <style lang="stylus" scoped>
     @import '~common/stylus/variable';
     .search-song-container {
+        padding-top: 0.25rem;
         .song-list-null {
             width: 100%;
             height: 1rem;

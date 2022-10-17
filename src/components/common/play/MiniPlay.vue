@@ -172,7 +172,7 @@
             display: flex;
             box-sizing: border-box;
             background: $color-common-background;
-            box-shadow: 0 -0.15rem 1rem rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0rem 0.3rem rgba(0, 0, 0, 0.12);
             .player-swiper {
                 flex: 1;
                 .swiper-slide {
@@ -226,7 +226,6 @@
                                 }
                                 .singer {
                                     margin-bottom: 0.2rem;
-                                    line-height: 0.6rem;
                                     font-size: $font-size-mini;
                                     color: $color-common-b2;
                                     no-wrap();

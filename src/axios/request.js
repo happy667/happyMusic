@@ -4,7 +4,7 @@ import apiConfig from './api.config.js'
 
 // 创建axios实例
 const service = axios.create({
-        timeout: 10000,
+        timeout: 15000,
         method: 'get',
         withCredentials: true
     })
@@ -42,39 +42,42 @@ service.interceptors.response.use(
     error => {
         console.log(error)
         let res = error.response
-        let resData = res.data
-        try {
-            if (res) {
-                let status = error.response.data.code
-                    // 错误信息处理
-                if (resData.msg && !resData.message) {
-                    resData.message = resData.msg
-                }
-                switch (status) {
-                    case 500:
-                        resData.message = '系统出错'
-                        break
-                    case 408:
-                        resData.message = '请求超时'
-                        break
-                    default:
-                        resData.message = error.response.data.message ? error.response.data.message : '系统出错'
-                        break
-                }
-                return Promise.reject(res) // 返回接口返回的错误信息
-            } else {
-                let resData = {
-                    data: {
-                        message: '加载超时'
+        if (res) {
+            let resData = res.data
+            try {
+                if (res) {
+                    let status = error.response.data.code
+                        // 错误信息处理
+                    if (resData.msg && !resData.message) {
+                        resData.message = resData.msg
                     }
+                    switch (status) {
+                        case 500:
+                            resData.message = '系统出错'
+                            break
+                        case 408:
+                            resData.message = '请求超时'
+                            break
+                        default:
+                            resData.message = error.response.data.message ? error.response.data.message : '系统出错'
+                            break
+                    }
+                    return Promise.reject(res) // 返回接口返回的错误信息
+                } else {
+                    let resData = {
+                        data: {
+                            message: '加载超时'
+                        }
 
+                    }
+                    return Promise.reject(resData) // 返回接口返回的错误信息
                 }
-                return Promise.reject(resData) // 返回接口返回的错误信息
+            } catch (err) {
+                console.log(err)
+                resData.message = err.response.data.message | err.response.data.msg
             }
-        } catch (err) {
-            console.log(err.response)
-            resData.message = err.response.data.message | err.response.data.msg
         }
+
     })
 
 export default service

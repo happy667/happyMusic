@@ -33,7 +33,7 @@
         flex-wrap: wrap;
         width: 100%;
         box-sizing: border-box;
-        padding: 0.1rem 0.46rem 0.2rem;
+        padding: 0.1rem 0.48rem 0.2rem;
         box-shadow: 0 0.25rem 0.6rem rgba(0, 0, 0, 0.1);
         border-radius: 0.3rem;
         height: 5.2rem;

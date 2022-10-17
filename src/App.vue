@@ -113,7 +113,7 @@
                     this.$toast('网络已断开，请检查网络')
                 })
                 window.addEventListener('online', e => {
-                    this.$toast('网络已连接')
+                    this.$toast('网络已连接,请刷新页面')
                 })
             },
             removeListenerNetWork() {
