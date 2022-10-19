@@ -415,7 +415,6 @@ export default {
   background $color-common-b
 .video-container
   width 100%
-  box-shadow 0 0.05rem 1rem rgba(0, 0, 0, 0.1)
   background $color-common-background
   .player
     position relative

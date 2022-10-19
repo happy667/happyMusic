@@ -1,11 +1,9 @@
 <template>
   <div class="video-item-container">
     <div class="container">
-      <div class="video-image"
-           @click="goToVideoInfo">
+      <div class="video-image" @click="goToVideoInfo">
         <div class="cover-image">
-          <img v-lazy="videoParams.coverUrl"
-               class="animated fadeIn">
+          <img v-lazy="videoParams.coverUrl" class="animated fadeIn">
         </div>
         <div class="cover-controller">
           <div class="top-controller">
@@ -30,8 +28,7 @@
 
       </div>
       <div class="video-info">
-        <div class="info-top van-hairline--bottom"
-             @click="goToVideoInfo">
+        <div class="info-top van-hairline--bottom" @click="goToVideoInfo">
           <!-- 视频标题 -->
           <div class="title">
             <div class="name">{{videoParams.name}}</div>
@@ -39,8 +36,7 @@
         </div>
 
         <!-- 视频出处 -->
-        <div class="info-bottom"
-             @click="selectSinger(videoParams.artist)">
+        <div class="info-bottom" @click="selectSinger(videoParams.artist)">
           <div class="play-source-img">
             <my-image :src="videoParams.artist.avatarUrl" class="animated fadeIn" />
           </div>
@@ -128,8 +124,11 @@
                         .controller-box {
                             width: 100%;
                             height: 1.3rem;
-                            padding: 0 0.5rem;
+                            padding: 0 0.3rem;
                             box-sizing: border-box;
+                            .play-count {
+                                font-size: $font-size-smaller-x;
+                            }
                             .play-controller {
                                 text-align: right;
                                 line-height: 1.3rem;

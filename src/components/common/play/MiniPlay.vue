@@ -1,24 +1,17 @@
 <template>
-  <transition enter-active-class="animated fadeIn faster"
-              leave-active-class="animated fadeOut faster">
-    <div class="mini-play-container"
-         @click="handleShowFullPlay">
+  <transition enter-active-class="animated fadeIn faster" leave-active-class="animated fadeOut faster">
+    <div class="mini-play-container" @click="handleShowFullPlay">
       <div class="fixed">
         <div class="swiper-container player-swiper">
           <div class="swiper-wrapper">
-            <div class="swiper-slide"
-                 v-for="item in sequenceList"
-                 :key="item.id">
+            <div class="swiper-slide" v-for="item in sequenceList" :key="item.id">
               <div class="swiper-list-item">
                 <!-- 左侧图片 -->
                 <div class="left">
-                  <div class="image  animated fadeIn"
-                       :class="cdCls">
-                    <van-image :src="item.picUrl"
-                               round>
+                  <div class="image  animated fadeIn" :class="cdCls">
+                    <van-image :src="item.picUrl" round>
                       <template v-slot:loading>
-                        <van-loading type="spinner"
-                                     size="20" />
+                        <van-loading type="spinner" size="20" />
                       </template>
 </van-image>
 </div>
@@ -207,25 +200,23 @@
                             .song-info {
                                 display: flex;
                                 flex-direction: column;
-                                justify-content: space-around;
+                                justify-content: space-evenly;
                                 height: 100%;
+                                &.active {
+                                    color: $color-common;
+                                    .singer {
+                                        color: $color-common;
+                                    }
+                                }
                                 .song-name {
-                                    margin-top: 0.2rem;
-                                    line-height: 0.7rem;
+                                    margin-top: 0.1rem;
+                                    line-height: $font-size-smaller-x;
                                     font-size: $font-size-smaller-x;
                                     font-weight: 400;
                                     no-wrap();
                                 }
-                                &.active {
-                                    overflow: hidden;
-                                    .song-name {
-                                        overflow: visible;
-                                        color: $color-common;
-                                        animation: 10s wordsLoop linear infinite normal;
-                                    }
-                                }
                                 .singer {
-                                    margin-bottom: 0.2rem;
+                                    margin-bottom: 0.1rem;
                                     font-size: $font-size-mini;
                                     color: $color-common-b2;
                                     no-wrap();
@@ -285,15 +276,6 @@
         }
         100% {
             transform: rotate(360deg);
-        }
-    }
-    
-    @keyframes wordsLoop {
-        0% {
-            transform: translate3d(100%, 0, 0);
-        }
-        100% {
-            transform: translate3d(-100%, 0, 0);
         }
     }
 </style>

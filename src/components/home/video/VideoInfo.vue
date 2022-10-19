@@ -21,7 +21,7 @@
                 <!-- 视频标题 -->
                 <div class="title">
                   <div class="icon">
-                    <van-tag plain color="#FD4979">mv</van-tag>
+                    <van-tag size="large" plain color="#FD4979">mv</van-tag>
                   </div>
                   <div class="name">{{video.name}}</div>
                 </div>

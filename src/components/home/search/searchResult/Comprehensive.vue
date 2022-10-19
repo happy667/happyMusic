@@ -78,17 +78,17 @@
             ...mapState(['searchKeywords'])
         },
         mounted() {
-            this.getSearchAll()
+            this.getSearchComprehensive()
         },
         methods: {
             ...mapMutations(['setSearchCurrentIndex', 'setSingerCurrentIndex', 'setPlayerFullScreen', 'setSelectSearchWord']),
             // 查询综合结果
-            async getSearchAll() {
+            async getSearchComprehensive() {
                 // 显示加载logo
                 this.loading = true
                 const {
                     data: res
-                } = await searchApi.getSearchAll(this.searchKeywords)
+                } = await searchApi.getSearchComprehensive(this.searchKeywords)
                 if (res.code === ERR_OK) {
                     // 未查询到结果
                     if (Object.keys(res.result).length === 0) {

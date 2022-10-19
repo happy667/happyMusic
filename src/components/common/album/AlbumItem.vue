@@ -89,7 +89,7 @@
             flex-direction: column;
             justify-content: center;
             .name {
-                line-height: 0.5rem;
+                line-height: 0.6rem;
                 no-wrap();
                 font-size: $font-size-smaller-x;
             }

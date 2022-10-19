@@ -1,23 +1,17 @@
 <template>
   <div class="search-box-container">
-    <scroll ref="search_scroll"
-            @scroll="scroll"
-            :listenScroll="listenScroll">
-      <section class="container"
-               ref="container">
+    <scroll ref="search_scroll" @scroll="scroll" :listenScroll="listenScroll">
+      <section class="container" ref="container">
         <!-- 历史搜索 -->
-        <div class="oldSearch"
-             v-if="localSearchList&&localSearchList.length!==0">
+        <div class="oldSearch" v-if="localSearchList&&localSearchList.length!==0">
           <!-- 搜索头部 -->
           <div class="search-list-header">
             <p class="title">历史搜索</p>
-            <div class="icon"
-                 @click="clearLocalList">
+            <div class="icon" @click="clearLocalList">
               <i class="iconfont icon-shanchu"></i>
             </div>
           </div>
-          <search-list :list="localSearchList"
-                       @select="selectItem"></search-list>
+          <search-list :list="localSearchList" @select="selectItem"></search-list>
         </div>
         <!-- 热门搜索 -->
         <div class="recommend-Search">
@@ -28,20 +22,15 @@
           <!-- loading -->
           <loading :loading="load" />
           <!-- 搜索列表 -->
-          <ul class="hot-search-list"
-              v-if="this.hotSearchList.length!==0">
-            <li class="hot-search-list-item"
-                @click="selectItem(item)"
-                v-for="(item,index) in hotSearchList"
-                :key="item.searchWord">
-              <div class="left"
-                   :class="index < 3 ? 'top' : ''">
+          <ul class="hot-search-list" v-if="this.hotSearchList.length!==0">
+            <li class="hot-search-list-item" @click="selectItem(item)" v-for="(item,index) in hotSearchList"
+              :key="item.searchWord">
+              <div class="left" :class="index < 3 ? 'top' : ''">
                 <div class="index">{{index+1}}</div>
                 <div class="search-info">
                   <div class="top">
                     <span class="name">{{item.searchWord}}</span>
-                    <span class="icon"
-                          v-if="item.iconUrl">
+                    <span class="icon" v-if="item.iconUrl">
                       <img :src="item.iconUrl">
                     </span>
                   </div>

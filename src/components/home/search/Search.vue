@@ -15,7 +15,6 @@
                   shape="round"
                   show-action
                   @input="handleInput"
-                  @focus="openSearchList"
                   v-model="searchVal"
                   @search="handleSearch">
         <template #action>
@@ -26,7 +25,7 @@
       <section class="search-list-container"
                v-show="showSearchList">
         <ul class="search-list">
-          <li class="search-list-item van-hairline--top"
+          <li class="search-list-item van-hairline--bottom"
               @click="selectItem(item)"
               v-for="(item,index) in searchList"
               :key="index">
@@ -36,6 +35,7 @@
             {{item}}
           </li>
         </ul>
+        <div class="close-search-list" v-show="searchList&&searchList.length>0" @click="closeSearchList">关闭</div>
       </section>
 
       <router-view></router-view>
@@ -47,11 +47,22 @@
 </template>
 <script>
 import searchApi from '@/api/search.js'
-import { ERR_OK } from '@/api/config.js'
-import { addLocalSearch } from '@/assets/common/js/localStorage.js'
-import { mapState, mapMutations } from 'vuex'
-import { utils } from '@/assets/common/js/utils.js'
-import { SEARCH_TYPE } from '@/assets/common/js/config.js'
+import {
+  ERR_OK
+} from '@/api/config.js'
+import {
+  addLocalSearch
+} from '@/assets/common/js/localStorage.js'
+import {
+  mapState,
+  mapMutations
+} from 'vuex'
+import {
+  utils
+} from '@/assets/common/js/utils.js'
+import {
+  SEARCH_TYPE
+} from '@/assets/common/js/config.js'
 
 export default {
   name: 'search',
@@ -124,8 +135,10 @@ export default {
       this.setShowSearchList(true)
     },
     // 获取默认关键词
-    async  getSearchDefault () {
-      const { data: res } = await searchApi.getSearchDefault()
+    async getSearchDefault () {
+      const {
+        data: res
+      } = await searchApi.getSearchDefault()
       if (res.code === ERR_OK) {
         this.searchDefault = {
           realkeyword: res.data.realkeyword,
@@ -134,9 +147,11 @@ export default {
         }
       }
     },
-    // 搜索综合内容
-    async getSearchAll () {
-      const { data: res } = await searchApi.getSearchAll(this.searchKeywords)
+    // 搜索搜索建议
+    async getSearchSuggest () {
+      const {
+        data: res
+      } = await searchApi.getSearchSuggest(this.searchKeywords)
       if (res.code === ERR_OK) {
         if (res.result.allMatch) {
           this.searchList = res.result.allMatch.map(item => item.keyword)
@@ -163,7 +178,7 @@ export default {
     },
     // 处理搜索索引
     handleSearchIndex (type) {
-      let index = 0// 默认为索引为0
+      let index = 0 // 默认为索引为0
       switch (type) {
         case SEARCH_TYPE.all:
           index = 0
@@ -203,7 +218,7 @@ export default {
       if (this.searchKeywords.trim().length === 0) {
         this.closeSearchList()
       } else {
-        this.getSearchAll().then(() => {
+        this.getSearchSuggest().then(() => {
           // 打开搜索列表
           this.openSearchList()
         })
@@ -233,52 +248,45 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
-.van-search {
-  height: 1.8rem;
-  padding: 0.25rem 0.32rem;
-  box-sizing: border-box;
-}
-
-.search-container {
-  width: 100%;
-  min-height: 100vh;
-  background: $color-common-background;
-  display: flex;
-  flex-direction: column;
-
-  .container {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-
-    .search-list-container {
-      position: absolute;
-      top: 3rem;
-      background: $color-common-background;
-      width: 100%;
-      padding: 0 0.4rem;
-      box-sizing: border-box;
-      max-height: 8rem;
-      z-index: 99;
-      box-shadow: 0 0.25rem 0.6rem rgba(0, 0, 0, 0.1);
-
-      .search-list {
-        .search-list-item {
-          display: flex;
-          line-height: 1rem;
-          height: 1rem;
-          font-size: $font-size-smaller-x;
-          color: $color-common-x;
-
-          .icon {
-            margin-right: 0.2rem;
-            font-size: 0.45rem;
-          }
-        }
-      }
-    }
-  }
-}
+@import '~common/stylus/variable'
+.van-search
+  height 1.8rem
+  padding 0.25rem 0.32rem
+  box-sizing border-box
+.search-container
+  width 100%
+  min-height 100vh
+  background $color-common-background
+  display flex
+  flex-direction column
+  .container
+    display flex
+    flex 1
+    flex-direction column
+    .search-list-container
+      position absolute
+      top 2.5rem
+      background $color-common-background
+      width 100%
+      padding 0 0.4rem
+      box-sizing border-box
+      max-height 8rem
+      z-index 99
+      box-shadow 0 0.3rem 0.25rem rgba(0, 0, 0, 0.04)
+      .search-list
+        .search-list-item
+          display flex
+          line-height 1rem
+          height 1rem
+          font-size $font-size-smaller-x
+          color $color-common-x
+          .icon
+            margin-right 0.2rem
+            font-size 0.45rem
+      .close-search-list
+        text-align center
+        line-height 1rem
+        height 1rem
+        font-size 0.35rem
+        color #23203f
 </style>

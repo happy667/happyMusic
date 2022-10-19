@@ -116,6 +116,7 @@
         height: 0;
         padding-top: 7.4rem;
         overflow: hidden;
+        background-image: linear-gradient(transparent, rgb(199, 199, 199));
         .singer-img {
             position: absolute;
             top: 0;

@@ -527,7 +527,7 @@
                 position: relative;
                 width: 100%;
                 height: 0;
-                padding-top: 60%;
+                padding-top: 55%;
                 overflow: hidden;
                 .bg {
                     position: absolute;
@@ -540,7 +540,7 @@
                         position: absolute;
                         width: 100%;
                         height: 100%;
-                        background-image: linear-gradient(transparent, #000);
+                        background-image: linear-gradient(transparent, rgb(165, 165, 165));
                         opacity: 0.4;
                         z-index: 1;
                     }
@@ -568,7 +568,7 @@
                     height: 100%;
                     left: 0;
                     top: 0;
-                    padding: 1.2rem 0.4rem 0 0.4rem;
+                    padding: 1rem 0.4rem 0 0.4rem;
                     box-sizing: border-box;
                     display: flex;
                     flex-direction: column;
@@ -586,8 +586,8 @@
                                 margin-right: 0.5rem;
                                 .song-sheet-image {
                                     position: relative;
-                                    width: 2.7rem;
-                                    height: 2.7rem;
+                                    width: 2.5rem;
+                                    height: 2.5rem;
                                     .image {
                                         position: absolute;
                                         left: 0;
@@ -713,7 +713,7 @@
                         width: 1.5rem;
                         height: 1.5rem;
                         border-radius: 50%;
-                        box-shadow: 0 0.01rem 0.3rem #f48faa;
+                        box-shadow: 0 0 0.2rem #f57f9e;
                         i {
                             margin-left: 0.1rem;
                             color: #fff;
@@ -748,8 +748,8 @@
                         margin-bottom: 0.5rem;
                         .image {
                             margin: 0 auto;
-                            width: 4.7rem;
-                            height: 4.7rem;
+                            width: 4.5rem;
+                            height: 4.5rem;
                             border-radius: 0.1rem;
                             img {
                                 display: block;

@@ -151,7 +151,8 @@
                     data: res
                 } = await recommendApi.getRecommendNewAlbum()
                 if (res.code === ERR_OK) { // 成功获取推荐新碟
-                    this.recommendNewAlbum = res.weekData
+                    this.recommendNewAlbum = res.albums
+                    console.log(res.weekData)
                 }
             },
             // 刷新
@@ -171,12 +172,6 @@
             this.getRecommendSongSheet(6)
 
 
-        },
-        activated() {
-            // 获取新碟上线
-            if (this.recommendNewAlbum.length == 0) {
-                this.getRecommendNewAlbum()
-            }
         },
         components: {
             recommendSwiper,

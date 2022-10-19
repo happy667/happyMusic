@@ -49,7 +49,15 @@
             },
             imageSize: {
                 type: String,
-                default: () => 'big'
+                default: () => 'middle'
+            },
+            imageWidth: {
+                type: String,
+                default: () => '1rem'
+            },
+            imageHeight: {
+                type: String,
+                default: () => '1rem'
             }
         },
         computed: {
@@ -145,8 +153,8 @@
                     justify-content: center;
                     overflow: hidden;
                     .name {
-                        height: 0.7rem;
-                        line-height: 0.7rem;
+                        height: 0.6rem;
+                        line-height: 0.6rem;
                         font-size: $font-size-smaller-x;
                         no-wrap();
                     }
