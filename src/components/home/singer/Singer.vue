@@ -1,29 +1,19 @@
 <template>
-  <div class="singer-container"
-       ref="container">
+  <div class="singer-container" ref="container">
     <div class="singer-cat-container">
       <ul class="area-list list">
-        <li class="item"
-            @click="selectAreaTypeList(item.typeId)"
-            :class="item.typeId===area?'active':''"
-            v-for="item in areaTypeList"
-            :key="item.typeId">{{item.name}}</li>
+        <li class="item" @click="selectAreaTypeList(item.typeId)" :class="item.typeId===area?'active':''"
+          v-for="item in areaTypeList" :key="item.typeId">{{item.name}}</li>
       </ul>
       <ul class="singer-type-list list">
-        <li class="item"
-            @click="selectSingerTypeList(item.typeId)"
-            :class="item.typeId===singerType?'active':''"
-            v-for="item in singerTypeList"
-            :key="item.typeId">{{item.name}}</li>
+        <li class="item" @click="selectSingerTypeList(item.typeId)" :class="item.typeId===singerType?'active':''"
+          v-for="item in singerTypeList" :key="item.typeId">{{item.name}}</li>
       </ul>
 
     </div>
     <!-- 歌手列表 -->
     <div class="container">
-      <scroll :data="singerList"
-              :pullUp="pullUp"
-              @pullingUpLoad="handlePullingUp"
-              ref="singer_list_scroll">
+      <scroll :data="singerList" :pullUp="pullUp" @pullingUpLoad="handlePullingUp" ref="singer_list_scroll">
         <div class="box">
 
           <template v-if="singerList.length === 0">
@@ -33,16 +23,12 @@
 <template v-else>
             <div class="list-wrapper">
               <ul class="list">
-                <li class="item"
-                    v-for="item in singerList"
-                    :key="item.id">
-                  <singer-item :singer="item"
-                               @select="handleSelect"></singer-item>
+                <li class="item" v-for="item in singerList" :key="item.id">
+                  <singer-item :singer="item" @select="handleSelect"></singer-item>
                 </li>
               </ul>
               <!-- loading -->
-              <loading :loading="loadMore"
-                       height="3rem" />
+              <loading :loading="loadMore" height="3rem" />
             </div>
           </template>
 
@@ -214,12 +200,12 @@
                 }
                 .item {
                     margin-right: 0.3rem;
-                    padding: 0 0.25rem;
+                    padding: 0 0.26rem;
                     height: 0.7rem;
                     border-radius: 0.5rem;
                     line-height: 0.7rem;
-                    color: #868e94;
-                    background: #f2f2f2;
+                    color: rgb(172, 171, 171);
+                    background $color-common-b;
                     font-size: $font-size-smaller-x;
                     &.active {
                         color: #fff;

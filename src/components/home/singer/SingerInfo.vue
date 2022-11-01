@@ -1,90 +1,91 @@
 <template>
-  <div class="singer-info-container"
-       @touchstart="handleTouchStart"
-       @touchmove="handleTouchMove"
-       @touchend="handleTouchEnd">
+  <div class="singer-info-container" @touchstart="handleTouchStart" @touchmove="handleTouchMove"
+    @touchend="handleTouchEnd">
     <!-- 返回 -->
     <!-- 头部导航栏 -->
     <van-sticky>
-      <van-nav-bar :title="$route.meta.title"
-                   ref="navBar"
-                   left-arrow
-                   :z-index="99"
-                   @click-left="routerBack" />
+      <van-nav-bar :title="$route.meta.title" ref="navBar" left-arrow :z-index="99" @click-left="routerBack" />
     </van-sticky>
     <!--歌手信息-->
     <section class="content">
-      <scroll ref="singerInfo_scroll"
-              @scroll="scroll"
-              :listenScroll="listenScroll"
-              :pullUp="pullUp"
-              @pullingUpLoad="handlePullingUp"
-              :probeType="probeType">
-        <div class="container"
-             ref="container">
-          <!-- 歌手简介 -->
-          <singer-synopsis :singer="singer"
-                           @toggle="handleToggleShowImage" />
+      <scroll ref="singerInfo_scroll" @scroll="scroll" :listenScroll="listenScroll" :pullUp="pullUp"
+        @pullingUpLoad="handlePullingUp" :probeType="probeType">
+        <div class="container" ref="container">
+          <!-- 歌手背景图片 -->
+          <singer-image :imageUrl="backgroundUrl" @toggle="handleClickSingerBackground" />
 
-          <van-tabs title-active-color="#FD4979"
-                    color="#FD4979"
-                    animated
-                    v-model="currentIndex"
-                    @change="handleTabsChange"
-                    swipeable>
+          <van-tabs title-active-color="#FD4979" ref="vanTab" color="#FD4979" animated v-model="currentIndex"
+            @change="handleTabsChange" swipeable>
             <!-- 歌手单曲 -->
             <van-tab title="歌曲">
-
-              <singer-song :list="singerSong"
-                           ref="singerSong"
-                           :loading="loading" />
+              <singer-song :list="singerSong" ref="singerSong" :loading="loading" />
             </van-tab>
             <!-- 歌手专辑 -->
-            <van-tab title="专辑">
+            <van-tab :title="albumTitle">
               <singer-album :singerAlbum="singerAlbum" />
               <!-- loading -->
-              <loading :loading="loadMoreAlbum"
-                       height="2rem" />
+              <loading :loading="loadMoreAlbum" height="2rem" />
             </van-tab>
             <!-- 歌手mv -->
-            <van-tab title="MV">
+            <van-tab :title="mvTitle">
               <singer-mv :mvList="singerMV" />
               <!-- loading -->
-              <loading :loading="loadMoreMV"
-                       height="2rem" />
+              <loading :loading="loadMoreMV" height="2rem" />
             </van-tab>
-            <!-- 歌手详情 -->
+            <!-- 歌手描述 -->
             <van-tab title="关于">
-              <singer-detail ref="singerDetail"
-                             :goToIntroduce="goToIntroduce"
-                             :simSingerList="simSingerList"
-                             :singerDetail="singerDetail"
-                             @selectSimSinger="selectSimSinger" />
+              <singer-desc ref="singerDesc" :goToIntroduce="goToIntroduce" :simSingerList="simSingerList"
+                :singerDesc="singerDesc" @selectSimSinger="selectSimSinger" />
             </van-tab>
           </van-tabs>
+          <div class="singer-card-container">
+            <div class="singer-card">
+              <van-skeleton :row="4" :loading="loading" row-width="100%">
+                <div class="content   animated fadeIn" v-if="this.singerDetail">
+                  <!-- 歌手头像 -->
+                  <div class="singer-avatar" v-if="this.singerDetail.user" @click="handleClickSingerAvatar">
+                    <my-image :src="this.singerDetail.user.avatarUrl" size="big" />
+                  </div>
+                  <!-- 歌手名称 -->
+                  <div class="singer-name" :style="singerNameStyle">
+                    {{singer.name}}
+                  </div>
+                  <!-- 粉丝数量 -->
+                  <p class="follows" v-if="singer.followCount">{{singer.followCount|convertCount}}粉丝</p>
+                  <div class="singer-desc" v-if="this.singerDetail.identify">
+                    {{this.singerDetail.identify.imageDesc}}
+                  </div>
+                  <!-- 收藏 -->
+                  <div class="follow">
+                    <follow @clickFollow="handleClickFollow" :followed="singer.followed"></follow>
+                  </div>
+                </div>
+              </van-skeleton>
+            </div>
+          </div>
         </div>
 
         <!-- 定位 -->
-        <position v-show="isShowPosition"
-                  @click="handlePosition"></position>
+        <position v-show="isShowPosition" @click="handlePosition"></position>
       </scroll>
       <!-- 遮罩层 -->
-      <template v-if="singer">
-        <overlay :showImage="showImage"
-                 :imgUrl="singer.picUrl"
-                 @toggle="handleToggleShowImage">
+      <template v-if="this.singerDetail">
+        <overlay :showImage="showImage" :imgUrl="overlayUrl" @toggle="handleToggleShowImage">
         </overlay>
       </template>
+
 </section>
 </div>
 </template>
 <script>
+    import MyImage from '@/components/common/img/Image'
     import SingerMv from './singerInfo/SingerMV'
-    import SingerSynopsis from './singerInfo/SingerSynopsis'
+    import SingerImage from './singerInfo/SingerImage'
     import SingerSong from './singerInfo/SingerSong'
     import SingerAlbum from './singerInfo/SingerAlbum'
-    import SingerDetail from './singerInfo/SingerDetail'
+    import SingerDesc from './singerInfo/SingerDesc'
     import Position from '@/components/common/Position'
+    import Follow from '@/components/common/Follow'
     import singerApi from '@/api/singer.js'
     import userApi from '@/api/user.js'
     import Song from '@/assets/common/js/song.js'
@@ -94,6 +95,7 @@
     import {
         ERR_OK
     } from '@/api/config.js'
+    import 'common/js/convert.js'
     import {
         mapState,
         mapMutations,
@@ -111,7 +113,7 @@
         mixins: [playlistMixin],
         data() {
             return {
-                singerDesc: {},
+                singerDesc: null, //歌手描述
                 simSingerList: [], // 相似
                 singerSong: [], // 歌手单曲
                 singerAlbum: null, // 歌手专辑
@@ -120,12 +122,12 @@
                 singerAlbumFinished: false, // 歌手专辑是否加载完成
                 singerMVFinished: false, // 歌手mv是否加载完成
                 loading: false,
-                accountId: null,
                 showPosition: false,
                 scrollY: 0,
                 loadMoreAlbum: false,
                 loadMoreMV: false,
-                showImage: false
+                showImage: false,
+                overlayUrl: ""
             }
         },
         created() {
@@ -135,12 +137,6 @@
             this.pullUp = true
         },
         watch: {
-            accountId(newId) {
-                if (newId) {
-                    // 获取歌手用户详情
-                    this.getUserDetail(newId)
-                }
-            },
             loadMoreAlbum() {
                 this.$nextTick(() => {
                     this.refresh()
@@ -153,10 +149,15 @@
             }
         },
         mounted() {
+            if (this.singer) {
+                this.singer.picUrl = '';
+            }
+
             // 根据歌手id获取歌手单曲
             this.handleTabsChange(this.currentIndex)
-            console.log(123)
+
         },
+
         computed: {
             ...mapState(['user', 'singerCurrentIndex', 'playerFullScreen', 'singer', 'currentPlayIndex', 'isPlayerClick', 'hideMiniPlayer']),
             ...mapGetters(['currentSong']),
@@ -168,11 +169,33 @@
                     this.setSingerCurrentIndex(index)
                 }
             },
+            followCount() {
+                return this.singer.followCount ? this.singer.followCount : 0
+            },
             // 是否显示定位
             isShowPosition() {
                 // 判断当前歌曲列表是否有正在播放的歌曲（-1表示没有，currentIndex表示当前tab切换页是否在歌曲列表页）
                 let index = this.$utils.findIndex(this.singerSong, this.currentSong)
                 return this.showPosition && this.currentIndex === 0 && index !== -1
+            },
+            backgroundUrl() {
+                if (!this.singerDetail) {
+                    return
+                }
+                return this.singerDetail.user ? this.singerDetail.user.backgroundUrl : this.singerDetail.artist.cover
+            },
+            singerNameStyle() {
+                return this.singerDetail.user ? "margin-top:0.6rem" : "margin-top:0"
+            },
+            albumTitle() {
+                console.log(this.singerDetail)
+                return this.singerDetail ? '专辑 ' + this.singerDetail.artist.albumSize : "专辑"
+
+            },
+            mvTitle() {
+                console.log(this.singerDetail)
+                return this.singerDetail ? 'MV ' + this.singerDetail.artist.mvSize : "MV"
+
             }
         },
         methods: {
@@ -195,9 +218,9 @@
                     case 2: // 歌手MV
                         if (!this.singerMV) this.getSingerMV(this.id)
                         break
-                    case 3: // 歌手详情
-                        if (!this.singerDetail) {
-                            this.getSingerDetail(this.id)
+                    case 3: // 歌手描述
+                        if (!this.singerDesc) {
+                            this.getSingerDesc(this.id)
                         }
                         if (this.simSingerList.length === 0 && this.user) {
                             this.getSimilarSinger(this.id)
@@ -216,39 +239,49 @@
                     if (res.code === ERR_OK) { // 成功获取歌手单曲
                         let songList = []
                         res.hotSongs.map((item) => { // 循环数组对象对每个数据进行处理 返回需要得数据
-                            let singers = item.ar.map(item => item.name).join('/')
-                            let singersList = []
-                                // 处理歌手
-                            item.ar.forEach(item => {
-                                singersList.push(new Singer({
+                                let singers = item.ar.map(item => item.name).join('/')
+                                let singersList = []
+                                    // 处理歌手
+                                item.ar.forEach(item => {
+                                    singersList.push(new Singer({
+                                        id: item.id,
+                                        name: item.name
+                                    }))
+                                })
+                                songList.push(new Song({
                                     id: item.id,
-                                    name: item.name
+                                    name: item.alia.length > 0 ? `${item.name} (${item.alia.join('/')})` : item.name,
+                                    singers,
+                                    singersList,
+                                    picUrl: item.al.picUrl,
+                                    st: item.privilege.st,
+                                    mv: item.mv,
+                                    album: new Album({
+                                        id: item.al.id,
+                                        name: item.al.name,
+                                        picUrl: item.al.picUrl
+                                    })
                                 }))
                             })
-                            songList.push(new Song({
-                                id: item.id,
-                                name: item.alia.length > 0 ? `${item.name} (${item.alia.join('/')})` : item.name,
-                                singers,
-                                singersList,
-                                picUrl: item.al.picUrl,
-                                st: item.privilege.st,
-                                mv: item.mv,
-                                album: new Album({
-                                    id: item.al.id,
-                                    name: item.al.name,
-                                    picUrl: item.al.picUrl
-                                })
-                            }))
-                        })
-                        this.setSingerInfo(res.artist)
-                        if (res.artist.accountId) {
-                            this.accountId = res.artist.accountId
-                        }
+                            //获取歌手详情
+                        await this.getSingerDetail(this.id)
                         this.singerSong = songList
                         this.loading = false
                     }
                 } catch (e) {
                     this.$router.replace('/')
+                }
+            },
+            async getSingerDetail(id) {
+                const {
+                    data: res
+                } = await singerApi.getSingerDetail(id)
+                if (res.code === ERR_OK) { // 成功获取歌手详情
+                    this.setSingerInfo(res.data.artist)
+                    this.singerDetail = res.data
+                        // 获取歌手关注详情
+                    await this.getSingerFollow(this.id)
+                    this.handleVanTab()
                 }
             },
             // 获取歌手专辑
@@ -309,13 +342,13 @@
                 }
             },
 
-            // 获取歌手详情
-            async getSingerDetail(id) {
+            // 获取歌手描述
+            async getSingerDesc(id) {
                 const {
                     data: res
-                } = await singerApi.getSingerDetail(id)
+                } = await singerApi.getSingerDesc(id)
                 if (res.code === ERR_OK) { // 成功 获取歌手详情
-                    this.singerDetail = {
+                    this.singerDesc = {
                         singerId: this.id,
                         briefDesc: res.briefDesc,
                         introduction: res.introduction,
@@ -345,21 +378,21 @@
                     })
                     this.simSingerList = singerList
                     this.refresh()
-                    this.$nextTick(() => {
-
-                    })
                 }
             },
 
-            // 获取歌手用户详情
-            async getUserDetail(id) {
+            // 获取歌手关注
+            async getSingerFollow(id) {
                 const {
                     data: res
-                } = await userApi.getUserDetail(id)
-                if (res.code === ERR_OK) { // 成功 获取歌手详情
-                    let followeds = res.profile.followeds
+                } = await singerApi.getSingerFollow(id)
+                if (res.code === ERR_OK) { // 成功 获取
                     let singer = this.singer
-                    singer.followeds = followeds
+
+                    singer.followCount = res.data.fansCnt
+                    singer.followed = res.data.isFollow
+                    this.setSingerInfo(singer)
+                    console.log(res)
                 }
             },
             // 设置歌手
@@ -367,9 +400,10 @@
                 let newSinger = new Singer({
                     id: singer.id,
                     name: singer.name,
-                    avatar: singer.img1v1Url,
-                    picUrl: singer.picUrl,
-                    followed: singer.followed
+                    avatar: singer.avatarUrl,
+                    picUrl: singer.backgroundUrl,
+                    followed: singer.followed,
+                    followCount: singer.followCount
                 })
                 this.setSinger(newSinger)
             },
@@ -471,23 +505,94 @@
                 if (this.currentPlayIndex !== -1) {
                     this.setHideMiniPlayer(!this.hideMiniPlayer)
                 }
+
+            },
+            //点击背景图片头像
+            handleClickSingerBackground() {
+                if (this.singerDetail.artist) {
+                    this.overlayUrl = this.singerDetail.user ? this.singerDetail.user.backgroundUrl : this.singerDetail.artist.cover
+                    this.handleToggleShowImage()
+                }
+            },
+            //点击歌手头像
+            handleClickSingerAvatar() {
+                if (this.singerDetail.user) {
+                    this.overlayUrl = this.singerDetail.user.avatarUrl
+                    this.handleToggleShowImage()
+                }
             },
             // 选择相似歌手
             selectSimSinger(item) {
                 this.setSingerCurrentIndex(0)
                 this.setAddNoCacheComponents('singerInfo')
                 this.$router.push(`/singerInfo/${item.id}`)
-            }
+            },
+            // 选中收藏歌手
+            handleClickFollow() {
+                if (this.user) { // 说明已经登录
+                    this.follow() // 收藏/取消收藏歌手
+                } else { // 弹窗提示去登录
+                    this.$utils.alertLogin(this.$router.currentRoute.fullPath)
+                }
+            },
+            // 收藏/取消收藏歌手
+            follow() {
+                let singer = this.singer
+                let follow = !singer.followed
+                follow = follow ? 1 : 0 // 1代表收藏，0代表不收藏
+                if (!follow) {
+                    this.$utils.alertConfirm({
+                        message: '确定不再收藏该歌手',
+                        confirmButtonText: '不再收藏'
+                    }).then(() => {
+                        userApi.updateFollowSinger(singer.id, follow).then(res => {
+                            if (res.data.code === ERR_OK) {
+                                this.$set(singer, 'followed', false)
+                                this.$toast('已不再收藏')
+                            }
+                        }).catch(err => {
+                            this.$toast(err.data.message)
+                        })
+                    }).catch(() => {})
+                } else {
+                    userApi.updateFollowSinger(singer.id, follow).then(res => {
+                        if (res.data.code === ERR_OK) {
+                            this.$set(singer, 'followed', true)
+                            this.$toast('收藏成功')
+                        }
+                    }).catch(err => {
+                        this.$toast(err.data.message)
+                    })
+                }
+            },
+            handleVanTab() {
+                // 适配tab栏与歌手名片距离
+                let top = "";
+                if (this.singerDetail.user) {
+                    top = "3.8rem";
+                } else if (!this.singerDetail.identify) {
+                    top = "2.5rem"
+                } else {
+                    top = "3.2rem"
+                }
+                this.$nextTick(() => {
+                    this.$refs.vanTab.$el.style.marginTop = top
+                })
+            },
+
+
         },
         components: {
-            SingerSynopsis,
+            SingerImage,
             SingerSong,
             SingerAlbum,
-            SingerDetail,
+            SingerDesc,
             Position,
             Scroll,
             overlay,
-            SingerMv
+            SingerMv,
+            Follow,
+            MyImage
         }
     }
 </script>
@@ -500,11 +605,53 @@
         overflow: hidden;
     }
     
+    .singer-info-container>>>.van-skeleton {
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .singer-info-container>>>.van-skeleton__row {
+        margin: 0 auto;
+    }
+    
+    .singer-info-container>>>.van-skeleton__avatar {
+        margin: 0 0 0.2rem 0;
+    }
+    
+    .van-skeleton__avatar+.van-skeleton__content {
+        padding: 0;
+    }
+    
+    .singer-info-container>>>.van-skeleton__row:nth-child(1) {
+        width: 60% !important;
+        margin: 0.225rem auto 0.28rem;
+        height: 0.6rem;
+    }
+    
+    .singer-info-container>>>.van-skeleton__row:nth-child(2) {
+        width: 40% !important;
+        margin: 0 auto 0.38rem;
+        height: 0.5rem;
+    }
+    
+    .singer-info-container>>>.van-skeleton__row:nth-child(3) {
+        margin: 0 auto;
+        height: 0.5rem;
+    }
+    
+    .singer-info-container>>>.van-skeleton__row:nth-child(4) {
+        height: 0.84rem;
+        background-color: transparent;
+    }
+    
     .singer-info-container>>>.van-tabs__wrap {
         margin-bottom: 0.4rem;
     }
     
     .singer-info-container>>>.van-tabs {
+        margin-top: 3.2rem;
         flex: 1;
         display: flex;
         flex-direction: column;
@@ -527,7 +674,7 @@
         display: flex;
         flex-direction: column;
         background-color: $color-common-background;
-        .content {
+        >.content {
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -539,6 +686,62 @@
                 flex: 1;
                 display: flex;
                 flex-direction: column;
+                .singer-card-container {
+                    width: 100%;
+                    position: absolute;
+                    top: 6.7rem;
+                    padding: 0 0.3rem;
+                    transform: translateY(-1rem);
+                    box-sizing: border-box;
+                    .singer-card {
+                        padding: 0.3rem 0.5rem 0.4rem;
+                        height: 100%;
+                        background-color: rgb(255, 255, 255);
+                        text-align: center;
+                        box-sizing: border-box;
+                        border-radius: .3rem;
+                        box-shadow: 0 0.12rem 0.2rem rgba(0 0 0 5%);
+                        .content {
+                            position: relative;
+                            height: 100%;
+                            display: flex;
+                            flex-direction: column;
+                            .singer-avatar {
+                                position: absolute;
+                                top: -0.3rem;
+                                left: 50%;
+                                transform: translate(-50%, -50%);
+                                display: flex;
+                                justify-content: center;
+                            }
+                            .singer-name {
+                                font-weight: bold;
+                                font-size: $font-size-small;
+                                height: 1rem;
+                                line-height: 1rem;
+                                no-wrap();
+                            }
+                            .singer-desc {
+                                margin-bottom: 0.3rem;
+                                no-wrap();
+                            }
+                            .follow {
+                                display: flex;
+                                justify-content: center;
+                            }
+                            .follows {
+                                margin-bottom: 0.3rem;
+                            }
+                            .follows,
+                            .singer-desc {
+                                color: $color-common-b2;
+                                height: 0.5rem;
+                                line-height: 0.5rem;
+                                font-size: $font-size-smaller-x;
+                            }
+                        }
+                    }
+                }
             }
         }
     }

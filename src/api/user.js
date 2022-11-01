@@ -49,16 +49,15 @@ export default {
         const url = `/user/subcount?timestamp=${new Date().getTime()}`;
         return request.post(url);
     },
-    // 获取用户每日推荐歌曲
-    getUserRecommendSong() {
-        const url = `/recommend/songs`;
+    // 获取用户最近播放
+    getUserRencent(typeName) {
+        let url = `/record/recent/${typeName}`;
+        if (typeName == 'song') {
+            url = `/record/recent/${ typeName }?limit=300 `
+        }
         return request.post(url);
     },
-    // 获取用户每日推荐歌单
-    getUserRecommendSongSheet() {
-        const url = `/recommend/resource`;
-        return request.post(url);
-    },
+
     // 获取用户收藏的歌单
     getUserSongSheet(uid) {
         const url = `/user/playlist?timestamp=${new Date().getTime()}`;
@@ -74,7 +73,7 @@ export default {
 
     // 收藏/取消关注歌单
     updateFollowSongSheet(id, t) {
-        const url = `/playlist/subscribe?&timestamp=${new Date().getTime()}`;
+        const url = `/playlist/subscribe?timestamp=${new Date().getTime()}`;
         return request.post(url, {
             id,
             t

@@ -34,7 +34,7 @@
         width: 100%;
         box-sizing: border-box;
         padding: 0.1rem 0.48rem 0.2rem;
-        box-shadow: 0 0.25rem 0.6rem rgba(0, 0, 0, 0.1);
+        box-shadow: 0 0.17rem 0.25rem rgba(0 0 0 5%);
         border-radius: 0.3rem;
         height: 5.2rem;
         .sons-img {

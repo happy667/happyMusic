@@ -1,38 +1,39 @@
 import Vue from 'vue'
 import {
-  Tab,
-  Tabs,
-  Swipe,
-  SwipeItem,
-  NavBar,
-  Icon,
-  search,
-  Sticky,
-  List,
-  slider,
-  progress,
-  PullRefresh,
-  Loading,
-  Toast,
-  Dialog,
-  Lazyload,
-  Field,
-  CellGroup,
-  Button,
-  Circle,
-  Popup,
-  Image,
-  Overlay,
-  Cell,
-  Area,
-  NoticeBar,
-  DatetimePicker,
-  RadioGroup,
-  Radio,
-  Empty,
-  Collapse,
-  CollapseItem,
-  Tag
+    Tab,
+    Tabs,
+    Swipe,
+    SwipeItem,
+    NavBar,
+    Icon,
+    search,
+    Sticky,
+    List,
+    slider,
+    progress,
+    PullRefresh,
+    Loading,
+    Toast,
+    Dialog,
+    Lazyload,
+    Field,
+    CellGroup,
+    Button,
+    Circle,
+    Popup,
+    Image,
+    Overlay,
+    Cell,
+    Area,
+    NoticeBar,
+    DatetimePicker,
+    RadioGroup,
+    Radio,
+    Empty,
+    Collapse,
+    CollapseItem,
+    Tag,
+    Skeleton
 } from 'vant'
 Vue.use(Tab)
 Vue.use(Tabs)
@@ -67,6 +68,7 @@ Vue.use(Empty)
 Vue.use(Collapse)
 Vue.use(CollapseItem)
 Vue.use(Tag)
+Vue.use(Skeleton)
 Vue.prototype.$Dialog = Dialog
 Vue.prototype.$Dialog = Dialog
 Vue.prototype.$toast = Toast

@@ -405,9 +405,9 @@ export default {
 @import '~common/stylus/variable'
 @keyframes wordsLoop
   0%
-    transform translate3d(100%, 0, 0)
+    transform translate3d(110%, 0, 0)
   100%
-    transform translate3d(-100%, 0, 0)
+    transform translate3d(-110%, 0, 0)
 .video-container>>>.van-loading
   position absolute
   width 100%

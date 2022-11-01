@@ -411,7 +411,7 @@
         .album-header {
             position: relative;
             padding-bottom: 3.6rem;
-            background: linear-gradient(transparent, rgb(224, 224, 224));
+            background: linear-gradient(transparent, rgb(238, 238, 238));
             .album-info {
                 position: absolute;
                 top: 0;

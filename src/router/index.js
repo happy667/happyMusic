@@ -36,8 +36,8 @@ const SongComment = () =>
     import ('../components/home/song/SongComment')
 const SingerInfo = () =>
     import ('../components/home/singer/SingerInfo')
-const SingerIntroduce = () =>
-    import ('../components/home/singer/SingerIntroduce')
+const SingerMoreDesc = () =>
+    import ('../components/home/singer/SingerMoreDesc')
 
 const Album = () =>
     import ('../components/home/singer/album/AlbumInfo')
@@ -52,8 +52,8 @@ const MyLike = () =>
     import ( /* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend_userEdit" */ '../components/user/MyLike')
 const PlayRanking = () =>
     import ( /* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend_userEdit" */ '../components/user/PlayRanking')
-const UserRecommend = () =>
-    import ( /* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend_userEdit" */ '../components/user/Recommend')
+const UserRecentPlay = () =>
+    import ( /* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend_userEdit" */ '../components/user/RecentPlay')
 const UserEdit = () =>
     import ( /* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend_userEdit" */ '../components/user/Edit')
 const UserEditNickname = () =>
@@ -318,11 +318,11 @@ const routes = [
             next()
         }
     },
-    // 歌收更多详情
+    // 歌手更多描述
     {
-        path: '/singerIntroduce/:id',
-        name: 'singerIntroduce',
-        component: SingerIntroduce,
+        path: '/singerMoreDesc/:id',
+        name: 'singerMoreDesc',
+        component: SingerMoreDesc,
         props: true,
         meta: {
             title: '歌手介绍'
@@ -330,10 +330,10 @@ const routes = [
         beforeEnter(to, from, next) {
             if (from.name === 'singerInfo') {
                 // 添加不缓存路由
-                store.commit('setAddNoCacheComponents', 'singerIntroduce')
+                store.commit('setAddNoCacheComponents', 'singerMoreDesc')
             } else {
                 // 移除不缓存路由
-                store.commit('setRemoveNoCacheComponents', 'singerIntroduce')
+                store.commit('setRemoveNoCacheComponents', 'singerMoreDesc')
             }
             next()
         }
@@ -447,20 +447,20 @@ const routes = [
     },
     // 用户推荐
     {
-        path: '/user/recommend',
-        name: 'userRecommend',
-        component: UserRecommend,
+        path: '/user/recentPlay',
+        name: 'userRecentPlay',
+        component: UserRecentPlay,
         meta: {
             requireLogin: true, // 当前路由需要校验，不需要就不用写
-            title: '每日推荐'
+            title: '最近播放'
         },
         beforeEnter(to, from, next) {
             if (from.name === 'user') {
                 // 添加不缓存路由
-                store.commit('setAddNoCacheComponents', 'userRecommend')
+                store.commit('setAddNoCacheComponents', 'userRecentPlay')
             } else {
                 // 移除不缓存路由
-                store.commit('setRemoveNoCacheComponents', 'userRecommend')
+                store.commit('setRemoveNoCacheComponents', 'userRecentPlay')
             }
             next()
         }

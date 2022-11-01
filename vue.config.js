@@ -59,7 +59,8 @@ module.exports = {
         // 解决跨域问题
         proxy: {
             '/api': {
-                target: 'http://8.130.20.143:3000',
+                //target: 'http://8.130.20.143:3000',//部署环境地址地址
+                target: 'http://localhost:3000', //开发环境地址
                 changeOrigin: true,
                 pathRewrite: {
                     '^/api': ''

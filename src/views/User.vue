@@ -68,13 +68,13 @@
 
               </div>
             </router-link>
-            <router-link to="/user/recommend">
-              <div class="my-recommend my-list-item">
+            <router-link to="/user/recentPlay">
+              <div class="my-recentPlay my-list-item">
                 <div class="left-image">
-                  <van-icon name="gem" />
+                  <van-icon name="play-circle" />
                 </div>
                 <div class="right-info">
-                  <div class="title">每日推荐</div>
+                  <div class="title">最近播放</div>
                 </div>
               </div>
             </router-link>

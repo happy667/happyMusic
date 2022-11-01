@@ -540,7 +540,7 @@
                         position: absolute;
                         width: 100%;
                         height: 100%;
-                        background-image: linear-gradient(transparent, rgb(165, 165, 165));
+                        background-image: linear-gradient(transparent, rgb(189, 189, 189));
                         opacity: 0.4;
                         z-index: 1;
                     }

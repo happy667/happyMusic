@@ -19,7 +19,7 @@
         <span class="time"
               v-if="showTime">{{item.publishTime|convertDate('.')}}</span>
         <span class="song-Size"
-              v-if="showSongSize">歌曲 {{item.size}}</span>
+              v-if="showSongSize">{{item.size}}首</span>
       </div>
     </article>
   </div>
@@ -100,7 +100,7 @@
                 line-height: 0.6rem;
                 font-size: $font-size-mini;
                 span {
-                    margin-right: 0.3rem;
+                    margin-right: 0.2rem;
                     &:last-child {
                         margin-right: 0;
                     }

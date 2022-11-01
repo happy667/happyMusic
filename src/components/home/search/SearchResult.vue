@@ -74,7 +74,7 @@
             },
             handlePlaylist(playList) {
                 // 适配播放器与页面底部距离
-                const bottom = playList.length > 0 ? '1.5rem' : ''
+                const bottom = playList.length > 0 ? '1.6rem' : ''
                 this.$nextTick(() => {
                     this.$refs.container.style.paddingBottom = bottom
                 })
