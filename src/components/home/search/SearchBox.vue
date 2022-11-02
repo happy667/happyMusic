@@ -171,7 +171,7 @@
         background: $color-common-background;
         box-sizing: border-box;
         .container {
-            padding: 0 0.5rem;
+            padding: 0 0.4rem;
             .search-list-header {
                 display: flex;
                 justify-content: space-between;
@@ -184,7 +184,7 @@
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    color: #999;
+                    color: $color-common-b2;
                 }
             }
             .recommend-Search {

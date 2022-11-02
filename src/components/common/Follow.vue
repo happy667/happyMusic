@@ -1,9 +1,6 @@
 <template>
   <!-- 关注 -->
   <div class="follow-container" @click.stop="handleClick" :class="[followCls,plainCls]">
-    <div class="icon">
-      <van-icon :name="icon" />
-    </div>
     <div class="text">{{text}}</div>
   </div>
 
@@ -29,7 +26,7 @@
                 return this.plain ? 'plain' : ''
             },
             text() {
-                return this.followed ? '已收藏' : '收藏'
+                return this.followed ? '已关注' : '关注'
             },
             icon() {
                 return this.followed ? 'success' : 'plus'
@@ -53,16 +50,13 @@
         font-size: $font-size-mini;
         background: $color-common;
         color: #fff;
-        .icon {
-            margin-right: 0.1rem;
-        }
         &.plain {
             color: $color-common;
-            background: $color-common-background;
+            background: #fff;
             border: 0.02rem solid $color-common;
         }
         &.followed {
-            color: rgb(172, 171, 171);
+            color: $color-common-b2;
             background $color-common-b;
             opacity: 0.9;
             border: none;

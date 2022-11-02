@@ -5,7 +5,7 @@
       <van-nav-bar :title="$route.meta.title" left-arrow @click-left="routerBack" />
     </van-sticky>
     <!-- 专辑头部 -->
-    <div class="album-header">
+    <div class="album-header" :style="loadBgStyle">
       <section class="album-info" v-if="albumObj.album">
         <div class="container">
           <div class="left-img" @click="openOverlay">
@@ -39,41 +39,44 @@
             </div>
           </div>
         </div>
-        <div class="bg">
-          <div class="filter"></div>
-          <div class="image" :style="bgImage"></div>
-        </div>
+        <!-- 背景 -->
+        <div class="bg" v-lazy:background-image="albumObj.album.blurPicUrl" v-if="albumObj.album.blurPicUrl"></div>
       </section>
     </div>
-    <!-- loading -->
-<loading :loading="!albumObj.songs"></loading>
-    <section v-if="albumObj.album">
+
+    <section>
       <scroll ref="album_scroll">
         <div class="container" ref="container">
           <!-- 专辑简介 -->
-          <div class="album-desc" v-if="albumObj.album.description" @click="openOverlay">
+          <div class="album-desc" @click="openOverlay">
             <section class="content">
-              <p>简介:</p>
-              <p v-html="albumObj.album.description"></p>
+              <van-skeleton title :row="2" title-width="30%" :loading="!albumObj.album" row-width="100%">
+                <p>简介:</p>
+                <p v-if="albumObj.album" v-html="albumObj.album.description"></p>
+              </van-skeleton>
             </section>
           </div>
-          <!-- 歌曲列表 -->
-          <div class="play-list" v-if="albumObj.songs&&albumObj.songs.length!==0">
-            <div class="play">
-              <play-all :length="albumObj.songs.length" @play="playAllSong(albumObj.songs)"></play-all>
-              <!-- 歌曲列表 -->
-              <songs-list :songsList="albumObj.songs" showIndex @select="selectSong"></songs-list>
+          <template v-if="albumObj.album">
+            <!-- 歌曲列表 -->
+            <div class="play-list" v-if="albumObj.songs&&albumObj.songs.length!==0">
+              <div class="play">
+                <play-all :length="albumObj.songs.length" @play="playAllSong(albumObj.songs)"></play-all>
+                <!-- 歌曲列表 -->
+                <songs-list :songsList="albumObj.songs" showIndex @select="selectSong"></songs-list>
+
+              </div>
 
             </div>
+          </template>
+<!-- loading -->
+<loading :loading="!albumObj.songs"></loading>
+</div>
+</scroll>
+</section>
 
-          </div>
-        </div>
-      </scroll>
-    </section>
-
-    <no-result v-if="albumObj.songs&&albumObj.songs.length===0" text="暂无相关资源"></no-result>
-    <!-- 上拉提示框 -->
-    <template v-if="albumObj.album&&albumObj.album.singerList.length!==0">
+<no-result v-if="albumObj.songs&&albumObj.songs.length===0" text="暂无相关资源"></no-result>
+<!-- 上拉提示框 -->
+<template v-if="albumObj.album&&albumObj.album.singerList.length!==0">
       <singer-popup :list="albumObj.album.singerList" :showPopup="showSingerPopup" @closePopup="showSingerPopup=false"
         @finishedLoadImage="handleFinished" @clickListItem="clickListItem" :isLoadImage="isLoadImage"></singer-popup>
     </template>
@@ -91,6 +94,7 @@
         </div>
         <div class="bottom">
             <article class="description">
+                <p class="company">发行公司: {{albumObj.album.company}}</p>
                 <p class="subType">专辑类别: {{albumObj.album.subType}}</p>
                 <div class="content" v-html="albumObj.album.description"></div>
             </article>
@@ -98,9 +102,7 @@
 
     </div>
     <!-- 背景 -->
-    <div class="bg" v-if="albumObj.album.blurPicUrl">
-        <div class="filter"></div>
-        <div class="image" :style="bgImage"></div>
+    <div class="bg" v-lazy:background-image="albumObj.album.blurPicUrl" v-if="albumObj.album.blurPicUrl">
     </div>
     <div class="close" @click="closeOverlay">
         <div class="icon">
@@ -161,10 +163,9 @@
             followText() {
                 return this.followed ? '已收藏' : '收藏'
             },
-            bgImage() {
-                return {
-                    backgroundImage: `url(${this.albumObj.album.blurPicUrl})`
-                }
+            loadBgStyle() {
+                return !this.albumObj.songs ? "background:#f2f3f5" : ''
+
             },
             // 是否要加载图片
             isLoadImage: {
@@ -261,6 +262,7 @@
                             id: res.album.id,
                             name: res.album.alias.length > 0 ? `${res.album.name} (${res.album.alias.join('/')})` : res.album.name,
                             subType: res.album.subType,
+                            company: res.album.company,
                             publishTime: res.album.publishTime,
                             picUrl: res.album.picUrl,
                             blurPicUrl: res.album.blurPicUrl,
@@ -268,10 +270,12 @@
                             singers,
                             singerList
                         })
+                        console.log(album)
                         this.$set(this.albumObj, 'songs', songList)
                         this.$set(this.albumObj, 'commentCount', res.album.info.commentCount)
                         this.$set(this.albumObj, 'album', album)
-                            // 适配页面底部
+
+                        // 适配页面底部
                         this.handlePlaylist(this.playList)
                     }
                 } catch (e) {
@@ -348,6 +352,7 @@
             },
             // 打开遮罩层
             openOverlay() {
+                if (!this.albumObj.album) return
                 this.showOverlay = true
                 this.setHideMiniPlayer(true)
                     // 不让页面滚动
@@ -401,6 +406,43 @@
         overflow: hidden;
     }
     
+    .album-container>>>.van-skeleton {
+        padding: 0;
+    }
+    
+    .album-container>>>.van-skeleton__row {
+        margin: 0.2rem 0;
+        width: 100% !important;
+        height: 0.4rem;
+        line-height: 0.4rem;
+    }
+    
+    .bg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        z-index: -1;
+        background-color: #161824;
+        width: 100%;
+        height: 100%;
+        transition: background-image 0.6s;
+        background: no-repeat 50% / cover;
+        transform-origin: center center;
+        filter: blur(20px);
+        transform: scale(1.5);
+        &::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, .35);
+        }
+    }
+    
     .album-container {
         position: fixed;
         width: 100%;
@@ -410,15 +452,15 @@
         flex-direction: column;
         .album-header {
             position: relative;
-            padding-bottom: 3.6rem;
-            background: linear-gradient(transparent, rgb(238, 238, 238));
+            padding-bottom: 4rem;
+            overflow: hidden;
             .album-info {
                 position: absolute;
                 top: 0;
                 left: 0;
                 width: 100%;
                 height: 100%;
-                padding: 0.9rem 0.5rem 0.5rem 0.5rem;
+                padding: 0.9rem 0.4rem 0.5rem;
                 box-sizing: border-box;
                 .container {
                     display: flex;
@@ -427,8 +469,8 @@
                         margin-right: 0.5rem;
                         .album-image {
                             position: relative;
-                            width: 2.1rem;
-                            height: 2.1rem;
+                            width: 2.5rem;
+                            height: 2.5rem;
                             border-radius: 0.2rem;
                             .image {
                                 position: absolute;
@@ -458,30 +500,38 @@
                             }
                             .public-time {
                                 position: absolute;
-                                bottom: 0rem;
-                                right: 0.2rem;
+                                bottom: 0;
+                                right: 0;
                                 color: #fff;
                                 font-size: 0.28rem;
                                 line-height: 0.5rem;
+                                border-radius: 0.2rem 0 0.2rem 0;
                                 z-index: 3;
+                                padding: 0.07rem 0.15rem;
+                                font-size: $font-size-mini-x;
+                                background-color: rgba(0, 0, 0, .45);
                             }
                         }
                     }
                     .right-info {
+                        display: flex;
                         width: 100%;
+                        flex-direction: column;
+                        justify-content: space-evenly;
                         color: #fff;
                         font-size: $font-size-smaller-x;
                         no-wrap();
                         .album-name {
-                            height: 0.75rem;
-                            line-height: 0.75rem;
+                            height: 0.6rem;
+                            line-height: 0.6rem;
                             font-size: $font-size-smaller;
                             font-weight: bold;
                             no-wrap();
                         }
                         .album-singer {
-                            height: 0.75rem;
-                            line-height: 0.75rem;
+                            margin: 0.1rem 0;
+                            height: 0.6rem;
+                            line-height: 0.6rem;
                             no-wrap();
                             a {
                                 color: #fff;
@@ -510,30 +560,6 @@
                         }
                     }
                 }
-                .bg {
-                    position: absolute;
-                    left: 0;
-                    top: 0;
-                    right: 0;
-                    bottom: 0;
-                    z-index: -1;
-                    overflow: hidden;
-                    .filter {
-                        position: absolute;
-                        width: 100%;
-                        height: 100%;
-                        background: $color-common-b2;
-                        opacity: 0.9;
-                    }
-                    .image {
-                        width: 100%;
-                        height: 100%;
-                        transition: background-image 0.4s;
-                        background: no-repeat 50% / cover;
-                        filter: blur(30px);
-                        transform: scale(1.5);
-                    }
-                }
             }
         }
         section {
@@ -545,7 +571,7 @@
                     .content {
                         no-wrap3();
                         line-height: 0.5rem;
-                        color: #777;
+                        color: $color-common-b2;
                         font-size: $font-size-smaller-x;
                     }
                 }
@@ -567,13 +593,13 @@
                 position: absolute;
                 top: 0;
                 left: 0;
-                padding: 1.2rem 0.5rem 1rem;
+                padding: 1.5rem 0.5rem 1rem;
                 width: 100%;
                 min-height: 100%;
                 box-sizing: border-box;
                 color: #fff;
                 .top {
-                    margin-bottom: 0.5rem;
+                    margin-bottom: 0.3rem;
                     width: 100%;
                     .image-container {
                         margin-bottom: 0.5rem;
@@ -591,10 +617,9 @@
                         }
                     }
                     .title {
-                        font-weight: bold;
                         line-height: 0.7rem;
                         text-align: center;
-                        font-size: $font-size-smaller-x;
+                        font-size: $font-size-smaller;
                     }
                 }
                 .bottom {
@@ -611,23 +636,6 @@
             }
             .bg {
                 position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                z-index: -1;
-                .filter {
-                    position: fixed;
-                    width: 100%;
-                    height: 100%;
-                    background: $color-common-b2;
-                }
-                .image {
-                    width: 100%;
-                    height: 100%;
-                    background: no-repeat 50% / cover;
-                    filter: blur(140px);
-                }
             }
             .close {
                 position: fixed;

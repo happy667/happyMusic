@@ -2,48 +2,37 @@
   <div class="user-container">
     <header>
       <div class="header-container">
-        <div class="back"
-             @click="routerBack">
+        <div class="back" @click="routerBack">
           <van-icon name="arrow-left" />
         </div>
         <!-- 头像 -->
         <div class="avatar">
-          <div class="image"
-               v-if="user">
-            <img v-lazy="user.avatarUrl"
-                 class="animated fadeIn">
+          <div class="image" v-if="user">
+            <img v-lazy="user.avatarUrl" class="animated fadeIn">
           </div>
-          <div class="icon"
-               @click="$router.push({name:'index'})"
-               v-else>
+          <div class="icon" @click="$router.push({name:'index'})" v-else>
             <van-icon name="user-o" />
           </div>
         </div>
         <!-- 昵称 -->
-        <div class="nikeName"
-             v-if="user">
+        <div class="nikeName" v-if="user">
           <div class="text"> {{user.nickname}}</div>
 
         </div>
 
-        <div class="no-login"
-             v-else>
+        <div class="no-login" v-else>
           <router-link :to="{name:'index'}">点击登录账户</router-link>
         </div>
-        <div class="edit"
-             v-if="user">
-          <div class="icon"
-               @click="handleEdit">
-            <van-icon name="setting-o"
-                      size="25" />
+        <div class="edit" v-if="user">
+          <div class="icon" @click="handleEdit">
+            <van-icon name="setting-o" size="25" />
           </div>
         </div>
       </div>
     </header>
     <section>
       <scroll ref="user_scroll">
-        <div class="user-index"
-             ref="container">
+        <div class="user-index" ref="container">
           <div class="my-list">
             <router-link to="/user/myFollow">
               <div class="my-follow my-list-item">
@@ -51,7 +40,7 @@
                   <van-icon name="star" />
                 </div>
                 <div class="right-info">
-                  <div class="title">收藏歌手</div>
+                  <div class="title">我的关注</div>
                   <div class="num">{{followCount}}</div>
                 </div>
               </div>
@@ -93,58 +82,48 @@
 
           <template v-if="userSongSheet&&userAlbum&&userVideo">
             <div class="my-follow">
-              <van-collapse v-model="activeNames"
-                            @change="changeCollapse"
-                            :border="false">
-                <van-collapse-item name="1"
-                                   ref="collapseItem1">
-                  <template #title>
-                    <div class="title">
-                      <div class="text">我的歌单</div>
-                      <span class="count">({{userSongSheet.length}}个)</span>
-                    </div>
-                  </template>
-<song-sheet-mini-list :list="userSongSheet"></song-sheet-mini-list>
-<template v-if="userSongSheet.length===0">
-                    <no-result text="还没有歌单,快去收藏吧"></no-result>
-                  </template>
-</van-collapse-item>
-<van-collapse-item name="2" ref="collapseItem2">
-    <template #title>
-                    <div class="title">
-                      <div class="text">我的专辑</div>
-                      <span class="count">({{albumCount}}个)</span>
-                    </div>
+              <div class="my-songSheet">
+                <div class="title">
+                  <div class="text">我的歌单</div>
+                  <span class="count">({{userSongSheet.length}}个)</span>
+                </div>
+                <song-sheet-mini-list :list="userSongSheet"></song-sheet-mini-list>
+                <template v-if="userSongSheet.length===0">
+                  <no-result text="还没有歌单,快去收藏吧"></no-result>
+                </template>
+</div>
+<div class="my-album">
+    <div class="title">
+        <div class="text">我的专辑</div>
+        <span class="count">({{albumCount}}个)</span>
+    </div>
 
-                  </template>
-
-    <album-list :list="userAlbum" @select="selectItem" showSongSize :showTime="false"></album-list>
+    <album-list :list="userAlbum" @select="selectItem" showSongSize showFunctions :showTime="false">
+    </album-list>
     <template v-if="userAlbum.length===0">
-                    <no-result text="还没有专辑,快去收藏吧"></no-result>
-                  </template>
-</van-collapse-item>
+                  <no-result text="还没有专辑,快去收藏吧"></no-result>
+                </template>
+</div>
 
-<van-collapse-item name="3" ref="collapseItem3">
-    <template #title>
-                    <div class="title">
-                      <div class="text">我的视频</div>
-                      <span class="count">({{videoCount}}个)</span>
-                    </div>
+<div class="my-video">
+    <div class="title">
+        <div class="text">我的视频</div>
+        <span class="count">({{videoCount}}个)</span>
+    </div>
 
-                  </template>
     <video-list @select="goToVideoInfo" :list="userVideo"></video-list>
     <template v-if="userVideo.length===0">
-                    <no-result text="还没有视频,快去收藏吧"></no-result>
-                  </template>
-</van-collapse-item>
-</van-collapse>
+                  <no-result text="还没有视频,快去收藏吧"></no-result>
+                </template>
+</div>
 </div>
 </template>
-<template v-if="load">
-            <!-- loading -->
-            <loading />
-          </template>
+
 </div>
+<template v-if="load">
+          <!-- loading -->
+          <loading />
+        </template>
 </scroll>
 </section>
 
@@ -375,8 +354,11 @@
     
     .user-container>>>.album-container {
         padding: 0;
-        margin-bottom: 0.4rem;
         color: $color-common-x;
+    }
+    
+    .user-container>>>.loading-container .van-loading {
+        background-color: #f4f4f4;
     }
     
     .user-container {
@@ -385,7 +367,7 @@
         height: 100%;
         display: flex;
         flex-direction: column;
-        background-color: $color-common-background;
+        background-color: #F5F5F5;
         header {
             position: relative;
             width: 100%;
@@ -487,15 +469,14 @@
             flex: 1;
             .user-index {
                 .my-list {
-                    padding: 0.4rem;
+                    padding-bottom: 0.4rem;
                     .my-list-item {
                         display: flex;
                         width: 100%;
                         height: 1.7rem;
-                        margin-bottom: 0.3rem;
-                        box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.1);
                         border-radius: 0.1rem;
                         color: $color-common-x;
+                        background-color: #fff;
                         .left-image {
                             display: flex;
                             justify-content: center;
@@ -521,8 +502,18 @@
                         }
                     }
                 }
-                .my-follow {
+                >.my-follow {
+                    .my-songSheet,
+                    .my-album,
+                    .my-video {
+                        padding: 0.3rem 0.4rem 0.4rem;
+                        background-color: #fff;
+                        margin-bottom: 0.3rem
+                    }
                     .title {
+                        margin-bottom: 0.2rem;
+                        height: 1rem;
+                        line-height: 1rem;
                         display: flex;
                         .text {
                             font-size: $font-size-smaller;

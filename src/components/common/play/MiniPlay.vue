@@ -8,43 +8,44 @@
               <div class="swiper-list-item">
                 <!-- 左侧图片 -->
                 <div class="left">
-                  <div class="image  animated fadeIn" :class="cdCls">
-                    <van-image :src="item.picUrl" round>
-                      <template v-slot:loading>
-                        <van-loading type="spinner" size="20" />
-                      </template>
-</van-image>
-</div>
-</div>
-<div class="right">
-    <!--歌曲信息-->
-    <div class="song-info" :class="currentSong.id===item.id?'active':''">
-        <p class="song-name">{{item.name}}</p>
-        <p class="singer">{{item.singers}}</p>
-    </div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<!-- 按钮区域 -->
-<div class="player-controller">
-    <div class="play" @click.stop="handleTogglePlaying">
-        <van-circle v-model="playerParams.width" size="32" color="#fd4979" :layer-color="circleColor">
-        </van-circle>
-        <div class="icon">
-            <i class="iconfont" :style="iconColor" :class="playIcon"></i>
-        </div>
-    </div>
+                  <div class="image-container">
+                    <div class="image">
+                      <img v-lazy="item.album.picUrl||item.picUrl" class="animated fadeIn">
+                    </div>
+                    <div class="digital-album">
+                      <img src="@/assets/images/digital-album.svg" class="animated fadeIn">
+                    </div>
+                  </div>
 
-    <!-- 歌曲列表 -->
-    <div class="play-list icon" @click.stop="handlePlayList">
-        <i class="iconfont icon-bofangliebiao"></i>
+                </div>
+                <div class="right">
+                  <!--歌曲信息-->
+                  <div class="song-info" :class="currentSong.id===item.id?'active':''">
+                    <p class="song-name">{{item.name+' - '+item.singers}}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 按钮区域 -->
+        <div class="player-controller">
+          <div class="play" @click.stop="handleTogglePlaying">
+            <van-circle v-model="playerParams.width" size="30" color="#fd4979" layer-color="#E2E2E2">
+            </van-circle>
+            <div class="icon">
+              <i class="iconfont" :style="iconStyle" :class="playIcon"></i>
+            </div>
+          </div>
+
+          <!-- 歌曲列表 -->
+          <div class="play-list icon" @click.stop="handlePlayList">
+            <i class="iconfont icon-bofangliebiao"></i>
+          </div>
+        </div>
+      </div>
     </div>
-</div>
-</div>
-</div>
-</transition>
+  </transition>
 </template>
 <script>
     import Swiper from 'swiper'
@@ -74,14 +75,10 @@
             cdCls() {
                 return this.playing ? 'play' : 'play pause'
             },
-            iconColor() {
+            iconStyle() {
                 return {
-                    color: this.playing ? '#fd4979' : '#999',
                     marginLeft: this.playing ? '0.03rem' : '0.07rem'
                 }
-            },
-            circleColor() {
-                return this.playing ? '#ddd' : '#999'
             },
             picUrl() {
                 return this.currentSong.picUrl ? this.currentSong.picUrl : DEFAULT_IMAGE
@@ -91,6 +88,7 @@
             this.$nextTick(() => {
                 // 初始化轮播图组件
                 this.initSwiper()
+                console.log(this.sequenceList)
             })
         },
         created() {
@@ -174,23 +172,40 @@
                         width: 100%;
                         height: 100%;
                         .left {
-                            margin: 0 0.3rem;
-                            height: 100%;
+                            position: relative;
+                            margin: 0 0.4rem 0 0.3rem;
                             display: flex;
                             flex-direction: column;
                             justify-content: center;
-                            .image {
-                                width: 1.1rem;
-                                height: 1.1rem;
-                                .van-image {
+                            .image-container {
+                                position: relative;
+                                width: 1.3rem;
+                                height: 1.3rem;
+                                .image {
+                                    position: absolute;
                                     width: 100%;
                                     height: 100%;
+                                    border-radius: 0.1rem;
+                                    background: $color-common-b;
+                                    img {
+                                        position: absolute;
+                                        display: block;
+                                        width: 100%;
+                                        height: 100%;
+                                        border-radius: 0.1rem;
+                                    }
                                 }
-                                &.play {
-                                    animation: rotate 10s linear infinite;
-                                }
-                                &.pause {
-                                    animation-play-state: paused;
+                                .digital-album {
+                                    position: absolute;
+                                    top: 5%;
+                                    left: 56%;
+                                    width: 100%;
+                                    height: 100%;
+                                    img {
+                                        display: block;
+                                        width: 100%;
+                                        height: 90%;
+                                    }
                                 }
                             }
                         }
@@ -213,12 +228,6 @@
                                     line-height: $font-size-smaller-x;
                                     font-size: $font-size-smaller-x;
                                     font-weight: 400;
-                                    no-wrap();
-                                }
-                                .singer {
-                                    margin-bottom: 0.1rem;
-                                    font-size: $font-size-mini;
-                                    color: $color-common-b2;
                                     no-wrap();
                                 }
                             }
@@ -245,7 +254,7 @@
                     width: 1.1rem;
                     height: 100%;
                     i {
-                        font-size: 0.8rem;
+                        font-size: 0.7rem;
                     }
                 }
                 .play {
@@ -255,14 +264,12 @@
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    color: red;
                     border-radius: 50%;
                     .icon {
                         position: absolute;
                         color: $color-common;
                         i {
-                            color: $color-common-b2;
-                            font-size: 0.35rem;
+                            font-size: 0.3rem;
                         }
                     }
                 }

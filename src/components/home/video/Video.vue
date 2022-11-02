@@ -75,7 +75,7 @@
                     <div class="play-count"
                          v-show="isFirstPlay">
                       <i class="iconfont icon-bofang"></i>
-                      {{videoParams.playCount|convertCount}}
+                      <span>{{videoParams.playCount|convertCount}}</span>
                     </div>
                   </div>
 
@@ -84,7 +84,7 @@
                     <div class="play-time"
                          v-show="isFirstPlay">
                       <i class="iconfont icon-shichang"></i>
-                      {{duration|convertTime}}
+                      <span>{{duration|convertTime}}</span>
                     </div>
                   </div>
                 </div>
@@ -100,7 +100,7 @@
                       <!-- 播放进度-->
                       <div class="play-progress"
                            v-show="isClickScreen">
-                        {{currenTime|convertTime}}/{{duration|convertTime}}
+                        {{currenTime|convertTime}} / {{duration|convertTime}}
                       </div>
 
                     </div>
@@ -503,7 +503,7 @@ export default {
           width 100%
           bottom 0
           left 0
-          padding 0 0.3rem
+          padding 0 0.2rem 0 0.3rem
           box-sizing border-box
           .controller-box
             width 100%
@@ -515,8 +515,19 @@ export default {
               display flex
               justify-content space-between
               color #fff
+              .play-left
+                .play-count
+                  display flex
+                  font-size $font-size-smaller-x
+                  i
+                    margin-right 0.1rem
+                    font-size $font-size-smaller-x
               .play-right
                 text-align center
+                .play-time
+                  display flex
+                  i
+                    margin-right 0.1rem
                 .full
                   width 1rem
                   font-size $font-size-small

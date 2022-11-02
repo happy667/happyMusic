@@ -159,7 +159,7 @@
                         no-wrap();
                     }
                     .info {
-                        color: #777;
+                        color: $color-common-b2;
                         font-size: $font-size-mini;
                         span {
                             display: inline-block;

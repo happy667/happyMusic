@@ -124,7 +124,7 @@
 <style lang="stylus" scoped>
     @import '~common/stylus/variable';
     .header-container {
-        margin: 0.2rem 0.1rem 0.1rem;
+        margin: 0.4rem 0.1rem 0.1rem;
         position: relative;
         display: flex;
         font-size: $font-size-small;
@@ -135,7 +135,7 @@
             width: 1rem;
             height: 1rem;
             line-height: 1rem;
-            color: $color-common;
+            color: #fff;
             z-index: 999;
             text-align: center;
             i {
@@ -156,15 +156,16 @@
                 height: 0.7rem;
                 line-height: 0.7rem;
                 text-align: center;
-                font-size: $font-size-smaller;
             }
             .song-name {
-                font-weight: 600;
+                color: #fff;
                 no-wrap();
+                font-size: $font-size-small-x;
             }
             .singer {
                 no-wrap();
-                color: $color-common-x;
+                color: hsla(0, 0%, 100%, .6);
+                font-size: $font-size-smaller;
             }
         }
         .share {

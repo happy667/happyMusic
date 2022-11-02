@@ -204,7 +204,7 @@
                     height: 0.7rem;
                     border-radius: 0.5rem;
                     line-height: 0.7rem;
-                    color: rgb(172, 171, 171);
+                    color: $color-common-x;
                     background $color-common-b;
                     font-size: $font-size-smaller-x;
                     &.active {

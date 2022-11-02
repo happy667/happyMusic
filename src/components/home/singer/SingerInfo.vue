@@ -250,7 +250,7 @@
                                 })
                                 songList.push(new Song({
                                     id: item.id,
-                                    name: item.alia.length > 0 ? `${item.name} (${item.alia.join('/')})` : item.name,
+                                    name: item.tns ? `${item.name} (${item.tns[0]})` : item.name,
                                     singers,
                                     singersList,
                                     picUrl: item.al.picUrl,
@@ -296,7 +296,13 @@
                     res.hotAlbums.forEach(item => {
                         let album = new Album({
                             id: item.id,
-                            name: item.alias.length > 0 ? `${item.name} (${item.alias.join('/')})` : item.name,
+                            name: item.alias.length > 0 ? `
+                                                    $ {
+                                                        item.name
+                                                    }($ {
+                                                        item.alias.join('/')
+                                                    })
+                                                    ` : item.name,
                             picUrl: item.picUrl,
                             singerName: item.artist.name,
                             size: item.size,
@@ -481,7 +487,10 @@
                 this.showPosition = false
             },
             goToIntroduce() {
-                this.$router.push(`/singerIntroduce/${this.id}`)
+                this.$router.push(` / singerIntroduce / $ {
+                                                        this.id
+                                                    }
+                                                    `)
             },
             handlePlaylist(playList) {
                 // 适配播放器与页面底部距离
@@ -525,7 +534,10 @@
             selectSimSinger(item) {
                 this.setSingerCurrentIndex(0)
                 this.setAddNoCacheComponents('singerInfo')
-                this.$router.push(`/singerInfo/${item.id}`)
+                this.$router.push(` / singerInfo / $ {
+                                                        item.id
+                                                    }
+                                                    `)
             },
             // 选中收藏歌手
             handleClickFollow() {
@@ -690,7 +702,7 @@
                     width: 100%;
                     position: absolute;
                     top: 6.7rem;
-                    padding: 0 0.3rem;
+                    padding: 0 0.4rem;
                     transform: translateY(-1rem);
                     box-sizing: border-box;
                     .singer-card {

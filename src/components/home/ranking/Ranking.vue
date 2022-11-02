@@ -160,7 +160,7 @@ export default {
   width 100%
   background $color-common-background
   .ranking-list-wrapper
-    padding 0 0.5rem
+    padding 0 0.4rem
     box-sizing border-box
     .list-container
       padding-bottom 0.5rem

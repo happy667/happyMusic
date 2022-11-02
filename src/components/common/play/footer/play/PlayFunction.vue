@@ -1,17 +1,12 @@
 <template>
   <div class="function-container">
-    <div class="love icon"
-         @click="selectItemLove">
-      <i class="iconfont"
-         :class="loveIcon"></i>
+    <div class="love icon" @click="selectItemLove">
+      <i class="iconfont" :class="loveIcon"></i>
     </div>
-    <div class="video icon"
-         v-if="currentSong.mv"
-         @click="handleVideoClick">
+    <div class="video icon" v-if="currentSong.mv" @click="handleVideoClick">
       <van-icon name="tv-o" />
     </div>
-    <div class="recommend icon"
-         @click="handleRecommendClick">
+    <div class="recommend icon" @click="handleRecommendClick">
       <van-icon name="more-o" />
     </div>
 
@@ -93,8 +88,11 @@
         height: 1.45rem;
         .icon {
             i {
-                color: $color-common;
+                color: #fff;
                 font-size: 0.7rem;
+            }
+            .icon-aixin {
+                color: $color-common;
             }
         }
         .van-info {
