@@ -95,16 +95,8 @@
                     // 比较两首歌曲
                 let result = this.$utils.compareSong(this.currentSong, item)
                 if (!result) {
-                    // 获取歌曲详情
-                    const {
-                        data: res
-                    } = await songApi.getSongDetail(item.id)
-                    if (res.code === ERR_OK) {
-                        item.picUrl = res.songs[0].al.picUrl
-                        console.log(index)
-                            // 引入vue原型上的utils
-                        this.$utils.playMusic(item)
-                    }
+                    // 引入vue原型上的utils
+                    this.$utils.playMusic(item, this.songList, index)
                 }
             },
 

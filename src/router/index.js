@@ -243,6 +243,7 @@ const routes = [
         component: VideoInfo,
         props: true,
         meta: {
+            isBack: false,
             title: '视频详情'
         },
         beforeEnter(to, from, next) {
@@ -308,7 +309,7 @@ const routes = [
             title: '歌手详情'
         },
         beforeEnter(to, from, next) {
-            if (from.name === 'home' || from.name === 'searchResult' || from.name === 'videoInfo' || from.name === 'myFollow' || store.state.isPlayerClick) {
+            if (from.name === 'home' || from.name === 'searchResult' || from.name === 'singerInfo' || (from.name === 'videoInfo' && !from.meta.isBack) || (from.name === 'singerMoreDesc' && !from.meta.isBack) || from.name === 'myFollow' || store.state.isPlayerClick) {
                 // 添加不缓存路由
                 store.commit('setAddNoCacheComponents', 'singerInfo')
             } else {
@@ -325,6 +326,7 @@ const routes = [
         component: SingerMoreDesc,
         props: true,
         meta: {
+            isBack: false,
             title: '歌手介绍'
         },
         beforeEnter(to, from, next) {

@@ -87,7 +87,7 @@
             </div>
             <!-- 评论列表 -->
             <div class="comment" ref="commentContainer" v-if="commentList">
-              <div class="comment-title">精彩评论{{commentText}}</div>
+              <div class="comment-title">精彩评论 {{commentText}}</div>
               <van-list v-model="loading" :immediate-check='false' :finished="finished"
                 :finished-text="commentCount===0?'':'没有更多了'" @load="handlePullingUp">
                 <template v-if="commentList.length!==0">
@@ -236,7 +236,7 @@
                                 publishTime: data1.publishTime,
                                 desc: data1.desc,
                                 duration: data1.duration,
-                                creatorName: data1.artists.map(item => item.name).join('/'),
+                                creatorName: data1.artists.map(item => item.name).join(' / '),
                                 creatorList,
                                 artist: data1.artists[0],
                                 followed: data1.subed,
@@ -473,7 +473,7 @@
                 display: flex;
                 flex-direction: column;
                 .info-top {
-                    padding: 0.1rem 0.5rem 0;
+                    padding: 0.1rem 0.4rem 0;
                     line-height: 1rem;
                     .content {
                         display: flex;
@@ -533,7 +533,7 @@
                     }
                 }
                 .info-bottom {
-                    padding: 0.2rem 0.5rem;
+                    padding: 0.2rem 0.4rem;
                     display: flex;
                     align-items: center;
                     .play-source-img {
@@ -549,7 +549,7 @@
                 }
             }
             .other-info {
-                padding: 0 0.5rem;
+                padding: 0 0.4rem;
                 background: $color-common-background;
                 .comment-title {
                     font-size: $font-size-smaller-x;

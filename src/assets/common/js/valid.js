@@ -3,7 +3,7 @@ export function checkIsNull(value) {
     return value.trim() === ''
 }
 // 昵称
-export const NIKENAME_VALID_TEXT = '昵称由4-16位字母,数字,汉字,下划线组成'
+export const NIKENAME_VALID_TEXT = '用户名由4-16位字母,数字,汉字,下划线组成'
 export function checkNickname(nickname) {
     return /^[a-zA-Z0-9_\u4e00-\u9fa5]{4,16}$/.test(nickname)
 }

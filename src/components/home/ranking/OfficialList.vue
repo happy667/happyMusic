@@ -46,7 +46,7 @@ export default {
   .official-list
     display flex
     width 100%
-    box-shadow 0 0.02rem 0.2rem rgba(0, 0, 0, 0.1)
+    box-shadow 0 0.06rem 0.16rem rgba(0, 0, 0, 0.07);
     border-radius 0.2rem
     padding 0.3rem
     box-sizing border-box

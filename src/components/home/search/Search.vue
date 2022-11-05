@@ -251,7 +251,7 @@ export default {
 @import '~common/stylus/variable'
 .van-search
   height 1.8rem
-  padding 0.25rem 0.32rem
+  padding 0.25rem 0.4rem
   box-sizing border-box
 .search-container
   width 100%

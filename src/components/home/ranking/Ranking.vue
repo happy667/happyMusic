@@ -99,11 +99,6 @@ export default {
       }
     }
   },
-  watch: {
-    rankingList () {
-      this.refresh()
-    }
-  },
   methods: {
     // 获取排行榜
     async getRankingList () {
@@ -125,6 +120,7 @@ export default {
         } = await rankingApi.getRankingListById(id)
         if (res.code === ERR_OK) {
           list.push(res.playlist)
+           this.refresh()
         }
       }
       list = tempList
@@ -139,9 +135,6 @@ export default {
     this.$nextTick(() => {
         this.getRankingList()
     })
-  },
-  activated () {
-      this.getRankingList()
   },
 
   components: {
@@ -160,7 +153,7 @@ export default {
   width 100%
   background $color-common-background
   .ranking-list-wrapper
-    padding 0 0.5rem
+    padding 0 0.4rem
     box-sizing border-box
     .list-container
       padding-bottom 0.5rem

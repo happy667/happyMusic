@@ -38,8 +38,8 @@
             height: 0.8rem;
             border-radius: 0.25rem;
             line-height: 0.8rem;
-            color: rgb(172, 171, 171);
-            background $color-common-b;
+            color: $color-common-x;
+            background: #f7f8fa;
             no-wrap();
             /* 选择最后一排 */
             &:nth-last-child(-n+3) {

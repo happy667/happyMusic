@@ -65,18 +65,19 @@
                         width: 100%;
                         font-size: $font-size-smaller-x;
                         line-height: 0.57rem;
-                        color: #666;
+                        color: $color-common-x;
                         no-wrap();
                     }
                     .comment-time {
-                        color: #777;
+                        color: $color-common-b2;
                     }
                 }
                 .bottom {
                     .comment-content {
-                        padding: 0.3rem 0;
+                        padding: 0.15rem 0;
                         line-height: 0.55rem;
                         word-break: break-all;
+                        color: $color-common-x;
                     }
                 }
             }

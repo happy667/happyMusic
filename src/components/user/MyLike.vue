@@ -155,7 +155,7 @@
             },
             handlePlaylist(playList) {
                 // 适配播放器与页面底部距离
-                const bottom = playList.length > 0 ? '1.6rem' : ''
+                const bottom = playList.length > 0 ? '1.5rem' : ''
                 this.$nextTick(() => {
                     this.$refs.container.style.paddingBottom = bottom
                     this.$refs.my_like_scroll.refresh()
@@ -167,16 +167,8 @@
                     // 比较两首歌曲
                 let result = this.$utils.compareSong(this.currentSong, item)
                 if (!result) {
-                    // 获取歌曲详情
-                    const {
-                        data: res
-                    } = await songApi.getSongDetail(item.id)
-                    if (res.code === ERR_OK) {
-                        item.picUrl = res.songs[0].al.picUrl
-                        console.log(index)
-                            // 引入vue原型上的utils
-                        this.$utils.playMusic(item)
-                    }
+                    // 引入vue原型上的utils
+                    this.$utils.playMusic(item, this.songList, index)
                 }
             },
             // 播放全部歌曲

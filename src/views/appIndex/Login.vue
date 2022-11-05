@@ -9,36 +9,23 @@
       <!-- 登录表单 -->
       <div class="login-form">
         <van-cell-group>
-          <van-field v-model="loginForm.phone"
-                     type="tel"
-                     label="手机号"
-                     :error-message="phoneErrMsg"
-                     placeholder="请输入手机号"
-                     maxlength="11" />
-          <van-field v-model="loginForm.password"
-                     size="large"
-                     label="密码"
-                     maxlength="16"
-                     :type="pwdType"
-                     :right-icon="pwdIcon"
-                     :error-message="pwdErrMsg"
-                     @click-right-icon="handleShowPwd"
-                     placeholder="请输入密码" />
+          <van-field v-model="loginForm.phone" type="tel" label="手机号" :error-message="phoneErrMsg" placeholder="请输入手机号"
+            maxlength="11" />
+          <van-field v-model="loginForm.password" size="large" label="密码" maxlength="16" :type="pwdType"
+            :right-icon="pwdIcon" :error-message="pwdErrMsg" @click-right-icon="handleShowPwd" placeholder="请输入密码" />
         </van-cell-group>
         <!-- 忘记密码 -->
         <div class="remember-pwd">
           <router-link to="/appIndex/findPassword">忘记密码?</router-link>
         </div>
         <!-- 登录 -->
-        <div class="login"
-             @click="handleLogin">
+        <div class="login" @click="handleLogin">
           <btn text="登录"></btn>
         </div>
         <!-- 去注册 -->
         <div class="other-wrapper">
           <span>还没有账号?</span>
-          <router-link to="/appIndex/register"
-                       replace>去注册</router-link>
+          <router-link to="/appIndex/register" replace>去注册</router-link>
         </div>
       </div>
     </div>
@@ -107,17 +94,20 @@
                     this.$toast('手机号不能为空')
                     return false
                 }
-                // 密码
-                if (checkIsNull(this.loginForm.password)) {
-                    this.$toast('密码不能为空')
-                    this.pwdErrMsg = PASSWORD_VALID_TEXT
-                    return false
-                }
                 // 验证手机号
                 if (!checkPhone(this.loginForm.phone)) {
                     this.phoneErrMsg = '手机号格式有误, 请输入正确的手机号'
                     return false
                 }
+                // 清空错误提示
+                this.phoneErrMsg = ''
+                    // 密码
+                if (checkIsNull(this.loginForm.password)) {
+                    this.$toast('密码不能为空')
+                    this.pwdErrMsg = PASSWORD_VALID_TEXT
+                    return false
+                }
+
                 // 验证密码
                 if (!checkPassword(this.loginForm.password)) {
                     this.pwdErrMsg = PASSWORD_VALID_TEXT

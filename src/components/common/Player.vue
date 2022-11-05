@@ -1,30 +1,18 @@
 <template>
-  <div class="play-container"
-       ref="play"
-       v-show="playList.length>0">
+  <div class="play-container" ref="play" v-show="playList.length>0">
     <!-- 全屏播放器 -->
-    <FullScreenPlay ref="FullScreenPlay"
-                    v-show="playerFullScreen"
-                    @prev="prev"></FullScreenPlay>
+    <FullScreenPlay ref="FullScreenPlay" v-show="playerFullScreen" @prev="prev"></FullScreenPlay>
 
     <!-- 迷你播放器 -->
     <mini-play v-show="!hideMiniPlayer">
     </mini-play>
     <div class="audio">
-      <audio ref="audio"
-             id="audio"
-             preload="auto"
-             @canplay="ready"
-             @error="error"
-             @timeupdate="handleUpdateTime"
-             @ended="handleEnd"
-             :src="url"></audio>
+      <audio ref="audio" id="audio" preload="auto" @canplay="ready" @error="error" @timeupdate="handleUpdateTime"
+        @ended="handleEnd" :src="url"></audio>
     </div>
     <!--歌曲列表-->
-    <transition enter-active-class="animated fadeIn faster"
-                leave-active-class="animated fadeOut faster">
-      <play-list v-show="togglePlayList"
-                 @close="togglePlayList"></play-list>
+    <transition enter-active-class="animated fadeIn faster" leave-active-class="animated fadeOut faster">
+      <play-list v-show="togglePlayList" @close="togglePlayList"></play-list>
     </transition>
   </div>
 </template>
@@ -189,6 +177,7 @@
             },
             // 获取歌曲
             async getSong(song) {
+                this.playerParams.width = 0;
                 // 获取音乐播放路径
                 const {
                     data: res

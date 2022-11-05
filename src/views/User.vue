@@ -1,57 +1,57 @@
 <template>
-  <div class="user-container">
+  <div class="user-container"
+    :style="(user&&$utils.isLogin())?'':'background-image:linear-gradient(-20deg, #f794a4 0%, #fdd6bd 100%)'">
     <header>
-      <div class="header-container">
-        <div class="back"
-             @click="routerBack">
+      <div class="header-container" v-lazy:background-image="user?user.backgroundUrl:''">
+        <div class="back" @click="routerBack">
           <van-icon name="arrow-left" />
         </div>
-        <!-- 头像 -->
-        <div class="avatar">
-          <div class="image"
-               v-if="user">
-            <img v-lazy="user.avatarUrl"
-                 class="animated fadeIn">
+        <div class="triangle-container">
+          <!-- 头像 -->
+          <div class="avatar">
+            <div class="image" v-if="user">
+              <img v-lazy="user.avatarUrl" class="animated fadeIn">
+            </div>
+            <div :class="user?'icon':'nologin icon'" @click="$router.push({name:'index'})" v-else>
+              <van-icon name="user-o" />
+            </div>
           </div>
-          <div class="icon"
-               @click="$router.push({name:'index'})"
-               v-else>
-            <van-icon name="user-o" />
-          </div>
-        </div>
-        <!-- 昵称 -->
-        <div class="nikeName"
-             v-if="user">
-          <div class="text"> {{user.nickname}}</div>
+          <van-skeleton title :row="1" :loading="skeletonLoad" row-width="100%">
+            <!-- 昵称 -->
+            <div class="nikeName" v-if="user">
+              <div class="text"> {{user.nickname}}</div>
+            </div>
+            <!-- 签名 -->
+            <div class="personalSignature" v-if="user">
+              <div class="text"> {{user.signature}}</div>
+            </div>
 
+            <div class="no-login" v-else>
+              <router-link :to="{name:'index'}">登录/注册</router-link>
+              <div class="text"> 立即登录，体验更多功能</div>
+            </div>
+          </van-skeleton>
         </div>
 
-        <div class="no-login"
-             v-else>
-          <router-link :to="{name:'index'}">点击登录账户</router-link>
-        </div>
-        <div class="edit"
-             v-if="user">
-          <div class="icon"
-               @click="handleEdit">
-            <van-icon name="setting-o"
-                      size="25" />
+        <div class="edit" v-if="user">
+          <div class="icon" @click="handleEdit">
+            <van-icon name="setting-o" size="25" />
           </div>
         </div>
       </div>
+      <div class="triangle"></div>
     </header>
     <section>
       <scroll ref="user_scroll">
-        <div class="user-index"
-             ref="container">
-          <div class="my-list">
+        <div class="user-index" ref="container">
+          <div class="my-list ">
             <router-link to="/user/myFollow">
-              <div class="my-follow my-list-item">
+              <div class="my-follow my-list-item ">
                 <div class="left-image">
                   <van-icon name="star" />
                 </div>
                 <div class="right-info">
-                  <div class="title">收藏歌手</div>
+                  <div class="title">我的关注</div>
                   <div class="num">{{followCount}}</div>
                 </div>
               </div>
@@ -63,7 +63,7 @@
                 </div>
                 <div class="right-info">
                   <div class="title">我的最爱</div>
-                  <div class="num">{{myLikeCount}}</div>
+                  <div class="num" v-show="userCount">{{myLikeCount}}</div>
                 </div>
 
               </div>
@@ -90,61 +90,48 @@
             </router-link>
 
           </div>
-
-          <template v-if="userSongSheet&&userAlbum&&userVideo">
+          <template v-if="user">
             <div class="my-follow">
-              <van-collapse v-model="activeNames"
-                            @change="changeCollapse"
-                            :border="false">
-                <van-collapse-item name="1"
-                                   ref="collapseItem1">
-                  <template #title>
-                    <div class="title">
-                      <div class="text">我的歌单</div>
-                      <span class="count">({{userSongSheet.length}}个)</span>
-                    </div>
-                  </template>
-<song-sheet-mini-list :list="userSongSheet"></song-sheet-mini-list>
-<template v-if="userSongSheet.length===0">
-                    <no-result text="还没有歌单,快去收藏吧"></no-result>
-                  </template>
-</van-collapse-item>
-<van-collapse-item name="2" ref="collapseItem2">
-    <template #title>
-                    <div class="title">
-                      <div class="text">我的专辑</div>
-                      <span class="count">({{albumCount}}个)</span>
-                    </div>
+              <div class="my-songSheet">
+                <div class="title">
+                  <div class="text">我的歌单</div>
+                  <span class="count">({{songSheetCount}}个)</span>
+                </div>
+                <song-sheet-mini-list v-if="userSongSheet" :list="userSongSheet"></song-sheet-mini-list>
+                <template v-if="userSongSheet&&userSongSheet.length===0">
+                  <no-result text="还没有歌单,快去收藏吧"></no-result>
+                </template>
+</div>
+<div class="my-album">
+    <div class="title" v-show="userSongSheet">
+        <div class="text">我的专辑</div>
+        <span class="count">({{albumCount}}个)</span>
+    </div>
 
-                  </template>
+    <album-list :list="userAlbum" v-if="userAlbum" @select="selectItem" showSongSize showFunctions :showTime="false">
+    </album-list>
+    <template v-if="userAlbum&&userAlbum.length===0">
+                  <no-result text="还没有专辑,快去收藏吧"></no-result>
+                </template>
+</div>
 
-    <album-list :list="userAlbum" @select="selectItem" showSongSize :showTime="false"></album-list>
-    <template v-if="userAlbum.length===0">
-                    <no-result text="还没有专辑,快去收藏吧"></no-result>
-                  </template>
-</van-collapse-item>
+<div class="my-video">
+    <div class="title" v-show="userAlbum">
+        <div class="text">我的视频</div>
+        <span class="count">({{videoCount}}个)</span>
+    </div>
 
-<van-collapse-item name="3" ref="collapseItem3">
-    <template #title>
-                    <div class="title">
-                      <div class="text">我的视频</div>
-                      <span class="count">({{videoCount}}个)</span>
-                    </div>
-
-                  </template>
     <video-list @select="goToVideoInfo" :list="userVideo"></video-list>
-    <template v-if="userVideo.length===0">
-                    <no-result text="还没有视频,快去收藏吧"></no-result>
-                  </template>
-</van-collapse-item>
-</van-collapse>
+    <template v-if="userVideo&&userVideo.length===0">
+                  <no-result text="还没有视频,快去收藏吧"></no-result>
+                </template>
+</div>
 </div>
 </template>
-<template v-if="load">
-            <!-- loading -->
-            <loading />
-          </template>
+<!-- loading -->
+<loading :loading="load" />
 </div>
+
 </scroll>
 </section>
 
@@ -173,6 +160,7 @@
         name: 'user',
         data() {
             return {
+                load: this.$utils.isLogin() ? true : false,
                 userCount: null,
                 userSongSheet: null, // 用户歌单
                 userAlbum: null, // 用户专辑
@@ -190,7 +178,7 @@
                 return this.userCount ? this.userCount.artistCount + '个收藏' : ''
             },
             songSheetCount() {
-                return this.userCount ? this.userCount.subPlaylistCount : 0
+                return this.userSongSheet ? this.userSongSheet.length : 0
             },
             albumCount() {
                 return this.userAlbum ? this.userAlbum.length : 0
@@ -198,43 +186,22 @@
             videoCount() {
                 return this.userVideo ? this.userVideo.length : 0
             },
-            load() {
-                if (this.user) { // 判断是否登录
-                    if (!this.userSongSheet || !this.userAlbum || !this.userVideo) { // 判断是否加载完收藏专辑和歌单、视频
-                        return true
-                    } else {
-                        return false
-                    }
+            skeletonLoad() {
+                if (this.$utils.isLogin()) {
+                    return this.user ? false : true
                 } else {
                     return false
                 }
+
             }
         },
         watch: {
             user() {
-                if (this.user) {
-                    // 获取用户专辑歌单数量
-                    this.getUserCount()
-                        // 获取用户专辑
-                    this.getUserAlbum()
-                        // 获取用户收藏的歌单
-                    this.getUserSongSheet(this.user.userId)
-                        // 获取用户收藏的视频
-                    this.getUserVideo()
-                }
+                this.getAllData();
             }
         },
         mounted() {
-            if (this.user) {
-                // 获取用户专辑歌单数量
-                this.getUserCount()
-                    // 获取用户专辑
-                this.getUserAlbum()
-                    // 获取用户收藏的歌单
-                this.getUserSongSheet(this.user.userId)
-                    // 获取用户收藏的视频
-                this.getUserVideo()
-            }
+            this.getAllData();
         },
 
         methods: {
@@ -247,26 +214,50 @@
             selectItem(item) {
                 this.$router.push(`/singerAlbum/${item.id}`)
             },
+            betterScrollRefresh() {
+                if (this.$refs.user_scroll) {
+                    this.$refs.user_scroll.refresh()
+                }
+            },
+            //获取页面所有数据
+            async getAllData() {
+                if (this.user) {
+                    // 获取用户专辑歌单数量
+                    this.getUserCount()
+                        // 获取用户收藏的歌单
+                    await this.getUserSongSheet(this.user.userId)
+                        // 获取用户专辑
+                    await this.getUserAlbum()
+                        // 获取用户收藏的视频
+                    await this.getUserVideo()
+                }
+            },
             // 获取用户信息 , 歌单，收藏，mv, dj 数量
             async getUserCount() {
+                this.load = true;
                 const {
                     data: res
                 } = await userApi.getUserCount()
                 if (res.code === ERR_OK) {
                     this.userCount = res
+                    this.load = false;
                 }
             },
             // 获取用户收藏的歌单
             async getUserSongSheet(id) {
+                this.load = true;
                 const {
                     data: res
                 } = await userApi.getUserSongSheet(id)
                 if (res.code === ERR_OK) {
                     this.userSongSheet = res.playlist
+                    this.betterScrollRefresh()
+                    this.load = false;
                 }
             },
             // 获取用户收藏专辑
             async getUserAlbum() {
+                this.load = true;
                 const {
                     data: res
                 } = await userApi.getUserAlbum()
@@ -284,9 +275,12 @@
                         albumList.push(album)
                     })
                     this.userAlbum = albumList
+                    this.betterScrollRefresh()
+                    this.load = false;
                 }
             },
             async getUserVideo() {
+                this.load = true;
                 const {
                     data: res
                 } = await userApi.getUserVideo()
@@ -305,6 +299,8 @@
                         videoList.push(video)
                     })
                     this.userVideo = videoList
+                    this.betterScrollRefresh()
+                    this.load = false;
                 }
             },
 
@@ -318,37 +314,11 @@
             },
             handlePlaylist(playList) {
                 // 适配播放器与页面底部距离
-                const bottom = playList.length > 0 ? '1.6rem' : ''
+                const bottom = playList.length > 0 ? '1.5rem' : ''
                 this.$nextTick(() => {
                     this.$refs.container.style.paddingBottom = bottom
-                    this.$refs.user_scroll.refresh()
+                    this.betterScrollRefresh()
                 })
-            },
-            // 切换面板
-            changeCollapse(activeNames) {
-                let element = null
-                let index = null
-                if (activeNames.length > 1) {
-                    index = activeNames[activeNames.length - 1]
-                } else {
-                    index = activeNames[0]
-                }
-                console.log(index)
-                switch (index) {
-                    case '1':
-                        element = this.$refs.collapseItem1.$el
-                        break
-                    case '2':
-                        element = this.$refs.collapseItem2.$el
-                        break
-                    case '3':
-                        element = this.$refs.collapseItem3.$el
-                        break
-                }
-                if (element) {
-                    this.$refs.user_scroll.scrollToElement(element, 0)
-                }
-                this.$refs.user_scroll.refresh()
             },
             goToVideoInfo(video) {
                 this.$router.push(`/videoInfo/${video.id}`)
@@ -371,12 +341,32 @@
         width: 100%;
         height: 100%;
         overflow: hidden;
+        background: #fff
     }
     
     .user-container>>>.album-container {
         padding: 0;
-        margin-bottom: 0.4rem;
         color: $color-common-x;
+    }
+    
+    .user-container>>>.loading-container .van-loading {
+        background-color: #fff;
+    }
+    
+    .user-container>>>.van-skeleton {
+        padding: 0;
+    }
+    
+    .user-container>>>.van-skeleton__title {
+        height: 0.7rem;
+        line-height: 0.7rem;
+    }
+    
+    .user-container>>>.van-skeleton__row {
+        margin-top: 0.2rem;
+        width: 100% !important;
+        height: 0.6rem;
+        line-height: 0.6rem;
     }
     
     .user-container {
@@ -385,71 +375,99 @@
         height: 100%;
         display: flex;
         flex-direction: column;
-        background-color: $color-common-background;
         header {
             position: relative;
             width: 100%;
-            padding-bottom: 6rem;
+            padding-bottom: 7rem;
             height: 0;
             box-sizing: border-box;
-            background-image: linear-gradient(-20deg, #f794a4 0%, #fdd6bd 100%);
+            .triangle {
+                position: absolute;
+                left: 0;
+                bottom: -1px;
+                width: 100%;
+                height: 3.3rem;
+                background: conic-gradient(from 100deg at 0% 0, #fff 0, #fff 135deg, transparent 45deg);
+            }
             .header-container {
                 position: absolute;
                 top: 0;
                 left: 0;
                 width: 100%;
-                height: 6rem;
-                padding: 1.5rem 0 1rem;
+                height: 7rem;
+                padding-top: 1.5rem;
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
-                align-items: center;
+                background-position: center center;
+                background-size: 100% 100%;
+                transition: background-image 0.6s;
                 box-sizing: border-box;
-                .avatar {
-                    position: relative;
-                    width: 2rem;
-                    height: 0;
-                    padding-bottom: 2rem;
-                    background: #f4f4f4;
-                    border-radius: 50%;
-                    .image,
-                    .icon {
-                        position: absolute;
-                        left: 0;
-                        top: 0;
-                        right: 0;
-                        bottom: 0;
-                        img {
-                            display: block;
+                .triangle-container {
+                    display: flex;
+                    position: absolute;
+                    padding: 0 0.45rem;
+                    width: 100%;
+                    left: 0;
+                    bottom: 5%;
+                    flex-direction: column;
+                    z-index: 99;
+                    box-sizing: border-box;
+                    .avatar {
+                        margin-bottom: 0.2rem;
+                        width: 2.2rem;
+                        height: 2.2rem;
+                        background: #f4f4f4;
+                        border-radius: 50%;
+                        .image,
+                        .icon {
                             width: 100%;
                             height: 100%;
+                            background: $color-common-b;
                             border-radius: 50%;
+                            img {
+                                display: block;
+                                width: 100%;
+                                height: 100%;
+                                border-radius: 50%;
+                            }
+                        }
+                        .icon {
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 1rem;
+                            color: $color-common;
+                            border-radius: 50%;
+                            border: 0.02rem solid #fff;
+                            background: #fff;
+                            &.nologin {
+                                box-shadow: 0.05rem 0.08rem 0.08rem rgba(0 0 0, 7%);
+                            }
                         }
                     }
-                    .image {
-                        background: $color-common-b;
-                        border-radius: 50%;
+                    .nikeName {
+                        padding-left: 0.1rem;
+                        max-width: 8rem;
+                        height: 0.75rem;
+                        line-height: 0.75rem;
+                        no-wrap();
+                        .text {
+                            color: $color-common-x;
+                            font-weight: bold;
+                            font-size: $font-size-large-x;
+                        }
                     }
-                    .icon {
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        font-size: 1rem;
-                        color: $color-common;
-                        border-radius: 50%;
-                        border: 0.02rem solid #fff;
-                        background: #fff;
-                    }
-                }
-                .nikeName {
-                    max-width: 8rem;
-                    height: 0.9rem;
-                    line-height: 0.9rem;
-                    no-wrap();
-                    .text {
-                        color: #fff;
-                        font-weight: bold;
-                        font-size: $font-size-large-x;
+                    .personalSignature {
+                        padding-left: 0.1rem;
+                        max-width: 8rem;
+                        height: 0.75rem;
+                        line-height: 0.75rem;
+                        no-wrap();
+                        .text {
+                            color: $color-common-b2;
+                            font-size: $font-size-smaller;
+                        }
                     }
                 }
                 .edit {
@@ -471,13 +489,20 @@
                     align-items: center;
                 }
                 .no-login {
-                    margin-top: 0.5rem;
                     a {
+                        padding-left: 0.1rem;
                         display: block;
-                        height: 1rem;
-                        line-height: 1rem;
+                        height: 0.75rem;
+                        line-height: 0.75rem;
                         font-size: $font-size-small-x;
-                        color: #fff;
+                        color: #000;
+                    }
+                    .text {
+                        padding-left: 0.1rem;
+                        height: 0.75rem;
+                        line-height: 0.75rem;
+                        color: $color-common-b2;
+                        font-size: $font-size-smaller;
                     }
                 }
             }
@@ -487,15 +512,13 @@
             flex: 1;
             .user-index {
                 .my-list {
-                    padding: 0.4rem;
                     .my-list-item {
                         display: flex;
                         width: 100%;
                         height: 1.7rem;
-                        margin-bottom: 0.3rem;
-                        box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.1);
                         border-radius: 0.1rem;
                         color: $color-common-x;
+                        background-color: #fff;
                         .left-image {
                             display: flex;
                             justify-content: center;
@@ -521,8 +544,21 @@
                         }
                     }
                 }
-                .my-follow {
+                >.my-follow {
+                    .my-songSheet,
+                    .my-album,
+                    .my-video {
+                        padding: 0 0.4rem 0.4rem;
+                        background-color: #fff;
+                    }
+                    .my-album,
+                    .my-video {
+                        margin-top: 0.2rem;
+                    }
                     .title {
+                        margin-bottom: 0.2rem;
+                        height: 1rem;
+                        line-height: 1rem;
                         display: flex;
                         .text {
                             font-size: $font-size-smaller;

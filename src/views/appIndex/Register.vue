@@ -8,63 +8,30 @@
       <!-- 注册表单 -->
       <div class="register-form">
         <van-cell-group>
-          <van-field v-model="registerForm.nikeName"
-                     required
-                     label="用户名"
-                     :error-message="nikeNameErrMsg"
-                     placeholder="请输入用户名"
-                     maxlength="16" />
-          <van-field v-model="registerForm.phone"
-                     required
-                     type="tel"
-                     label="手机号"
-                     placeholder="请输入手机号"
-                     :error-message="phoneErrMsg"
-                     maxlength="11" />
-          <van-field v-model="password1"
-                     required
-                     label="密码"
-                     maxlength="16"
-                     :error-message="pwdErrMsg1"
-                     :type="pwdType"
-                     :right-icon="pwdIcon"
-                     @click-right-icon="handleShowPwd"
-                     placeholder="请输入密码" />
-          <van-field v-model="password2"
-                     required
-                     label="确认密码"
-                     :error-message="pwdErrMsg2"
-                     maxlength="16"
-                     type="password"
-                     placeholder="请输入确认密码" />
-          <van-field v-model="registerForm.captcha"
-                     required
-                     center
-                     clearable
-                     type="tel"
-                     maxlength="4"
-                     label="短信验证码"
-                     placeholder="请输入短信验证码">
-            <van-button slot="button"
-                        color="#FD4979"
-                        size="small"
-                        type="primary"
-                        :disabled="isDisabled "
-                        @click="handleSendSms">{{sendText}}
+          <van-field v-model="registerForm.nikeName" required label="用户名" :error-message="nikeNameErrMsg"
+            placeholder="请输入用户名" maxlength="16" />
+          <van-field v-model="registerForm.phone" required type="tel" label="手机号" placeholder="请输入手机号"
+            :error-message="phoneErrMsg" maxlength="11" />
+          <van-field v-model="password1" required label="密码" maxlength="16" :error-message="pwdErrMsg1" :type="pwdType"
+            :right-icon="pwdIcon" @click-right-icon="handleShowPwd" placeholder="请输入密码" />
+          <van-field v-model="password2" required label="确认密码" :error-message="pwdErrMsg2" maxlength="16"
+            type="password" placeholder="请输入确认密码" />
+          <van-field v-model="registerForm.captcha" required center clearable type="tel" maxlength="4" label="短信验证码"
+            placeholder="请输入短信验证码">
+            <van-button slot="button" color="#FD4979" size="small" type="primary" :disabled="isDisabled "
+              @click="handleSendSms">{{sendText}}
             </van-button>
           </van-field>
         </van-cell-group>
 
         <!-- 注册 -->
-        <div class="register"
-             @click="handleRegister">
+        <div class="register" @click="handleRegister">
           <btn text="注册"></btn>
         </div>
         <!-- 去登陆 -->
         <div class="other-wrapper">
           <span>已经有账号了?</span>
-          <router-link to="/appIndex/login"
-                       replace>去登陆</router-link>
+          <router-link to="/appIndex/login" replace>去登陆</router-link>
         </div>
       </div>
     </div>
@@ -136,29 +103,8 @@
             validForm() {
                 // 用户名
                 if (checkIsNull(this.registerForm.nikeName)) {
-                    this.$toast('昵称不能为空')
+                    this.$toast('用户名不能为空')
                     this.nikeNameErrMsg = NIKENAME_VALID_TEXT
-                    return false
-                }
-                // 手机号
-                if (checkIsNull(this.registerForm.phone)) {
-                    this.$toast('手机号不能为空')
-                    return false
-                }
-                // 密码
-                if (checkIsNull(this.password1)) {
-                    this.$toast('密码不能为空')
-                    this.pwdErrMsg1 = PASSWORD_VALID_TEXT
-                    return false
-                }
-                // 确认密码
-                if (checkIsNull(this.password2)) {
-                    this.$toast('确认密码不能为空')
-                    return false
-                }
-                // 验证码
-                if (checkIsNull(this.registerForm.captcha)) {
-                    this.$toast('验证码不能为空')
                     return false
                 }
                 // 验证用户名
@@ -166,14 +112,36 @@
                     this.nikeNameErrMsg = NIKENAME_VALID_TEXT
                     return false
                 }
+                // 清空错误提示
+                this.nikeNameErrMsg = ''
+                    // 手机号
+                if (checkIsNull(this.registerForm.phone)) {
+                    this.$toast('手机号不能为空')
+                    return false
+                }
                 // 验证手机号
                 if (!checkPhone(this.registerForm.phone)) {
                     this.phoneErrMsg = '手机号格式有误, 请输入正确的手机号'
                     return false
                 }
+                // 清空错误提示
+                this.phoneErrMsg = ''
+                    // 密码
+                if (checkIsNull(this.password1)) {
+                    this.$toast('密码不能为空')
+                    this.pwdErrMsg1 = PASSWORD_VALID_TEXT
+                    return false
+                }
                 // 验证密码
                 if (!checkPassword(this.password1)) {
                     this.pwdErrMsg1 = PASSWORD_VALID_TEXT
+                    return false
+                }
+                // 清空错误提示
+                this.pwdErrMsg1 = ''
+                    // 确认密码
+                if (checkIsNull(this.password2)) {
+                    this.$toast('确认密码不能为空')
                     return false
                 }
                 // 比较二次密码
@@ -182,7 +150,15 @@
                     return false
                 }
                 // 清空错误提示
+                this.pwdErrMsg2 = ''
+                    // 验证码
+                if (checkIsNull(this.registerForm.captcha)) {
+                    this.$toast('验证码不能为空')
+                    return false
+                }
+                // 清空错误提示
                 this.phoneErrMsg = ''
+                this.nikeNameErrMsg = ''
                 this.pwdErrMsg1 = ''
                 this.pwdErrMsg2 = ''
                 return true

@@ -6,7 +6,7 @@ export function convertCount(num) {
     if (number.length > 8) { // 转换成亿
         number = parseFloat(number / 100000000).toFixed(1) + '亿'
     } else if (number.length > 4) { // 转换成万
-        number = parseFloat(number / 10000).toFixed(1) + '万'
+        number = parseInt(number / 10000) + '万'
     }
 
     return number

@@ -13,7 +13,7 @@
                   <!-- 播放次数 -->
                   <div class="play-count">
                     <i class="iconfont icon-bofang"></i>
-                    {{videoParams.playCount|convertCount}}
+                    <span>{{videoParams.playCount|convertCount}}</span>
                   </div>
                 </div>
               </div>
@@ -123,16 +123,29 @@
                         left: 0;
                         .controller-box {
                             width: 100%;
-                            height: 1.3rem;
-                            padding: 0 0.3rem;
                             box-sizing: border-box;
                             .play-count {
                                 font-size: $font-size-smaller-x;
                             }
                             .play-controller {
-                                text-align: right;
-                                line-height: 1.3rem;
                                 color: #fff;
+                                .play-right {
+                                    display: flex;
+                                    justify-content: flex-end;
+                                    .play-count {
+                                        padding: 0.07rem 0.25rem;
+                                        height: 0.6rem;
+                                        display: flex;
+                                        align-items: center;
+                                        border-radius: 0 0.2rem 0 0.2rem;
+                                        background-color: rgba(0, 0, 0, 0.35);
+                                        font-size: $font-size-smaller-x;
+                                        i {
+                                            font-size: $font-size-smaller-x;
+                                            margin-right: 0.1rem;
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
