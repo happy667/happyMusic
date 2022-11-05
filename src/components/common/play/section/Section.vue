@@ -89,6 +89,7 @@
                             console.log(1234)
                                 // 先解析歌词
                             let lyric = this.parseLyric(res.lrc.lyric)
+                            let tlyric = this.parseLyric(res.tlyric.lyric)
                                 // 创建lyric对象对歌词进行处理
                             let currentLyric = new Lyric(lyric, this.handleLyric)
                             if (res.tlyric) { //翻译歌词
