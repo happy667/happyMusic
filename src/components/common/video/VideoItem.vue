@@ -67,9 +67,9 @@
                 align-items: center;
                 border-radius: 0 0.2rem 0 0.2rem;
                 background-color: rgba(0, 0, 0, 0.4);
-                font-size: $font-size-mini-x;
+                font-size: $font-size-mini;
                 i {
-                    font-size: $font-size-mini-x;
+                    font-size: $font-size-mini;
                     margin-right: 0.1rem;
                 }
             }

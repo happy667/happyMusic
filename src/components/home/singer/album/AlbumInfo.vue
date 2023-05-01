@@ -508,7 +508,7 @@
                                 border-radius: 0.2rem 0 0.2rem 0;
                                 z-index: 3;
                                 padding: 0.07rem 0.15rem;
-                                font-size: $font-size-mini-x;
+                                font-size: $font-size-mini;
                                 background-color: rgba(0, 0, 0, .45);
                             }
                         }

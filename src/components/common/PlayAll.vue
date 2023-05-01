@@ -31,7 +31,7 @@ export default {
   .play-icon {
     font-size: $font-size-large-x;
     color: $color-common;
-    margin-right: 0.2rem;
+    margin-right: 0.18rem;
 
     i {
       line-height: inherit;

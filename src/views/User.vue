@@ -1,41 +1,56 @@
 <template>
   <div class="user-container"
-    :style="(user&&$utils.isLogin())?'':'background-image:linear-gradient(-20deg, #f794a4 0%, #fdd6bd 100%)'">
+       :style="(user&&$utils.isLogin())?'':'background-image:linear-gradient(-20deg, #f794a4 0%, #fdd6bd 100%)'">
     <header>
-      <div class="header-container" v-lazy:background-image="user?user.backgroundUrl:''">
-        <div class="back" @click="routerBack">
+      <div class="header-container"
+           v-lazy:background-image="user?user.backgroundUrl:''">
+        <div class="back"
+             @click="routerBack">
           <van-icon name="arrow-left" />
         </div>
         <div class="triangle-container">
           <!-- 头像 -->
           <div class="avatar">
-            <div class="image" v-if="user">
-              <img v-lazy="user.avatarUrl" class="animated fadeIn">
+            <div class="image"
+                 v-if="user">
+              <img v-lazy="user.avatarUrl"
+                   class="animated fadeIn">
             </div>
-            <div :class="user?'icon':'nologin icon'" @click="$router.push({name:'index'})" v-else>
+            <div :class="user?'icon':'nologin icon'"
+                 @click="$router.push({name:'index'})"
+                 v-else>
               <van-icon name="user-o" />
             </div>
           </div>
-          <van-skeleton title :row="1" :loading="skeletonLoad" row-width="100%">
+          <van-skeleton title
+                        :row="1"
+                        :loading="skeletonLoad"
+                        row-width="100%">
             <!-- 昵称 -->
-            <div class="nikeName" v-if="user">
+            <div class="nikeName"
+                 v-if="user">
               <div class="text"> {{user.nickname}}</div>
             </div>
             <!-- 签名 -->
-            <div class="personalSignature" v-if="user">
+            <div class="personalSignature"
+                 v-if="user">
               <div class="text"> {{user.signature}}</div>
             </div>
 
-            <div class="no-login" v-else>
-              <router-link :to="{name:'index'}">登录/注册</router-link>
+            <div class="no-login"
+                 v-else>
+              <router-link :to="{name:'index'}">登录 / 注册</router-link>
               <div class="text"> 立即登录，体验更多功能</div>
             </div>
           </van-skeleton>
         </div>
 
-        <div class="edit" v-if="user">
-          <div class="icon" @click="handleEdit">
-            <van-icon name="setting-o" size="25" />
+        <div class="edit"
+             v-if="user">
+          <div class="icon"
+               @click="handleEdit">
+            <van-icon name="setting-o"
+                      size="25" />
           </div>
         </div>
       </div>
@@ -43,7 +58,8 @@
     </header>
     <section>
       <scroll ref="user_scroll">
-        <div class="user-index" ref="container">
+        <div class="user-index"
+             ref="container">
           <div class="my-list ">
             <router-link to="/user/myFollow">
               <div class="my-follow my-list-item ">
@@ -63,7 +79,8 @@
                 </div>
                 <div class="right-info">
                   <div class="title">我的最爱</div>
-                  <div class="num" v-show="userCount">{{myLikeCount}}</div>
+                  <div class="num"
+                       v-show="userCount">{{myLikeCount}}</div>
                 </div>
 
               </div>
@@ -97,37 +114,46 @@
                   <div class="text">我的歌单</div>
                   <span class="count">({{songSheetCount}}个)</span>
                 </div>
-                <song-sheet-mini-list v-if="userSongSheet" :list="userSongSheet"></song-sheet-mini-list>
+                <song-sheet-mini-list v-if="userSongSheet"
+                                      :list="userSongSheet"></song-sheet-mini-list>
                 <template v-if="userSongSheet&&userSongSheet.length===0">
                   <no-result text="还没有歌单,快去收藏吧"></no-result>
                 </template>
-</div>
-<div class="my-album">
-    <div class="title" v-show="userSongSheet">
-        <div class="text">我的专辑</div>
-        <span class="count">({{albumCount}}个)</span>
-    </div>
+              </div>
+              <div class="my-album">
+                <div class="title"
+                     v-show="userSongSheet">
+                  <div class="text">我的专辑</div>
+                  <span class="count">({{albumCount}}个)</span>
+                </div>
 
-    <album-list :list="userAlbum" v-if="userAlbum" @select="selectItem" showSongSize showFunctions :showTime="false">
-    </album-list>
-    <template v-if="userAlbum&&userAlbum.length===0">
+                <album-list :list="userAlbum"
+                            v-if="userAlbum"
+                            @select="selectItem"
+                            showSongSize
+                            showFunctions
+                            :showTime="false">
+                </album-list>
+                <template v-if="userAlbum&&userAlbum.length===0">
                   <no-result text="还没有专辑,快去收藏吧"></no-result>
                 </template>
-</div>
+              </div>
 
-<div class="my-video">
-    <div class="title" v-show="userAlbum">
-        <div class="text">我的视频</div>
-        <span class="count">({{videoCount}}个)</span>
-    </div>
+              <div class="my-video">
+                <div class="title"
+                     v-show="userAlbum">
+                  <div class="text">我的视频</div>
+                  <span class="count">({{videoCount}}个)</span>
+                </div>
 
-    <video-list @select="goToVideoInfo" :list="userVideo"></video-list>
-    <template v-if="userVideo&&userVideo.length===0">
+                <video-list @select="goToVideoInfo"
+                            :list="userVideo"></video-list>
+                <template v-if="userVideo&&userVideo.length===0">
                   <no-result text="还没有视频,快去收藏吧"></no-result>
                 </template>
-</div>
-</div>
-</template>
+              </div>
+            </div>
+          </template>
 <!-- loading -->
 <loading :loading="load" />
 </div>

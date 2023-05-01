@@ -404,145 +404,205 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable'
-@keyframes wordsLoop
-  0%
-    transform translate3d(110%, 0, 0)
-  100%
-    transform translate3d(-110%, 0, 0)
-.video-container>>>.van-loading
-  position absolute
-  width 100%
-  z-index 90
-  background $color-common-b
-.video-container
-  width 100%
-  background $color-common-background
-  .player
-    position relative
-    width 100%
-    height 5rem
-    &.full
-      position absolute
-      left 0
-      top 0
-      z-index 999
-    .cover-image
-      position absolute
-      top 0
-      left 0
-      width 100%
-      height 100%
-      z-index 10
-      img
-        display block
-        width 100%
-        height 100%
-    .videoBox
-      position absolute
-      left 0
-      top 0
-      width 100%
-      height 100%
-      video
-        display block
-        width 1px
-        height 100%
-        object-fit fill
-        object-position center center
-      .cover-controller
-        position absolute
-        width 100%
-        height 100%
-        top 0
-        left 0
-        z-index 10
-        .big-btn
-          position absolute
-          top 50%
-          left 50%
-          margin-left -1rem
-          margin-top -1rem
-          width 2rem
-          height 2rem
-          background rgba(255, 255, 255, 0)
-          display flex
-          align-items center
-          justify-content center
-          .van-icon
-            display block
-            color #fff
-            font-size 2rem
-            opacity 0.7
-        .top-container
-          position absolute
-          width 100%
-          top 0
-          left 0
-          display flex
-          height 1.2rem
-          line-height 1.2rem
-          color #fff
-          box-sizing border-box
-          overflow hidden
-          .back
-            width 1rem
-            height 100%
-            display flex
-            justify-content center
-            align-items center
-            font-size $font-size-small
-            overflow hidden
-          .title
-            no-wrap()
-            font-size $font-size-smaller
-            overflow hidden
-            width 100%
-            p.active
-              animation 5s wordsLoop linear infinite normal
-        .bottom-controller
-          position absolute
-          width 100%
-          bottom 0
-          left 0
-          padding 0 0.2rem 0 0.3rem
-          box-sizing border-box
-          .controller-box
-            width 100%
-            height 1.2rem
-            line-height 1.2rem
-            box-sizing border-box
-            transition all 0.5s
-            .play-controller
-              display flex
-              justify-content space-between
-              color #fff
-              .play-left
-                .play-count
-                  display flex
-                  font-size $font-size-smaller-x
-                  i
-                    margin-right 0.1rem
-                    font-size $font-size-smaller-x
-              .play-right
-                text-align center
-                .play-time
-                  display flex
-                  i
-                    margin-right 0.1rem
-                .full
-                  width 1rem
-                  font-size $font-size-small
-    .progress
-      position absolute
-      bottom 0
-      left 0
-      width 100%
-      z-index 10
-      transition all 0.5s
-      .button
-        width 0.25rem
-        height 0.25rem
-        border-radius 50%
-        background $color-common
+@import '~common/stylus/variable';
+
+@keyframes wordsLoop {
+  0% {
+    transform: translate3d(110%, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(-110%, 0, 0);
+  }
+}
+
+.video-container>>>.van-loading {
+  position: absolute;
+  width: 100%;
+  z-index: 90;
+  background: $color-common-b;
+}
+
+.video-container {
+  width: 100%;
+  background: $color-common-background;
+
+  .player {
+    position: relative;
+    width: 100%;
+    height: 5rem;
+
+    &.full {
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: 999;
+    }
+
+    .cover-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+
+      img {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .videoBox {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+
+      video {
+        display: block;
+        width: 1px;
+        height: 100%;
+        object-fit: fill;
+        object-position: center center;
+      }
+
+      .cover-controller {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 10;
+
+        .big-btn {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          margin-left: -1rem;
+          margin-top: -1rem;
+          width: 2rem;
+          height: 2rem;
+          background: rgba(255, 255, 255, 0);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          .van-icon {
+            display: block;
+            color: #fff;
+            font-size: 2rem;
+            opacity: 0.7;
+          }
+        }
+
+        .top-container {
+          position: absolute;
+          width: 100%;
+          top: 0;
+          left: 0;
+          display: flex;
+          height: 1.2rem;
+          line-height: 1.2rem;
+          color: #fff;
+          box-sizing: border-box;
+          overflow: hidden;
+
+          .back {
+            width: 1rem;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: $font-size-small;
+            overflow: hidden;
+          }
+
+          .title {
+            no-wrap();
+            font-size: $font-size-smaller;
+            overflow: hidden;
+            width: 100%;
+
+            p.active {
+              animation: 5s wordsLoop linear infinite normal;
+            }
+          }
+        }
+
+        .bottom-controller {
+          position: absolute;
+          width: 100%;
+          bottom: 0;
+          left: 0;
+          padding: 0 0.2rem 0 0.3rem;
+          box-sizing: border-box;
+
+          .controller-box {
+            width: 100%;
+            height: 1.2rem;
+            line-height: 1.2rem;
+            box-sizing: border-box;
+            transition: all 0.5s;
+
+            .play-controller {
+              display: flex;
+              justify-content: space-between;
+              color: #fff;
+
+              .play-left {
+                .play-count {
+                  display: flex;
+                  font-size: $font-size-smaller-x;
+
+                  i {
+                    margin-right: 0.1rem;
+                    font-size: $font-size-smaller-x;
+                  }
+                }
+              }
+
+              .play-right {
+                text-align: center;
+                font-size: $font-size-smaller-x;
+
+                .play-time {
+                  display: flex;
+
+                  i {
+                    font-size: $font-size-smaller;
+                    margin-right: 0.1rem;
+                  }
+                }
+
+                .full {
+                  width: 1rem;
+                  font-size: $font-size-small;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .progress {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      z-index: 10;
+      transition: all 0.5s;
+
+      .button {
+        width: 0.25rem;
+        height: 0.25rem;
+        border-radius: 50%;
+        background: $color-common;
+      }
+    }
+  }
+}
 </style>

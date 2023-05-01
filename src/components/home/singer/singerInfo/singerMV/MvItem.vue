@@ -67,12 +67,12 @@
                 height: 0.6rem;
                 line-height: 0.6rem;
                 color: #fff;
-                font-size: $font-size-mini-x;
+                font-size: $font-size-mini;
                 border-radius: 0 0 0.1rem 0.1rem;
                 z-index: 99;
                 i {
                     margin-right: 0.1rem;
-                    font-size: $font-size-mini-x;
+                    font-size: $font-size-mini;
                 }
             }
             .layer {

@@ -138,7 +138,7 @@
         .functions {
             padding: 0 0 0.2rem 0.4rem;
             .icon {
-                margin-right: 0.6rem;
+                margin-right: 0.4rem;
                 font-size: $font-size-smaller;
             }
             .text {

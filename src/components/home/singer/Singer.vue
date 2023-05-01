@@ -176,7 +176,7 @@
 <style lang="stylus" scoped>
     @import '~common/stylus/variable';
     .singer-container .item>>>.follow-container {
-        font-size: $font-size-mini-x;
+        font-size: $font-size-mini;
     }
     
     .singer-container {

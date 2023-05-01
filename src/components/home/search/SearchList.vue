@@ -25,7 +25,7 @@
 <style lang="stylus" scoped>
     @import '~common/stylus/variable';
     .list {
-        padding: 0.15rem 0;
+        padding: 0.35rem 0;
         display: flex;
         flex-wrap: wrap;
         max-height: 10rem;

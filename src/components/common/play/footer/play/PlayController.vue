@@ -14,7 +14,7 @@
     <!-- 播放暂停 -->
     <div class="play icon"
          @click="handleTogglePlaying">
-      <van-icon :name="playIcon" size="50"  />
+      <van-icon :name="playIcon" size="56"  />
     </div>
     <!--下一曲-->
     <div class="next icon"

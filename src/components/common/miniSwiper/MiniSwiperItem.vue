@@ -68,7 +68,7 @@
                 }
                 .icon {
                     position: absolute;
-                    right: 0.25rem;
+                    right: 0.1rem;
                     bottom: 0rem;
                     font-size: 0.8rem;
                     color: #fff;

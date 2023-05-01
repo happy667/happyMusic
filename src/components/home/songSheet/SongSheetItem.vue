@@ -53,12 +53,12 @@
                 line-height: 0.5rem;
                 border-radius: 0 0.3rem 0 0.3rem;
                 color: #fff;
-                font-size: $font-size-mini-x;
+                font-size: $font-size-mini;
                 no-wrap();
                 z-index: 1;
                 background-color: rgba(0, 0, 0, .45);
                 i {
-                    font-size: $font-size-mini-x;
+                    font-size: $font-size-mini;
                 }
             }
             img {

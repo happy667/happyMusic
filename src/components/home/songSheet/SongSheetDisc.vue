@@ -612,7 +612,7 @@
                                         border-radius: 0.2rem 0 0.2rem 0;
                                         color: #fff;
                                         background-color: rgba(0, 0, 0, .45);
-                                        font-size: $font-size-mini-x;
+                                        font-size: $font-size-mini;
                                         no-wrap();
                                         z-index: 10;
                                         i {
