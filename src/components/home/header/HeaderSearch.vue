@@ -9,7 +9,7 @@
     <!-- 搜索框 -->
     <div class="search"
          @click="handleSearchClick">
-      <van-search disabled
+      <van-search 
                   left-icon=""
                   right-icon="search"
                   shape="round"
@@ -48,6 +48,7 @@
             handleSearchClick() {
                 // 清空搜索内容
                 this.setSearchKeywords('')
+                console.log('点击搜索')
                 this.$router.push('/search/searchPage')
             },
             goToMyHome() {

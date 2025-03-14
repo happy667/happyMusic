@@ -47,7 +47,7 @@
         align-items: center;
         padding: 0.2rem 0.4rem;
         border-radius: 0.5rem;
-        font-size: $font-size-mini;
+        font-size: $font-size-smaller-x;
         background: $color-common;
         color: #fff;
         &.plain {

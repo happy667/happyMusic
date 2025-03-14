@@ -40,7 +40,7 @@
             height: 1rem;
             line-height: 1rem;
             font-weight: bold;
-            font-size: $font-size-smaller-x;
+            font-size: $font-size-smaller;
         }
         .viewMore {
             display: flex;
