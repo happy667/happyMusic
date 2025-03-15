@@ -82,7 +82,7 @@
         font-size: $font-size-smaller-x;
         border-bottom: 0.02rem solid #efefef;
         i {
-            font-size: $font-size-smaller-x;
+            font-size: $font-size-smaller;
         }
         .left {
             height: 1.2rem;

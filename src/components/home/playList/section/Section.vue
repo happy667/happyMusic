@@ -27,7 +27,7 @@
             <div class="right delete"
                  @click.stop="handleDelete(item)">
               <div class="icon">
-                <van-icon name="cross" size="14" />
+                <van-icon name="cross" size="16" />
               </div>
             </div>
           </li>

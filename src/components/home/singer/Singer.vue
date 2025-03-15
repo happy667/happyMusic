@@ -175,9 +175,7 @@
 </script>
 <style lang="stylus" scoped>
     @import '~common/stylus/variable';
-    .singer-container .item>>>.follow-container {
-        font-size: $font-size-mini;
-    }
+ 
     
     .singer-container {
         position: absolute;

@@ -176,12 +176,14 @@ export default {
   height: 100%;
   overflow: hidden;
 }
+
 .search-box-container>>>.van-search {
   position: absolute;
   width: 100%;
   height: 100%;
   overflow: hidden;
 }
+
 .search-box-container {
   position: relative;
   flex: 1;
@@ -213,7 +215,8 @@ export default {
       padding: 0;
 
       .hot-search-list {
-        padding:0.1rem 0 0.5rem;
+        padding: 0.1rem 0 0.2rem;
+
         .hot-search-list-item {
           padding: 0.15rem 0;
           display: flex;
@@ -260,7 +263,8 @@ export default {
                 .name {
                   color: $color-common-x;
                   font-size: $font-size-smaller-x;
-                  margin-right: 0.15rem;
+                  margin-right: 0.1rem;
+                  height: 0.5rem;
                   no-wrap();
                 }
 
@@ -278,6 +282,8 @@ export default {
 
               .bottom {
                 font-size: $font-size-mini;
+                height: 0.5rem;
+                line-height: 0.5rem;
                 no-wrap();
               }
             }

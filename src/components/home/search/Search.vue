@@ -215,6 +215,7 @@ export default {
     },
     // 输入搜索内容
     handleInput: utils.debounce(function () {
+      console.log('输入搜索内容')
       if (this.searchKeywords.trim().length === 0) {
         this.closeSearchList()
       } else {

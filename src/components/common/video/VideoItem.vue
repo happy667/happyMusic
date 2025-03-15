@@ -65,7 +65,7 @@
                 padding: 0.07rem 0.15rem;
                 display: flex;
                 align-items: center;
-                border-radius: 0 0.2rem 0 0.2rem;
+                border-radius: 0 0.1rem 0 0.1rem;
                 background-color: rgba(0, 0, 0, 0.4);
                 font-size: $font-size-mini;
                 i {
