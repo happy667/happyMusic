@@ -116,16 +116,12 @@
                 </div>
                 <song-sheet-mini-list v-if="userSongSheet"
                                       :list="userSongSheet"></song-sheet-mini-list>
-                <template>
-                  <no-result text="还没有歌单,快去收藏吧"></no-result>
-                </template>
-                <template v-if="userSongSheet&&userSongSheet.length===0">
+                <template v-if="userSongSheet.length===0">
                   <no-result text="还没有歌单,快去收藏吧"></no-result>
                 </template>
               </div>
               <div class="my-album">
-                <div class="title"
-                     v-show="userSongSheet">
+                <div class="title">
                   <div class="text">我的专辑</div>
                   <span class="count">({{albumCount}}个)</span>
                 </div>
@@ -137,24 +133,20 @@
                             showFunctions
                             :showTime="false">
                 </album-list>
-                <!-- <template v-if="userAlbum&&userAlbum.length===0">
-                  <no-result text="还没有歌单,快去收藏吧"></no-result>
-                </template> -->
-                <template>
+                <template v-if="userAlbum.length===0">
                   <no-result text="还没有专辑,快去收藏吧"></no-result>
                 </template>
               </div>
 
               <div class="my-video">
-                <div class="title"
-                     v-show="userAlbum">
+                <div class="title">
                   <div class="text">我的视频</div>
                   <span class="count">({{videoCount}}个)</span>
                 </div>
 
                 <video-list @select="goToVideoInfo"
                             :list="userVideo"></video-list>
-                <template v-if="userVideo&&userVideo.length===0">
+                <template v-if="userVideo.length===0">
                   <no-result text="还没有视频,快去收藏吧"></no-result>
                 </template>
               </div>
@@ -194,9 +186,9 @@ export default {
     return {
       load: this.$utils.isLogin() ? true : false,
       userCount: null,
-      userSongSheet: null, // 用户歌单
-      userAlbum: null, // 用户专辑
-      userVideo: null, // 用户视频
+      userSongSheet: [], // 用户歌单
+      userAlbum: [], // 用户专辑
+      userVideo: [], // 用户视频
       activeNames: ['1', '2', '3']
     }
   },
@@ -254,7 +246,6 @@ export default {
     //获取页面所有数据
     async getAllData () {
       if (this.user) {
-        return;//临时
         // 获取用户专辑歌单数量
         this.getUserCount()
         // 获取用户收藏的歌单

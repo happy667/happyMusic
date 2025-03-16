@@ -5,7 +5,7 @@
     </div>
     <div class="play-all"
          @click="$emit('play')">
-      播放全部({{length}})
+      <span>播放全部({{length}})</span>
     </div>
   </div>
 </template>
@@ -25,8 +25,6 @@ export default {
 .play-all-container {
   display: flex;
   padding-left: 0.4rem;
-  height: 0.8rem;
-  line-height: 0.8rem;
 
   .play-icon {
     font-size: $font-size-large-x;
@@ -34,12 +32,16 @@ export default {
     margin-right: 0.1rem;
 
     i {
-      line-height: inherit;
+      height: 0.8rem;
+      line-height: 0.8rem;
     }
   }
 
   .play-all {
+    display: flex;
     font-size: $font-size-smaller;
+    height: 0.8rem;
+    line-height: 0.8rem;
   }
 }
 </style>

@@ -111,5 +111,5 @@ export const NEED_LOGIN_COMPONENTS = [ // 存放路由name属性
 
 export const DEFAULT_IMAGE = 'http://s4.music.126.net/style/web2/img/default/default_album.jpg?param=130y130'
 export const DEFAULT_SINGER_IMAGE = 'https://p2.music.126.net/VnZiScyynLG7atLIZ2YPkw==/18686200114669622.jpg'
-export const LOGO_IMAGE = '/assets/images/Logo.png'
+export const LOGO_IMAGE = '/assets/images/logo.png'
 export const LOGO_INDEX_IMAGE = 'src/assets/images/logoIndex.png'

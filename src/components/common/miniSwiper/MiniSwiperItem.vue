@@ -3,7 +3,7 @@
     <div class="mini-swiper-item">
       <div class="image-wrapper">
         <div class="image animated fadeIn">
-          <img :data-src="item.picUrl" class="swiper-lazy" :key="item.picUrl">
+          <img :data-src="item.picUrl" class="swiper-lazy animated fadeIn" :key="item.picUrl">
           <div class="icon">
             <van-icon name="play-circle-o" />
           </div>
@@ -57,7 +57,6 @@
                     width: 100%;
                     height: 100%;
                     border-radius: 0.3rem;
-                    box-shadow: 0 0.1rem #fff;
                     img {
                         display: block;
                         width: 100%;

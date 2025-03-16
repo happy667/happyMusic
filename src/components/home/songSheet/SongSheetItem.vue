@@ -4,7 +4,7 @@
       <div class="songs-playCount" v-if="playCount">
         <i class="iconfont icon-bofang"></i> {{playCount|convertCount}}
       </div>
-      <img v-lazy="picUrl" class="animated fadeIn" :key="picUrl">
+      <img v-lazy="picUrl" :key="picUrl">
     </div>
     <div class="songs-desc">{{songSheet.name}}</div>
 
