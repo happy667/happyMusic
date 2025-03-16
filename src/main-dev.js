@@ -14,7 +14,7 @@ import '@/assets/common/js/globalComponents.js'
 
 // 插件
 import './plugins/vant.js'
-import './plugins/vueLazyLoad.js'
+import 'vue-lazyload'
 // 解决移动端300ms延迟
 import fastclick from 'fastclick'
 
@@ -22,7 +22,7 @@ Vue.config.productionTip = false
 Vue.use(animate)
 fastclick.attach(document.body)
 new Vue({
-  router,
-  store,
-  render: h => h(App)
+    router,
+    store,
+    render: h => h(App)
 }).$mount('#app')

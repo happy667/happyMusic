@@ -53,6 +53,10 @@ export default {
       width: 46%;
       margin-bottom: 0.6rem;
     }
+
+    .songs-sheet-list-item:nth-last-child(-n+2) {
+      margin-bottom: 0.4rem;
+    }
   }
 }
 </style>

@@ -19,7 +19,7 @@ export default class User {
         this.city = city
         this.createDays = createDays
         this.createTime = createTime
-        this.birthday = birthday,
-            this.backgroundUrl = backgroundUrl
+        this.birthday = birthday
+        this.backgroundUrl = backgroundUrl
     }
 }

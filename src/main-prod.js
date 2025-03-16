@@ -7,9 +7,8 @@ import 'common/stylus/index.styl'
 import '@/assets/common/font/iconfont.css'
 import '@/assets/common/js/utils.js'
 import '@/assets/common/js/globalComponents.js'
-import './plugins/vueLazyLoad.js'
+import 'vue-lazyload'
 Vue.config.productionTip = false
-
 new Vue({
     router,
     store,
