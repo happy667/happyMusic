@@ -88,7 +88,7 @@ export default {
 <style lang="stylus" scoped>
 .song-sheet-square-swiper-container {
   .swiper-container {
-    padding: 0.5rem 0.3rem 0.65rem;
+    padding: 0.5rem 0.3rem 0.4rem;
 
     .swiper-slide {
       display: flex;

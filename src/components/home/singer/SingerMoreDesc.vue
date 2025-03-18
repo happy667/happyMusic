@@ -124,7 +124,7 @@
       flex: 1;
 
       .container {
-        padding: 0.4rem;
+        padding: 0.4rem 0.4rem 0;
 
         .context {
           margin: 0.4rem 0;

@@ -6,7 +6,7 @@
       <section class="container"
                ref="container">
         <!-- 历史搜索 -->
-        <div class="oldSearch"
+        <div class="old-search"
              v-if="localSearchList&&localSearchList.length!==0">
           <!-- 搜索头部 -->
           <div class="search-list-header">
@@ -20,7 +20,7 @@
                        @select="selectItem"></search-list>
         </div>
         <!-- 热门搜索 -->
-        <div class="recommend-Search">
+        <div class="recommend-search">
           <!-- 搜索头部 -->
           <div class="search-list-header">
             <p class="title">热门搜索</p>
@@ -193,14 +193,23 @@ export default {
   .container {
     padding: 0 0.4rem;
 
+    .old-search {
+      margin-bottom: 0.2rem;
+
+      .search-list-header {
+        margin-bottom: 0.2rem;
+      }
+    }
+
     .search-list-header {
       display: flex;
       justify-content: space-between;
 
       .title {
         font-weight: bold;
-        line-height: 0.4rem;
-        font-size: $font-size-smaller-x;
+        height: 0.7rem;
+        line-height: 0.7rem;
+        font-size: $font-size-smaller;
       }
 
       .icon {
@@ -211,11 +220,11 @@ export default {
       }
     }
 
-    .recommend-Search {
+    .recommend-search {
       padding: 0;
 
       .hot-search-list {
-        padding: 0.1rem 0 0.2rem;
+        padding-bottom: 0.2rem;
 
         .hot-search-list-item {
           padding: 0.15rem 0;

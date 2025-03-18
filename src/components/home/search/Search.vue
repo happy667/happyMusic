@@ -35,7 +35,9 @@
             {{item}}
           </li>
         </ul>
-        <div class="close-search-list" v-show="searchList&&searchList.length>0" @click="closeSearchList">关闭</div>
+        <div class="close-search-list"
+             v-show="searchList&&searchList.length>0"
+             @click="closeSearchList">关闭</div>
       </section>
 
       <router-view></router-view>
@@ -249,45 +251,60 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable'
-.van-search
-  height 1.8rem
-  padding 0.25rem 0.4rem
-  box-sizing border-box
-.search-container
-  width 100%
-  min-height 100vh
-  background $color-common-background
-  display flex
-  flex-direction column
-  .container
-    display flex
-    flex 1
-    flex-direction column
-    .search-list-container
-      position absolute
-      top 2.5rem
-      background $color-common-background
-      width 100%
-      padding 0 0.4rem
-      box-sizing border-box
-      max-height 8rem
-      z-index 99
-      box-shadow 0 0.3rem 0.25rem rgba(0, 0, 0, 0.04)
-      .search-list
-        .search-list-item
-          display flex
-          line-height 1rem
-          height 1rem
-          font-size $font-size-smaller-x
-          color $color-common-x
-          .icon
-            margin-right 0.2rem
-            font-size 0.45rem
-      .close-search-list
-        text-align center
-        line-height 1rem
-        height 1rem
-        font-size 0.35rem
-        color #23203f
+@import '~common/stylus/variable';
+
+.van-search {
+  height: 1.8rem;
+  padding: 0.25rem 0.1rem 0rem 0.25rem;
+  box-sizing: border-box;
+}
+
+.search-container {
+  width: 100%;
+  min-height: 100vh;
+  background: $color-common-background;
+  display: flex;
+  flex-direction: column;
+
+  .container {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+
+    .search-list-container {
+      position: absolute;
+      top: 2.5rem;
+      background: $color-common-background;
+      width: 100%;
+      padding: 0 0.4rem;
+      box-sizing: border-box;
+      max-height: 8rem;
+      z-index: 99;
+      box-shadow: 0 0.3rem 0.25rem rgba(0, 0, 0, 0.04);
+
+      .search-list {
+        .search-list-item {
+          display: flex;
+          line-height: 1rem;
+          height: 1rem;
+          font-size: $font-size-smaller-x;
+          color: $color-common-x;
+
+          .icon {
+            margin-right: 0.2rem;
+            font-size: 0.45rem;
+          }
+        }
+      }
+
+      .close-search-list {
+        text-align: center;
+        line-height: 1rem;
+        height: 1rem;
+        font-size: 0.35rem;
+        color: #23203f;
+      }
+    }
+  }
+}
 </style>

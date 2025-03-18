@@ -4,7 +4,7 @@
       <div class="left">
         <!-- 歌手头像 -->
         <div class="singer-avatar">
-          <my-image :src="avatar" class="animated fadeIn" :size="imageSize"></my-image>
+          <my-image :src="avatar" :size="imageSize"></my-image>
         </div>
         <!-- 歌手信息 -->
         <article class="singer-info">
@@ -132,7 +132,7 @@
   
     
     .singer-list-item-container {
-        padding: 0.25rem 0.4rem;
+        padding: 0.2rem 0.4rem;
         .singer-list-item {
             display: flex;
             align-items: center;

@@ -46,7 +46,7 @@
         margin-bottom: 0.3rem;
         .video-img {
             position: relative;
-            height: 1.7rem;
+            height: 1.62rem;
             width: 2.9rem;
             background: $color-common-b;
             flex: none;
@@ -83,7 +83,7 @@
             justify-content: center;
             .video-title {
                 color: $color-common-x;
-                line-height: 0.5rem;
+                line-height: 0.6rem;
                 no-wrap2();
                 font-size: $font-size-smaller-x;
             }

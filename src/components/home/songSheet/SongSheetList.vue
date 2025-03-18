@@ -1,5 +1,5 @@
 <template>
-  <div class="songs-sheet-list-container">
+  <div class="song-sheet-list-container">
     <slot></slot>
 
     <template v-if="list&&list.length!==0">
@@ -40,7 +40,7 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.songs-sheet-list-container {
+.song-sheet-list-container {
   width: 100%;
 
   .songs-sheet-list {
@@ -51,7 +51,7 @@ export default {
 
     .songs-sheet-list-item {
       width: 46%;
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.5rem;
     }
 
     .songs-sheet-list-item:nth-last-child(-n+2) {

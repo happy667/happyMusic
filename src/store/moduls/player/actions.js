@@ -30,7 +30,7 @@ export default {
         state,
         commit
     }) {
-        if (!state.songReady) return
+        if (!state.songReady || state.songLoading) return
         commit('setPlaying', !state.playing)
         if (state.currentLyric) {
             state.currentLyric.togglePlay()

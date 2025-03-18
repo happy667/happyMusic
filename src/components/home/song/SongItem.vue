@@ -1,5 +1,5 @@
 <template>
-  <div class="songs-list-item-containter"
+  <div class="song-list-item-containter"
        :class="disableCls?'disable':''">
     <!-- 索引 -->
     <div class="song-index"
@@ -200,11 +200,11 @@ export default {
 <style lang="stylus">
 @import '~common/stylus/variable';
 
-.songs-list-item-containter {
+.song-list-item-containter {
   position: relative;
   display: flex;
   align-items: center;
-  padding: 0.2rem 0.2rem 0.4rem 0.4rem;
+  padding: 0.2rem 0.2rem 0.2rem 0.4rem;
 
   &.disable {
     color: $color-common-b2;
@@ -250,6 +250,7 @@ export default {
     .song-desc {
       flex: 1;
       width: 1%;
+      margin-right: 0.1rem;
 
       .icon {
         margin-right: 0.2rem;

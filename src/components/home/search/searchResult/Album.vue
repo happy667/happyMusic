@@ -102,7 +102,6 @@ export default {
     },
     // 上拉加载更多专辑
     handlePullingUp () {
-      console.log(123)
       // 加载时判断当前滚动的页面是否为该页面，因为其他页面在上拉加载时会干扰该页面
       if (this.searchCurrentIndex === 3) {
         if (this.album.isNull) { // 没有结果了

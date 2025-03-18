@@ -42,7 +42,7 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable'
 .official-list-container
-  margin-bottom 0.3rem
+  margin-bottom 0.4rem
   .official-list
     display flex
     width 100%
@@ -51,8 +51,8 @@ export default {
     padding 0.3rem
     box-sizing border-box
     .official-list-img
-      width 2rem
-      height 2rem
+      width 2.2rem
+      height 2.2rem
       border-radius 0.2rem
       margin-right 0.3rem
       background-color $color-common-b

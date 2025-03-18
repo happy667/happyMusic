@@ -56,7 +56,8 @@
           </div>
         </template>
         <!-- loading -->
-        <loading :loading="loadMore" height="3rem" />
+        <loading :loading="loadMore"
+                 height="3rem" />
       </div>
     </div>
   </scroll>
@@ -78,7 +79,7 @@ export default {
       return this.rankingList1.length === 0
     },
     loadMore () {
-      return (this.rankingList1.length > 0 &&(this.rankingList2.length === 0 || this.rankingList3.length === 0 || this.rankingList4.length === 0 || this.rankingList5.length === 0 || this.rankingList6.length === 0))
+      return (this.rankingList1.length > 0 && (this.rankingList2.length === 0 || this.rankingList3.length === 0 || this.rankingList4.length === 0 || this.rankingList5.length === 0 || this.rankingList6.length === 0))
     }
   },
   data () {
@@ -120,7 +121,7 @@ export default {
         } = await rankingApi.getRankingListById(id)
         if (res.code === ERR_OK) {
           list.push(res.playlist)
-           this.refresh()
+          this.refresh()
         }
       }
       list = tempList
@@ -133,7 +134,7 @@ export default {
   mounted () {
     // 获取榜单列表
     this.$nextTick(() => {
-        this.getRankingList()
+      this.getRankingList()
     })
   },
 
@@ -146,15 +147,23 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable'
-.ranking-container .list-container>>>.official-list-container:last-child
-  margin-bottom 0
-.ranking-container
-  width 100%
-  background $color-common-background
-  .ranking-list-wrapper
-    padding 0 0.4rem
-    box-sizing border-box
-    .list-container
-      padding-bottom 0.5rem
+@import '~common/stylus/variable';
+
+.ranking-container .list-container>>>.official-list-container:last-child {
+  margin-bottom: 0;
+}
+
+.ranking-container {
+  width: 100%;
+  background: $color-common-background;
+
+  .ranking-list-wrapper {
+    padding: 0 0.4rem;
+    box-sizing: border-box;
+
+    >.list-container {
+      padding-bottom: 0.4rem;
+    }
+  }
+}
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="songs-list-containter">
+  <div class="song-list-containter">
     <slot></slot>
     <ul class="songs-list"
         ref="list">
@@ -21,68 +21,68 @@
   </div>
 </template>
 <script>
-    import SongItem from './SongItem'
-    import {
-        mapGetters
-    } from 'vuex'
-    export default {
-        props: {
-            songsList: Array,
-            showImage: {
-                type: Boolean,
-                default: () => false
-            },
-            showIndex: {
-                type: Boolean,
-                default: () => false
-            },
-            top: {
-                type: Boolean,
-                default: () => false
-            }
-        },
-        computed: {
-            ...mapGetters(['currentSong'])
-        },
-
-        methods: {
-            // 选择歌曲
-            selectItem(song, index) {
-                this.$emit('select', song, index)
-            },
-            handleNoLike(song) {
-                this.$emit('noLike', song)
-            }
-        },
-        components: {
-            SongItem
-        }
+import SongItem from './SongItem'
+import {
+  mapGetters
+} from 'vuex'
+export default {
+  props: {
+    songsList: Array,
+    showImage: {
+      type: Boolean,
+      default: () => false
+    },
+    showIndex: {
+      type: Boolean,
+      default: () => false
+    },
+    top: {
+      type: Boolean,
+      default: () => false
     }
+  },
+  computed: {
+    ...mapGetters(['currentSong'])
+  },
+
+  methods: {
+    // 选择歌曲
+    selectItem (song, index) {
+      this.$emit('select', song, index)
+    },
+    handleNoLike (song) {
+      this.$emit('noLike', song)
+    }
+  },
+  components: {
+    SongItem
+  }
+}
 </script>
 <style lang="stylus" scoped>
-    @import '~common/stylus/variable';
-    .songs-list-containter {
-        .songs-list {
-            .songs-list-item {
-                &.active>>>.songs-list-item-containter {
-                    .sg-info,
-                    .song-name,
-                    .song-index {
-                        color: $color-common;
-                    }
-                    &::after {
-                        position: absolute;
-                        top: 50%;
-                        left: 0.02rem;
-                        content: '';
-                        display: block;
-                        margin-top: -0.65rem;
-                        width: 3px;
-                        height: 1.3rem;
-                        background: $color-common;
-                    }
-                }
-            }
+@import '~common/stylus/variable';
+
+.song-list-containter {
+  .songs-list {
+    .songs-list-item {
+      &.active>>>.song-list-item-containter {
+        .sg-info, .song-name, .song-index {
+          color: $color-common;
         }
+
+        &::after {
+          position: absolute;
+          top: 50%;
+          left: 0.02rem;
+          content: '';
+          display: block;
+          margin-top: -0.65rem;
+          width: 3px;
+          height: 1.3rem;
+          background: $color-common;
+        }
+      }
     }
+  }
+}
 </style>

@@ -39,11 +39,11 @@ export default {
 
     .list-item {
       height: 2.9rem;
-      padding: 0.22rem;
+      padding: 0.2rem 0.3rem 0.25rem;
       background: $color-common-background;
       box-shadow: 0 0.1rem 0.8rem rgba(0, 0, 0, 0.1);
       border-radius: 0.2rem;
-      margin-bottom: 0.3rem;
+      margin-bottom: 0.4rem;
 
       /* 选择最后一排 */
       &:nth-last-child(-n+3) {

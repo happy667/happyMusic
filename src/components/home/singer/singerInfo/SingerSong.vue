@@ -13,7 +13,6 @@
       <song-list @noLike="handleNoLike"
                  @select="selectSong"
                  ref="songList"
-                 :showImage="true"
                  :songsList="list" />
 
     </template>

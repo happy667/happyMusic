@@ -42,17 +42,18 @@ export default {
 .mv-item-container {
   width: 100%;
   box-sizing: border-box;
-  border-radius: 0.3rem;
-  height: 4.3rem;
+  border-radius: 0.1rem;
+  margin-bottom: 0.3rem;
 
   .video-image {
     position: relative;
     z-index: 1;
+    border-radius: 0.1rem;
 
     .image {
       width: 100%;
-      height: 2.7rem;
-      border-radius: 0.3rem;
+      height: 3.3rem;
+      border-radius: 0.1rem;
       background-color: $color-common-b;
 
       img {
@@ -93,14 +94,15 @@ export default {
       right: 0;
       width: 100%;
       height: 100%;
-      background-image: linear-gradient(transparent 70%, rgba(0, 0, 0, 0.5));
+      background-image: linear-gradient(transparent 80%, rgba(0, 0, 0, 1));
       z-index: 90;
+      border-radius:0 0 0.1rem 0.1rem;
     }
   }
 
   .title {
     position: relative;
-    margin-top: 0.25rem;
+    margin-top: 0.2rem;
     display: flex;
 
     .text {

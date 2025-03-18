@@ -269,44 +269,52 @@ export default {
     // 获取歌手单曲
     async getSingerSong (id) {
       try {
-        this.loading = true
-        const {
-          data: res
-        } = await singerApi.getSingerSong(id)
-        if (res.code === ERR_OK) { // 成功获取歌手单曲
-          let songList = []
-          res.hotSongs.map((item) => { // 循环数组对象对每个数据进行处理 返回需要得数据
-            let singers = item.ar.map(item => item.name).join('/')
-            let singersList = []
-            // 处理歌手
-            item.ar.forEach(item => {
-              singersList.push(new Singer({
-                id: item.id,
-                name: item.name
-              }))
-            })
-            songList.push(new Song({
+        this.loading = true;
+
+        const { data: res } = await singerApi.getSingerSong(id);
+        if (res.code !== ERR_OK) {
+          throw new Error('获取歌手单曲失败');
+        }
+
+        // 处理每首歌曲
+        const songList = await Promise.all(
+          res.hotSongs.map(async (item) => {
+            // 处理歌手信息
+            const singers = item.ar.map((artist) => artist.name).join('/');
+            const singersList = item.ar.map(
+              (artist) =>
+                new Singer({
+                  id: artist.id,
+                  name: artist.name,
+                })
+            );
+
+            // 返回歌曲对象
+            return new Song({
               id: item.id,
               name: item.tns ? `${item.name} (${item.tns[0]})` : item.name,
               singers,
               singersList,
-              picUrl: item.al.picUrl,
-              st: item.privilege.st,
               mv: item.mv,
               album: new Album({
                 id: item.al.id,
                 name: item.al.name,
-                picUrl: item.al.picUrl
-              })
-            }))
+                picUrl: item.al.picUrl,
+              }),
+            });
           })
-          //获取歌手详情
-          await this.getSingerDetail(this.id)
-          this.singerSong = songList
-          this.loading = false
-        }
-      } catch (e) {
-        this.$router.replace('/')
+        );
+
+        // 获取歌手详情
+        await this.getSingerDetail(this.id);
+        // 更新歌手单曲列表
+        this.singerSong = songList;
+      } catch (error) {
+        console.error('获取歌手单曲失败:', error.message);
+        this.$router.replace('/');
+      } finally {
+        // 关闭加载logo
+        this.loading = false;
       }
     },
     async getSingerDetail (id) {
@@ -446,6 +454,7 @@ export default {
     },
     // 上拉加载
     handlePullingUp () {
+      if(this.loading)return
       switch (this.currentIndex) {
         case 1:
           this.handleLoadMoreAlbum()

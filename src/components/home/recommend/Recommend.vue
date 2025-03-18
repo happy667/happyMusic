@@ -21,7 +21,8 @@
         <!--个性化区域-->
         <personalization v-if="this.recommendNewSong.length > 0 ">
           <template>
-            <Title title="个性化定制"></Title>
+            <Title title="个性化定制"
+                   styleInfo="margin-bottom:0.2rem"></Title>
           </template>
         </personalization>
         <!-- 推荐歌单区域 -->
@@ -58,7 +59,7 @@ import SongSheetList from '@/components/home/songSheet/SongSheetList'
 import SongSwiper from '@/components/home/song/SongSwiper'
 import AlbumSwiper from '@/components/common/miniSwiper/MiniSwiper'
 import Title from '@/components/common/Title'
-import Personalization from '@/components/home/personalization/personalization'
+import Personalization from '@/components/home/personalization/Personalization'
 import recommendApi from '@/api/recommend.js'
 import Song from '@/assets/common/js/song.js'
 import Album from '@/assets/common/js/album.js'
@@ -216,9 +217,11 @@ export default {
 .recommend-container>>>.title-container {
   padding: 0 0.4rem;
 }
-.recommend-container>>>.song-sheet-list-item:nth-last-child(-n+2){
-  margin-bottom: 0.4rem
+
+.recommend-container>>>.song-sheet-list-item:nth-last-child(-n+2) {
+  margin-bottom: 0.4rem;
 }
+
 .recommend-container {
   position: absolute;
   width: 100%;

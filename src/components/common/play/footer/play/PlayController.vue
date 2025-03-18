@@ -14,7 +14,11 @@
     <!-- 播放暂停 -->
     <div class="play icon"
          @click="handleTogglePlaying">
-      <van-icon :name="playIcon" size="56"  />
+      <van-icon v-if="!songLoading"
+                :name="playIcon"
+                size="60" />
+      <i v-if="songLoading"
+         class="loading iconfont icon-loading rotate"></i>
     </div>
     <!--下一曲-->
     <div class="next icon"
@@ -29,73 +33,82 @@
   </div>
 </template>
 <script>
-    import {
-        mapState,
-        mapMutations
-    } from 'vuex'
-    import {
-        PLAY_MODE
-    } from '@/assets/common/js/config.js'
-    export default {
-        computed: {
-            ...mapState(['playing', 'playMode']),
-            playIcon() {
-                return this.playing ? 'pause-circle-o' : 'play-circle-o'
-            },
-            playModeIcon() {
-                return this.playMode === PLAY_MODE.sequence ? 'icon-xunhuanbofang' : this.playMode === PLAY_MODE.loop ? 'icon-danquxunhuan' : 'icon-suijibofang'
-            }
-        },
-        methods: {
-            ...mapMutations(['setTogglePlayList']),
-            // 切换播放暂停
-            handleTogglePlaying() {
-                this.$parent.$parent.$parent.handleTogglePlaying()
-            },
-            // 上一曲
-            prev() {
-                this.$parent.$parent.$parent.prev()
-            },
-            // 下一曲
-            next() {
-                this.$parent.$parent.$parent.next()
-            },
-            // 切换播放类型
-            changeMode() {
-                this.$parent.$parent.$parent.changeMode()
-            },
-            // 查看歌曲列表
-            handlePlayList() {
-                this.setTogglePlayList(true)
-            }
-        }
-
+import {
+  mapState,
+  mapMutations
+} from 'vuex'
+import {
+  PLAY_MODE
+} from '@/assets/common/js/config.js'
+export default {
+  computed: {
+    ...mapState(['playing', 'playMode', 'songLoading']),
+    playIcon () {
+      return this.playing ? 'pause-circle-o' : 'play-circle-o'
+    },
+    playModeIcon () {
+      return this.playMode === PLAY_MODE.sequence ? 'icon-xunhuanbofang' : this.playMode === PLAY_MODE.loop ? 'icon-danquxunhuan' : 'icon-suijibofang'
     }
+  },
+  methods: {
+    ...mapMutations(['setTogglePlayList']),
+    // 切换播放暂停
+    handleTogglePlaying () {
+      this.$parent.$parent.$parent.handleTogglePlaying()
+    },
+    // 上一曲
+    prev () {
+      this.$parent.$parent.$parent.prev()
+    },
+    // 下一曲
+    next () {
+      this.$parent.$parent.$parent.next()
+    },
+    // 切换播放类型
+    changeMode () {
+      this.$parent.$parent.$parent.changeMode()
+    },
+    // 查看歌曲列表
+    handlePlayList () {
+      this.setTogglePlayList(true)
+    }
+  }
+
+}
 </script>
 <style lang="stylus" scoped>
-    @import '~common/stylus/variable';
-    .play-controller-container {
-        margin: 0 0.65rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        color: #fff;
-        .icon {
-            i {
-                font-size: 0.6rem;
-            }
-        }
-        .play {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 1.3rem;
-            height: 1.3rem;
-            border-radius: 50%;
-            i {
-                font-size: 0.8rem;
-                color: #fff;
-            }
-        }
+@import '~common/stylus/variable';
+
+.play-controller-container {
+  margin: 0 0.65rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #fff;
+
+  .icon {
+    i {
+      font-size: 0.6rem;
     }
+  }
+
+  .play {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 1.3rem;
+    height: 1.3rem;
+    border-radius: 50%;
+
+    i {
+      font-size: 0.8rem;
+      color: #fff;
+    }
+
+    i.loading {
+      width: 0.8rem;
+      height: 0.8rem;
+    }
+  }
+}
 </style>

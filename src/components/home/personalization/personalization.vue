@@ -4,16 +4,18 @@
     <div class="container">
       <div class="ai-emotional-radio-station item animated fadeIn"
            @click="openAiDialog"><span class="title">AI情绪电台</span></div>
-      <div class="scenario-based-recommendation item animated fadeIn"><span class="title">场景化推荐</span></div>
+      <div class="scenario-based-recommendation item animated fadeIn"
+           @click="handleScenarioRecommendation"><span class="title">场景化推荐</span></div>
       <div class="hearing-health-protection item animated fadeIn"><span class="title">听力健康守护</span></div>
-
     </div>
     <!-- 输入框 -->
     <van-dialog v-model="show"
+                class="input-container"
                 title="AI情绪电台"
                 confirm-button-color="#FD4979"
                 confirm-button-text="搜索"
                 show-cancel-button
+                get-container="body"
                 @confirm="goToSearch"
                 :lazy-render="false">
       <van-field type="textarea"
@@ -27,9 +29,11 @@
                  class="message" />
     </van-dialog>
   </div>
+
 </template>
 <script>
 import nlpApi from '@/api/nlp.js'
+import scenarioRecommendationApi from '@/api/scenario-recommendation.js'
 import {
   mapMutations
 } from 'vuex'
@@ -54,10 +58,11 @@ export default {
       this.message = '';
       this.show = false
     },
+    //ai智能分析
     async goToSearch () {
       try {
         if (this.message === '') {
-          this.$toast('请输入内容')
+          this.$toast('文本内容不能为空哦~')
           return
         }
         const toast = this.$toast.loading({
@@ -78,6 +83,10 @@ export default {
         toast.clear();
         this.$toast(err)
       }
+    },
+    async handleScenarioRecommendation () {
+      const { data: res } = await scenarioRecommendationApi.recommend();
+      console.log(res)
     }
   }
 }
@@ -86,6 +95,8 @@ export default {
 @import '~common/stylus/variable';
 
 .personalization-container {
+  width: 100%;
+
   .container {
     display: flex;
     flex-wrap: wrap;
@@ -96,14 +107,10 @@ export default {
       position: relative;
       width: 2.7rem;
       height: 2.7rem;
-      line-height: 2.7rem;
-      text-align: center;
       box-sizing: border-box;
       border-radius: 0.3rem;
-      box-shadow: 0 0.12rem 0.2rem rgba(0, 0, 0, 0.05);
+      box-shadow: 0.06rem 0.06rem 0.14rem rgba(0, 0, 0, 0.4);
       font-size: 0.4rem;
-      color: #fff;
-      font-weight: bolder;
 
       span.title {
         position: absolute;
@@ -114,6 +121,7 @@ export default {
         line-height: 0.8rem;
         border-radius: 0 0 0.3rem 0.3rem;
         color: #fff;
+        text-align: center;
         font-size: $font-size-smaller-x;
         background-color: rgba(0, 0, 0, 0.45);
         box-sizing: border-box;
@@ -134,13 +142,6 @@ export default {
     .hearing-health-protection {
       background: url('../../../assets/images/hearing-health-protection.jpg') center center no-repeat;
       background-size: cover;
-    }
-
-    .van-field {
-      border: 1px solid #e2e2e2;
-      width: 90%;
-      margin: 12px auto 28px auto;
-      background: #f6f6f6;
     }
   }
 }

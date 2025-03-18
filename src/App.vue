@@ -181,5 +181,6 @@ export default {
 
 #app>>>.van-popup .singerList {
   max-height: 6rem;
+  padding-top: 0.1rem;
 }
 </style>

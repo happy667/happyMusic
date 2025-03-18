@@ -71,7 +71,7 @@ export default {
 @import '~common/stylus/variable';
 
 .singer-list-item-container {
-  padding: 0.25rem 0.4rem;
+  padding: 0.2rem 0.4rem;
 
   .singer-list-item {
     display: flex;

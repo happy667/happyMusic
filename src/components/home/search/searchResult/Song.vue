@@ -125,7 +125,7 @@ export default {
               name: item.al.name,
               picUrl: item.al.picUrl
             }),
-            isOriginal : !item.originSongSimpleData && (item.originCoverType === 0 || item.originCoverType === 1) ? 1 : 0
+            isOriginal: !item.originSongSimpleData && (item.originCoverType === 0 || item.originCoverType === 1) ? 1 : 0
           }))
         })
         // 将每次查询的歌曲追加到song.songList中

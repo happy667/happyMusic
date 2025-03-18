@@ -64,7 +64,7 @@ module.exports = {
                 pathRewrite: { '^/api/baiduApi': '' }
             },
             '/api': {
-                target: 'https://neteasecloudmusicapi.aizrf.com', //部署环境地址地址
+                target: 'https://www.happy6year.com', //部署环境地址地址
                 //target: 'http://localhost:3000', //开发环境地址
                 changeOrigin: true,
                 pathRewrite: {

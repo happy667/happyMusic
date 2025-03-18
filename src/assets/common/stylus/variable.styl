@@ -48,7 +48,19 @@ extend-click()
     right: -10px
     bottom: -10px
 
+@keyframes rotateAnimation {
+    from {
+      transform: rotate(0deg); /* 从0度开始 */
+    }
+    to {
+      transform: rotate(360deg); /* 到360度结束 */
+    }
+  }
 
+/* 应用旋转动画到元素 */
+  .rotate {
+    animation: rotateAnimation 0.8s linear infinite; /* 应用动画 */
+  }
 
 
  

@@ -25,6 +25,7 @@ export default {
 .play-all-container {
   display: flex;
   padding-left: 0.4rem;
+  align-items: center;
 
   .play-icon {
     font-size: $font-size-large-x;

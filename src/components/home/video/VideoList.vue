@@ -27,7 +27,7 @@
 import VideoItem from './VideoItem'
 import Scroll from '@/components/common/Scroll'
 import videoApi from '@/api/video.js'
-import SingerApi from '@/api/singer.js'
+import singerApi from '@/api/singer.js'
 import Video from '@/assets/common/js/video.js'
 import {
   ERR_OK
@@ -79,44 +79,45 @@ export default {
         })
       }, 300)
     },
-    // 获取推荐视频
-    async getVideoList (context) {
+    async getVideoList () {
       try {
-        const offset = this.videoList.length
-        const {
-          data: res
-        } = await videoApi.getRecommendVideo(offset)
-        if (res.code === ERR_OK) {
-          const data = res.data
-          let videoList = []
-          let length = 0 // 用于判断是否执行完毕
-          data.forEach(async (item) => {
-            // 获取歌手信息
-            const {
-              data: res2
-            } = await SingerApi.getSinger(item.artistId)
-            if (res2.code === ERR_OK) {
-              let video = new Video({
-                id: item.id,
-                coverUrl: item.cover,
-                name: item.name,
-                playCount: item.playCount,
-                artist: {
-                  id: res2.artist.id,
-                  name: res2.artist.name,
-                  avatarUrl: res2.artist.img1v1Url
-                }
-              })
-              length++
-              this.videoList.push(video)
-              if (length === data.length) { // 说明请求完成
-                this.loadMore = false
-              }
-            }
-          })
+        const offset = this.videoList.length;
+        const { data: res } = await videoApi.getRecommendVideo(offset);
+        if (res.code !== ERR_OK) {
+          this.$toast.fail('系统出错');
+          return
         }
-      } catch (e) {
-        this.$toast(e.message)
+
+        const data = res.data;
+
+        // 使用 Promise.all 并行获取歌手信息
+        const videoPromises = data.map(async (item) => {
+          const { data: singerRes } = await singerApi.getSinger(item.artistId);
+          if (singerRes.code !== ERR_OK) {
+            this.$toast.fail('系统出错');
+            return
+          }
+
+          return new Video({
+            id: item.id,
+            coverUrl: item.cover,
+            name: item.name,
+            playCount: item.playCount,
+            artist: {
+              id: singerRes.artist.id,
+              name: singerRes.artist.name,
+              avatarUrl: singerRes.artist.img1v1Url,
+            },
+          });
+        });
+
+        // 等待所有视频信息获取完成
+        const newVideos = await Promise.all(videoPromises);
+        this.videoList = [...this.videoList, ...newVideos];
+        this.loadMore = false; // 请求完成，关闭加载更多状态
+      } catch (error) {
+        this.$toast('获取视频列表失败');
+        this.loadMore = false; // 请求失败，关闭加载更多状态
       }
     },
     // 刷新

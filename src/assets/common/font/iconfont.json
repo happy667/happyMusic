@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "9400485",
+      "name": "倍速_54",
+      "font_class": "speed",
+      "unicode": "e674",
+      "unicode_decimal": 58996
+    },
+    {
+      "icon_id": "7127384",
+      "name": "加载",
+      "font_class": "loading",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
       "icon_id": "573575",
       "name": "暂停",
       "font_class": "zanting",

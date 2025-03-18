@@ -82,7 +82,7 @@ export default {
   @import '~common/stylus/variable';
 
   .context {
-    margin: 0.2rem 0;
+    margin: 0.2rem 0 0.4rem;
     line-height: 0.5rem;
     white-space: pre-wrap;
   }

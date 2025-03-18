@@ -430,7 +430,7 @@ export default {
   .player {
     position: relative;
     width: 100%;
-    height: 5rem;
+    height: 5.17rem;
 
     &.full {
       position: absolute;

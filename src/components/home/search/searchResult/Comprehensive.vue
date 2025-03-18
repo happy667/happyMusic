@@ -101,7 +101,7 @@ export default {
         // 存放所有搜索的结果
         let result = {}
         // 处理单曲结果
-        result.song = this.handleSong(res.result.songs)
+        result.song = await this.handleSong(res.result.songs)
         // 处理歌手结果
         result.singer = this.handleSinger(res.result.artists)
         // 处理专辑结果
@@ -123,42 +123,56 @@ export default {
       }
     },
     // 处理单曲结果
-    handleSong (song) {
-      if (!song) return null
+    async handleSong (song) {
+      if (!song) return { more: false, moreText: '', songList: [] }; // 返回一个默认对象
+
       // 用于存放处理后的歌曲列表
-      let songList = []
-      // 存放歌曲搜索结果信息
-      let songObj = {
-        more: song.more,
-        moreText: song.moreText,
-        songList
-      }
-      song.map((item) => { // 循环数组对象对每个数据进行处理 返回需要得数据
-        let singers = item.artists.map(item => item.name).join('/')
-        let singersList = []
-        // 处理歌手
-        item.artists.forEach(item => {
-          singersList.push(new Singer({
-            id: item.id,
-            name: item.name
-          }))
-        })
-        songList.push(new Song({
+      const songList = [];
+
+      // 并行处理每首歌曲
+      const songPromises = song.map(async (item) => {
+        // 处理歌手信息
+        const singers = item.artists.map((artist) => artist.name).join('/');
+        const singersList = item.artists.map(
+          (artist) =>
+            new Singer({
+              id: artist.id,
+              name: artist.name,
+            })
+        );
+
+        return new Song({
           id: item.id,
           name: item.name,
           picUrl: item.album.picUrl,
           singers,
           singersList,
-          mv: item.mvid,
+          mv: item.album.mvid,
           album: new Album({
             id: item.album.id,
             name: item.album.name,
-            picUrl: item.album.picUrl
+            picUrl: item.album.picUrl,
           }),
-          isOriginal: !item.originSongSimpleData && (item.originCoverType === 0 || item.originCoverType === 1) ? 1 : 0
-        }))
-      })
-      return songObj
+          isOriginal: !item.originSongSimpleData && (item.originCoverType === 0 || item.originCoverType === 1) ? 1 : 0,
+        });
+      });
+
+      // 等待所有歌曲处理完成
+      const results = await Promise.all(songPromises);
+
+      // 过滤掉 null 值（请求失败的歌曲）
+      results.forEach((song) => {
+        if (song) {
+          songList.push(song);
+        }
+      });
+
+      // 返回处理后的歌曲对象
+      return {
+        more: song.more,
+        moreText: song.moreText,
+        songList,
+      };
     },
     // 处理歌手结果
     handleSinger (singer) {
