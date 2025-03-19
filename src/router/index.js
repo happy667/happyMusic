@@ -119,7 +119,7 @@ const routes = [
     },
     // 歌单广场页
     {
-        path: '/SongSheetSquare',
+        path: '/songSheetSquare',
         name: 'songSheetSquare',
         component: SongSheetSquare,
         meta: {

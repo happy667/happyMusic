@@ -23,7 +23,8 @@
               <div class="song-sheet-info">
                 <div class="container">
                   <div class="left-img">
-                    <div class="song-sheet-image" :style="loadBgStyle">
+                    <div class="song-sheet-image"
+                         :style="loadBgStyle">
                       <img v-lazy="songSheet.picUrl"
                            :key="songSheet.picUrl"
                            class="animated fadeIn" />
@@ -64,8 +65,8 @@
         </div>
       </template>
 
-</section>
-</div>
+    </section>
+  </div>
 </template>
 <script>
 import SongSheetDetail from '@/assets/common/js/songSheetDetail.js'
@@ -259,6 +260,7 @@ export default {
                 width: 1.7rem;
                 height: 1.7rem;
                 border-radius: 0.3rem;
+                box-shadow: 0.06rem 0.06rem 0.14rem rgba(0, 0, 0, 0.3);
 
                 img {
                   display: block;

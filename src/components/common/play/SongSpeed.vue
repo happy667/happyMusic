@@ -80,12 +80,12 @@ export default {
 @import '~common/stylus/variable';
 
 .song-speed-container {
-  padding: 0.6rem 0.4rem 0.5rem;
+  padding: 0.6rem 0.4rem 0.4rem;
   text-align: center;
 
   .title {
     font-size: $font-size-small-x;
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.7rem;
   }
 
   .slider {
@@ -93,7 +93,7 @@ export default {
   }
 
   .speed-options {
-    margin-top: 0.6rem;
+    margin-top: 0.7rem;
     display: flex;
     justify-content: space-between;
     align-items: center;

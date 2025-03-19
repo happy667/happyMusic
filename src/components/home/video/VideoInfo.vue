@@ -331,7 +331,6 @@ export default {
     },
     // 上拉加载
     handlePullingUp () {
-      if (this.loading) return
       setTimeout(async () => {
         await this.getVideoComment(this.id)
         if (this.commentList.length >= this.commentCount) {

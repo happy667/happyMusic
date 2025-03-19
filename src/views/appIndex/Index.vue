@@ -13,13 +13,13 @@
       <!-- 操作 -->
       <div class="option">
         <router-link to="/appIndex/login"
-                     tag="div">
+                     is="div">
           <btn text="登录" />
         </router-link>
         <p>OR</p>
         <!-- 注册 -->
         <router-link to="/appIndex/register"
-                     tag="div">
+                     is="div">
           <btn text="注册" />
         </router-link>
       </div>

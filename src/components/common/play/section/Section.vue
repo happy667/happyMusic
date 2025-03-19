@@ -63,7 +63,7 @@ export default {
   data () {
     return {
       nolyric: true,
-      text: '',
+      text: '歌词加载中...',
     }
   },
   inject: ['playerParams'],
@@ -87,7 +87,7 @@ export default {
 
     // 获取歌词
     getLyric (id) {
-      this.text = '加载歌词中...'
+      this.text = '歌词加载中...'
       songApi.getSongLyric(id).then(res => {
         res = res.data
 

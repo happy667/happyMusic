@@ -454,7 +454,7 @@ export default {
     },
     // 上拉加载
     handlePullingUp () {
-      if(this.loading)return
+      if (this.loading) return
       switch (this.currentIndex) {
         case 1:
           this.handleLoadMoreAlbum()
