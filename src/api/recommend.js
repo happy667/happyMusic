@@ -44,14 +44,14 @@ export default {
     },
     // 根据id获取歌单详情
     getSongSheetById(id) {
-        const url = `/playlist/detail?id=${id}`
+        const url = `/playlist/detail?id=${id}&timestamp=${new Date().getTime()}`
         return request({
             url
         })
     },
     // 获取歌单评论
     getSongSheetComment(id, offset = 0) {
-        let url = `comment/playlist?id=${id}&offset=${offset}`
+        let url = `comment/playlist?id=${id}&offset=${offset}&timestamp=${new Date().getTime()}`
         return request({
             url
         })

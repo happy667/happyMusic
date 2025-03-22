@@ -27,7 +27,7 @@
             <div class="icon">
               <i class="iconfont icon-shanchu"></i>
             </div>
-            <div class="text">删除</div>
+            <div class="text">取消收藏</div>
           </div>
 
         </div>
@@ -81,7 +81,7 @@
             handleDelete() {
                 this.showPopup = false;
                 this.$utils.alertConfirm({
-                    message: '你确定要删除该歌单吗',
+                    message: '你确定要取消收藏该歌单吗',
                     confirmButtonText: '删除'
                 }).then(async() => {
                     if (this.item.userId === this.user.userId) {
@@ -90,7 +90,7 @@
                     }
                     userApi.updateFollowSongSheet(this.item.id, false).then(res => {
                         if (res.data.code === ERR_OK) {
-                            this.$toast("删除成功!")
+                            this.$toast("已取消收藏!")
                             this.$emit("removeSongSheetItem", this.id);
                         }
                     }).catch(err => {

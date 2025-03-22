@@ -16,7 +16,7 @@ export default {
     },
     // 获取歌曲评论
     getSongComment(id, offset = 0) {
-        let url = `comment/music?id=${id}&offset=${offset}`
+        let url = `comment/music?id=${id}&offset=${offset}&timestamp=${new Date().getTime()}`
         return request({
             url
         })

@@ -9,8 +9,9 @@ export default {
     async getLoginUserInfo(context) {
         const {
             data: res
-        } = await loginApi.loginStatus()
+        } = await loginApi.loginStatus(context.state.token)
         if (res.data.code === ERR_OK) {
+            console.log("获取用户信息成功")
             let user = res.data.profile
             context.commit('setLoginUser', user)
             context.dispatch('getUserLikeList', user.userId)

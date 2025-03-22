@@ -8,6 +8,7 @@ export default class Singer {
         singers,
         singersList,
         followed,
+        followDay,
         followCount,
         songSize,
         mvSize,
@@ -25,5 +26,6 @@ export default class Singer {
         this.mvSize = mvSize
         this.songSize = songSize
         this.albumSize = albumSize
+        this.followDay = followDay
     }
 }

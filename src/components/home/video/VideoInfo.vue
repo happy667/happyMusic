@@ -227,7 +227,6 @@ export default {
     })
   },
   methods: {
-
     ...mapMutations(['setHideMiniPlayer', 'setSingerCurrentIndex', 'setAddNoCacheComponents']),
     // 获取视频详情
     async getVideoDetail (id) {
@@ -246,7 +245,7 @@ export default {
         }
         const videoData = videoDetailRes.data;
         // 获取歌手信息
-        const creatorList = await this.fetchCreators(videoData.artists);
+        const creatorList = this.getSingerInfo(videoData.artists);
         // 创建视频详情对象
         const video = new VideoDetail({
           id: videoData.id,
@@ -262,7 +261,7 @@ export default {
           creatorName: videoData.artists.map(item => item.name).join(' / '),
           creatorList,
           artist: creatorList[0],
-          followed: videoData.subed,
+          followed: videoDetailRes.subed,
           url: videoUrlRes.data.url,
         });
         // 获取视频的点赞和评论信息
@@ -280,11 +279,10 @@ export default {
       }
     },
     //获取歌手信息
-    async fetchCreators (artists) {
+    getSingerInfo (artists) {
       const creatorList = [];
       for (const item of artists) {
-        const { data: singerData } = await singerApi.getSinger(item.id);
-        const artist = singerData.artist;
+        const artist = item;
         const creator = new Singer({
           id: artist.id,
           name: artist.name,
@@ -386,14 +384,14 @@ export default {
         })
       } else {
         this.$utils.alertConfirm({
-          message: '确定不再收藏该视频',
-          confirmButtonText: '不再收藏'
+          message: '确定取消收藏该视频',
+          confirmButtonText: '确定'
         }).then(async () => {
           userApi.updateFollowVideo(this.id, follow).then(res => {
             if (res.data.code === ERR_OK) {
               this.video.followed = false
               this.video.subCount -= 1
-              this.$toast('已不再收藏')
+              this.$toast('已取消收藏')
             }
           }).catch(err => {
             this.$toast(err.data.message)

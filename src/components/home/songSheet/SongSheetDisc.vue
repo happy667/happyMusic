@@ -141,9 +141,8 @@
            @touchmove.stop>
         <div class="top">
           <div class="image-container">
-            <div class="image">
-              <img v-lazy="songSheetDisc.picUrl"
-                   class="animated fadeIn">
+            <div class="image animated fadeIn">
+              <img v-lazy="songSheetDisc.picUrl">
             </div>
           </div>
 
@@ -375,10 +374,9 @@ export default {
     },
 
     follow () {
-      let follow = !this.followed
-      follow = follow ? 1 : 0 // 1代表收藏，0代表不收藏
-      if (follow) { // 收藏
-        userApi.updateFollowSongSheet(this.id, follow).then(res => {
+      let follow = !this.followed  
+      if (follow) { // 1代表收藏，2代表不收藏
+        userApi.updateFollowSongSheet(this.id, 1).then(res => {
           if (res.data.code === ERR_OK) {
             this.songSheetDisc.followed = true
             this.$toast('收藏成功')
@@ -388,13 +386,13 @@ export default {
         })
       } else {
         this.$utils.alertConfirm({
-          message: '确定不再收藏该歌单',
-          confirmButtonText: '不再收藏'
+          message: '确定取消收藏该歌单',
+          confirmButtonText: '确定'
         }).then(async () => {
-          userApi.updateFollowSongSheet(this.id, follow).then(res => {
+          userApi.updateFollowSongSheet(this.id, 2).then(res => {
             if (res.data.code === ERR_OK) {
               this.songSheetDisc.followed = false
-              this.$toast('已不再收藏')
+              this.$toast('已取消收藏')
             }
           }).catch(err => {
             this.$toast(err.data.message)

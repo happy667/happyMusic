@@ -18,11 +18,8 @@ export default {
     },
     // 喜欢音乐
     likeMusic(id, like) {
-        const url = `/like?timestamp=${new Date().getTime()}`;
-        return request.post(url, {
-            id,
-            like
-        });
+        const url = `/like?id=${id}&like=${like}&timestamp=${new Date().getTime()}`;
+        return request.get(url);
     },
     // 获取用户关注的歌手
     getUserFollowSinger() {
@@ -73,6 +70,7 @@ export default {
 
     // 收藏/取消关注歌单
     updateFollowSongSheet(id, t) {
+        console.log(t)
         const url = `/playlist/subscribe?timestamp=${new Date().getTime()}`;
         return request.post(url, {
             id,

@@ -91,7 +91,8 @@
                   <!-- 收藏 -->
                   <div class="follow">
                     <follow @clickFollow="handleClickFollow"
-                            :followed="singer.followed"></follow>
+                            :followed="singer.followed"
+                            :followText="singer.followDay"></follow>
                   </div>
                 </div>
               </van-skeleton>
@@ -419,6 +420,7 @@ export default {
             mvSize: item.mvSize,
             albumSize: item.albumSize,
             followed: item.followed
+
           }))
         })
         this.simSingerList = singerList
@@ -433,11 +435,10 @@ export default {
       } = await singerApi.getSingerFollow(id)
       if (res.code === ERR_OK) { // 成功 获取
         let singer = this.singer
-
         singer.followCount = res.data.fansCnt
         singer.followed = res.data.isFollow
+        singer.followDay = res.data.followDay
         this.setSingerInfo(singer)
-        console.log(res)
       }
     },
     // 设置歌手
@@ -448,7 +449,8 @@ export default {
         avatar: singer.avatarUrl,
         picUrl: singer.backgroundUrl,
         followed: singer.followed,
-        followCount: singer.followCount
+        followCount: singer.followCount,
+        followDay: singer.followDay
       })
       this.setSinger(newSinger)
     },
@@ -588,13 +590,13 @@ export default {
       follow = follow ? 1 : 0 // 1代表收藏，0代表不收藏
       if (!follow) {
         this.$utils.alertConfirm({
-          message: '确定不再收藏该歌手',
-          confirmButtonText: '不再收藏'
+          message: '确定取消关注该歌手',
+          confirmButtonText: '确定'
         }).then(() => {
           userApi.updateFollowSinger(singer.id, follow).then(res => {
             if (res.data.code === ERR_OK) {
               this.$set(singer, 'followed', false)
-              this.$toast('已不再收藏')
+              this.$toast('已取消关注')
             }
           }).catch(err => {
             this.$toast(err.data.message)
@@ -604,7 +606,8 @@ export default {
         userApi.updateFollowSinger(singer.id, follow).then(res => {
           if (res.data.code === ERR_OK) {
             this.$set(singer, 'followed', true)
-            this.$toast('收藏成功')
+            this.$set(singer, 'followDay', '已关注1天')
+            this.$toast('关注成功')
           }
         }).catch(err => {
           this.$toast(err.data.message)

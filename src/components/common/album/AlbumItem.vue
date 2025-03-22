@@ -38,7 +38,7 @@
             <div class="icon">
               <i class="iconfont icon-shanchu"></i>
             </div>
-            <div class="text">删除</div>
+            <div class="text">取消收藏</div>
           </div>
 
         </div>
@@ -102,18 +102,17 @@ export default {
 
     },
     handleHpenFunctions () {
-      console.log(123)
       this.showPopup = !this.showPopup;
     },
     handleDelete () {
       this.showPopup = false;
       this.$utils.alertConfirm({
-        message: '你确定要删除该专辑吗',
-        confirmButtonText: '删除'
+        message: '你确定要取消收藏吗',
+        confirmButtonText: '确定'
       }).then(async () => {
         userApi.updateFollowAlbum(this.item.id, false).then(res => {
           if (res.data.code === ERR_OK) {
-            this.$toast("删除成功!")
+            this.$toast("已取消收藏!")
             this.$emit("removeAlbumItem", this.item.id);
           }
         }).catch(err => {
