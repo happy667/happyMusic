@@ -60,104 +60,106 @@
       <scroll ref="user_scroll">
         <div class="user-index"
              ref="container">
-          <div class="my-list ">
-            <router-link to="/user/myFollow">
-              <div class="my-follow my-list-item ">
-                <div class="left-image">
-                  <van-icon name="star" />
+          <div class="my-container">
+            <div class="my-list ">
+              <router-link to="/user/myFollow">
+                <div class="my-follow my-list-item ">
+                  <div class="left-image">
+                    <van-icon name="star" />
+                  </div>
+                  <div class="right-info">
+                    <div class="title">我的关注</div>
+                    <div class="num">{{followCount}}</div>
+                  </div>
                 </div>
-                <div class="right-info">
-                  <div class="title">我的关注</div>
-                  <div class="num">{{followCount}}</div>
-                </div>
-              </div>
-            </router-link>
-            <router-link to="/user/myLike">
-              <div class="my-like my-list-item">
-                <div class="left-image">
-                  <van-icon name="like" />
-                </div>
-                <div class="right-info">
-                  <div class="title">我的最爱</div>
-                  <div class="num"
-                       v-show="userCount">{{myLikeCount}}</div>
-                </div>
+              </router-link>
+              <router-link to="/user/myLike">
+                <div class="my-like my-list-item">
+                  <div class="left-image">
+                    <van-icon name="like" />
+                  </div>
+                  <div class="right-info">
+                    <div class="title">我的最爱</div>
+                    <div class="num"
+                         v-show="userCount">{{myLikeCount}}</div>
+                  </div>
 
-              </div>
-            </router-link>
-            <router-link to="/user/recentPlay">
-              <div class="my-recentPlay my-list-item">
-                <div class="left-image">
-                  <van-icon name="play-circle" />
                 </div>
-                <div class="right-info">
-                  <div class="title">最近播放</div>
+              </router-link>
+              <router-link to="/user/recentPlay">
+                <div class="my-recentPlay my-list-item">
+                  <div class="left-image">
+                    <van-icon name="play-circle" />
+                  </div>
+                  <div class="right-info">
+                    <div class="title">最近播放</div>
+                  </div>
                 </div>
-              </div>
-            </router-link>
-            <router-link to="/user/playRanking">
-              <div class="play-music-ranking my-list-item">
-                <div class="left-image">
-                  <van-icon name="medal" />
+              </router-link>
+              <router-link to="/user/playRanking">
+                <div class="play-music-ranking my-list-item">
+                  <div class="left-image">
+                    <van-icon name="medal" />
+                  </div>
+                  <div class="right-info">
+                    <div class="title">听歌排行</div>
+                  </div>
                 </div>
-                <div class="right-info">
-                  <div class="title">听歌排行</div>
-                </div>
-              </div>
-            </router-link>
+              </router-link>
 
-          </div>
-          <template v-if="user">
-            <div class="my-follow">
-              <div class="my-songSheet">
-                <div class="title">
-                  <div class="text">我的歌单</div>
-                  <span class="count">({{songSheetCount}}个)</span>
-                </div>
-                <song-sheet-mini-list v-if="userSongSheet"
-                                      :list="userSongSheet"></song-sheet-mini-list>
-                <template v-if="userSongSheet&&userSongSheet.length===0">
-                  <no-result text="还没有歌单,快去收藏吧"></no-result>
-                </template>
-                <!-- loading -->
-                <loading :loading="songSheetLoading" />
-              </div>
-              <div class="my-album">
-                <div class="title">
-                  <div class="text">我的专辑</div>
-                  <span class="count">({{albumCount}}个)</span>
-                </div>
-
-                <album-list :list="userAlbum"
-                            v-if="userAlbum"
-                            @select="selectItem"
-                            showSongSize
-                            showFunctions
-                            :showTime="false">
-                </album-list>
-                <template v-if="userAlbum&&userAlbum.length===0">
-                  <no-result text="还没有专辑,快去收藏吧"></no-result>
-                </template>
-                <loading :loading="albumLoading" />
-              </div>
-
-              <div class="my-video">
-                <div class="title">
-                  <div class="text">我的视频</div>
-                  <span class="count">({{videoCount}}个)</span>
-                </div>
-
-                <video-list @select="goToVideoInfo"
-                            :list="userVideo"></video-list>
-                <template v-if="userVideo&&userVideo.length===0">
-                  <no-result text="还没有视频,快去收藏吧"></no-result>
-                </template>
-                <loading :loading="videoLoading" />
-              </div>
             </div>
-          </template>
-          <!-- loading -->
-          <loading :loading="loading" />
+            <template v-if="user">
+              <div class="my-follow">
+                <div class="my-songSheet">
+                  <div class="title">
+                    <div class="text">我的歌单</div>
+                    <span class="count">({{songSheetCount}}个)</span>
+                  </div>
+                  <song-sheet-mini-list v-if="userSongSheet"
+                                        :list="userSongSheet"></song-sheet-mini-list>
+                  <template v-if="userSongSheet&&userSongSheet.length===0">
+                    <no-result text="还没有歌单,快去收藏吧"></no-result>
+                  </template>
+                  <!-- loading -->
+                  <loading :loading="songSheetLoading" />
+                </div>
+                <div class="my-album">
+                  <div class="title">
+                    <div class="text">我的专辑</div>
+                    <span class="count">({{albumCount}}个)</span>
+                  </div>
+
+                  <album-list :list="userAlbum"
+                              v-if="userAlbum"
+                              @select="selectItem"
+                              showSongSize
+                              showFunctions
+                              :showTime="false">
+                  </album-list>
+                  <template v-if="userAlbum&&userAlbum.length===0">
+                    <no-result text="还没有专辑,快去收藏吧"></no-result>
+                  </template>
+                  <loading :loading="albumLoading" />
+                </div>
+
+                <div class="my-video">
+                  <div class="title">
+                    <div class="text">我的视频</div>
+                    <span class="count">({{videoCount}}个)</span>
+                  </div>
+
+                  <video-list @select="goToVideoInfo"
+                              :list="userVideo"></video-list>
+                  <template v-if="userVideo&&userVideo.length===0">
+                    <no-result text="还没有视频,快去收藏吧"></no-result>
+                  </template>
+                  <loading :loading="videoLoading" />
+                </div>
+              </div>
+            </template>
+            <!-- loading -->
+            <loading :loading="loading" />
+          </div>
         </div>
       </scroll>
     </section>
@@ -566,79 +568,82 @@ export default {
     flex: 1;
 
     .user-index {
-      background: $color-common-b;
+      .my-container {
+        background: $color-common-b;
 
-      .my-list {
-        margin-bottom: 0.4rem;
+        .my-list {
+          margin-bottom: 0.4rem;
 
-        .my-list-item {
-          display: flex;
-          width: 100%;
-          height: 1.7rem;
-          border-radius: 0.1rem;
-          color: $color-common-x;
-          background-color: #fff;
-
-          .left-image {
+          .my-list-item {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 1.6rem;
+            width: 100%;
             height: 1.7rem;
-            font-size: 0.7rem;
-            color: $color-common;
+            border-radius: 0.1rem;
+            color: $color-common-x;
+            background-color: #fff;
+
+            .left-image {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              width: 1.6rem;
+              height: 1.7rem;
+              font-size: 0.7rem;
+              color: $color-common;
+            }
+
+            .right-info {
+              display: flex;
+              justify-content: center;
+              flex-direction: column;
+              font-size: $font-size-smaller;
+
+              .title {
+                height: 0.7rem;
+                line-height: 0.7rem;
+              }
+
+              .num {
+                color: $color-common-b2;
+                line-height: 0.6rem;
+              }
+            }
+          }
+        }
+
+        >.my-follow {
+          .my-songSheet, .my-album {
+            padding: 0 0.4rem 0.2rem;
+            background-color: #fff;
           }
 
-          .right-info {
+          >>>.my-album .list .item {
+            margin-bottom: 0.3rem;
+
+            &:last-child {
+              margin-bottom: 0;
+            }
+          }
+
+          .my-video {
+            padding: 0 0.4rem 0.4rem;
+            background-color: #fff;
+          }
+
+          .title {
+            height: 1rem;
+            line-height: 1rem;
             display: flex;
-            justify-content: center;
-            flex-direction: column;
-            font-size: $font-size-smaller;
 
-            .title {
-              height: 0.7rem;
-              line-height: 0.7rem;
+            .text {
+              font-size: $font-size-smaller;
+              font-weight: bold;
+              margin-right: 0.1rem;
             }
 
-            .num {
+            .count {
               color: $color-common-b2;
-              line-height: 0.6rem;
             }
-          }
-        }
-      }
-
-      >.my-follow {
-        .my-songSheet, .my-album {
-          padding: 0 0.4rem 0.2rem;
-          background-color: #fff;
-        }
-
-        >>>.my-album .list .item {
-          margin-bottom: 0.3rem;
-          &:last-child {
-            margin-bottom: 0;
-          }
-        }
-
-        .my-video {
-          padding: 0 0.4rem 0.4rem;
-          background-color: #fff;
-        }
-
-        .title {
-          height: 1rem;
-          line-height: 1rem;
-          display: flex;
-
-          .text {
-            font-size: $font-size-smaller;
-            font-weight: bold;
-            margin-right: 0.1rem;
-          }
-
-          .count {
-            color: $color-common-b2;
           }
         }
       }
