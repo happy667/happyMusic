@@ -56,8 +56,6 @@ export default {
     this.listenerStorage()
     // 监听网络连接
     this.listenerNetWork()
-    //设置临时用户登录
-    this.setTempUser()
   },
   destroyed () {
     this.removeListener()
@@ -107,6 +105,8 @@ export default {
               })
             }
           }
+        }else{
+          this.$toast(res.data.message)
         }
       })
     },
@@ -121,47 +121,6 @@ export default {
     removeListenerNetWork () {
       window.removeEventListener('offline')
       window.removeEventListener('online')
-    },
-    setTempUser () {
-      this.setLoginUser({
-        "userId": 369271922,
-        "userType": 0,
-        "nickname": "Charming_ku",
-        "avatarImgId": 109951168026971154,
-        "avatarUrl": "http://p2.music.126.net/mywZrxHzoJfvxfEVsEE6Jg==/109951168026971154.jpg",
-        "backgroundImgId": 2002210674180203,
-        "backgroundUrl": "http://p1.music.126.net/bmA_ablsXpq3Tk9HlEg9sA==/2002210674180203.jpg",
-        "signature": "I love happyMusic",
-        "createTime": 1480300929486,
-        "userName": "1_********172",
-        "accountType": 1,
-        "shortUserName": "********172",
-        "birthday": 1665676800000,
-        "authority": 0,
-        "gender": 1,
-        "accountStatus": 0,
-        "province": 650000,
-        "city": 650200,
-        "authStatus": 0,
-        "description": null,
-        "detailDescription": null,
-        "defaultAvatar": false,
-        "expertTags": null,
-        "experts": null,
-        "djStatus": 0,
-        "locationStatus": 30,
-        "vipType": 11,
-        "followed": false,
-        "mutual": false,
-        "authenticated": false,
-        "lastLoginTime": 1741966879930,
-        "lastLoginIP": "61.242.130.217",
-        "remarkName": null,
-        "viptypeVersion": 1730276361897,
-        "authenticationTypes": 0,
-        "avatarDetail": null,
-        "anchor": false
-      })
     }
   },
   components: {

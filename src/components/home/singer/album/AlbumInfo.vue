@@ -117,10 +117,9 @@
            @click="closeOverlay"
            @touchmove.stop>
         <div class="top">
-          <div class="image-container">
+          <div class="image-container animated fadeIn">
             <div class="image">
-              <img v-lazy="albumObj.album.picUrl"
-                   class="animated fadeIn">
+              <img v-lazy="albumObj.album.picUrl">
             </div>
           </div>
 
@@ -205,7 +204,6 @@ export default {
       return !this.albumObj.songs ? "background:#f2f3f5" : ''
     },
     loadAlbumBgStyle () {
-      console.log(this.albumObj.album)
       return !this.albumObj.album ? "background:#f2f3f5" : ''
     },
     // 是否要加载图片
@@ -225,13 +223,17 @@ export default {
       } else {
         this.setHideMiniPlayer(false)
       }
+    },
+    // 获取用户收藏的专辑
+    user () {
+      this.getUserAlbum()
     }
   },
   mounted () {
     // 获取专辑详情
     this.getAlbumInfo(this.id)
-    // 获取用户收藏的专辑
     if (this.user) {
+      // 获取用户收藏的专辑
       this.getUserAlbum()
     }
     this.isLoadImage = true
@@ -310,7 +312,6 @@ export default {
             singers,
             singerList
           })
-          console.log(album)
           this.$set(this.albumObj, 'songs', songList)
           this.$set(this.albumObj, 'commentCount', res.album.info.commentCount)
           this.$set(this.albumObj, 'album', album)
@@ -328,11 +329,10 @@ export default {
         data: res
       } = await userApi.getUserAlbum()
       if (res.code === ERR_OK) {
-        console.log(res)
         let list = res.data
         let id = parseInt(this.id) // 转换成整数类型
         let item = list.find(item => item.id === id)
-        this.followed = !!item
+        this.followed = item
       }
     },
 
@@ -358,13 +358,13 @@ export default {
         })
       } else {
         this.$utils.alertConfirm({
-          message: '确定不再收藏该专辑',
-          confirmButtonText: '不再收藏'
+          message: '确定取消收藏该专辑',
+          confirmButtonText: '确定'
         }).then(async () => {
           userApi.updateFollowAlbum(this.id, follow).then(res => {
             if (res.data.code === ERR_OK) {
               this.followed = false
-              this.$toast('已不再收藏')
+              this.$toast('已取消收藏')
             }
           }).catch(err => {
             this.$toast(err.data.message)

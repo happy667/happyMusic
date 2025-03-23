@@ -32,6 +32,7 @@ import Video from '@/assets/common/js/video.js'
 import {
   ERR_OK
 } from '@/api/config.js'
+const LIMIT = 3;//一次请求的数据
 export default {
   data () {
     return {
@@ -82,7 +83,7 @@ export default {
     async getVideoList () {
       try {
         const offset = this.videoList.length;
-        const { data: res } = await videoApi.getRecommendVideo(offset);
+        const { data: res } = await videoApi.getRecommendVideo(offset, LIMIT);
         if (res.code !== ERR_OK) {
           this.$toast.fail('系统出错');
           return

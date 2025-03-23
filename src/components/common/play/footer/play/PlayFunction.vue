@@ -85,6 +85,8 @@ export default {
           console.log(like)
           // 同步喜欢状态
           this.$set(this.currentSong, 'isLike', like)
+        } else {
+          this.$toast(res.data.message)
         }
       }).catch(err => {
         this.$toast(err.data.message)

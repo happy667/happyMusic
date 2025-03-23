@@ -49,6 +49,7 @@ export default {
     border-radius: 0.3rem;
     width: 3.1rem;
     height: 3.1rem;
+    background: $color-common-b;
 
     .songs-playCount {
       position: absolute;
@@ -74,7 +75,6 @@ export default {
       width: 100%;
       height: 100%;
       border-radius: 0.3rem;
-      background: $color-common-b;
     }
   }
 

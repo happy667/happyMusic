@@ -119,7 +119,7 @@ const routes = [
     },
     // 歌单广场页
     {
-        path: '/SongSheetSquare',
+        path: '/songSheetSquare',
         name: 'songSheetSquare',
         component: SongSheetSquare,
         meta: {
@@ -447,7 +447,7 @@ const routes = [
         }
 
     },
-    // 用户推荐
+    // 最近播放
     {
         path: '/user/recentPlay',
         name: 'userRecentPlay',
@@ -459,10 +459,10 @@ const routes = [
         beforeEnter(to, from, next) {
             if (from.name === 'user') {
                 // 添加不缓存路由
-                store.commit('setAddNoCacheComponents', 'userRecentPlay')
+                store.commit('setAddNoCacheComponents', 'recentPlay')
             } else {
                 // 移除不缓存路由
-                store.commit('setRemoveNoCacheComponents', 'userRecentPlay')
+                store.commit('setRemoveNoCacheComponents', 'recentPlay')
             }
             next()
         }
@@ -548,7 +548,6 @@ router.beforeEach((to, from, next) => {
 
     if (to.matched.some(record => record.meta.requireLogin)) { // 判断该路由是否需要登录权限
         let utils = Vue.prototype.$utils
-        console.log(utils.isLogin())
         if (utils.isLogin()) { // 判断是否登录
             next()
         } else if (from.name !== 'login') {

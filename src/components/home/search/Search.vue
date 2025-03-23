@@ -254,9 +254,10 @@ export default {
 @import '~common/stylus/variable';
 
 .van-search {
-  height: 1.8rem;
-  padding: 0.25rem 0.1rem 0rem 0.25rem;
-  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  padding:0.4rem 0.2rem 0 0.4rem;
+  box-sizingrem: border-box;
 }
 
 .search-container {

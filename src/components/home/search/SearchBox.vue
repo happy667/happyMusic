@@ -191,7 +191,7 @@ export default {
   box-sizing: border-box;
 
   .container {
-    padding: 0 0.4rem;
+    padding: 0.3rem 0.4rem 0;
 
     .old-search {
       margin-bottom: 0.2rem;

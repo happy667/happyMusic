@@ -30,7 +30,7 @@
                          :list="recommendSongSheet"
                          v-if="this.recommendSongSheet.length > 0 ">
           <template>
-            <Title path='/SongSheetSquare'
+            <Title path='/songSheetSquare'
                    loadMore
                    styleInfo="margin-bottom:0.2rem"
                    title="推荐歌单"></Title>
@@ -88,6 +88,9 @@ export default {
       console.dir(this)
       return this.banners.length === 0
     }
+  },
+  activated () {
+    this.refresh();
   },
   methods: {
     ...mapMutations(['setPlayerFullScreen', 'setRank']),

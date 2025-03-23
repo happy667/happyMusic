@@ -48,7 +48,7 @@ export default {
       this.$emit('select', item)
     },
     removeAlbumItem (id) {
-      let index = this.list.findIndex(item => item.id = id)
+      let index = this.list.findIndex(item => item.id === id)
       this.list.splice(index, 1)
     }
   },
@@ -57,3 +57,5 @@ export default {
   }
 }
 </script>
+<style lang="stylus" scoped>
+</style>

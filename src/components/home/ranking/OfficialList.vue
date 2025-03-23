@@ -2,7 +2,7 @@
   <div class="official-list-container"
        @click="selectItem(rankingObj)">
     <router-link to="/songSheetInfo"
-                 tab="div"
+                 tag="div"
                  class="official-list">
       <!-- 排行列表图片 -->
       <div class="official-list-img">

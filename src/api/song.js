@@ -16,7 +16,7 @@ export default {
     },
     // 获取歌曲评论
     getSongComment(id, offset = 0) {
-        let url = `comment/music?id=${id}&offset=${offset}`
+        let url = `comment/music?id=${id}&offset=${offset}&timestamp=${new Date().getTime()}`
         return request({
             url
         })
@@ -30,10 +30,7 @@ export default {
     },
     // 听歌打卡
     scrobble(id, sourceId) {
-        const url = `/scrobble?timestamp=${new Date().getTime()}`
-        return request.post(url, {
-            id,
-            sourceid: sourceId
-        })
+        const url = `/scrobble?id=${id}&sourceid=${sourceId}&timestamp=${new Date().getTime()}`
+        return request(url)
     }
 }

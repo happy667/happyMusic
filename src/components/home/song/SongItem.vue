@@ -6,10 +6,10 @@
          :class="top?'rank':''"
          v-if="showIndex">{{index}}</div>
     <!-- 歌曲图片 -->
-    <div class="song-img"
+    <div class="song-img animated fadeIn"
+         :style="loadBgStyle"
          v-if="showImage">
-      <img v-lazy="picUrl"
-           class="animated fadeIn"
+      <img :src="picUrl"
            :key="picUrl">
     </div>
     <article class="right-info">
@@ -101,7 +101,10 @@ export default {
     // 歌手名称-专辑名称
     sgName () {
       return this.song.album ? this.song.singers + ' - ' + this.song.album.name : this.song.singers
-    }
+    },
+    loadBgStyle () {
+      return !this.picUrl ? "background:#f2f3f5" : ''
+    },
   },
   watch: {
     userLikeList () {
@@ -161,6 +164,7 @@ export default {
         userApi.likeMusic(song.id, like).then(res => {
           if (res.data.code === ERR_OK) {
             this.$set(this.song, 'isLike', like)
+            this.$toast('已添加到我喜欢')
             if (this.song.id === this.currentSong.id) {
               // 同步喜欢状态
               this.$set(this.currentSong, 'isLike', like)
@@ -170,14 +174,11 @@ export default {
           this.$toast(err.data.message)
         })
       } else {
-        this.$utils.alertConfirm({
-          message: '确定要取消喜欢该歌曲吗',
-          confirmButtonText: '取消'
-        }).then(async () => {
           userApi.likeMusic(song.id, like).then(res => {
             if (res.data.code === ERR_OK) {
               this.$set(this.song, 'isLike', like)
               this.$emit('noLike', this.song) // 派发取消喜欢事件
+              this.$toast('已取消收藏')
               if (this.song.id === this.currentSong.id) {
                 // 同步喜欢状态
                 this.$set(this.currentSong, 'isLike', like)
@@ -186,7 +187,6 @@ export default {
           }).catch(err => {
             this.$toast(err.data.message)
           })
-        }).catch(() => { })
       }
     },
     // 选择歌曲视频
@@ -227,8 +227,7 @@ export default {
   .song-img {
     width: 1rem;
     height: 1rem;
-    margin: 0.15rem 0.4rem 0.15rem 0;
-    background-color: $color-common-b;
+    margin: 0.15rem 0.3rem 0.15rem 0;
     border-radius: 50%;
     flex: none;
 

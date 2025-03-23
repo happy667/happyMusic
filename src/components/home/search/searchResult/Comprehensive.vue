@@ -137,7 +137,7 @@ export default {
           (artist) =>
             new Singer({
               id: artist.id,
-              name: artist.name,
+              name: artist.name
             })
         );
 

@@ -12,9 +12,9 @@
           <!-- 头像 -->
           <div class="avatar">
             <div class="image"
-                 v-if="user">
-              <img v-lazy="user.avatarUrl"
-                   class="animated fadeIn">
+                 v-if="user"
+                 :style="loadUserBgStyle">
+              <img v-lazy="user.avatarUrl">
             </div>
             <div :class="user?'icon':'nologin icon'"
                  @click="$router.push({name:'index'})"
@@ -34,7 +34,7 @@
             <!-- 签名 -->
             <div class="personalSignature"
                  v-if="user">
-              <div class="text"> {{user.signature}}</div>
+              <div class="text"> {{user.signature?user.signature:'暂无简介'}}</div>
             </div>
 
             <div class="no-login"
@@ -116,9 +116,11 @@
                 </div>
                 <song-sheet-mini-list v-if="userSongSheet"
                                       :list="userSongSheet"></song-sheet-mini-list>
-                <template v-if="userSongSheet.length===0">
+                <template v-if="userSongSheet&&userSongSheet.length===0">
                   <no-result text="还没有歌单,快去收藏吧"></no-result>
                 </template>
+                <!-- loading -->
+                <loading :loading="songSheetLoading" />
               </div>
               <div class="my-album">
                 <div class="title">
@@ -133,9 +135,10 @@
                             showFunctions
                             :showTime="false">
                 </album-list>
-                <template v-if="userAlbum.length===0">
+                <template v-if="userAlbum&&userAlbum.length===0">
                   <no-result text="还没有专辑,快去收藏吧"></no-result>
                 </template>
+                <loading :loading="albumLoading" />
               </div>
 
               <div class="my-video">
@@ -146,16 +149,16 @@
 
                 <video-list @select="goToVideoInfo"
                             :list="userVideo"></video-list>
-                <template v-if="userVideo.length===0">
+                <template v-if="userVideo&&userVideo.length===0">
                   <no-result text="还没有视频,快去收藏吧"></no-result>
                 </template>
+                <loading :loading="videoLoading" />
               </div>
             </div>
           </template>
           <!-- loading -->
-          <loading :loading="load" />
+          <loading :loading="loading" />
         </div>
-
       </scroll>
     </section>
 
@@ -184,11 +187,14 @@ export default {
   name: 'user',
   data () {
     return {
-      load: this.$utils.isLogin() ? true : false,
+      loading: false,
+      videoLoading: false,
+      albumLoading: false,
+      songSheetLoading: true,
       userCount: null,
-      userSongSheet: [], // 用户歌单
-      userAlbum: [], // 用户专辑
-      userVideo: [], // 用户视频
+      userSongSheet: null, // 用户歌单
+      userAlbum: null, // 用户专辑
+      userVideo: null, // 用户视频
       activeNames: ['1', '2', '3']
     }
   },
@@ -210,13 +216,15 @@ export default {
     videoCount () {
       return this.userVideo ? this.userVideo.length : 0
     },
+    loadUserBgStyle () {
+      return !this.user.avatarUrl ? "background:#f2f3f5" : ''
+    },
     skeletonLoad () {
       if (this.$utils.isLogin()) {
         return this.user ? false : true
       } else {
         return false
       }
-
     }
   },
   watch: {
@@ -246,42 +254,46 @@ export default {
     //获取页面所有数据
     async getAllData () {
       if (this.user) {
+        this.loading = false
+        this.songSheetLoading = true;
+        this.videoLoading = true;
+        this.albumLoading = true;
         // 获取用户专辑歌单数量
-        this.getUserCount()
+        await this.getUserCount()
         // 获取用户收藏的歌单
         await this.getUserSongSheet(this.user.userId)
         // 获取用户专辑
         await this.getUserAlbum()
         // 获取用户收藏的视频
         await this.getUserVideo()
+      } else {
+        this.loading = true;
       }
     },
     // 获取用户信息 , 歌单，收藏，mv, dj 数量
     async getUserCount () {
-      this.load = true;
       const {
         data: res
       } = await userApi.getUserCount()
       if (res.code === ERR_OK) {
         this.userCount = res
-        this.load = false;
       }
     },
     // 获取用户收藏的歌单
     async getUserSongSheet (id) {
-      this.load = true;
+      this.songSheetLoading = true;
       const {
         data: res
       } = await userApi.getUserSongSheet(id)
       if (res.code === ERR_OK) {
         this.userSongSheet = res.playlist
+        this.songSheetLoading = false;
         this.betterScrollRefresh()
-        this.load = false;
       }
     },
     // 获取用户收藏专辑
     async getUserAlbum () {
-      this.load = true;
+      this.albumLoading = true;
       const {
         data: res
       } = await userApi.getUserAlbum()
@@ -299,12 +311,12 @@ export default {
           albumList.push(album)
         })
         this.userAlbum = albumList
+        this.albumLoading = false;
         this.betterScrollRefresh()
-        this.load = false;
       }
     },
     async getUserVideo () {
-      this.load = true;
+      this.videoLoading = true;
       const {
         data: res
       } = await userApi.getUserVideo()
@@ -323,8 +335,8 @@ export default {
           videoList.push(video)
         })
         this.userVideo = videoList
+        this.videoLoading = false;
         this.betterScrollRefresh()
-        this.load = false;
       }
     },
 
@@ -404,7 +416,7 @@ export default {
   header {
     position: relative;
     width: 100%;
-    padding-bottom: 7rem;
+    padding-bottom: 6.5rem;
     height: 0;
     box-sizing: border-box;
 
@@ -422,7 +434,7 @@ export default {
       top: 0;
       left: 0;
       width: 100%;
-      height: 7rem;
+      height: 6.5rem;
       padding-top: 1.5rem;
       display: flex;
       flex-direction: column;
@@ -435,10 +447,11 @@ export default {
       .triangle-container {
         display: flex;
         position: absolute;
+        margin-bottom: 0.1rem;
         padding: 0 0.45rem;
         width: 100%;
         left: 0;
-        bottom: 5%;
+        bottom: 0%;
         flex-direction: column;
         z-index: 99;
         box-sizing: border-box;
@@ -447,14 +460,13 @@ export default {
           margin-bottom: 0.2rem;
           width: 2.2rem;
           height: 2.2rem;
-          background: #f4f4f4;
           border-radius: 50%;
 
           .image, .icon {
             width: 100%;
             height: 100%;
-            background: $color-common-b;
             border-radius: 50%;
+            box-shadow: 0.06rem 0.06rem 0.14rem rgba(0, 0, 0, 0.3);
 
             img {
               display: block;
@@ -554,7 +566,11 @@ export default {
     flex: 1;
 
     .user-index {
+      background: $color-common-b;
+
       .my-list {
+        margin-bottom: 0.4rem;
+
         .my-list-item {
           display: flex;
           width: 100%;
@@ -593,17 +609,24 @@ export default {
       }
 
       >.my-follow {
-        .my-songSheet, .my-album, .my-video {
+        .my-songSheet, .my-album {
+          padding: 0 0.4rem 0.2rem;
+          background-color: #fff;
+        }
+
+        >>>.my-album .list .item {
+          margin-bottom: 0.3rem;
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+
+        .my-video {
           padding: 0 0.4rem 0.4rem;
           background-color: #fff;
         }
 
-        .my-album, .my-video {
-          margin-top: 0.2rem;
-        }
-
         .title {
-          margin-bottom: 0.2rem;
           height: 1rem;
           line-height: 1rem;
           display: flex;

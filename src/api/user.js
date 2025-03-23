@@ -3,7 +3,7 @@ export default {
     // 获取用户详情
     getUserDetail(uid) {
         console.log(2222)
-        const url = `/user/detail?uid=${uid}`;
+        const url = `/user/detail?uid=${uid}&timestamp=${new Date().getTime()}`;
         return request({
             method: 'get',
             url
@@ -18,11 +18,8 @@ export default {
     },
     // 喜欢音乐
     likeMusic(id, like) {
-        const url = `/like?timestamp=${new Date().getTime()}`;
-        return request.post(url, {
-            id,
-            like
-        });
+        const url = `/like?id=${id}&like=${like}&timestamp=${new Date().getTime()}`;
+        return request.get(url);
     },
     // 获取用户关注的歌手
     getUserFollowSinger() {
@@ -39,7 +36,7 @@ export default {
     },
     // 获取用户播放记录
     getUserPlayRecord(uid, type) {
-        const url = `/user/record?uid=${uid}&type=${type}`;
+        const url = `/user/record?uid=${uid}&type=${type}&timestamp=${new Date().getTime()}`;
         return request({
             url
         });
@@ -51,9 +48,9 @@ export default {
     },
     // 获取用户最近播放
     getUserRencent(typeName) {
-        let url = `/record/recent/${typeName}`;
+        let url = `/record/recent/${typeName}?timestamp=${new Date().getTime()}`;
         if (typeName == 'song') {
-            url = `/record/recent/${ typeName }?limit=300 `
+            url = `/record/recent/${ typeName }?limit=300&timestamp=${new Date().getTime()}`
         }
         return request.post(url);
     },
@@ -73,6 +70,7 @@ export default {
 
     // 收藏/取消关注歌单
     updateFollowSongSheet(id, t) {
+        console.log(t)
         const url = `/playlist/subscribe?timestamp=${new Date().getTime()}`;
         return request.post(url, {
             id,

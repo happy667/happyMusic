@@ -9,7 +9,7 @@ export default {
     async getLoginUserInfo(context) {
         const {
             data: res
-        } = await loginApi.loginStatus()
+        } = await loginApi.loginStatus(context.state.token)
         if (res.data.code === ERR_OK) {
             let user = res.data.profile
             context.commit('setLoginUser', user)

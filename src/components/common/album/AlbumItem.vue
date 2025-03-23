@@ -2,7 +2,8 @@
   <div class="album-container">
     <div class="album-image">
       <div class="image-container">
-        <div class="image animated fadeIn">
+        <div class="image animated fadeIn"
+             :style="loadBgStyle">
           <img v-lazy="item.picUrl">
         </div>
         <div class="digital-album">
@@ -38,7 +39,7 @@
             <div class="icon">
               <i class="iconfont icon-shanchu"></i>
             </div>
-            <div class="text">删除</div>
+            <div class="text">取消收藏</div>
           </div>
 
         </div>
@@ -92,7 +93,10 @@ export default {
     }
   },
   computed: {
-    ...mapState(['user'])
+    ...mapState(['user']),
+    loadBgStyle () {
+      return !this.item.picUrl ? "background:#f2f3f5" : ''
+    }
   },
   methods: {
     goToSongSheetInfo () {
@@ -102,19 +106,20 @@ export default {
 
     },
     handleHpenFunctions () {
-      console.log(123)
       this.showPopup = !this.showPopup;
     },
     handleDelete () {
       this.showPopup = false;
       this.$utils.alertConfirm({
-        message: '你确定要删除该专辑吗',
-        confirmButtonText: '删除'
+        message: '你确定要取消收藏吗',
+        confirmButtonText: '确定'
       }).then(async () => {
-        userApi.updateFollowAlbum(this.item.id, false).then(res => {
+        userApi.updateFollowAlbum(this.item.id, 0).then(res => {
           if (res.data.code === ERR_OK) {
-            this.$toast("删除成功!")
+            this.$toast("已取消收藏!")
             this.$emit("removeAlbumItem", this.item.id);
+          } else {
+            this.$toast(res.data.message)
           }
         }).catch(err => {
           this.$toast(err.data.message)
@@ -191,7 +196,6 @@ export default {
       .image {
         width: 100%;
         height: 100%;
-        background: $color-common-b;
         border-radius: 0.1rem;
 
         img {

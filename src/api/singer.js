@@ -66,7 +66,7 @@ export default {
     },
     // 获取相似歌手
     getSimilarSinger(id) {
-        const url = `/simi/artist?id=${id}`
+        const url = `/simi/artist?id=${id}&timestamp=${new Date().getTime()}`
         return request({
             url
         })
@@ -80,7 +80,7 @@ export default {
     },
     // 获取专辑评论
     getAlbumComment(id, offset = 0) {
-        const url = `/comment/album?id=${id}&offset=${offset}`
+        const url = `/comment/album?id=${id}&offset=${offset}&timestamp=${new Date().getTime()}`
         return request({
             url
         })
@@ -88,7 +88,7 @@ export default {
 
     // 获取歌手关注信息
     getSingerFollow(id) {
-        const url = `/artist/follow/count?id=${id}`
+        const url = `/artist/follow/count?id=${id}&timestamp=${new Date().getTime()}`
         return request({
             url
         })
