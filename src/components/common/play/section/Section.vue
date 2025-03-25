@@ -99,10 +99,10 @@ export default {
           } else {
             // 先解析歌词
             let lyric = res.lrc.lyric
-            let tlyric = res.tlyric.lyric
             // 创建lyric对象对歌词进行处理
             let currentLyric = new Lyric(lyric, this.handleLyric)
             if (res.tlyric) { //翻译歌词
+              let tlyric = res.tlyric.lyric
               let translateLyric = new Lyric(tlyric, this.handleLyric)
               //同步歌词和翻译
               this.handleSynchronousTranslation(currentLyric, translateLyric)
