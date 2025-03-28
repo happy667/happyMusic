@@ -268,8 +268,6 @@ export default {
         await this.getUserAlbum()
         // 获取用户收藏的视频
         await this.getUserVideo()
-      } else {
-        this.loading = true;
       }
     },
     // 获取用户信息 , 歌单，收藏，mv, dj 数量
@@ -495,6 +493,7 @@ export default {
         }
 
         .nikeName {
+          margin-bottom: 0.1rem;
           padding-left: 0.1rem;
           max-width: 8rem;
           height: 0.75rem;

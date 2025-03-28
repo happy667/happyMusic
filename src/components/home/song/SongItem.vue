@@ -9,7 +9,7 @@
     <div class="song-img animated fadeIn"
          :style="loadBgStyle"
          v-if="showImage">
-      <img :src="picUrl"
+      <img v-lazy="picUrl"
            :key="picUrl">
     </div>
     <article class="right-info">

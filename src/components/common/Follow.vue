@@ -57,10 +57,12 @@ export default {
   font-size: $font-size-smaller-x;
   background: $color-common;
   color: #fff;
+
   .text {
     height: 0.4rem;
     line-height: 0.4rem;
   }
+
   &.plain {
     color: $color-common;
     background: #fff;
@@ -71,7 +73,7 @@ export default {
     color: $color-common-b2;
     background: $color-common-b;
     opacity: 0.9;
-    border: none;
+    border: 0.02rem solid $color-common-b;
   }
 }
 </style>

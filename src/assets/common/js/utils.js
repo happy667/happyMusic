@@ -62,6 +62,10 @@ const utils = {
     },
     // 播放所有歌曲
     playAllSong(list) {
+        if (list.length === 0) {
+            Vue.prototype.$toast('暂无可播放的歌曲')
+            return
+        }
         utils.handlePlayList(null, list, 0)
         utils.resetPlayProgress()
         store.commit('setPlayerFullScreen', true)

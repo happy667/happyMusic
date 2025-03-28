@@ -18,7 +18,17 @@
           <!-- loading -->
           <loading :loading="pageLoading" />
           <template v-if="songList&&songList.length!==0">
+            <!-- 时间筛选 -->
+            <time-filter ref="timeFilter"
+                         :maxDate="new Date()"
+                         :minDate="new Date(this.user.createTime)"
+                         :filterCondition="filterCondition"
+                         :showTimeFilter.sync="showTimeFilterPopup"
+                         @filterChange="handleFilterChange" />
             <play-all :length="songList.length"
+                      :showFilter="true"
+                      :filterStatus="filterStatus"
+                      @filterClick="handleFilterClickBtn"
                       @play="handlePlayAll(songList)"></play-all>
             <song-list @select="selectSong"
                        :showImage="true"
@@ -27,6 +37,11 @@
           </template>
 
           <template v-if="!pageLoading&&songList.length===0">
+            <play-all :length="songList.length"
+                      :showFilter="true"
+                      :filterStatus="filterStatus"
+                      @filterClick="handleFilterClickBtn"
+                      @play="handlePlayAll(songList)"></play-all>
             <no-result text="暂无收藏的歌曲"></no-result>
           </template>
 
@@ -43,11 +58,13 @@ import PlayAll from '@/components/common/PlayAll'
 import Scroll from '@/components/common/Scroll'
 import Position from '@/components/common/Position'
 import SongList from '@/components/home/song/SongList'
+import TimeFilter from '@/components/common/TimeFilter.vue'
 import Singer from '@/assets/common/js/singer.js'
 import Song from '@/assets/common/js/song.js'
 import NoResult from '@/components/common/NoResult'
 import Album from '@/assets/common/js/album.js'
-import songApi from '@/api/song.js'
+import recommendApi from '@/api/recommend.js'
+import userApi from '@/api/user.js'
 import {
   ERR_OK
 } from '@/api/config.js'
@@ -64,13 +81,20 @@ export default {
   data () {
     return {
       songList: null, // 歌曲列表
+      originalSongList: null, // 歌曲列表(过滤)
+      filterStatus: false, // 筛选状态
       loading: true,
-      showPosition: false
+      showPosition: false,
+      filterCondition: {
+        startTime: null,
+        endTime: null
+      },
+      showTimeFilterPopup: false, // 是否显示时间筛选
     }
   },
   mixins: [playlistMixin],
   computed: {
-    ...mapState(['user', 'userLikeList', 'currentPlayIndex']),
+    ...mapState(['user', 'currentPlayIndex']),
     ...mapGetters(['currentSong']),
     // 是否显示定位
     isShowPosition () {
@@ -83,67 +107,71 @@ export default {
       return !this.songList
     }
   },
-  watch: {
-    userLikeList () {
-      if (this.user) {
-        this.getSongDetail()
-      }
-    }
-  },
   methods: {
     ...mapActions(['getUserLikeList']),
     // 返回上一个路由
     routerBack () {
       this.$utils.routerBack()
     },
-    handleNoLike (song) {
-      // 移除歌曲
-      this.$utils.removeItem(this.songList, song)
-    },
-    // 获取歌曲详情
-    async getSongDetail () {
-      if (this.userLikeList.length === 0) {
-        this.songList = []
-        this.loading = false
-        return
-      }
-      let ids = this.userLikeList.join(',')
-      const {
-        data: res
-      } = await songApi.getSongDetail(ids)
-      if (res.code === ERR_OK) {
-        let songList = []
-        res.songs.forEach((item) => { // 循环数组对象对每个数据进行处理 返回需要得数据
-          let singers = item.ar.map(item => item.name).join('/')
-          let singersList = []
-          // 处理歌手
-          item.ar.forEach(item => {
-            singersList.push(new Singer({
-              id: item.id,
-              name: item.name
-            }))
-          })
-          let song = new Song({
+    // 获取歌曲列表
+    async getSongList () {
+      try {
+        // 获取用户收藏的歌单
+        const { data: playlistRes } = await userApi.getUserSongSheet(this.user.userId);
+        if (playlistRes.code !== ERR_OK) {
+          throw new Error(playlistRes.message || '获取歌单失败');
+        }
+        // 查找用户创建的歌单ID
+        const userPlaylist = playlistRes.playlist.find(
+          item => item.creator.userId === this.user.userId
+        );
+        if (!userPlaylist) {
+          throw new Error('未找到用户歌单');
+        }
+        // 获取歌单详情
+        const { data: detailRes } = await recommendApi.getSongSheetById(userPlaylist.id);
+        if (detailRes.code !== ERR_OK) {
+          throw new Error(detailRes.message || '获取歌单详情失败');
+        }
+        const { playlist } = detailRes;
+        // 创建trackId到收藏时间的映射
+        const trackTimeMap = playlist.trackIds.reduce((map, track) => {
+          map[track.id] = track.at; // 使用at字段作为收藏时间
+          return map;
+        }, {});
+        // 处理歌曲列表
+        this.originalSongList = playlist.tracks.map(item => {
+          const singerName = item.ar.map(artist => artist.name).join('/');
+          const singersList = item.ar.map(artist => new Singer({
+            id: artist.id,
+            name: artist.name,
+            aliaName: artist.alias.join(' / '),
+            avatar: artist.img1v1Url,
+            picUrl: artist.picUrl
+          }));
+
+          return new Song({
             id: item.id,
-            name: item.alia.length > 0 ? `${item.name} (${item.alia.join('/')})` : item.name,
-            singers,
+            name: item.name,
+            singers: singerName,
             singersList,
             picUrl: item.al.picUrl,
-            st: item.st,
-            mv: item.mv,
             album: new Album({
               id: item.al.id,
               name: item.al.name,
               picUrl: item.al.picUrl
-            })
-          })
-          songList.push(song)
-        })
-        this.songList = songList
-        this.loading = false
+            }),
+            mv: item.mv,
+            followTime: trackTimeMap[item.id] // 添加收藏时间字段
+          });
+        });
+        this.songList = this.originalSongList
+      } catch (error) {
+        console.error('获取歌曲列表出错:', error);
+        this.$toast(error.message || '获取歌曲列表失败');
+        this.$router.replace('/');
       }
     },
-
     handlePosition () {
       // 说明有歌曲在播放
       if (this.currentSong) {
@@ -188,10 +216,60 @@ export default {
       // 引入vue原型上的utils
       this.$utils.playAllSong(list)
     },
+    //当筛选时间变化时
+    handleFilterChange (condition) {
+      this.filterCondition = {
+        startTime: condition.startTime,
+        endTime: condition.endTime
+      }
+      //筛选歌曲
+      this.songList = this.filterSong(this.originalSongList)
+      this.filterStatus = true
+      this.showTimeFilterPopup = false
+      this.$toast("筛选成功")
+    },
+    /**
+   * 处理筛选按钮点击事件
+   * 控制时间筛选弹窗的显示/隐藏，并根据筛选状态更新歌曲列表
+   */
+    handleFilterClickBtn () {
+      // 如果当前已经是筛选状态，则关闭弹窗并取消筛选
+      if (this.filterStatus) {
+        this.filterStatus = false;       // 取消筛选状态
+        this.songList = this.originalSongList; // 恢复显示原始歌曲列表
+        this.showTimeFilterPopup = true; // 显示时间筛选弹窗
+        console.log(this.filterCondition)
+        return;
+      }
+
+      // 如果不是筛选状态，则切换时间筛选弹窗的显示状态
+      this.showTimeFilterPopup = !this.showTimeFilterPopup;
+
+      // 如果关闭弹窗且没有应用筛选条件，保持当前列表不变
+      if (!this.showTimeFilterPopup && !this.filterStatus) {
+        this.songList = this.originalSongList;
+      }
+    },
+    //筛选歌曲
+    filterSong (list) {
+      let { startTime, endTime } = this.filterCondition;
+      let filterList = list.filter(item => {
+        let timestamp = item.followTime;
+        return timestamp >= startTime && timestamp <= endTime
+      });
+      return filterList;
+    }
   },
   mounted () {
     if (this.user) {
-      this.getUserLikeList(this.user.userId)
+      this.getSongList()
+    }
+  },
+  watch: {
+    user () {
+      if (this.user && !this.songList) {
+        this.getSongList()
+      }
     }
   },
   components: {
@@ -199,7 +277,8 @@ export default {
     Position,
     Scroll,
     NoResult,
-    PlayAll
+    PlayAll,
+    TimeFilter
   }
 }
 </script>

@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1167179",
+      "name": "筛选",
+      "font_class": "shaixuan",
+      "unicode": "e642",
+      "unicode_decimal": 58946
+    },
+    {
       "icon_id": "9400485",
       "name": "倍速_54",
       "font_class": "speed",

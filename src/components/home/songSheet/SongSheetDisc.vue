@@ -54,8 +54,9 @@
 
               </div>
               <article class="right-info">
-                <div class="creator">
-                  <img class="avatar animated fadeIn"
+                <div class="creator animated fadeIn"
+                     :style="loadBgStyle">
+                  <img class="avatar"
                        v-lazy="songSheetDisc.creator.avatarUrl" />
                   <span class="name">{{songSheetDisc.creator.nickname}}</span>
                 </div>
@@ -274,7 +275,6 @@ export default {
     },
     loadBgStyle () {
       return this.loading ? "background:#f2f3f5" : ''
-
     }
   },
   methods: {
@@ -374,7 +374,7 @@ export default {
     },
 
     follow () {
-      let follow = !this.followed  
+      let follow = !this.followed
       if (follow) { // 1代表收藏，2代表不收藏
         userApi.updateFollowSongSheet(this.id, 1).then(res => {
           if (res.data.code === ERR_OK) {
@@ -704,7 +704,6 @@ export default {
                   width: 0.7rem;
                   height: 0.7rem;
                   border-radius: 50%;
-                  background: $color-common-b;
                 }
 
                 .name {
@@ -750,12 +749,12 @@ export default {
       flex: 1;
 
       .songs-desc {
-        margin-bottom: 0.1rem;
         padding: 0.4rem 0.4rem 0 0.4rem;
         position: relative;
 
         .desc {
           margin-right: 2.3rem;
+          min-height: 0.4rem;
           line-height: 0.65rem;
           font-weight: 500;
           font-size: $font-size-small-x;
