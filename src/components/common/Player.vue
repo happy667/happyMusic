@@ -79,10 +79,6 @@ export default {
       this.getSong(this.currentSong)
       this.scrobble(this.currentSong.id, this.currentSong.album.id)
       this.setIsLoadPlayerImage(true)
-
-      this.$nextTick(() => {
-        this.applyPlaybackRate()
-      })
     },
     playing (newPlaying) {
       const audio = this.audio
@@ -118,11 +114,14 @@ export default {
     togglePlayList () {
       this.togglePlayList ? this.closeScroll() : this.openScroll()
     },
-    songSpeed (newSpeed) {
-      console.log('播放速度更新:', newSpeed) // 调试日志
-      this.$refs.audio.playbackRate = newSpeed // 确保直接更新
-      this.setAudio(this.$refs.audio)
+    songSpeed () {
       this.applyPlaybackRate()
+    },
+    playerFullScreen () {
+      //关闭播放器页面则关闭歌词页面
+      if (this.playerFullScreen === false) {
+        this.setPlayerShowImage(true)
+      }
     }
   },
   computed: {
@@ -142,13 +141,14 @@ export default {
     ...mapMutations(['setAudio', 'setTogglePlayList', 'setSongReady', 'setPlaying',
       'setPlayMode', 'setPlayList', 'setCurrentPlayIndex', 'setSequenceList',
       'setPlayerShowImage', 'setCurrentPlayLyric', 'setCurrentLineNum',
-      'setIsLoadPlayerImage', 'setCurrentLyric', 'setSongLoading', 'setSongSpeed']),
+      'setIsLoadPlayerImage', 'setCurrentLyric', 'setSongLoading']),
     ...mapActions(['deleteSong', 'loop', 'next', 'prev', 'handleTogglePlaying']),
     // 统一应用播放速度
     applyPlaybackRate () {
-      const audio = this.$refs.audio
-      if (audio) {
-        audio.playbackRate = this.songSpeed
+      if (this.audio) {
+        this.$nextTick(() => {
+          this.audio.playbackRate = this.songSpeed
+        })
       }
     },
     ready () {
@@ -173,25 +173,25 @@ export default {
           return
         }
         this.url = url
-        this.$nextTick(() => {
-          this.$refs.FullScreenPlay.$refs.playSection.getLyric(this.currentSong.id)
-        })
         if (!song.album.picUrl) {
           const { data: albumData } = await singerApi.getAlbumInfo(song.album.id)
           song.album.picUrl = albumData.album.picUrl
         }
+        this.$nextTick(async () => {
+          await this.$refs.FullScreenPlay.$refs.playSection.getLyric(this.currentSong.id)
+        })
         if (this.currentLyric) this.currentLyric.play()
         this.setPlaying(true)
       } catch (error) {
         this.$toast('获取歌曲失败')
       } finally {
         this.setSongLoading(false)
+        this.applyPlaybackRate()
       }
     },
     handleUpdateTime (e) {
       this.playerParams.currentTime = e.target.currentTime
       this.playerParams.width = (this.playerParams.currentTime / this.playerParams.duration) * 100
-      this.applyPlaybackRate();//更新播放速度
     },
     handleEnd () {
       this.playMode === PLAY_MODE.loop ? this.loop() : this.next()

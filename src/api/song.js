@@ -23,14 +23,16 @@ export default {
     },
     // 获取歌曲歌词
     getSongLyric(id) {
-        let url = `lyric?id=${id}`
+        let url = `lyric/new?id=${id}`
         return request({
             url
         })
     },
     // 听歌打卡
-    scrobble(id, sourceId) {
-        const url = `/scrobble?id=${id}&sourceid=${sourceId}&timestamp=${new Date().getTime()}`
-        return request(url)
+    scrobble(id, sourceId, time = 0) {
+        const url = `/scrobble?id=${id}&sourceid=${sourceId}&time=${time}&timestamp=${new Date().getTime()}`
+        return request({
+            url
+        })
     }
 }

@@ -5,12 +5,12 @@
                :get-container="getContainer"
                round>
       <div class="song-speed-container">
-        <h3 class="title">播放速度 {{ songSpeed === 1 ? '正常' : `${songSpeed}X` }}</h3>
+        <h3 class="title">播放速度 {{ songSpeed === 1.0 ? '正常' : `${songSpeed}X` }}</h3>
         <div class="slider">
           <van-slider v-model="currentSpeed"
                       :min="0.5"
                       bar-height="4px"
-                      :max="2"
+                      :max="2.0"
                       active-color="#FD4979"
                       :step="0.1"
                       button-size="18"
@@ -20,9 +20,9 @@
         <div class="speed-options">
           <div v-for="speed in speedOptions"
                :key="speed"
-               :class="['speed-option', { active: currentSpeed === speed }]"
-               @click="setSpeed(speed)">
-            {{ speed === 1 ? '正常' : `${speed}X` }}
+               :class="['speed-option', { active: songSpeed === speed }]"
+               @click="handleSpeedChange(speed)">
+            {{ speed === 1.0 ? '正常' : `${speed}X` }}
           </div>
         </div>
       </div>
@@ -38,8 +38,7 @@ export default {
   name: 'SongSpeed',
   data () {
     return {
-      speedOptions: [0.5, 1, 1.5, 2],
-      currentSpeed: 1
+      speedOptions: [0.5, 1.0, 1.5, 2.0]
     }
   },
   computed: {
@@ -47,22 +46,16 @@ export default {
     showPopup: {
       get () { return this.songSpeedPopup },
       set (value) { this.setSongSpeedPopup(value) }
-    }
-  },
-  watch: {
-    songSpeed (newSpeed) {
-      this.currentSpeed = newSpeed
+    },
+    currentSpeed: {
+      get () { return this.songSpeed },
+      set (value) { this.setSongSpeed(value) }
     }
   },
   methods: {
     ...mapMutations(['setSongSpeed', 'setSongSpeedPopup']),
-    setSpeed (speed) {
-      this.currentSpeed = speed
-      this.setSongSpeed(speed)
-      this.$toast('当前倍速:' + (speed === 1 ? '正常' : `${speed}X`))
-    },
     handleSpeedChange (speed) {
-      this.setSpeed(speed)
+      this.currentSpeed = speed
       this.$toast('当前倍速:' + (speed === 1 ? '正常' : `${speed}X`))
     },
     getContainer () {
