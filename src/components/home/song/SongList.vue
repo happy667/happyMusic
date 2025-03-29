@@ -12,6 +12,7 @@
         <song-item @noLike="handleNoLike"
                    :showImage="showImage"
                    :song="item"
+                   :showMV="showMV"
                    :top="index<3&&top"
                    :index="index+1"
                    :showIndex="showIndex"></song-item>
@@ -31,6 +32,10 @@ export default {
     showImage: {
       type: Boolean,
       default: () => false
+    },
+    showMV: {
+      type: Boolean,
+      default: () => true
     },
     showIndex: {
       type: Boolean,

@@ -7,50 +7,73 @@
                class="main-popup">
       <div class="filter-content">
         <div class="header">
-          <div class="title">收藏时间筛选</div>
+          <div class="title">筛选歌曲</div>
           <van-icon name="cross"
                     class="close-icon"
-                    @click="_showPopup = false" />
+                    @click="handleClose" />
         </div>
 
-        <div class="date-range">
-          <div class="date-item start-date"
-               @click="openPicker('start')">
-            <div class="label">起始时间</div>
-            <div class="value">{{ startTimeDisplay }}</div>
-            <van-icon name="arrow-down"
-                      class="arrow-icon" />
+        <div class="time-filter-content">
+          <div class="time-range">
+            <div class="title">时间范围</div>
+            <div class="time-picker">
+              <div class="date-item start-date"
+                   @click="openPicker('start')">
+                <div class="label">起始时间</div>
+                <div class="value">{{ startTimeText }}</div>
+                <van-icon name="arrow-down"
+                          class="arrow-icon" />
+              </div>
+
+              <div class="divider">至</div>
+
+              <div class="date-item end-date"
+                   @click="openPicker('end')">
+                <div class="label">结束时间</div>
+                <div class="value">{{ endTimeText }}</div>
+                <van-icon name="arrow-down"
+                          class="arrow-icon" />
+              </div>
+            </div>
           </div>
 
-          <div class="divider">至</div>
-
-          <div class="date-item end-date"
-               @click="openPicker('end')">
-            <div class="label">结束时间</div>
-            <div class="value">{{ endTimeDisplay }}</div>
-            <van-icon name="arrow-down"
-                      class="arrow-icon" />
+          <div class="play-count">
+            <div class="title">播放次数</div>
+            <div class="count-range">
+              <van-field v-model="minPlayCount"
+                         type="number"
+                         placeholder="最小播放次数"
+                         :maxlength="10"
+                         @input="validateMinCount" />
+              <div class="divider">至</div>
+              <van-field v-model="maxPlayCount"
+                         type="number"
+                         placeholder="最大播放次数"
+                         :maxlength="10"
+                         @input="validateMaxCount" />
+            </div>
           </div>
         </div>
 
         <div class="time-range-tips">
-          可选范围：{{ filterStartTimeText }} - {{ filterEndTimeText }}
+          <span class="tips-label">时间可选范围：</span>
+          <span class="tips-value">{{ filterStartTimeText }} 至 {{ filterEndTimeText }}</span>
         </div>
 
         <div class="action-buttons">
           <van-button plain
                       block
                       color="#999"
-                      @click="resetDates">重置</van-button>
+                      @click="handleReset">重置</van-button>
           <van-button type="primary"
                       class="confirm-btn"
                       color="#fd4979"
-                      @click="emitFilterChange">确定</van-button>
+                      @click="handleConfirm">确定</van-button>
         </div>
       </div>
     </van-popup>
 
-    <!-- 日期选择器 -->
+    <!-- 日期选择器弹窗 -->
     <van-popup v-model="showDatePicker"
                round
                position="bottom"
@@ -60,7 +83,7 @@
                            :title="pickerTitle"
                            :min-date="minDate"
                            :max-date="maxDate"
-                           @confirm="confirmDate"
+                           @confirm="handleDateConfirm"
                            @cancel="closeDatePicker" />
     </van-popup>
   </div>
@@ -69,6 +92,7 @@
 <script>
 import { convertDate } from '@/assets/common/js/convert.js'
 import { mapMutations } from 'vuex'
+
 export default {
   name: 'TimeFilter',
   props: {
@@ -90,9 +114,11 @@ export default {
     //父组件传入的筛选条件
     filterCondition: {
       type: Object,
-      default: () => ({
-        startTime: null, // 起始时间
-        endTime: null // 结束时间
+      default: () => ({  
+        startTime: null,
+        endTime: null,
+        minPlayCount: null,
+        maxPlayCount: null
       })
     }
   },
@@ -100,14 +126,18 @@ export default {
     return {
       showDatePicker: false, // 日期选择器弹窗状态
       currentPickerType: null, // 当前操作类型：'start'或'end'
-      startTime: this.minDate, // 最终起始时间（时间戳）
-      endTime: new Date(), // 最终结束时间（时间戳）
+      startTime: this.minDate, // 默认开始时间为最小日期
+      endTime: new Date(), // 默认结束时间为当前日期
       currentDate: null, //当前日期
+      minPlayCount: '',
+      maxPlayCount: '',
+      startTimeText: '',
+      endTimeText: ''
     }
   },
   mounted () {
     //回填筛选数据
-    this.loadFilterCondition()
+    this.initFilterCondition()
   },
   computed: {
     // 主弹窗显示控制（双向绑定）
@@ -141,11 +171,9 @@ export default {
     }
   },
   watch: {
-    showTimeFilter () {
-      if (this.showTimeFilter) {
-        this.setHideMiniPlayer(true)
-      } else {
-        this.setHideMiniPlayer(false)
+    showTimeFilter (val) {
+      if (val) {
+        this.initFilterCondition()
       }
     }
   },
@@ -154,59 +182,136 @@ export default {
     // 打开日期选择器
     openPicker (type) {
       this.currentPickerType = type // 设置当前操作类型
-      if (this.currentPickerType === 'start') {
-        this.currentDate = new Date(this.startTime)
-      } else {
-        this.currentDate = new Date(this.endTime)
-      }
+      this.currentDate = new Date(type === 'start' ? this.startTime : this.endTime)
       this.showDatePicker = true // 显示日期选择器
-
     },
     // 关闭日期选择器
     closeDatePicker () {
       this.showDatePicker = false
     },
     // 确认选择的日期
-    confirmDate (value) {
+    handleDateConfirm (value) {
       // 根据当前操作类型存储时间戳
       if (this.currentPickerType === 'start') {
         this.startTime = value
+        this.startTimeText = this.formatDate(value)
       } else {
         this.endTime = value
+        this.endTimeText = this.formatDate(value)
       }
       this.closeDatePicker() // 关闭日期选择器
     },
     // 触发筛选事件
-    emitFilterChange () {
-      const startTime = this.startTime
-      const endTime = this.endTime
-      // 验证逻辑
-      if (convertDate(startTime) > convertDate(endTime)) {
-        this.$toast('起始时间不能大于结束时间')
+    handleConfirm () {
+      if (!this.validateFilter()) return
+
+      if (this.isDefaultValues()) {
+        this._showPopup = false
         return
       }
-      if (convertDate(startTime) === convertDate(this.minDate) && convertDate(endTime) === convertDate(new Date())) {
-        this._showPopup = false
-      } else {
-        this.$emit('filterChange', { startTime, endTime })
-      }
+
+      // 修改播放次数的处理逻辑
+      const minCount = this.minPlayCount.trim() ? parseInt(this.minPlayCount) : null
+      const maxCount = this.maxPlayCount.trim() ? parseInt(this.maxPlayCount) : null
+
+      this.$emit('filterChange', {
+        startTime: this.startTime,
+        endTime: this.endTime,
+        minPlayCount: minCount,
+        maxPlayCount: maxCount
+      })
     },
     //重置筛选数据
-    resetDates () {
-      this.startTime = this.minDate.getTime()
-      this.endTime = new Date().getTime()
-      this.tempStart = null
-      this.tempEnd = null
+    handleReset () {
+      this.startTime = this.minDate
+      this.endTime = new Date()
+      this.minPlayCount = ''
+      this.maxPlayCount = ''
+      this.startTimeText = this.formatDate(this.startTime)
+      this.endTimeText = this.formatDate(this.endTime)
       this.$toast("已重置筛选条件")
     },
-    //加载筛选数据
-    loadFilterCondition () {
-      const { startTime, endTime } = this.filterCondition
-      if (startTime && endTime) {
-        this.startTime = startTime
-        this.endTime = endTime
+    initFilterCondition () {
+      const { startTime, endTime, minPlayCount, maxPlayCount } = this.filterCondition
+      
+      this.startTime = startTime || this.minDate
+      this.endTime = endTime || new Date()
+      this.startTimeText = this.formatDate(this.startTime)
+      this.endTimeText = this.formatDate(this.endTime)
+      console.log(minPlayCount,maxPlayCount)
+      // 修复播放次数的回填
+      this.minPlayCount = minPlayCount !== null ? minPlayCount : ''
+      this.maxPlayCount = maxPlayCount !== null ? maxPlayCount : ''
+    },
+    onConfirmStartTime (date) {
+      this.startTime = date
+      this.startTimeText = this.formatDate(date)
+      this.showStartPicker = false
+    },
+    onConfirmEndTime (date) {
+      this.endTime = date
+      this.endTimeText = this.formatDate(date)
+      this.showEndPicker = false
+    },
+    onCancelStartTime () {
+      this.showStartPicker = false
+    },
+    onCancelEndTime () {
+      this.showEndPicker = false
+    },
+    formatDate (date) {
+      const year = date.getFullYear()
+      const month = String(date.getMonth() + 1).padStart(2, '0')
+      const day = String(date.getDate()).padStart(2, '0')
+      return `${year}-${month}-${day}`
+    },
+    validateMinCount(value) {
+      // 移除非数字字符
+      this.minPlayCount = value.replace(/[^\d]/g, '')
+    },
+    validateMaxCount(value) {
+      // 移除非数字字符
+      this.maxPlayCount = value.replace(/[^\d]/g, '')
+    },
+    validateFilter () {
+      const startTime = this.startTime
+      const endTime = this.endTime
+      const minCount = this.minPlayCount.trim() ? parseInt(this.minPlayCount) : null
+      const maxCount = this.maxPlayCount.trim() ? parseInt(this.maxPlayCount) : null
+
+      if (convertDate(startTime) > convertDate(endTime)) {
+        this.$toast('起始时间不能大于结束时间')
+        return false
       }
-    }
+
+      // 只验证已输入的播放次数
+      if (minCount !== null && minCount < 0) {
+        this.$toast('最小播放次数不能小于0')
+        return false
+      }
+
+      if (maxCount !== null && maxCount < 0) {
+        this.$toast('最大播放次数不能小于0')
+        return false
+      }
+
+      // 确保最小播放次数不能大于或等于最大播放次数
+      if (minCount !== null && maxCount !== null && minCount >= maxCount) {
+        this.$toast('最小播放次数必须小于最大播放次数')
+        return false
+      }
+
+      return true
+    },
+    isDefaultValues () {
+      const isDefaultTime = convertDate(this.startTime) === convertDate(this.minDate) && 
+                           convertDate(this.endTime) === convertDate(new Date())
+      const isDefaultPlayCount = !this.minPlayCount && !this.maxPlayCount
+      return isDefaultTime && isDefaultPlayCount
+    },
+    handleClose () {
+      this._showPopup = false
+    },
   }
 }
 </script>
@@ -218,102 +323,151 @@ export default {
   --primary-color: #fd4979;
   --text-primary: $color-common-x;
   --text-secondary: $color-common-b2;
-  --background-light: #f9f9f9;
+  --background-light: #f7f8fa;
+  --border-color: #ebedf0;
+  --divider-color: #f5f6fa;
 
   .main-popup {
     overflow: visible;
+    border-radius: 0.3rem 0.3rem 0 0;
 
     .filter-content {
       padding: 0.4rem;
 
       .header {
-        margin-bottom: 0.5rem;
         position: relative;
+        margin-bottom: 0.4rem;
+        padding-bottom: 0.4rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-bottom: 1px solid var(--divider-color);
 
         .title {
-          font-size: 0.5rem;
+          height: 0.6rem;
+          line-height: 0.6rem;
+          font-size: $font-size-small;
           color: var(--text-primary);
-          font-weight: 600;
+          font-weight: 500;
           text-align: center;
         }
 
         .close-icon {
           position: absolute;
-          right: 0;
-          top: 50%;
-          transform: translateY(-50%);
+          right: 0.3rem;
           color: var(--text-secondary);
           font-size: $font-size-smaller;
           padding: 0.2rem;
+          transition: all 0.3s ease;
         }
       }
 
-      .date-range {
-        display: flex;
-        align-items: center;
-        gap: 0.2rem;
-        margin-bottom: 0.4rem;
+      .time-filter-content {
+        .time-range, .play-count {
+          margin-bottom: 0.3rem;
 
-        .date-item {
-          flex: 1;
-          padding: 0.3rem;
-          border-radius: 0.2rem;
-          background: var(--background-light);
-          position: relative;
-          transition: all 0.2s;
-
-          &:active {
-            background: darken(#f9f9f9, 2%);
-          }
-
-          .label {
-            font-size: $font-size-mini;
-            margin-bottom: 0.2rem;
-          }
-
-          .value {
-            font-size: $font-size-smaller;
-            color: var(--text-primary);
-            font-weight: 500;
-          }
-
-          .arrow-icon {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
+          .title {
+            font-size: $font-size-small-x;
             color: var(--text-secondary);
-            right: 0.3rem;
-            font-size: $font-size-mini;
+            margin-bottom: 0.3rem;
+            padding: 0 0.1rem;
           }
         }
 
-        .divider {
-          color: var(--text-secondary);
-          font-size: $font-size-smaller;
+        .play-count {
+          .count-range {
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+
+            .van-field {
+              flex: 1;
+              padding: 0.15rem 0.3rem;
+              background: #fff;
+              border-radius: 0.2rem;
+              border: 1px solid var(--border-color);
+            }
+
+            .divider {
+              color: var(--text-secondary);
+              font-size: $font-size-smaller;
+              padding: 0 0.1rem;
+              font-weight: 500;
+            }
+          }
+        }
+
+        .time-picker {
+          margin-bottom: 0.3rem;
+          display: flex;
+          align-items: center;
+          gap: 0.2rem;
+
+          .date-item {
+            flex: 1;
+            padding: 0.3rem;
+            border-radius: 0.2rem;
+            background: var(--background-light);
+            position: relative;
+            border: none;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+
+            .label {
+              font-size: $font-size-mini;
+              color: var(--text-secondary);
+              margin-bottom: 0.2rem;
+            }
+
+            .value {
+              font-size: $font-size-smaller;
+              color: var(--text-primary);
+              font-weight: 500;
+            }
+
+            .arrow-icon {
+              position: absolute;
+              top: 50%;
+              transform: translateY(-50%);
+              color: var(--text-secondary);
+              right: 0.3rem;
+              font-size: $font-size-mini;
+            }
+          }
+
+          .divider {
+            color: var(--text-secondary);
+            font-size: $font-size-smaller;
+            padding: 0 0.1rem;
+            font-weight: 500;
+          }
         }
       }
 
       .time-range-tips {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.2rem;
         height: 0.4rem;
         line-height: 0.4rem;
         font-size: $font-size-mini;
-        margin-bottom: 0.5rem;
         padding: 0.2rem;
-        border-radius: 0.2rem;
-        color: var(--text-secondary);
-        text-align: center;
+        border-radius: 0.1rem;
         background: var(--background-light);
+        color: var(--text-secondary);
       }
 
       .action-buttons {
         display: flex;
-        gap: 0.3rem;
+        gap: 0.4rem;
+        margin-top: 0.3rem;
+        padding-top: 0.3rem;
+        border-top: 1px solid var(--divider-color);
 
         .van-button {
           flex: 1;
-          height: 1.1rem;
-          border-radius: 0.2rem;
-          font-size: $font-size-smaller;
+          height: 0.9rem;
+          border-radius: 0.1rem;
         }
       }
     }

@@ -11,7 +11,8 @@ export default class Song {
         album,
         isOriginal,
         isLike = false,
-        followTime = 0
+        followTime = 0,
+        songSheetListId = null,
     }) {
         this.id = id
         this.name = name
@@ -25,5 +26,6 @@ export default class Song {
         this.album = album
         this.isOriginal = isOriginal
         this.followTime = followTime
+        this.songSheetListId = songSheetListId
     }
 }

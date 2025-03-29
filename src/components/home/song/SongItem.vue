@@ -30,7 +30,7 @@
       </div>
       <div class="icon-container"
            v-if="song.st>=0">
-        <div v-if="song.mv"
+        <div v-if="song.mv&&showMV"
              class="icon video"
              @click.stop="selectItemVideo">
           <van-icon name="tv-o" />
@@ -43,8 +43,7 @@
           </div>
           <div class="count">{{song.playCount}}次</div>
         </div>
-        <div v-else
-             class="icon love"
+        <div class="icon love"
              :class="song.isLike ? 'active' : ''"
              @click.stop="selectItemLove">
           <i class="iconfont"
@@ -73,6 +72,10 @@ export default {
     song: Object,
     index: Number,
     showImage: {
+      type: Boolean,
+      default: () => false
+    },
+    showMV: {
       type: Boolean,
       default: () => false
     },
@@ -174,19 +177,19 @@ export default {
           this.$toast(err.data.message)
         })
       } else {
-          userApi.likeMusic(song.id, like).then(res => {
-            if (res.data.code === ERR_OK) {
-              this.$set(this.song, 'isLike', like)
-              this.$emit('noLike', this.song) // 派发取消喜欢事件
-              this.$toast('已取消收藏')
-              if (this.song.id === this.currentSong.id) {
-                // 同步喜欢状态
-                this.$set(this.currentSong, 'isLike', like)
-              }
+        userApi.likeMusic(song.id, like).then(res => {
+          if (res.data.code === ERR_OK) {
+            this.$set(this.song, 'isLike', like)
+            this.$emit('noLike', this.song) // 派发取消喜欢事件
+            this.$toast('已取消收藏')
+            if (this.song.id === this.currentSong.id) {
+              // 同步喜欢状态
+              this.$set(this.currentSong, 'isLike', like)
             }
-          }).catch(err => {
-            this.$toast(err.data.message)
-          })
+          }
+        }).catch(err => {
+          this.$toast(err.data.message)
+        })
       }
     },
     // 选择歌曲视频

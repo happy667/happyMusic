@@ -10,6 +10,7 @@
       </div>
     </div>
     <div class="right"
+         v-if="showFilter"
          @click="$emit('filterClick')">
       <i class="iconfont icon-shaixuan"
          :style="{color:filterStatus ?'#fd4979':'#999'}"></i>
@@ -26,7 +27,7 @@ export default {
       type: Boolean,
       default: false
     },
-    filterStatus : {
+    filterStatus: {
       type: Boolean,
       default: false
     }

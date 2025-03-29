@@ -32,6 +32,7 @@
                       @play="handlePlayAll(songList)"></play-all>
             <song-list @select="selectSong"
                        :showImage="true"
+                       :showMV="false"
                        ref="songList"
                        :songsList="songList"></song-list>
           </template>
@@ -87,12 +88,19 @@ export default {
       showPosition: false,
       filterCondition: {
         startTime: null,
-        endTime: null
+        endTime: null,
+        minPlayCount: null,
+        maxPlayCount: null
       },
       showTimeFilterPopup: false, // 是否显示时间筛选
     }
   },
   mixins: [playlistMixin],
+  provide () {
+    return {
+      showPlayCount: true
+    }
+  },
   computed: {
     ...mapState(['user', 'currentPlayIndex']),
     ...mapGetters(['currentSong']),
@@ -165,11 +173,44 @@ export default {
             followTime: trackTimeMap[item.id] // 添加收藏时间字段
           });
         });
-        this.songList = this.originalSongList
+
+        // 获取听歌排行数据并合并播放次数
+        await this.getUserPlayRecord();
+
+        this.songList = this.originalSongList;
       } catch (error) {
         console.error('获取歌曲列表出错:', error);
         this.$toast(error.message || '获取歌曲列表失败');
         this.$router.replace('/');
+      }
+    },
+    // 获取用户听歌排行
+    async getUserPlayRecord () {
+      try {
+        // 获取所有时间的听歌排行
+        const { data: res } = await userApi.getUserPlayRecord(this.user.userId, 0);
+        if (res.code === ERR_OK) {
+          // 创建播放次数映射
+          const playCountMap = {};
+          res.allData.forEach(item => {
+            playCountMap[item.song.id] = item.playCount;
+          });
+
+          // 更新歌曲列表中的播放次数
+          this.originalSongList = this.originalSongList.map(song => {
+            if (playCountMap[song.id]) {
+              song.playCount = playCountMap[song.id];
+            }
+            return song;
+          });
+
+          // 如果当前处于筛选状态，重新应用筛选条件
+          if (this.filterStatus) {
+            this.songList = this.filterSong(this.originalSongList);
+          }
+        }
+      } catch (error) {
+        console.error('获取听歌排行失败:', error);
       }
     },
     handlePosition () {
@@ -218,9 +259,12 @@ export default {
     },
     //当筛选时间变化时
     handleFilterChange (condition) {
+      // 确保播放次数数据正确传递
       this.filterCondition = {
         startTime: condition.startTime,
-        endTime: condition.endTime
+        endTime: condition.endTime,
+        minPlayCount: condition.minPlayCount,
+        maxPlayCount: condition.maxPlayCount
       }
       //筛选歌曲
       this.songList = this.filterSong(this.originalSongList)
@@ -238,7 +282,6 @@ export default {
         this.filterStatus = false;       // 取消筛选状态
         this.songList = this.originalSongList; // 恢复显示原始歌曲列表
         this.showTimeFilterPopup = true; // 显示时间筛选弹窗
-        console.log(this.filterCondition)
         return;
       }
 
@@ -252,10 +295,26 @@ export default {
     },
     //筛选歌曲
     filterSong (list) {
-      let { startTime, endTime } = this.filterCondition;
+      let { startTime, endTime, minPlayCount, maxPlayCount } = this.filterCondition;
       let filterList = list.filter(item => {
         let timestamp = item.followTime;
-        return timestamp >= startTime && timestamp <= endTime
+        let timeMatch = true;
+        let playCountMatch = true;
+
+        // 时间筛选
+        if (startTime && endTime) {
+          timeMatch = timestamp >= startTime && timestamp <= endTime;
+        }
+
+        // 播放次数筛选
+        if (minPlayCount !== null&&maxPlayCount !== null) {
+          playCountMatch = item.playCount >= minPlayCount&& item.playCount <= maxPlayCount;
+        }else if(minPlayCount !== null){
+          playCountMatch = item.playCount >= minPlayCount;
+        }else if (maxPlayCount !== null) {
+          playCountMatch = playCountMatch && item.playCount <= maxPlayCount;
+        }
+        return timeMatch && playCountMatch;
       });
       return filterList;
     }
