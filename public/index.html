@@ -28,6 +28,17 @@
     <script src="https://cdn.bootcss.com/axios/0.19.0/axios.min.js"></script>
     <script src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vant@2.6/lib/vant.min.js"></script>
+    
+    <!-- 动态加载百度地图API，环境变量处理AK，不直接暴露 -->
+    <script>
+        (function() {
+            window.BMapCallback = function() {
+                console.log('百度地图API加载完成');
+                window.isBMapLoaded = true;
+            }
+        })();
+    </script>
+    
     <!-- fast-click -->
     <script src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
     <script>

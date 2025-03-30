@@ -2,9 +2,7 @@
   <div class="song-sheet-square-container">
     <!-- 头部导航栏 -->
     <van-sticky>
-      <van-nav-bar :title="$route.meta.title"
-                   left-arrow
-                   @click-left="routerBack" />
+      <van-nav-bar :title="$route.meta.title" left-arrow @click-left="routerBack" />
     </van-sticky>
 
     <!-- loading -->
@@ -13,33 +11,21 @@
     <template v-if="!loading">
       <section>
         <scroll ref="song_sheet_square_scroll">
-          <div class="container"
-               ref="container">
-            <van-tabs v-model="currentIndex"
-                      @change="handleChange"
-                      title-active-color="#FD4979"
-                      color="#FD4979"
-                      animated
-                      swipe-threshold="6"
-                      swipeable>
+          <div class="container" ref="container">
+            <van-tabs v-model="currentIndex" @change="handleChange" title-active-color="#FD4979" color="#FD4979"
+              animated swipe-threshold="6" swipeable>
               <van-tab title="推荐">
                 <div class="recommend-list">
                   <swiper-list :list="swiperList"></swiper-list>
                   <song-sheet-list :list="newRecommendSongSheet"></song-sheet-list>
                 </div>
               </van-tab>
-              <van-tab v-for="(item,index) in songSheetCagetory"
-                       :key="item.id"
-                       :title="item.playlistTag.name">
+              <van-tab v-for="(item, index) in songSheetCagetory" :key="item.id" :title="item.playlistTag.name">
 
                 <div class="song-sheet-cagetory-list">
-                  <van-loading v-if="loading||!songSheetCagetoryList[index+1]"
-                               size="24px"
-                               color="#FD4979"
-                               class="load"
-                               vertical>加载中...</van-loading>
-                  <song-sheet-list v-else
-                                   :list="songSheetCagetoryList[index+1]"></song-sheet-list>
+                  <van-loading v-if="loading || !songSheetCagetoryList[index + 1]" size="24px" color="#FD4979"
+                    class="load" vertical>加载中...</van-loading>
+                  <song-sheet-list v-else :list="songSheetCagetoryList[index + 1]"></song-sheet-list>
                 </div>
               </van-tab>
             </van-tabs>
@@ -107,16 +93,18 @@ export default {
     // 获取推荐歌单
     async getRecommendSongSheet () {
       this.loading = true
-      const {
-        data: res
-      } = await recommendApi.getRecommendSongSheet()
-      if (res.code === ERR_OK) { // 成功获取推荐歌单
-        this.recommendSongSheet = res.result
-        this.loading = false
-        this.handlePlaylist(this.playList)
-      }
+      this.getSongSheet("全部歌单").then(res => {
+        if (res.code === ERR_OK) { // 成功获取推荐歌单
+          this.recommendSongSheet = res.playlists
+          this.loading = false
+          this.handlePlaylist(this.playList)
+        }
+      })
     },
     handleChange (name, title) {
+      if (title == "推荐") {
+        return
+      }
       if (!this.songSheetCagetoryList[name]) { // 说明还没有该分类的歌单
         this.getSongSheet(title).then(res => {
           this.$set(this.songSheetCagetoryList, name, res.playlists)

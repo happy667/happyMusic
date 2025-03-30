@@ -4,22 +4,40 @@
     <div class="mini-swiper-item">
       <div class="image-wrapper">
         <div class="image animated fadeIn">
-          <img :data-src="item.picUrl"
+          <img :data-src="picUrl"
                class="swiper-lazy"
-               :key="item.picUrl">
-          <div class="icon">
+               :key="picUrl">
+          <div class="playCount"
+               v-if="showPlayCount">
+            <i class="iconfont icon-bofang"></i> {{ item.playCount | convertCount }}
+          </div>
+          <div class="icon"
+               v-if="showIcon">
             <van-icon name="play-circle-o" />
           </div>
         </div>
       </div>
-      <div class="name">{{item.name}}</div>
+      <div class="name">{{ item.name }}</div>
     </div>
   </div>
 </template>
 <script>
 export default {
   props: {
-    item: Object
+    item: Object,
+    showPlayCount: {
+      type: Boolean,
+      default: false
+    },
+    showIcon: {
+      type: Boolean,
+      default: false
+    }
+  },
+  computed: {
+    picUrl () {
+      return this.item.picUrl || this.item.coverImgUrl
+    }
   },
   methods: {
     handleClick () {
@@ -71,6 +89,23 @@ export default {
           width: 100%;
           height: 100%;
           border-radius: 0.3rem;
+        }
+      }
+
+      .playCount {
+        position: absolute;
+        right: 0;
+        top: 0.1rem;
+        color: #fff;
+        height: 0.4rem;
+        padding: 0.07rem 0.15rem;
+        display: flex;
+        align-items: center;
+        border-radius: 0 0.3rem 0 0.3rem;
+        font-size: 0.35rem;
+
+        i {
+          font-size: $font-size-smaller-x;
         }
       }
 

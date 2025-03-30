@@ -1,38 +1,30 @@
 <template>
   <div class="time-filter">
     <!-- 主弹窗 -->
-    <van-popup v-model="_showPopup"
-               round
-               position="bottom"
-               class="main-popup">
+
+    <van-popup v-model="_showPopup" round position="bottom" class="main-popup">
       <div class="filter-content">
         <div class="header">
           <div class="title">筛选歌曲</div>
-          <van-icon name="cross"
-                    class="close-icon"
-                    @click="handleClose" />
+          <van-icon name="cross" class="close-icon" @click="handleClose" />
         </div>
 
         <div class="time-filter-content">
           <div class="time-range">
             <div class="title">时间范围</div>
             <div class="time-picker">
-              <div class="date-item start-date"
-                   @click="openPicker('start')">
+              <div class="date-item start-date" @click="openPicker('start')">
                 <div class="label">起始时间</div>
                 <div class="value">{{ startTimeText }}</div>
-                <van-icon name="arrow-down"
-                          class="arrow-icon" />
+                <van-icon name="arrow-down" class="arrow-icon" />
               </div>
 
               <div class="divider">至</div>
 
-              <div class="date-item end-date"
-                   @click="openPicker('end')">
+              <div class="date-item end-date" @click="openPicker('end')">
                 <div class="label">结束时间</div>
                 <div class="value">{{ endTimeText }}</div>
-                <van-icon name="arrow-down"
-                          class="arrow-icon" />
+                <van-icon name="arrow-down" class="arrow-icon" />
               </div>
             </div>
           </div>
@@ -40,17 +32,11 @@
           <div class="play-count">
             <div class="title">播放次数</div>
             <div class="count-range">
-              <van-field v-model="minPlayCount"
-                         type="number"
-                         placeholder="最小播放次数"
-                         :maxlength="10"
-                         @input="validateMinCount" />
+              <van-field v-model="minPlayCount" type="number" placeholder="最小播放次数" :maxlength="10"
+                @input="validateMinCount" />
               <div class="divider">至</div>
-              <van-field v-model="maxPlayCount"
-                         type="number"
-                         placeholder="最大播放次数"
-                         :maxlength="10"
-                         @input="validateMaxCount" />
+              <van-field v-model="maxPlayCount" type="number" placeholder="最大播放次数" :maxlength="10"
+                @input="validateMaxCount" />
             </div>
           </div>
         </div>
@@ -61,37 +47,23 @@
         </div>
 
         <div class="action-buttons">
-          <van-button plain
-                      block
-                      color="#999"
-                      @click="handleReset">重置</van-button>
-          <van-button type="primary"
-                      class="confirm-btn"
-                      color="#fd4979"
-                      @click="handleConfirm">确定</van-button>
+          <van-button plain block color="#999" @click="handleReset">重置</van-button>
+          <van-button type="primary" class="confirm-btn" color="#fd4979" @click="handleConfirm">确定</van-button>
         </div>
       </div>
     </van-popup>
 
     <!-- 日期选择器弹窗 -->
-    <van-popup v-model="showDatePicker"
-               round
-               position="bottom"
-               class="picker-popup">
-      <van-datetime-picker v-model="currentDate"
-                           type="date"
-                           :title="pickerTitle"
-                           :min-date="minDate"
-                           :max-date="maxDate"
-                           @confirm="handleDateConfirm"
-                           @cancel="closeDatePicker" />
+    <van-popup v-model="showDatePicker" round position="bottom" class="picker-popup">
+      <van-datetime-picker v-model="currentDate" type="date" :title="pickerTitle" :min-date="minDate"
+        :max-date="maxDate" @confirm="handleDateConfirm" @cancel="closeDatePicker" />
     </van-popup>
   </div>
 </template>
 
 <script>
 import { convertDate } from '@/assets/common/js/convert.js'
-import { mapMutations } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 
 export default {
   name: 'TimeFilter',
@@ -114,7 +86,7 @@ export default {
     //父组件传入的筛选条件
     filterCondition: {
       type: Object,
-      default: () => ({  
+      default: () => ({
         startTime: null,
         endTime: null,
         minPlayCount: null,
@@ -136,10 +108,12 @@ export default {
     }
   },
   mounted () {
+    this.setHideMiniPlayer(true)
     //回填筛选数据
     this.initFilterCondition()
   },
   computed: {
+    ...mapState(['hideMiniPlayer']),
     // 主弹窗显示控制（双向绑定）
     _showPopup: {
       get () {
@@ -174,6 +148,13 @@ export default {
     showTimeFilter (val) {
       if (val) {
         this.initFilterCondition()
+      }
+    },
+    _showPopup (val) {
+      if (val) {
+        this.setHideMiniPlayer(true)
+      } else {
+        this.setHideMiniPlayer(false)
       }
     }
   },
@@ -220,6 +201,7 @@ export default {
         minPlayCount: minCount,
         maxPlayCount: maxCount
       })
+      this.setHideMiniPlayer(false)
     },
     //重置筛选数据
     handleReset () {
@@ -233,12 +215,11 @@ export default {
     },
     initFilterCondition () {
       const { startTime, endTime, minPlayCount, maxPlayCount } = this.filterCondition
-      
       this.startTime = startTime || this.minDate
       this.endTime = endTime || new Date()
       this.startTimeText = this.formatDate(this.startTime)
       this.endTimeText = this.formatDate(this.endTime)
-      console.log(minPlayCount,maxPlayCount)
+      console.log(minPlayCount, maxPlayCount)
       // 修复播放次数的回填
       this.minPlayCount = minPlayCount !== null ? minPlayCount : ''
       this.maxPlayCount = maxPlayCount !== null ? maxPlayCount : ''
@@ -265,11 +246,11 @@ export default {
       const day = String(date.getDate()).padStart(2, '0')
       return `${year}-${month}-${day}`
     },
-    validateMinCount(value) {
+    validateMinCount (value) {
       // 移除非数字字符
       this.minPlayCount = value.replace(/[^\d]/g, '')
     },
-    validateMaxCount(value) {
+    validateMaxCount (value) {
       // 移除非数字字符
       this.maxPlayCount = value.replace(/[^\d]/g, '')
     },
@@ -304,8 +285,8 @@ export default {
       return true
     },
     isDefaultValues () {
-      const isDefaultTime = convertDate(this.startTime) === convertDate(this.minDate) && 
-                           convertDate(this.endTime) === convertDate(new Date())
+      const isDefaultTime = convertDate(this.startTime) === convertDate(this.minDate) &&
+        convertDate(this.endTime) === convertDate(new Date())
       const isDefaultPlayCount = !this.minPlayCount && !this.maxPlayCount
       return isDefaultTime && isDefaultPlayCount
     },
@@ -337,7 +318,7 @@ export default {
       .header {
         position: relative;
         margin-bottom: 0.4rem;
-        padding-bottom: 0.4rem;
+        padding-bottom: 0.3rem;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -346,7 +327,7 @@ export default {
         .title {
           height: 0.6rem;
           line-height: 0.6rem;
-          font-size: $font-size-small;
+          font-size: $font-size-small-xx;
           color: var(--text-primary);
           font-weight: 500;
           text-align: center;
@@ -363,18 +344,17 @@ export default {
       }
 
       .time-filter-content {
-        .time-range, .play-count {
-          margin-bottom: 0.3rem;
-
-          .title {
-            font-size: $font-size-small-x;
+        .time-range{
+          margin-bottom: 0.5rem;
+        }
+        .title {
+            font-size: $font-size-smaller;
             color: var(--text-secondary);
-            margin-bottom: 0.3rem;
+            margin-bottom: 0.2rem;
             padding: 0 0.1rem;
           }
-        }
-
         .play-count {
+          margin-bottom: 0.3rem;
           .count-range {
             display: flex;
             align-items: center;
@@ -398,7 +378,7 @@ export default {
         }
 
         .time-picker {
-          margin-bottom: 0.3rem;
+         
           display: flex;
           align-items: center;
           gap: 0.2rem;

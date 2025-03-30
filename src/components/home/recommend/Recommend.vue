@@ -1,7 +1,6 @@
 <template>
   <scroll ref="recommend_scroll">
-    <div class="recommend-container "
-         ref="container">
+    <div class="recommend-container " ref="container">
       <!-- loading -->
       <!-- loading -->
       <loading :loading="load" />
@@ -11,42 +10,32 @@
         <recommend-swiper :banners="banners"></recommend-swiper>
 
         <!-- 推荐新音乐 -->
-        <song-swiper :recommendNewSong="recommendNewSong"
-                     v-if="this.recommendNewSong.length > 0 "
-                     @select="selectSong">
+        <song-swiper :recommendNewSong="recommendNewSong" v-if="this.recommendNewSong.length > 0" @select="selectSong">
           <template>
             <Title title="新歌推送"></Title>
           </template>
         </song-swiper>
         <!--个性化区域-->
-        <personalization v-if="this.recommendNewSong.length > 0 ">
+        <personalization v-if="this.recommendNewSong.length > 0">
           <template>
-            <Title title="个性化定制"
-                   styleInfo="margin-bottom:0.2rem"></Title>
+            <Title title="个性化推荐"></Title>
           </template>
         </personalization>
         <!-- 推荐歌单区域 -->
-        <song-sheet-list @select="selectSongSheet"
-                         :list="recommendSongSheet"
-                         v-if="this.recommendSongSheet.length > 0 ">
+        <song-sheet-list @select="selectSongSheet" :list="recommendSongSheet" v-if="this.recommendSongSheet.length > 0">
           <template>
-            <Title path='/songSheetSquare'
-                   loadMore
-                   styleInfo="margin-bottom:0.2rem"
-                   title="推荐歌单"></Title>
+            <Title path='/songSheetSquare' loadMore title="推荐歌单"></Title>
           </template>
         </song-sheet-list>
 
         <!-- 新碟上线 -->
-        <album-swiper :list="recommendNewAlbum"
-                      v-if="this.recommendNewAlbum.length > 0 ">
+        <album-swiper :showIcon="true" :list="recommendNewAlbum" v-if="this.recommendNewAlbum.length > 0">
           <template>
             <Title title="新碟上线"></Title>
           </template>
         </album-swiper>
         <!-- loading -->
-        <loading :loading="loadMore"
-                 height="3rem" />
+        <loading :loading="loadMore" height="3rem" />
       </template>
 
     </div>
@@ -85,7 +74,6 @@ export default {
   computed: {
     ...mapGetters(['currentSong']),
     load () {
-      console.dir(this)
       return this.banners.length === 0
     }
   },
@@ -118,22 +106,26 @@ export default {
       this.$router.push(`/songSheetDisc/${item.id}`)
     },
     // 获取推荐歌单
-    async getRecommendSongSheet (limit) {
+    async getRecommendSongSheet () {
       this.loadMore = true;
-      const {
-        data: res
-      } = await recommendApi.getRecommendSongSheet(limit)
+      let res = null
+      if (this.$utils.isLogin()) {
+        res = await recommendApi.getUserRecommendSongSheet()
+      } else {
+        res = await recommendApi.getRecommendSongSheet()
+      }
+      res = res.data
       if (res.code === ERR_OK) { // 成功获取推荐歌单
-        this.recommendSongSheet = res.result
+        this.recommendSongSheet = res.result || res.recommend
         this.$nextTick(() => {
           this.loadMore = false;
         })
-
       }
     },
     // 获取推荐新音乐
     async getRecommendNewSong () {
       this.loadMore = true;
+      //判断用户是否登录，若登录则获取用户每日推荐歌单否则默认歌单
       const {
         data: res
       } = await recommendApi.getRecommendNewSong()
@@ -219,10 +211,6 @@ export default {
 
 .recommend-container>>>.title-container {
   padding: 0 0.4rem;
-}
-
-.recommend-container>>>.song-sheet-list-item:nth-last-child(-n+2) {
-  margin-bottom: 0.4rem;
 }
 
 .recommend-container {

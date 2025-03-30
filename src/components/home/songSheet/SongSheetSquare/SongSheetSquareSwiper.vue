@@ -2,14 +2,9 @@
   <div class="song-sheet-square-swiper-container">
     <div class="swiper-container square-swiper">
       <div class="swiper-wrapper">
-        <div class="swiper-slide"
-             :data-id="item.id"
-             v-for="item in list"
-             :key="item.id">
-          <div class="swiper-list-item"
-               @click="selectItem(item)">
-            <song-Sheet-swiper-item :item="item"
-                                    :key="item.id"></song-Sheet-swiper-item>
+        <div class="swiper-slide" :data-id="item.id" v-for="item in list" :key="item.id">
+          <div class="swiper-list-item" @click="selectItem(item)">
+            <song-Sheet-swiper-item :item="item" :showPlayCount="true" :key="item.id"></song-Sheet-swiper-item>
           </div>
         </div>
       </div>
