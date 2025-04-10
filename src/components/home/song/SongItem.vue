@@ -41,7 +41,7 @@
           <div class="icon">
             <van-icon name="play-circle-o" />
           </div>
-          <div class="count">{{song.playCount}}次</div>
+          <div class="count">{{song.playCount||0}}次</div>
         </div>
         <div class="icon love"
              :class="song.isLike ? 'active' : ''"

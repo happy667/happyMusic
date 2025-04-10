@@ -18,13 +18,6 @@
           <!-- loading -->
           <loading :loading="pageLoading" />
           <template v-if="songList&&songList.length!==0">
-            <!-- 时间筛选 -->
-            <time-filter ref="timeFilter"
-                         :maxDate="new Date()"
-                         :minDate="new Date(this.user.createTime)"
-                         :filterCondition="filterCondition"
-                         :showTimeFilter.sync="showTimeFilterPopup"
-                         @filterChange="handleFilterChange" />
             <play-all :length="songList.length"
                       :showFilter="true"
                       :filterStatus="filterStatus"
@@ -48,6 +41,14 @@
 
         </div>
       </scroll>
+      <!-- 时间筛选 -->
+      <time-filter ref="timeFilter"
+                   v-if="user"
+                   :maxDate="new Date()"
+                   :minDate="new Date(this.user.createTime)"
+                   :filterCondition="filterCondition"
+                   :showTimeFilter.sync="showTimeFilterPopup"
+                   @filterChange="handleFilterChange" />
       <!-- 定位 -->
       <position v-show="isShowPosition"
                 @click="handlePosition"></position>
@@ -292,6 +293,13 @@ export default {
       if (!this.showTimeFilterPopup && !this.filterStatus) {
         this.songList = this.originalSongList;
       }
+      //清空筛选条件
+      this.filterCondition = {
+        startTime: null,
+        endTime: null,
+        minPlayCount: null,
+        maxPlayCount: null
+      }
     },
     //筛选歌曲
     filterSong (list) {
@@ -307,11 +315,11 @@ export default {
         }
 
         // 播放次数筛选
-        if (minPlayCount !== null&&maxPlayCount !== null) {
-          playCountMatch = item.playCount >= minPlayCount&& item.playCount <= maxPlayCount;
-        }else if(minPlayCount !== null){
+        if (minPlayCount !== null && maxPlayCount !== null) {
+          playCountMatch = item.playCount >= minPlayCount && item.playCount <= maxPlayCount;
+        } else if (minPlayCount !== null) {
           playCountMatch = item.playCount >= minPlayCount;
-        }else if (maxPlayCount !== null) {
+        } else if (maxPlayCount !== null) {
           playCountMatch = playCountMatch && item.playCount <= maxPlayCount;
         }
         return timeMatch && playCountMatch;

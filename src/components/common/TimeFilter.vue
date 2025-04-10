@@ -108,7 +108,6 @@ export default {
     }
   },
   mounted () {
-    this.setHideMiniPlayer(true)
     //回填筛选数据
     this.initFilterCondition()
   },
@@ -277,7 +276,7 @@ export default {
       }
 
       // 确保最小播放次数不能大于或等于最大播放次数
-      if (minCount !== null && maxCount !== null && minCount >= maxCount) {
+      if (minCount !== null && maxCount !== null && minCount > maxCount) {
         this.$toast('最小播放次数必须小于最大播放次数')
         return false
       }
