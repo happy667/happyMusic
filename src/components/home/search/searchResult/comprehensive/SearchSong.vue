@@ -1,22 +1,16 @@
 <template>
   <!-- 歌曲 -->
-  <div class="search"
-       v-if="song&&song.songList.length!==0">
+  <div class="search" v-if="song && song.songList.length !== 0">
     <div class="search-song">
-      <song-list @select="selectSong"
-                 :showIndex="false"
-                 :songsList="song.songList">
+      <song-list @select="selectSong" :showIndex="false" :songsList="song.songList">
         <div class="header">
           <Title title="单曲"></Title>
-          <play-all :length="song.songList.length"
-                    @play="handlePlayAll(song.songList)"></play-all>
+          <play-all :length="song.songList.length" @play="handlePlayAll(song.songList)"></play-all>
         </div>
       </song-list>
-      <div class="more"
-           v-if="song.moreText"
-           @click="$emit('setIndex',1)">
+      <div class="more" v-if="song.moreText" @click="$emit('setIndex', 1)">
         <div class="text">
-          {{song.moreText}}
+          {{ song.moreText }}
         </div>
         <div class="icon">
           <van-icon name="arrow" />
@@ -66,12 +60,11 @@ export default {
 .search>>>.play-all-container {
   padding-left: 0;
   padding-right: 0.4rem;
-  height: 1.1rem;
-  line-height: 1.1rem;
 }
 
 .search .search-song .header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 </style>

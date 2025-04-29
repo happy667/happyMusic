@@ -210,8 +210,8 @@ export default {
 
     .song-image {
       margin-top: 0.5rem;
-      width: 6.7rem;
-      height: 6.7rem;
+      width: 6.9rem;
+      height: 6.9rem;
       display: flex;
       justify-content: center;
       align-items: center;

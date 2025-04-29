@@ -6,20 +6,56 @@
  */
 import request from '@/axios/request.js'
 import { ERR_OK } from '@/api/config.js'
-import searchApi from '@/api/search.js'
-import { SEARCH_TYPE } from '@/assets/common/js/config.js'
-import { scorePlaylists } from './scenario-recommendation-optimized.js'
+import { recommendByScenario } from '@/assets/common/js/playlist-recommender.js'
 import config from './config.js'
 import baiduMapApi from '@/api/baiduMap.js'
 
 // 从配置中导入所需常量
 const {
   DEFAULT_SETTINGS,
-  SCENE_CONFIG,
-  WEATHER_CODE_RANGES,
-  TIME_RANGES,
-  MONTH_TO_SEASON
+  SCENE_CONFIG
 } = config;
+
+// 从配置中构建天气代码范围、时间范围和月份到季节的映射
+const WEATHER_CODE_RANGES = Object.entries(SCENE_CONFIG.weather).map(([type, settings]) => {
+  if (Array.isArray(settings.codeRange)) {
+    // 多个范围，展开为多个范围对象
+    return settings.codeRange.map(range => ({
+      ...range,
+      type
+    }));
+  } else {
+    // 单个范围
+    return {
+      min: settings.codeRange.min,
+      max: settings.codeRange.max,
+      type
+    };
+  }
+}).flat();
+
+const TIME_RANGES = Object.entries(SCENE_CONFIG.time).map(([type, settings]) => ({
+  min: settings.hourRange.min,
+  max: settings.hourRange.max,
+  type
+}));
+
+const MONTH_TO_SEASON = Object.entries(SCENE_CONFIG.season).map(([type, settings]) => {
+  if (Array.isArray(settings.monthRange)) {
+    // 多个范围，展开为多个范围对象
+    return settings.monthRange.map(range => ({
+      ...range,
+      type
+    }));
+  } else {
+    // 单个范围
+    return {
+      min: settings.monthRange.min,
+      max: settings.monthRange.max,
+      type
+    };
+  }
+}).flat();
 
 // ================ 通用辅助函数 ================
 /**
@@ -61,19 +97,19 @@ const EnvironmentManager = {
    */
   async getWeather (latitude, longitude) {
     try {
-      const response = await request({
-        url: '/weather/v1/forecast',
-        params: {
-          latitude,
-          longitude,
-          current_weather: true,
-          temperature_unit: 'celsius',
-          noCookie: true
-        }
-      });
+    const response = await request({
+      url: '/weather/v1/forecast',
+      params: {
+        latitude,
+        longitude,
+        current_weather: true,
+        temperature_unit: 'celsius',
+        noCookie: true
+      }
+    });
 
-      if (response.data && response.data.current_weather) {
-        const weatherCode = response.data.current_weather.weathercode;
+    if (response.data && response.data.current_weather) {
+      const weatherCode = response.data.current_weather.weathercode;
         const weatherType = findInRanges(weatherCode, WEATHER_CODE_RANGES, DEFAULT_SETTINGS.WEATHER.type);
         return { type: weatherType };
       }
@@ -324,7 +360,7 @@ const KeywordGenerator = {
       weatherMusicStyles, areaMusicStyles, seasonMusicStyles
     } = sceneData;
 
-    return {
+  return {
       // 时间相关
       time: timeOfDay,
       timeOfDayMood,
@@ -373,176 +409,125 @@ const KeywordGenerator = {
   }
 };
 
-// ================ 歌单搜索模块 ================
-/**
- * 歌单搜索器
- * 负责根据关键词搜索和筛选歌单
- */
-const PlaylistSearcher = {
-  /**
-   * 搜索匹配歌单
-   */
-  async searchPlaylists (searchKeyword, maxResults = 100) {
-    console.log(`使用搜索关键词: "${searchKeyword}" 查找歌单`);
-
-    try {
-      const { data: res } = await searchApi.getSearchResult(
-        searchKeyword,
-        SEARCH_TYPE.songSheet,
-        0,
-        maxResults
-      );
-
-      console.log(`搜索结果: 状态=${res.code}, 返回歌单数=${res.result?.playlists?.length || 0}`);
-
-      if (res.code !== ERR_OK || !res.result?.playlists || res.result.playlists.length === 0) {
-        return null;
-      }
-
-      return res.result.playlists;
-    } catch (error) {
-      console.error('搜索歌单失败:', error);
-      return null;
-    }
-  },
-
-  /**
-   * 使用备用关键词搜索
-   */
-  async searchWithFallbackKeyword (metadata) {
-    // 备用搜索词策略 - 使用单一维度的核心情绪关键词
-    const fallbackKeywords = [
-      metadata.timeOfDayMood, // 时间情绪
-      metadata.weatherMood,   // 天气情绪
-      metadata.areaMood,      // 区域关键词
-      '音乐'                 // 最后的保底词
-    ].filter(Boolean);
-
-    // 使用第一个非空关键词作为备用
-    const fallbackKeyword = fallbackKeywords[0];
-    console.log(`使用备用搜索关键词: "${fallbackKeyword}"`);
-
-    return await this.searchPlaylists(fallbackKeyword);
-  }
-};
-
 // ================ 主推荐模块 ================
-export default {
-  /**
-   * 场景化推荐主函数
-   */
-  async recommend () {
+/**
+ * 场景推荐主函数
+ * 
+ * 根据当前环境信息生成歌单推荐
+ * 
+ * @returns {Promise<Object>} 推荐结果对象
+ */
+export async function recommend () {
+  console.log('开始进行场景化推荐...');
+
+  let locationData;
+  let locationError = null;
+  let isDefaultLocation = false;
+  let weatherInfo = DEFAULT_SETTINGS.WEATHER;
+  let timeOfDay = '早晨';
+  let areaType = DEFAULT_SETTINGS.AREA_TYPE;
+
+  try {
+    // 获取位置信息
     try {
-      const MIN_ACCEPTABLE_SCORE = 70; // 最低可接受分数
-      let locationError = null;
-      let isUsingDefaultLocation = false;
-
-      console.log('开始场景推荐流程...');
-
-      // 1. 获取基础时间信息
-      const timeOfDay = EnvironmentManager.getTimeOfDay();
-
-      // 2. 获取位置信息
-      console.log('正在获取位置信息...');
-      let location;
-      try {
-        location = await EnvironmentManager.getCurrentPosition();
-        console.log('位置获取成功:', location);
+      locationData = await EnvironmentManager.getCurrentPosition();
+      console.log('获取位置成功:', locationData);
       } catch (error) {
-        console.warn('位置获取失败，使用默认坐标:', error);
-        locationError = error.message || '位置获取失败';
-        // 使用北京坐标作为默认位置
-        location = {
-          latitude: 39.9042,
-          longitude: 116.4074,
-          isDefaultLocation: true
-        };
-        isUsingDefaultLocation = true;
-      }
-
-      // 3. 并行获取天气和区域类型(提高响应速度)
-      console.log('并行获取环境信息...');
-      const [weatherInfo, areaType] = await Promise.all([
-        EnvironmentManager.getWeather(location.latitude, location.longitude)
-          .catch(error => {
-            console.warn('天气获取失败，使用默认值:', error);
-            return DEFAULT_SETTINGS.WEATHER;
-          }),
-        EnvironmentManager.determineAreaType(location.latitude, location.longitude, location.isDefaultLocation)
-          .catch(error => {
-            console.warn('区域类型判断失败，使用默认值:', error);
-            return DEFAULT_SETTINGS.AREA_TYPE;
-          })
-      ]);
-
-      console.log('环境数据汇总:', {
-        timeOfDay,
-        areaType,
-        weatherType: weatherInfo.type,
-        isUsingDefaultLocation
-      });
-
-      // 4. 生成推荐关键词
-      const recommendation = await KeywordGenerator.generateSmartRecommendation(
-        timeOfDay,
-        weatherInfo,
-        areaType
-      );
-
-      // 输出每个维度的关键词
-      console.log('搜索关键词维度分布:',
-        `时间维度: "${recommendation.metadata.usedKeywords.time || '无'}"`,
-        `区域维度: "${recommendation.metadata.usedKeywords.area || '无'}"`,
-        `天气维度: "${recommendation.metadata.usedKeywords.weather || '无'}"`,
-        `季节维度: "${recommendation.metadata.usedKeywords.season || '无'}"`
-      );
-
-      // 5. 搜索匹配歌单
-      let playlists = await PlaylistSearcher.searchPlaylists(recommendation.searchKeyword);
-
-      // 检查搜索结果，如果为空则使用备用关键词
-      if (!playlists) {
-        console.log('主搜索关键词未返回结果，尝试备用搜索词...');
-        playlists = await PlaylistSearcher.searchWithFallbackKeyword(recommendation.metadata);
-
-        if (!playlists) {
-          throw new Error('未能找到匹配的歌单，即使使用备用关键词也没有结果');
-        }
-      }
-
-      // 6. 评分排序
-      console.log(`开始对${playlists.length}个候选歌单进行评分...`);
-      const scoredPlaylists = scorePlaylists(playlists, recommendation);
-      const bestPlaylist = scoredPlaylists[0]; // 评分最高的歌单
-
-      console.log(`评分完成，最佳推荐: "${bestPlaylist.name}", 得分: ${bestPlaylist.score}`);
-
-      // 7. 返回最终推荐结果
-      return {
-        data: {
-          // 场景元数据
-          metadata: recommendation.metadata,
-          searchKeyword: recommendation.searchKeyword,
-
-          // 匹配质量信息
-          matchScore: bestPlaylist.score,
-          matchQuality: bestPlaylist.score >= MIN_ACCEPTABLE_SCORE ? 'high' : 'medium',
-
-          // 位置相关信息
-          locationError,
-          usingDefaultSettings: isUsingDefaultLocation,
-
-          // 推荐歌单信息
-          recommendedPlaylist: {
-            id: bestPlaylist.id,
-            name: bestPlaylist.name,
-            coverImgUrl: bestPlaylist.coverImgUrl
-          }
-        }
-      };
-    } catch (error) {
-      console.error('场景推荐生成失败:', error);
-      throw error;
+      console.warn('位置获取失败，使用默认位置:', error);
+      locationData = { latitude: 39.9042, longitude: 116.4074 }; // 北京默认坐标
+      locationError = '无法获取您的位置';
+      isDefaultLocation = true;
     }
+
+    // 开始并行获取各种场景信息
+    const weatherPromise = EnvironmentManager.getWeather(locationData.latitude, locationData.longitude);
+    const areaTypePromise = EnvironmentManager.determineAreaType(
+      locationData.latitude,
+      locationData.longitude,
+      isDefaultLocation
+    );
+
+    // 获取当前时段
+    timeOfDay = EnvironmentManager.getTimeOfDay();
+    console.log('当前时段:', timeOfDay);
+
+    // 等待并行请求完成
+    const [weatherResult, areaTypeResult] = await Promise.all([weatherPromise, areaTypePromise]);
+    weatherInfo = weatherResult;
+    areaType = areaTypeResult;
+    console.log('天气信息:', weatherInfo, '区域类型:', areaType);
+
+    // 生成推荐搜索关键词
+    const sceneRecommendation = await KeywordGenerator.generateSmartRecommendation(
+      timeOfDay,
+      weatherInfo,
+      areaType
+    );
+    console.log('生成的场景推荐关键词:', sceneRecommendation);
+
+    // 记录是否使用了默认设置
+    sceneRecommendation.usingDefaultSettings = isDefaultLocation;
+    if (locationError) {
+      sceneRecommendation.locationError = locationError;
+    }
+
+    // 添加场景描述
+    sceneRecommendation.sceneDescription = `${weatherInfo.type}的${timeOfDay}`;
+
+    // 使用统一的歌单推荐系统进行推荐
+    try {
+      console.log('调用歌单推荐系统, 参数:', JSON.stringify(sceneRecommendation));
+      const recommendedPlaylist = await recommendByScenario(sceneRecommendation);
+      console.log('歌单推荐返回结果:', recommendedPlaylist);
+
+      if (!recommendedPlaylist || !recommendedPlaylist.id) {
+        throw new Error('推荐系统未返回有效歌单');
+      }
+
+      // 返回最终推荐结果
+      const result = {
+        ...sceneRecommendation,
+        recommendedPlaylist,
+        timestamp: Date.now()
+      };
+
+      console.log('场景推荐完成，返回结果:', JSON.stringify(result));
+      return result;
+    } catch (recommenderError) {
+      console.error('歌单推荐系统错误:', recommenderError);
+      // 如果推荐系统出错，仍然返回场景数据，但标记推荐失败
+      const result = {
+        ...sceneRecommendation,
+        recommendationFailed: true,
+        errorMessage: recommenderError.message || '歌单推荐失败',
+        usingDefaultSettings: isDefaultLocation,
+        locationError: locationError,
+        timestamp: Date.now()
+      };
+
+      console.log('场景推荐失败，返回错误结果:', JSON.stringify(result));
+      return result;
+    }
+
+    } catch (error) {
+    console.error('场景推荐处理失败:', error);
+
+    // 出错时返回基本信息，确保前端能够正常处理
+    const result = {
+      usingDefaultSettings: true,
+      locationError: locationError || '场景推荐系统错误',
+      sceneDescription: `${weatherInfo.type || '未知天气'}的${timeOfDay}`,
+      searchKeyword: '热门 推荐',
+      errorMessage: error.message || '场景推荐系统错误',
+      timestamp: Date.now()
+    };
+
+    console.log('场景推荐出错，返回基本信息:', JSON.stringify(result));
+    return result;
   }
-}; 
+}
+
+// 导出主要函数
+export default {
+  recommend
+};

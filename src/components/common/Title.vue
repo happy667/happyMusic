@@ -37,8 +37,8 @@
         justify-content: space-between;
         background: $color-common-background;
         .title {
-            height: 1rem;
-            line-height: 1rem;
+            height: 0.8rem;
+            line-height: 0.8rem;
             font-weight: bold;
             font-size: $font-size-smaller;
         }

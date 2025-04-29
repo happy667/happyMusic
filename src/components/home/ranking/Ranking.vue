@@ -1,22 +1,20 @@
 <template>
   <scroll ref="ranking_scroll">
-    <div class="ranking-container"
-         ref="container">
+    <div class="ranking-container" ref="container">
       <!-- loading -->
       <loading :loading="load" />
       <div class="ranking-list-wrapper">
 
         <!-- 官方榜 -->
-        <template v-if="rankingList1.length>0">
+        <template v-if="rankingList1.length > 0">
           <ranking-title title="官方榜"></ranking-title>
           <div class="list-container">
-            <official-list v-for="rankingObj in rankingList1"
-                           :key="rankingObj.id"
-                           :rankingObj="rankingObj"></official-list>
+            <official-list v-for="rankingObj in rankingList1" :key="rankingObj.id"
+              :rankingObj="rankingObj"></official-list>
           </div>
         </template>
         <!-- 精选榜 -->
-        <template v-if="rankingList2.length>0">
+        <template v-if="rankingList2.length > 0">
           <div class="list-container">
             <ranking-title title="精选榜"></ranking-title>
             <common-list :rankingList="rankingList2">
@@ -24,7 +22,7 @@
           </div>
         </template>
         <!-- 曲风榜 -->
-        <template v-if="rankingList3.length>0">
+        <template v-if="rankingList3.length > 0">
           <div class="list-container">
             <ranking-title title="曲风榜"></ranking-title>
             <common-list :rankingList="rankingList3">
@@ -32,7 +30,7 @@
           </div>
         </template>
         <!-- 全球榜-->
-        <template v-if="rankingList4.length>0">
+        <template v-if="rankingList4.length > 0">
           <div class="list-container">
             <ranking-title title="全球榜"></ranking-title>
             <common-list :rankingList="rankingList4">
@@ -40,7 +38,7 @@
           </div>
         </template>
         <!-- 语种榜-->
-        <template v-if="rankingList5.length>0">
+        <template v-if="rankingList5.length > 0">
           <div class="list-container">
             <ranking-title title="语种榜"></ranking-title>
             <common-list :rankingList="rankingList5">
@@ -48,7 +46,7 @@
           </div>
         </template>
         <!-- 特色榜-->
-        <template v-if="rankingList6.length>0">
+        <template v-if="rankingList6.length > 0">
           <div class="list-container">
             <ranking-title title="特色榜"></ranking-title>
             <common-list :rankingList="rankingList6">
@@ -56,8 +54,7 @@
           </div>
         </template>
         <!-- loading -->
-        <loading :loading="loadMore"
-                 height="3rem" />
+        <loading :loading="loadMore" height="3rem" />
       </div>
     </div>
   </scroll>
@@ -103,18 +100,22 @@ export default {
   methods: {
     // 获取排行榜
     async getRankingList () {
-      // 分为官方榜，精选榜，曲风榜，全球榜,语种榜,特色榜
-      await this.getRankingListByType(this.rankingList1, "official")
-      await this.getRankingListByType(this.rankingList2, "selected")
-      await this.getRankingListByType(this.rankingList3, "genre")
-      await this.getRankingListByType(this.rankingList4, "global")
-      await this.getRankingListByType(this.rankingList5, "languages")
-      await this.getRankingListByType(this.rankingList6, "characteristic")
-
+      try {
+        // 并行加载所有类型榜单
+        await Promise.all([
+          this.getRankingListByType(this.rankingList1, "official"),
+          this.getRankingListByType(this.rankingList2, "selected"),
+          this.getRankingListByType(this.rankingList3, "genre"),
+          this.getRankingListByType(this.rankingList4, "global"),
+          this.getRankingListByType(this.rankingList5, "languages"),
+          this.getRankingListByType(this.rankingList6, "characteristic")
+        ]);
+      } catch (error) {
+        console.error('获取排行榜数据失败:', error);
+      }
     },
     //根据排行类型获取歌单
     async getRankingListByType (list, type) {
-      let tempList = [];
       for (let id of this.rankingListIds[type]) {
         const {
           data: res
@@ -124,7 +125,6 @@ export default {
           this.refresh()
         }
       }
-      list = tempList
     },
     // 刷新
     refresh () {

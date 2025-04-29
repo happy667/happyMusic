@@ -156,7 +156,7 @@ export default {
 
 .recommend-swiper-container {
   width: 100%;
-  margin: 0.2rem 0;
+  margin: 0.3rem 0;
   box-sizing: border-box;
   border-radius: 0.3rem;
   height: 0;

@@ -1,38 +1,24 @@
 <template>
-  <div class="play-container"
-       ref="play"
-       v-show="playList.length>0">
+  <div class="play-container" ref="play" v-show="playList.length > 0">
     <!-- 全屏播放器 -->
-    <FullScreenPlay ref="FullScreenPlay"
-                    v-show="playerFullScreen"
-                    @prev="prev"></FullScreenPlay>
+    <FullScreenPlay ref="FullScreenPlay" v-show="playerFullScreen" @prev="prev"></FullScreenPlay>
 
     <!-- 迷你播放器 -->
     <mini-play v-show="!hideMiniPlayer"></mini-play>
 
     <!-- 音频组件 -->
     <div class="audio">
-      <audio ref="audio"
-             id="audio"
-             :playbackRate="songSpeed"
-             preload="auto"
-             @canplay="ready"
-             @error="error"
-             @timeupdate="handleUpdateTime"
-             @ended="handleEnd"
-             :src="url"></audio>
+      <audio ref="audio" id="audio" :playbackRate="songSpeed" preload="auto" @canplay="ready" @error="error"
+        @timeupdate="handleUpdateTime" @ended="handleEnd" :src="url"></audio>
     </div>
 
     <!-- 歌曲列表 -->
-    <transition enter-active-class="animated fadeIn faster"
-                leave-active-class="animated fadeOut faster">
-      <play-list v-show="togglePlayList"
-                 @close="togglePlayList"></play-list>
+    <transition enter-active-class="animated fadeIn faster" leave-active-class="animated fadeOut faster">
+      <play-list v-show="togglePlayList" @close="togglePlayList"></play-list>
     </transition>
 
     <!-- 播放速度 -->
-    <transition enter-active-class="animated fadeIn faster"
-                leave-active-class="animated fadeOut faster">
+    <transition enter-active-class="animated fadeIn faster" leave-active-class="animated fadeOut faster">
       <song-speed v-show="songSpeedPopup"></song-speed>
     </transition>
   </div>
@@ -120,7 +106,10 @@ export default {
     playerFullScreen () {
       //关闭播放器页面则关闭歌词页面
       if (this.playerFullScreen === false) {
-        this.setPlayerShowImage(true)
+        // 等待关闭动画结束后再切换到图片状态
+        setTimeout(() => {
+          this.setPlayerShowImage(true)
+        }, 400) // fadeOut动画的持续时间是400ms
       }
     }
   },
@@ -163,6 +152,7 @@ export default {
       this.playerParams.width = 0
       try {
         const { data: res } = await songApi.getMusicUrl(song.id)
+        console.log(res)
         if (res.code !== ERR_OK) throw new Error('获取音乐播放路径失败')
         const url = res.data[0].url
         if (!url) {
