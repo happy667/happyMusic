@@ -1,10 +1,10 @@
 <template>
   <div class="video-list-container">
     <div class="video-list">
-      <template v-for="item in list">
+      <template v-for="item in list" :key="item.id">
         <video-item @click="handleClick"
                     :video="item"
-                    :key="item.id"></video-item>
+                    ></video-item>
       </template>
 
     </div>

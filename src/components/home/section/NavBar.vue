@@ -59,23 +59,22 @@
         // 适配播放器与页面底部距离
         const bottom = playList.length > 0 ? '1.5rem' : ''
         this.$nextTick(() => {
-          switch (this.currentIndex) {
-            case 0:
-              this.$refs.recommend.$refs.container.style.paddingBottom = bottom
-              this.$refs.recommend.refresh()
-              break
-            case 1:
-              this.$refs.ranking.$refs.container.style.paddingBottom = bottom
-              this.$refs.ranking.refresh()
-              break
-            case 2:
-              this.$refs.singer.$refs.container.style.paddingBottom = bottom
-              this.$refs.singer.refresh()
-              break
-            case 3:
-              this.$refs.mv.$refs.container.style.paddingBottom = bottom
-              this.$refs.mv.refresh()
-              break
+          // 根据当前索引获取对应的子组件 ref 名称
+          const refMap = {
+            0: 'recommend',
+            1: 'ranking',
+            2: 'singer',
+            3: 'mv'
+          }
+          const refName = refMap[this.currentIndex]
+          if (!refName) return
+          const child = this.$refs[refName]
+          // 判空：child 存在且有 $refs.container
+          if (child && child.$refs && child.$refs.container) {
+            child.$refs.container.style.paddingBottom = bottom
+            if (typeof child.refresh === 'function') {
+              child.refresh()
+            }
           }
         })
       }

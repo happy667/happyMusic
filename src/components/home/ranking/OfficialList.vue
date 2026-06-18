@@ -13,9 +13,8 @@
       <!-- 歌曲排名 -->
       <ul class="official-list-info">
         <template v-for="(item,index) in rankingObj.tracks">
-          <template v-if="index<3">
-            <li class="official-list-item"
-                :key="item.id">
+          <template v-if="index<3" :key="item.id">
+            <li class="official-list-item">
               {{index+1+'. '}}{{item.name+' - '}} {{item.ar|convertSinger}}
             </li>
           </template>

@@ -9,9 +9,8 @@
       <div class="video-list"
            ref="container">
         <template v-if="videoList.length>0">
-          <template v-for="item in videoList">
-            <video-item :videoParams="item"
-                        :key="item.id"></video-item>
+          <template v-for="item in videoList" :key="item.id">
+            <video-item :videoParams="item"></video-item>
           </template>
         </template>
         <!-- loading -->

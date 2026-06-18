@@ -1,8 +1,7 @@
 <template>
   <div class="comment-list-container">
-    <template v-for="item in commentList">
-      <comment-item :key="item.commentId"
-                    :comment="item"></comment-item>
+    <template v-for="item in commentList" :key="item.commentId">
+      <comment-item :comment="item"></comment-item>
     </template>
 
   </div>

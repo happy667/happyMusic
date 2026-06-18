@@ -1,10 +1,8 @@
 <template>
   <div class="song-sheet-mini-list-container">
     <div class="list">
-      <template v-for="item in list">
-        <song-sheet-mini-item :item="item"
-                              @removeSongSheetItem="removeSongSheetItem"
-                              :key="item.id">
+      <template v-for="item in list" :key="item.id">
+        <song-sheet-mini-item :item="item" @removeSongSheetItem="removeSongSheetItem">
         </song-sheet-mini-item>
       </template>
 
