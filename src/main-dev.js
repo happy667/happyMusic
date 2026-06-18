@@ -1,4 +1,5 @@
-import Vue from 'vue'
+import Vue from '@vue/compat'
+import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
@@ -14,14 +15,15 @@ import '@/assets/common/js/globalComponents.js'
 
 // 插件
 import './plugins/vant.js'
-import 'vue-lazyload'
+import VueLazyload from 'vue-lazyload'
 
 Vue.config.productionTip = false
-Vue.use(animate)
-Vue.prototype.$Dialog = vant.Dialog
-Vue.prototype.$toast = vant.Toast
-new Vue({
-    router,
-    store,
-    render: h => h(App)
-}).$mount('#app')
+Vue.prototype.$Dialog = Vue.prototype.$Dialog || {}
+Vue.prototype.$toast = Vue.prototype.$toast || {}
+
+const app = createApp(App)
+app.use(router)
+app.use(store)
+app.use(animate)
+app.use(VueLazyload, { preLoad: 1.3 })
+app.mount('#app')

@@ -26,7 +26,7 @@ import {
     Cell,
     Area,
     NoticeBar,
-    DatetimePicker,
+    Picker ,
     RadioGroup,
     Radio,
     Empty,
@@ -61,7 +61,7 @@ Vue.use(Overlay)
 Vue.use(Cell)
 Vue.use(Area)
 Vue.use(NoticeBar)
-Vue.use(DatetimePicker)
+Vue.use(Picker)
 Vue.use(RadioGroup)
 Vue.use(Radio)
 Vue.use(Empty)

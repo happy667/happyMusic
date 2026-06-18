@@ -1,11 +1,12 @@
 var path = require('path')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+
 
 function resolve (dir) {
   console.log(__dirname)
   return path.join(__dirname, dir)
 }
 module.exports = {
+  lintOnSave: false,  
   chainWebpack: config => {
     // 发布模式
     config.when(process.env.NODE_ENV === 'production', config => {
@@ -13,31 +14,7 @@ module.exports = {
       // add添加新的打包入口
       config.entry('app').clear().add('./src/main-prod.js')
 
-      // 使用externals设置排除项
-      config.set('externals', {
-        'vue': 'Vue',
-        'vue-router': 'VueRouter',
-        'vuex': 'Vuex',
-        'axios': 'axios',
-        'babel-polyfill': 'polyfill',
-        'vant': 'vant',
-        'swiper': 'Swiper'
-      })
-      plugins: [
-        new UglifyJsPlugin({
-          uglifyOptions: {
-            output: {
-              comments: false, // 去掉注释
-            },
-            warnings: false,
-            compress: {
-              drop_console: true,
-              drop_debugger: false,
-              pure_funcs: ['console.log'] //移除console
-            }
-          }
-        })
-      ]
+      // 不使用 externals，确保本地打包时依赖可以正常解析
     })
     // 开发模式
     config.when(process.env.NODE_ENV === 'development', config => {
@@ -47,6 +24,23 @@ module.exports = {
     config.resolve.alias
       .set('@', resolve('src')) // key,value自行定义，比如.set('@@', resolve('src/components'))
       .set('common', resolve('src/assets/common'))
+      .set('vue$', '@vue/compat')
+      .set('vue-router$', 'vue-router')
+      .set('vuex$', 'vuex')
+
+    config.module
+      .rule('vue')
+      .use('vue-loader')
+      .tap(options => {
+        return {
+          ...options,
+          compilerOptions: {
+            compatConfig: {
+              MODE: 2
+            }
+          }
+        }
+      })
   },
   css: {
     extract: false
@@ -98,8 +92,8 @@ module.exports = {
         }
       },
       '/api': {
-        target: 'https://www.happy6year.com', //部署环境地址地址
-        //target: 'http://localhost:3000', //开发环境地址
+        //target: 'https://www.happy6year.com', //部署环境地址地址
+        target: 'http://localhost:3000', //开发环境地址
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''
