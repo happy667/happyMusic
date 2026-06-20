@@ -9,15 +9,5 @@ if (process.env.NODE_ENV === 'production') {
 module.exports = {
   presets: [
     '@vue/cli-plugin-babel/preset'
-  ],
-  plugins: [
-    ['import', {
-      libraryName: 'vant',
-      libraryDirectory: 'es',
-      style: true
-    }, 'vant'],
-    ...productPlugins,
-    // 配置路由懒加载插件
-    '@babel/plugin-syntax-dynamic-import'
   ]
 }

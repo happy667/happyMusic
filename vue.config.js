@@ -1,5 +1,7 @@
 var path = require('path')
-
+const { VantResolver } = require('@vant/auto-import-resolver');
+const AutoImport = require('unplugin-auto-import/webpack');
+const Components = require('unplugin-vue-components/webpack');
 
 function resolve (dir) {
   console.log(__dirname)
@@ -8,6 +10,14 @@ function resolve (dir) {
 module.exports = {
   lintOnSave: false,  
   chainWebpack: config => {
+    config.plugin('auto-import').use(AutoImport({
+      resolvers: [VantResolver()],
+      // 可选：如果你希望自动导入 Vue API (如 ref, computed)，可以添加以下配置
+      // imports: ['vue'], 
+    }))
+    config.plugin('vue-components').use(Components({
+      resolvers: [VantResolver()],
+    }))
     // 发布模式
     config.when(process.env.NODE_ENV === 'production', config => {
       // entry找到默认的打包入口，调用clear则是删除默认的打包入口

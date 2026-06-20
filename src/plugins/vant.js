@@ -1,74 +1,12 @@
-import Vue from 'vue'
+import { createApp } from 'vue'
 import {
-    Tab,
-    Tabs,
-    Swipe,
-    SwipeItem,
-    NavBar,
-    Icon,
-    search,
-    Sticky,
-    List,
-    slider,
-    progress,
-    PullRefresh,
-    Loading,
-    Toast,
-    Dialog,
-    Lazyload,
-    Field,
-    CellGroup,
-    Button,
-    Circle,
-    Popup,
-    Image,
-    Overlay,
-    Cell,
-    Area,
-    NoticeBar,
-    Picker ,
-    RadioGroup,
-    Radio,
-    Empty,
-    Collapse,
-    CollapseItem,
-    Tag,
-    Skeleton
+  Toast,
+  Dialog,
 } from 'vant'
-Vue.use(Tab)
-Vue.use(Tabs)
-Vue.use(Swipe)
-Vue.use(SwipeItem)
-Vue.use(NavBar)
-Vue.use(Icon)
-Vue.use(search)
-Vue.use(Sticky)
-Vue.use(List)
-Vue.use(slider)
-Vue.use(progress)
-Vue.use(PullRefresh)
-Vue.use(Loading)
-Vue.use(Toast)
-Vue.use(Dialog)
-Vue.use(Lazyload)
-Vue.use(Field)
-Vue.use(CellGroup)
-Vue.use(Button)
-Vue.use(Circle)
-Vue.use(Popup)
-Vue.use(Image)
-Vue.use(Overlay)
-Vue.use(Cell)
-Vue.use(Area)
-Vue.use(NoticeBar)
-Vue.use(Picker)
-Vue.use(RadioGroup)
-Vue.use(Radio)
-Vue.use(Empty)
-Vue.use(Collapse)
-Vue.use(CollapseItem)
-Vue.use(Tag)
-Vue.use(Skeleton)
-Vue.prototype.$Dialog = Dialog
-Vue.prototype.$Dialog = Dialog
-Vue.prototype.$toast = Toast
+import 'vant/lib/index.css'
+export default {
+  install: (app) => {
+    app.config.globalProperties.$dialog = Dialog 
+    app.config.globalProperties.$toast = Toast
+  }
+}

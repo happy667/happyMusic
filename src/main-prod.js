@@ -13,8 +13,6 @@ import '@/assets/common/js/globalComponents.js'
 Vue.use(VueLazyload, {
     preLoad: 1.3
 })
-Vue.prototype.$Dialog = vant.Dialog
-Vue.prototype.$toast = vant.Toast
 Vue.config.productionTip = false
 new Vue({
     router,

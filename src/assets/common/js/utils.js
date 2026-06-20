@@ -1,4 +1,3 @@
-import Vue from 'vue'
 import router from '@/router/index.js'
 import store from '@/store/index.js'
 // import songApi from '@/api/song.js'
@@ -8,10 +7,11 @@ import {
 import {
   PLAY_MODE
 } from '@/assets/common/js/config.js'
+import { showToast,showConfirmDialog,showDialog  } from 'vant'
 const utils = {
   playMusic (song, list = null, index) {
     if (song && song.st < 0) {
-      Vue.prototype.$toast('亲爱的，暂无版权')
+      showToast('亲爱的，暂无版权')
       return
     }
     utils.handlePlayList(song, list, index)
@@ -63,7 +63,7 @@ const utils = {
   // 播放所有歌曲
   playAllSong (list) {
     if (list.length === 0) {
-      Vue.prototype.$toast('暂无可播放的歌曲')
+      showToast('暂无可播放的歌曲')
       return
     }
     utils.handlePlayList(null, list, 0)
@@ -173,7 +173,7 @@ const utils = {
     message,
     title = null
   }) {
-    return Vue.prototype.$Dialog.alert({
+    return showDialog({
       message,
       confirmButtonColor: '#FD4979',
       width: '265px'
@@ -184,7 +184,7 @@ const utils = {
     message,
     confirmButtonText = '确认'
   }) {
-    return Vue.prototype.$Dialog.confirm({
+    return showConfirmDialog({
       message,
       confirmButtonColor: '#FD4979',
       confirmButtonText,
@@ -342,7 +342,4 @@ export function createNumberAnimation (options) {
   };
 }
 
-export {
-  utils
-}
-Vue.prototype.$utils = utils
+export default utils

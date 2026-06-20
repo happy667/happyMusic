@@ -5,7 +5,7 @@
  */
 
 import { EMOTION_MUSIC_CONFIG, SENTIMENT_TYPES } from './config'
-import { utils } from '@/assets/common/js/utils.js'
+import utils from '@/assets/common/js/utils.js'
 import { getSentimentType } from './ai-emotion-helper.js'
 
 const randomList = utils.randomList
