@@ -40,7 +40,7 @@
             ...mapMutations(['setPlayMode', 'setCurrentPlayIndex', 'setPlayList']),
             ...mapActions(['deleteSongList']),
             clearPlayList() {
-                this.$Dialog.confirm({
+                this.$dialog.confirm({
                     message: '确定要清空播放列表?',
                     confirmButtonColor: '#FD4979',
                     width: '265px'

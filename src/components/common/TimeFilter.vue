@@ -55,7 +55,7 @@
 
     <!-- 日期选择器弹窗 -->
     <van-popup v-model="showDatePicker" round position="bottom" class="picker-popup">
-      <van-datetime-picker v-model="currentDate" type="date" :title="pickerTitle" :min-date="minDate"
+      <van-time-picker v-model="currentDate" type="date" :title="pickerTitle" :min-date="minDate"
         :max-date="maxDate" @confirm="handleDateConfirm" @cancel="closeDatePicker" />
     </van-popup>
   </div>

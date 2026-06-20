@@ -128,10 +128,11 @@
         <van-slider active-color="#FD4979"
                     @input="handleSlideChange"
                     v-model="slideVal">
-          <div slot="button"
-               v-show="isClickScreen"
-               :class="isClickScreen?'button':''">
-          </div>
+          <template>
+            <div v-show="isClickScreen"
+                 :class="isClickScreen?'button':''">
+            </div>
+          </template>
         </van-slider>
       </div>
     </div>

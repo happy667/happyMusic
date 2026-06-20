@@ -114,7 +114,7 @@
 </div>
 <!-- 出生日期 -->
 <div class="updateBirthday" v-if="option==='birthday'">
-    <van-datetime-picker type="date" @cancel="showPopup=false" @confirm="handleSaveBirthday" :value="currentDate" :max-date="maxDate" :min-date="minDate" :formatter="formatter" />
+    <van-time-picker type="date" @cancel="showPopup=false" @confirm="handleSaveBirthday" :value="currentDate" :max-date="maxDate" :min-date="minDate" :formatter="formatter" />
 </div>
 <!-- 地区 -->
 <div class="updateAddress" v-if="option==='address'">
