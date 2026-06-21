@@ -1,12 +1,20 @@
 import { createApp } from 'vue'
 import {
-  Toast,
-  Dialog,
+  showToast,
+  showConfirmDialog ,
+  showLoadingToast,
+  showFailToast,
+  closeToast,
 } from 'vant'
-import 'vant/lib/index.css'
+import 'vant/es/toast/style';
+import 'vant/es/dialog/style'
 export default {
   install: (app) => {
-    app.config.globalProperties.$dialog = Dialog 
-    app.config.globalProperties.$toast = Toast
+    // 在 mount 之前设置所有全局属性
+    app.config.globalProperties.$confirmDialog = showConfirmDialog
+    app.config.globalProperties.$toast = showToast
+    app.config.globalProperties.$loadingToast = showLoadingToast
+    app.config.globalProperties.$failToast = showFailToast
+    app.config.globalProperties.$closeToast = closeToast
   }
 }

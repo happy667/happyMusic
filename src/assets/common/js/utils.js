@@ -7,7 +7,7 @@ import {
 import {
   PLAY_MODE
 } from '@/assets/common/js/config.js'
-import { showToast,showConfirmDialog,showDialog  } from 'vant'
+import { showToast, showConfirmDialog, showDialog } from 'vant'
 const utils = {
   playMusic (song, list = null, index) {
     if (song && song.st < 0) {
@@ -198,7 +198,7 @@ const utils = {
   alertLogin (redirectPath) {
     utils.alertConfirm({ // 未登录跳转到登录页面
       message: '您还没有登录哦',
-      confirmButtonText: '去登陆'
+      confirmButtonText: '去登录'
     }).then(() => {
       // 未登录则跳转到登陆界面
       console.dir(router)
@@ -271,10 +271,8 @@ const utils = {
         networkType = 'other'
     }
     return networkType
-  }
-}
-
-/**
+  },
+  /**
  * 创建数值动画
  * @param {Object} options 动画配置项
  * @param {number} options.from|startValue 起始值
@@ -285,61 +283,64 @@ const utils = {
  * @param {Function} options.onComplete 动画完成时的回调
  * @returns {Object} 动画控制器
  */
-export function createNumberAnimation (options) {
-  const {
-    startValue = 0,
-    endValue = 100,
-    from = startValue,
-    to = endValue,
-    duration = 800,
-    steps = 20,
-    onUpdate,
-    onComplete
-  } = options;
+  createNumberAnimation (options) {
+    const {
+      startValue = 0,
+      endValue = 100,
+      from = startValue,
+      to = endValue,
+      duration = 800,
+      steps = 20,
+      onUpdate,
+      onComplete
+    } = options;
 
-  // 支持两种参数命名方式
-  const actualStartValue = from !== undefined ? from : startValue;
-  const actualEndValue = to !== undefined ? to : endValue;
+    // 支持两种参数命名方式
+    const actualStartValue = from !== undefined ? from : startValue;
+    const actualEndValue = to !== undefined ? to : endValue;
 
-  let timer = null;
-  let currentStep = 0;
-  const stepDuration = duration / steps;
-  const increment = (actualEndValue - actualStartValue) / steps;
-  let currentValue = actualStartValue;
+    let timer = null;
+    let currentStep = 0;
+    const stepDuration = duration / steps;
+    const increment = (actualEndValue - actualStartValue) / steps;
+    let currentValue = actualStartValue;
 
-  // 停止动画
-  const stop = () => {
-    if (timer) {
-      clearInterval(timer);
-      timer = null;
-      currentStep = 0;
-    }
-  };
-
-  // 开始动画
-  const start = () => {
-    stop(); // 先停止之前的动画
-    currentValue = actualStartValue;
-    currentStep = 0;
-
-    timer = setInterval(() => {
-      currentStep++;
-      if (currentStep >= steps) {
-        currentValue = actualEndValue;
-        onUpdate?.(currentValue);
-        stop();
-        onComplete?.();
-      } else {
-        currentValue += increment;
-        onUpdate?.(currentValue);
+    // 停止动画
+    const stop = () => {
+      if (timer) {
+        clearInterval(timer);
+        timer = null;
+        currentStep = 0;
       }
-    }, stepDuration);
-  };
+    };
 
-  return {
-    start,
-    stop
-  };
+    // 开始动画
+    const start = () => {
+      stop(); // 先停止之前的动画
+      currentValue = actualStartValue;
+      currentStep = 0;
+
+      timer = setInterval(() => {
+        currentStep++;
+        if (currentStep >= steps) {
+          currentValue = actualEndValue;
+          onUpdate?.(currentValue);
+          stop();
+          onComplete?.();
+        } else {
+          currentValue += increment;
+          onUpdate?.(currentValue);
+        }
+      }, stepDuration);
+    };
+
+    return {
+      start,
+      stop
+    };
+  }
 }
+
+
 
 export default utils

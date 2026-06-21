@@ -72,7 +72,7 @@
     </div>
   </div>
 </template>
-<script>
+  <script>
 import Btn from '@/components/common/Button'
 import {
   checkIsNull,
@@ -212,7 +212,7 @@ export default {
     // 注册
     handleRegister () {
       if (this.validForm()) { // 验证用户输入
-        this.$toast.loading({
+        this.$loadingToast({
           message: '正在注册...',
           duration: 10000,
           forbidClick: true
@@ -229,7 +229,7 @@ export default {
                   registerApi.register(this.registerForm).then(res => {
                     console.log(res)
                     if (res.data.code === ERR_OK) {
-                      this.$toast.clear()
+                      this.$closeToast()
                       this.$utils.alert({
                         message: '注册成功，快去登陆吧'
                       }).then(() => {
@@ -246,7 +246,7 @@ export default {
                 this.$toast('验证码错误,请发送验证码至您的手机')
               })
             } else {
-              this.$toast.clear()
+              this.$closeToast()
               this.$utils.alert({
                 message: '该手机号已经注册'
               })

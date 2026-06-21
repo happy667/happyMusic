@@ -1,5 +1,5 @@
 import axios from 'axios'
-import Vue from 'vue'
+import { showToast } from 'vant'
 import apiConfig from './api.config.js'
 import {
     USER_TOKEN
@@ -34,7 +34,7 @@ service.interceptors.request.use(request => {
         if (navigator.onLine) {
             return request
         } else {
-            Vue.prototype.$toast('请连接网络后重试')
+            showToast('请连接网络后重试')
         }
     }, error => {
         // 对请求错误做些什么

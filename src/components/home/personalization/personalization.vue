@@ -146,7 +146,6 @@ import {
   getSentimentPercentage,
   getSentimentDescription
 } from '@/assets/common/js/ai-emotion-radio/ai-emotion-helper.js'
-import { createNumberAnimation } from '@/assets/common/js/utils.js'
 
 export default {
   name: 'Personalization',
@@ -231,11 +230,11 @@ export default {
       if (this.$utils.isLogin()) {
         this.getUserRecommendSong()
       } else {
-        this.$utils.alertLogin(this.$router.currentRoute.fullPath)
+        this.$utils.alertLogin(this.$route.fullPath)
       }
     },
     async getUserRecommendSong () {
-      const toast = this.$toast.loading(
+      this.$loadingToast(
         {
           duration: 0,
           message: '获取歌曲中...'
@@ -268,9 +267,9 @@ export default {
             isOriginal: !item.originSongSimpleData && (item.originCoverType === 0 || item.originCoverType === 1) ? 1 : 0
           }))
         })
-        toast.clear();
+        this.$closeToast();
         this.$utils.playAllSong(songList)
-      
+
       }
     },
     async goToSearch () {
@@ -286,7 +285,7 @@ export default {
 
         this.requestInProgress = true;
         this.aiLoading = true;
-        const toast = this.$toast.loading({
+        this.$loadingToast({
           duration: 0,
           forbidClick: true,
           message: 'AI分析中...'
@@ -309,9 +308,9 @@ export default {
           this.showAnalysisResult = true;
           this.startConfidenceAnimation();
         } catch (err) {
-          this.$toast.fail('AI分析失败，请稍后重试');
+          this.$failToast('AI分析失败，请稍后重试');
         } finally {
-          toast.clear();
+          this.$closeToast()
           this.aiLoading = false;
           this.requestInProgress = false;
         }
@@ -321,7 +320,7 @@ export default {
       }
     },
     async handleScenarioRecommendation () {
-      const toast = this.$toast.loading({
+      const toast=this.$loadingToast({
         duration: 0,
         forbidClick: true,
         message: '场景分析中...'
@@ -377,13 +376,13 @@ export default {
 
         // 延迟跳转以显示toast消息
         setTimeout(() => {
-          toast.clear();
+          this.$closeToast()
           this.$router.push(`/songSheetDisc/${res.recommendedPlaylist.id}`);
         }, 1000);
       } catch (error) {
         console.error('场景推荐完整错误:', error);
-        toast.clear();
-        this.$toast.fail(error.message || '抱歉，没有找到合适的推荐歌单');
+        this.$closeToast()
+        this.$failToast(error.message || '抱歉，没有找到合适的推荐歌单');
       }
     },
 
@@ -392,7 +391,7 @@ export default {
         return;
       }
       this.isRecommendingPlaylist = true;
-      const toast = this.$toast.loading({
+      const toast=this.$loadingToast({
         duration: 0,
         forbidClick: true,
         message: '查找最佳匹配歌单中...'
@@ -406,11 +405,11 @@ export default {
         toast.message = '找到匹配歌单，正在跳转...';
         setTimeout(() => {
           this.closeAiDialog();
-          toast.clear();
+          this.$closeToast()
           this.$router.push(`/songSheetDisc/${recommendedPlaylist.id}`);
         }, 1500);
       } catch (error) {
-        this.$toast.fail('歌单匹配失败，请稍后再试');
+        this.$failToast('歌单匹配失败，请稍后再试');
       } finally {
         this.isRecommendingPlaylist = false;
       }
@@ -432,7 +431,7 @@ export default {
         this.$toast("音乐类型调整为" + this.aiAnalysisResult.searchKeyword)
       } catch (error) {
         console.error('调整推荐失败:', error);
-        this.$toast.fail(error.message || '调整推荐失败，请重试');
+        this.$failToast(error.message || '调整推荐失败，请重试');
       }
     },
     getSentimentType () {
@@ -457,7 +456,7 @@ export default {
       }
       const targetValue = this.getSentimentPercentage();
       try {
-        this.animationController = createNumberAnimation({
+        this.animationController = this.$utils.createNumberAnimation({
           startValue: 0,
           endValue: targetValue,
           duration: 800,

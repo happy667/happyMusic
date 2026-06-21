@@ -2,7 +2,6 @@
   <scroll ref="recommend_scroll">
     <div class="recommend-container " ref="container">
       <!-- loading -->
-      <!-- loading -->
       <loading :loading="load" />
       <template v-if="!load">
 
