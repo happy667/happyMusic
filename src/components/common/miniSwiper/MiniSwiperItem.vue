@@ -9,7 +9,7 @@
                :key="picUrl">
           <div class="playCount"
                v-if="showPlayCount">
-            <i class="iconfont icon-bofang"></i> {{ item.playCount | convertCount }}
+            <i class="iconfont icon-bofang"></i> {{ $filters.convertCount(item.playCount) }}
           </div>
           <div class="icon"
                v-if="showIcon">

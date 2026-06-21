@@ -1,4 +1,3 @@
-import Vue from 'vue'
 // 过滤次数
 export function convertCount(num) {
     let number = num.toString()
@@ -11,7 +10,6 @@ export function convertCount(num) {
 
     return number
 }
-Vue.filter('convertCount', convertCount)
 
 export function convertDate(time, sign = '-') {
     let date = new Date(time)
@@ -20,8 +18,6 @@ export function convertDate(time, sign = '-') {
     let day = date.getDate()
     return `${year}${sign}${month}${sign}${day}`
 }
-// 过滤日期时间
-Vue.filter('convertDate', convertDate)
 
 // 过滤播放时间
 export function convertTime(time) {
@@ -31,10 +27,7 @@ export function convertTime(time) {
     return h === '00' ? `${m}:${s}` : `${h}:${m}:${s}`
 }
 
-Vue.filter('convertTime', convertTime)
-
 // 过滤歌手
 export function convertSinger(item) {
     return item.map(item => item.name).join('/')
 }
-Vue.filter('convertSinger', convertSinger)

@@ -48,7 +48,7 @@
                          :key="songSheetDisc.picUrl" />
                   </div>
                   <div class="playCount">
-                    <i class="iconfont icon-bofang"></i> {{songSheetDisc.playCount|convertCount}}
+                    <i class="iconfont icon-bofang"></i> {{ $filters.convertCount(songSheetDisc.playCount) }}
                   </div>
                 </div>
 
@@ -75,7 +75,7 @@
                     <div class="icon">
                       <van-icon name="more-o" />
                     </div>
-                    <div class="num">{{songSheetDisc.commentCount|convertCount}}</div>
+                    <div class="num">{{ $filters.convertCount(songSheetDisc.commentCount) }}</div>
                   </div>
                 </div>
               </article>
@@ -104,7 +104,7 @@
             <div class="songs-nt">
               <span class="songs-num">{{songSheetDisc.songs.length}}首</span>
               <span class="songs-time"
-                    v-if="songSheetDisc.songs.length!==0">{{songSheetDisc.updateTime|convertDate}}</span>
+                    v-if="songSheetDisc.songs.length!==0">{{ $filters.convertDate(songSheetDisc.updateTime) }}</span>
             </div>
             <!-- 播放按钮 -->
             <div class="playBtn"
@@ -369,7 +369,7 @@ export default {
       if (this.user) { // 说明已经登录
         this.follow()
       } else {
-        this.$utils.alertLogin(this.$router.currentRoute.fullPath)
+        this.$utils.alertLogin(this.$route.fullPath)
       }
     },
 

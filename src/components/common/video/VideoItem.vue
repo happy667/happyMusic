@@ -10,7 +10,7 @@
       <div class="play-num"
            v-if="video.playCount">
         <i class="iconfont icon-bofang"></i>
-        <span>{{video.playCount|convertCount}}</span>
+        <span>{{ $filters.convertCount(video.playCount) }}</span>
       </div>
     </div>
     <!-- video信息 -->
@@ -19,7 +19,7 @@
       <h4 class="video-title">{{video.name}}</h4>
       <div class="bottom">
         <!-- 时间 -->
-        <div class="video-time">{{video.duration/1000|convertTime}}</div>
+        <div class="video-time">{{ $filters.convertTime(video.duration/1000) }}</div>
         <!-- 来源 -->
         <div class="video-source">{{video.creatorName}}</div>
       </div>

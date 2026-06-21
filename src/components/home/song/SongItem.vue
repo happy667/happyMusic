@@ -142,7 +142,7 @@ export default {
       if (this.user) { // 说明已经登录
         this.likeMusic(song) // 添加或取消喜欢音乐
       } else { // 弹窗提示去登录
-        this.$utils.alertLogin(this.$router.currentRoute.fullPath)
+        this.$utils.alertLogin(this.$route.fullPath)
       }
     },
     // 同步当前播放歌曲喜欢状态

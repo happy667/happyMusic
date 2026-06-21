@@ -13,7 +13,7 @@
           <!-- 用户昵称 -->
           <div class="comment-nikeName">{{comment.user.nickname}}</div>
           <!--评论时间-->
-          <div class="comment-time">{{comment.time|convertDate}}</div>
+          <div class="comment-time">{{ $filters.convertDate(comment.time) }}</div>
         </div>
         <div class="bottom">
           <!-- 评论内容 -->

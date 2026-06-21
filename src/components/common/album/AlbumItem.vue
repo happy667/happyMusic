@@ -17,7 +17,7 @@
         <span class="singer"
               v-if="showSinger">{{item.singerName}}</span>
         <span class="time"
-              v-if="showTime">{{item.publishTime|convertDate('.')}}</span>
+              v-if="showTime">{{ $filters.convertDate(item.publishTime, '.') }}</span>
         <span class="song-Size"
               v-if="showSongSize">{{item.size}}首</span>
       </div>

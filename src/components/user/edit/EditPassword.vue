@@ -143,7 +143,7 @@ export default {
     // 保存
     save () {
       if (this.validForm()) { // 验证用户输入
-        this.$toast.loading({
+        this.$loadingToast({
           forbidClick: true,
           duration: 0,
           message: '保存中...'

@@ -1,27 +1,20 @@
 <template>
   <div class="official-list-container"
        @click="selectItem(rankingObj)">
-    <router-link to="/songSheetInfo"
-                 tag="div"
-                 class="official-list">
-      <!-- 排行列表图片 -->
-      <div class="official-list-img">
-        <img v-lazy="rankingObj.coverImgUrl"
-             class="animated fadeIn"
-             :key="rankingObj.coverImgUrl" />
-      </div>
-      <!-- 歌曲排名 -->
-      <ul class="official-list-info">
-        <template v-for="(item,index) in rankingObj.tracks">
-          <template v-if="index<3" :key="item.id">
-            <li class="official-list-item">
-              {{index+1+'. '}}{{item.name+' - '}} {{item.ar|convertSinger}}
-            </li>
-          </template>
-        </template>
-      </ul>
-    </router-link>
-
+    <!-- 排行列表图片 -->
+    <div class="official-list-img">
+      <img v-lazy="rankingObj.coverImgUrl"
+           class="animated fadeIn"
+           :key="rankingObj.coverImgUrl" />
+    </div>
+    <!-- 歌曲排名 -->
+    <ul class="official-list-info">
+      <li v-for="(item,index) in topThreeTracks"
+          :key="item.id"
+          class="official-list-item">
+        {{index+1+'. '}}{{item.name+' - '}} {{ $filters.convertSinger(item.ar) }}
+      </li>
+    </ul>
   </div>
 </template>
 <script>
@@ -29,6 +22,12 @@ import 'common/js/convert.js'
 export default {
   props: {
     rankingObj: Object
+  },
+  computed: {
+    // 只取前3首歌曲
+    topThreeTracks() {
+      return this.rankingObj.tracks ? this.rankingObj.tracks.slice(0, 3) : []
+    }
   },
   methods: {
     // 选择排行榜进入歌单详情

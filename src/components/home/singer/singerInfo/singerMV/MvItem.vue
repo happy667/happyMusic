@@ -11,7 +11,7 @@
         </div>
         <div class="play-count">
           <i class="iconfont icon-bofang"></i>
-          <span>{{item.playCount|convertCount}}</span>
+          <span>{{ $filters.convertCount(item.playCount) }}</span>
         </div>
 
       </div>

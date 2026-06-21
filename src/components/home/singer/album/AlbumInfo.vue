@@ -21,7 +21,7 @@
                      :key="albumObj.album.picUrl" />
               </div>
               <div class="digital-album"></div>
-              <div class="public-time">{{albumObj.album.publishTime|convertDate}}</div>
+              <div class="public-time">{{ $filters.convertDate(albumObj.album.publishTime) }}</div>
             </div>
 
           </div>
@@ -45,7 +45,7 @@
                 <div class="icon">
                   <van-icon name="more-o" />
                 </div>
-                <div class="num">{{albumObj.commentCount|convertCount}}</div>
+                <div class="num">{{ $filters.convertCount(albumObj.commentCount) }}</div>
               </div>
             </div>
           </div>
@@ -340,7 +340,7 @@ export default {
       if (this.user) { // 说明已经登录
         this.follow() // 收藏/取消收藏专辑
       } else { // 弹窗提示去登录
-        this.$utils.alertLogin(this.$router.currentRoute.fullPath)
+        this.$utils.alertLogin(this.$route.fullPath)
       }
     },
     // 收藏/取消收藏专辑

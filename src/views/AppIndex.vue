@@ -109,7 +109,7 @@ export default {
     },
     login (cookie) {
       console.log(cookie)
-      this.$toast.loading({
+      this.$loadingToast({
         message: '登陆中...',
         duration: 10000,
         forbidClick: true
@@ -123,14 +123,14 @@ export default {
         this.setToken(cookie)
         this.setLoginUser(res.data.profile)
 
-        if (this.$router.currentRoute.query.redirect) { // 跳回到原来页面
+        if (this.$route.query.redirect) { // 跳回到原来页面
           // 使用replace是为了不保留登录页面历史记录
-          this.$router.replace(this.$router.currentRoute.query.redirect)
+          this.$router.replace(this.$route.query.redirect)
           this.$router.go(-1) // 这里执行go是为了解决需要返回两次才能回退上一个页面的问题
         } else {
           this.$router.replace('/home')
         }
-        this.$toast.clear()
+        this.$closeToast()
       }
     }
   }

@@ -99,7 +99,7 @@ export default {
       if (this.user) { // 说明已经登录
         this.follow() // 收藏/取消收藏歌手
       } else { // 弹窗提示去登录
-        this.$utils.alertLogin(this.$router.currentRoute.fullPath)
+        this.$utils.alertLogin(this.$route.fullPath)
       }
     },
     // 收藏/取消收藏歌手

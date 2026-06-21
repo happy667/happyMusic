@@ -14,14 +14,20 @@
       <!-- 操作 -->
       <div class="option">
         <router-link to="/appIndex/login"
-                     tag="div">
-          <btn text="登录" />
+                     custom
+                     v-slot="{ navigate }">
+          <div @click="navigate">
+            <btn text="登录" />
+          </div>
         </router-link>
         <p>OR</p>
         <!-- 注册 -->
         <router-link to="/appIndex/register"
-                     tag="div">
-          <btn text="注册" />
+                     custom
+                     v-slot="{ navigate }">
+          <div @click="navigate">
+            <btn text="注册" />
+          </div>
         </router-link>
       </div>
       <!-- 游客登录 -->

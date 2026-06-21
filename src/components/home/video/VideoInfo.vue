@@ -58,7 +58,7 @@
               <div class="love icon">
                 <i class="iconfont icon-dianzan"></i>
               </div>
-              <p class="text">{{video.likeCount|convertCount}}</p>
+              <p class="text">{{ $filters.convertCount(video.likeCount) }}</p>
             </div>
             <div class="item"
                  :class="video.followed?'active':''"
@@ -66,14 +66,14 @@
               <div class="follow icon">
                 <van-icon :name="followIcon" />
               </div>
-              <p class="text">{{video.subCount|convertCount}}</p>
+              <p class="text">{{ $filters.convertCount(video.subCount) }}</p>
             </div>
             <div class="item"
                  @click="handleClickComment">
               <div class="comment icon">
                 <van-icon name="more-o" />
               </div>
-              <p class="text">{{video.commentCount|convertCount}}</p>
+              <p class="text">{{ $filters.convertCount(video.commentCount) }}</p>
             </div>
             <div class="item"
                  ref="share"
@@ -81,7 +81,7 @@
               <div class="share icon">
                 <i class="iconfont icon-fenxiang"></i>
               </div>
-              <p class="text">{{video.shareCount|convertCount}}</p>
+              <p class="text">{{ $filters.convertCount(video.shareCount) }}</p>
             </div>
           </div>
           <!-- 视频出处 -->
@@ -230,13 +230,13 @@ export default {
         // 获取视频详情
         const { data: videoDetailRes } = await videoApi.getVideoDetail(id);
         if (videoDetailRes.code !== ERR_OK) {
-          this.$toast.fail('系统出错');
+          this.$failToast('系统出错');
           return;
         }
         // 获取视频 URL
         const { data: videoUrlRes } = await videoApi.getVideoUrl(id);
         if (videoUrlRes.code !== ERR_OK) {
-          this.$toast.fail('系统出错');
+          this.$failToast('系统出错');
           return;
         }
         const videoData = videoDetailRes.data;
@@ -273,7 +273,7 @@ export default {
         this.commentCount = videoData.commentCount;
         this.video = video;
       } catch (error) {
-        this.$toast.fail('系统出错');
+        this.$failToast('系统出错');
         this.$router.replace('/');
       }
     },
@@ -364,7 +364,7 @@ export default {
       if (this.user) { // 说明已经登录
         this.follow() // 收藏/取消收藏专辑
       } else { // 弹窗提示去登录
-        this.$utils.alertLogin(this.$router.currentRoute.fullPath)
+        this.$utils.alertLogin(this.$route.fullPath)
       }
     },
     // 收藏/取消收藏专辑
@@ -404,7 +404,7 @@ export default {
       if (this.user) { // 说明已经登录
         this.likeVideo(video) // 点赞视频
       } else { // 弹窗提示去登录
-        this.$utils.alertLogin(this.$router.currentRoute.fullPath)
+        this.$utils.alertLogin(this.$route.fullPath)
       }
     },
     likeVideo (video) {

@@ -158,7 +158,7 @@ export default {
     // 修改
     handleUpdate () {
       if (this.validForm()) { // 验证用户输入
-        this.$toast.loading({
+        this.$loadingToast({
           message: '修改中...',
           duration: 10000,
           forbidClick: true
@@ -176,7 +176,7 @@ export default {
                   registerApi.register(this.updateForm).then(res => {
                     console.log(res)
                     if (res.data.code === ERR_OK) {
-                      this.$toast.clear()
+                      this.$closeToast()
                       this.$utils.alert({
                         message: '密码修改成功，快去登陆吧'
                       }).then(() => {
@@ -190,7 +190,7 @@ export default {
                 this.$toast(error.data.message)
               })
             } else {
-              this.$toast.clear()
+              this.$closeToast()
               this.$utils.alert({
                 message: '该手机号尚未注册'
               }).then(() => {

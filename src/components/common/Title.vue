@@ -1,9 +1,11 @@
 <template>
   <div class="title-container" :class="borderLeft?'border-left':''" :style="styleInfo">
     <h2 class="title">{{title}}</h2>
-    <router-link tag="div" :to="path" class="viewMore" v-if="loadMore">
-      更多
-      <van-icon name="arrow" />
+    <router-link v-if="loadMore" :to="path" custom v-slot="{ navigate }">
+      <div @click="navigate" class="viewMore">
+        更多
+        <van-icon name="arrow" />
+      </div>
     </router-link>
   </div>
 </template>

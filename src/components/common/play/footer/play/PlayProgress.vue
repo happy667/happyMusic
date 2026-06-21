@@ -11,8 +11,8 @@
     <!-- 播放时长 -->
 
     <div class="play-time">
-      <div class="start-time">{{playerParams.currentTime|convertTime}}</div>
-      <div class="end-time">{{playerParams.duration|convertTime}}</div>
+      <div class="start-time">{{ $filters.convertTime(playerParams.currentTime) }}</div>
+      <div class="end-time">{{ $filters.convertTime(playerParams.duration) }}</div>
     </div>
   </div>
 </template>

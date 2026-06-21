@@ -3,7 +3,7 @@
     <div class="sons-img animated fadeIn">
       <div class="songs-playCount"
            v-if="playCount">
-        <i class="iconfont icon-bofang"></i> {{playCount|convertCount}}
+        <i class="iconfont icon-bofang"></i> {{ $filters.convertCount(playCount) }}
       </div>
       <img v-lazy="picUrl"
            :key="picUrl">

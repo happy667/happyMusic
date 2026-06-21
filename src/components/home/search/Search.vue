@@ -59,9 +59,7 @@ import {
   mapState,
   mapMutations
 } from 'vuex'
-import {
-  utils
-} from '@/assets/common/js/utils.js'
+import utils from '@/assets/common/js/utils.js'
 import {
   SEARCH_TYPE
 } from '@/assets/common/js/config.js'

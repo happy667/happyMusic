@@ -75,7 +75,7 @@
                     <div class="play-count"
                          v-show="isFirstPlay">
                       <i class="iconfont icon-bofang"></i>
-                      <span>{{videoParams.playCount|convertCount}}</span>
+                      <span>{{ $filters.convertCount(videoParams.playCount) }}</span>
                     </div>
                   </div>
 
@@ -84,7 +84,7 @@
                     <div class="play-time"
                          v-show="isFirstPlay">
                       <i class="iconfont icon-shichang"></i>
-                      <span>{{duration|convertTime}}</span>
+                      <span>{{ $filters.convertTime(duration) }}</span>
                     </div>
                   </div>
                 </div>
@@ -100,7 +100,7 @@
                       <!-- 播放进度-->
                       <div class="play-progress"
                            v-show="isClickScreen">
-                        {{currenTime|convertTime}} / {{duration|convertTime}}
+                        {{ $filters.convertTime(currenTime) }} / {{ $filters.convertTime(duration) }}
                       </div>
 
                     </div>

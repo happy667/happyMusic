@@ -1,6 +1,4 @@
-import {
-    utils
-} from '@/assets/common/js/utils.js'
+import utils from '@/assets/common/js/utils.js'
 export default {
     // 上一曲
     prev({

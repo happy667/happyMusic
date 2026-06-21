@@ -58,7 +58,7 @@ export default {
     // 保存修改昵称
     async save () {
       if (this.valid()) { // 验证成功
-        this.$toast.loading({
+        this.$loadingToast({
           forbidClick: true,
           duration: 0,
           message: '保存中...'

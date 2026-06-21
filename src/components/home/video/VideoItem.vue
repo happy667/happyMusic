@@ -14,7 +14,7 @@
                   <!-- 播放次数 -->
                   <div class="play-count">
                     <i class="iconfont icon-bofang"></i>
-                    <span>{{videoParams.playCount|convertCount}}</span>
+                    <span>{{ $filters.convertCount(videoParams.playCount) }}</span>
                   </div>
                 </div>
               </div>

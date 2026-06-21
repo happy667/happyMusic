@@ -1,6 +1,6 @@
-import Vue from '@vue/compat'
 import store from '@/store/index.js'
 import { createRouter, createWebHistory } from 'vue-router'
+import utils from '@/assets/common/js/utils.js'
 const Login = () =>
   import( /* webpackChunkName:"login_index_register_findPassword_appIndex" */ '../views/appIndex/Login')
 const Index = () =>
@@ -64,16 +64,10 @@ const UserEditPassword = () =>
 
 
 const routes = [
-  // 重定向到首页
-  {
-    path: '/:pathMatch(.*)*',
-    redirect: '/home'
-  },
   // 重定向到登录页
   {
     path: '/appIndex',
     redirect: 'appIndex/index'
-
   },
   {
     path: '/index',
@@ -221,7 +215,8 @@ const routes = [
         },
         beforeEnter (to, from, next) {
           if (!store.state.searchKeywords) {
-            router.replace('/search/searchPage')
+            next({ path: '/search/searchPage', replace: true })
+            return
           } else if (from.name === 'searchPage') {
             // 添加不缓存路由
             store.commit('setAddNoCacheComponents', 'search')
@@ -526,8 +521,12 @@ const routes = [
       next()
     }
 
+  },
+  // 通配符路由必须放在最后，处理所有未匹配的路由
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: '/home'
   }
-
 ]
 
 const router = createRouter({
@@ -537,44 +536,42 @@ const router = createRouter({
     if (savedPosition) {
       return savedPosition
     } else {
-      return {
-        x: 0,
-        y: 0
-      }
+      return { top: 0, left: 0 }
     }
   }
-
 })
 router.beforeEach((to, from, next) => {
 
   if (to.matched.some(record => record.meta.requireLogin)) { // 判断该路由是否需要登录权限
-    let utils = Vue.prototype.$utils
     if (utils.isLogin()) { // 判断是否登录
       next()
     } else if (from.name !== 'login') {
       utils.alertConfirm({ // 未登录跳转到登录页面
-        message: '您还没有登录哦',
-        confirmButtonText: '去登陆'
-      }).then(() => {
-        next({
-          name: 'login',
-          query: {
-            redirect: to.fullPath // 未登录则跳转到登陆界面，query:{ redirect: to.fullPath}表示把当前路由信息传递过去方便登录后跳转回来；
+          message: '您还没有登录哦',
+          confirmButtonText: '去登陆',
+          confirmButtonColor: '#FD4979'
+        }).then(() => {
+          next({
+            name: 'login',
+            query: {
+              redirect: to.fullPath // 未登录则跳转到登陆界面，query:{ redirect: to.fullPath}表示把当前路由信息传递过去方便登录后跳转回来；
+            }
+          })
+        }).catch(() => {
+          if (from.name !== 'user') {
+            next({
+              name: 'user'
+            }) // 回到个人主页
           }
         })
-      }).catch(() => {
-        if (from.name !== 'user') {
-          next({
-            name: 'user'
-          }) // 回到个人主页
-        }
-      })
+      return
     } else {
       if (from.name !== 'user') {
         next({
           name: 'user'
         }) // 回到个人主页
       }
+      return
     }
   } else {
     if (store.state.playerFullScreen) {

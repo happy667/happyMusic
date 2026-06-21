@@ -86,7 +86,7 @@
                     </div>
                     <!-- 粉丝数量 -->
                     <p class="follows"
-                       v-if="singer">{{singer.followCount|convertCount}}粉丝</p>
+                       v-if="singer">{{ $filters.convertCount(singer.followCount) }}粉丝</p>
                     <div class="singer-desc"
                          v-if="this.singerDetail.identify">
                       {{this.singerDetail.identify.imageDesc}}
@@ -596,7 +596,7 @@ export default {
       if (this.user) { // 说明已经登录
         this.follow() // 收藏/取消收藏歌手
       } else { // 弹窗提示去登录
-        this.$utils.alertLogin(this.$router.currentRoute.fullPath)
+        this.$utils.alertLogin(this.$route.fullPath)
       }
     },
     // 收藏/取消收藏歌手
