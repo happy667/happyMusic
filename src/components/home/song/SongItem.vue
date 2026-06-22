@@ -149,7 +149,7 @@ export default {
     asyncCurrentLikeStatus () {
       if (this.song.id === this.currentSong.id) {
         // 同步喜欢状态
-        this.$set(this.song, 'isLike', this.currentSong.isLike)
+        this.song.isLike = this.currentSong.isLike
       }
     },
     // 更新歌曲状态
@@ -157,7 +157,7 @@ export default {
       let newItem = this.userLikeList.find(id => id === song.id)
       if (newItem) { // 说明用户已添加该歌曲到喜欢列表中
         // 修改song中的isLike属性
-        this.$set(this.song, 'isLike', true)
+        this.song.isLike = true
       }
     },
 
@@ -166,11 +166,11 @@ export default {
       if (like) { // 喜欢
         userApi.likeMusic(song.id, like).then(res => {
           if (res.data.code === ERR_OK) {
-            this.$set(this.song, 'isLike', like)
+            this.song.isLike = like
             this.$toast('已添加到我喜欢')
             if (this.song.id === this.currentSong.id) {
               // 同步喜欢状态
-              this.$set(this.currentSong, 'isLike', like)
+              this.currentSong.isLike = like
             }
           }
         }).catch(err => {
@@ -179,12 +179,12 @@ export default {
       } else {
         userApi.likeMusic(song.id, like).then(res => {
           if (res.data.code === ERR_OK) {
-            this.$set(this.song, 'isLike', like)
+            this.song.isLike = like
             this.$emit('noLike', this.song) // 派发取消喜欢事件
             this.$toast('已取消收藏')
             if (this.song.id === this.currentSong.id) {
               // 同步喜欢状态
-              this.$set(this.currentSong, 'isLike', like)
+              this.currentSong.isLike = like
             }
           }
         }).catch(err => {

@@ -312,9 +312,9 @@ export default {
             singers,
             singerList
           })
-          this.$set(this.albumObj, 'songs', songList)
-          this.$set(this.albumObj, 'commentCount', res.album.info.commentCount)
-          this.$set(this.albumObj, 'album', album)
+          this.albumObj.songs = songList
+          this.albumObj.commentCount = res.album.info.commentCount
+          this.albumObj.album = album
 
           // 适配页面底部
           this.handlePlaylist(this.playList)

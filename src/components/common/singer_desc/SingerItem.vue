@@ -1,144 +1,145 @@
 <template>
-  <div class="singer-list-item-container"
-       @click.stop="selectItem(_singer)">
+  <div class="singer-list-item-container" @click.stop="selectItem(_singer)">
     <div class="singer-list-item">
       <div class="left">
         <!-- 歌手头像 -->
         <div class="singer-avatar">
-          <my-image :src="avatar"
-                    :size="imageSize"></my-image>
+          <my-image :src="avatar" :size="imageSize"></my-image>
         </div>
         <!-- 歌手信息 -->
         <article class="singer-info">
-          <div class="name">{{singerName}}</div>
+          <div class="name">{{ singerName }}</div>
           <div class="info">
-            <span v-if="_singer.songSize"
-                  class="songSize">单曲:{{_singer.songSize}}</span>
-            <span v-if="_singer.albumSize"
-                  class="albumSize">专辑:{{_singer.albumSize}}</span>
-            <span v-if="_singer.mvSize"
-                  class="mvSize">视频:{{_singer.mvSize}}</span>
+            <span v-if="_singer.songSize" class="songSize"
+              >单曲:{{ _singer.songSize }}</span
+            >
+            <span v-if="_singer.albumSize" class="albumSize"
+              >专辑:{{ _singer.albumSize }}</span
+            >
+            <span v-if="_singer.mvSize" class="mvSize">视频:{{ _singer.mvSize }}</span>
           </div>
         </article>
-
       </div>
 
-      <div class="right"
-           v-if="showFollow">
+      <div class="right" v-if="showFollow">
         <!-- 收藏 -->
-        <follow @clickFollow="handleClickFollow"
-                plain
-                :followed="_singer.followed"></follow>
+        <follow
+          @clickFollow="handleClickFollow"
+          plain
+          :followed="_singer.followed"
+        ></follow>
       </div>
     </div>
   </div>
-
 </template>
 <script>
-import MyImage from '@/components/common/img/Image'
-import Follow from '@/components/common/Follow'
-import userApi from '@/api/user.js'
-import {
-  ERR_OK
-} from '@/api/config.js'
-import {
-  DEFAULT_SINGER_IMAGE
-} from '@/assets/common/js/config.js'
-import {
-  mapState,
-  mapMutations
-} from 'vuex'
+import MyImage from "@/components/common/img/Image";
+import Follow from "@/components/common/Follow";
+import userApi from "@/api/user.js";
+import { ERR_OK } from "@/api/config.js";
+import { DEFAULT_SINGER_IMAGE } from "@/assets/common/js/config.js";
+import { mapState, mapMutations } from "vuex";
 export default {
   props: {
     singer: Object,
     showFollow: {
       type: Boolean,
-      default: () => true
+      default: () => true,
     },
     imageSize: {
       type: String,
-      default: () => 'middle'
+      default: () => "middle",
     },
     imageWidth: {
       type: String,
-      default: () => '1rem'
+      default: () => "1rem",
     },
     imageHeight: {
       type: String,
-      default: () => '1rem'
-    }
+      default: () => "1rem",
+    },
   },
   computed: {
-    ...mapState(['user']),
-    _singer () {
-      return this.singer
+    ...mapState(["user"]),
+    _singer() {
+      return this.singer;
     },
-    singerName () {
-      let aliaName = ''
+    singerName() {
+      let aliaName = "";
       if (this._singer.aliaName) {
-        aliaName = ' (' + this._singer.aliaName + ')'
+        aliaName = " (" + this._singer.aliaName + ")";
       }
-      return this._singer.name + aliaName
+      return this._singer.name + aliaName;
     },
-    avatar () {
-      return this._singer.avatar ? this._singer.avatar : DEFAULT_SINGER_IMAGE
-    }
+    avatar() {
+      return this._singer.avatar ? this._singer.avatar : DEFAULT_SINGER_IMAGE;
+    },
   },
   components: {
     MyImage,
-    Follow
+    Follow,
   },
   methods: {
-    ...mapMutations(['setSingerCurrentIndex']),
+    ...mapMutations(["setSingerCurrentIndex"]),
     // 选择歌手
-    selectItem (item) {
-      this.$emit('select', item)
+    selectItem(item) {
+      this.$emit("select", item);
     },
     // 点击收藏
-    handleClickFollow () {
-      if (this.user) { // 说明已经登录
-        this.follow() // 收藏/取消收藏歌手
-      } else { // 弹窗提示去登录
-        this.$utils.alertLogin(this.$route.fullPath)
+    handleClickFollow() {
+      if (this.user) {
+        // 说明已经登录
+        this.follow(); // 收藏/取消收藏歌手
+      } else {
+        // 弹窗提示去登录
+        this.$utils.alertLogin(this.$route.fullPath);
       }
     },
     // 收藏/取消收藏歌手
-    follow () {
-      let singer = this._singer
-      let follow = !singer.followed
-      follow = follow ? 1 : 0 // 1代表收藏，0代表不收藏
+    follow() {
+      let singer = this._singer;
+      let follow = !singer.followed;
+      follow = follow ? 1 : 0; // 1代表收藏，0代表不收藏
       if (!follow) {
-        this.$utils.alertConfirm({
-          message: '确定取消关注该歌手',
-          confirmButtonText: '确定'
-        }).then(() => {
-          userApi.updateFollowSinger(singer.id, follow).then(res => {
-            if (res.data.code === ERR_OK) {
-              this.$set(singer, 'followed', false)
-              this.$toast('已取消关注')
-            } else {
-              this.$toast(res.data.message)
-            }
-          }).catch(err => {
-            this.$toast(err.data.message)
+        this.$utils
+          .alertConfirm({
+            message: "确定取消关注该歌手",
+            confirmButtonText: "确定",
           })
-        }).catch(() => { })
+          .then(() => {
+            userApi
+              .updateFollowSinger(singer.id, follow)
+              .then((res) => {
+                if (res.data.code === ERR_OK) {
+                  this.singer.followed = false;
+                  this.$toast("已取消关注");
+                } else {
+                  this.$toast(res.data.message);
+                }
+              })
+              .catch((err) => {
+                this.$toast(err.data.message);
+              });
+          })
+          .catch(() => {});
       } else {
-        userApi.updateFollowSinger(singer.id, follow).then(res => {
-          if (res.data.code === ERR_OK) {
-            this.$set(singer, 'followed', true)
-            this.$toast('关注成功')
-          } else {
-            this.$toast(res.data.message)
-          }
-        }).catch(err => {
-          this.$toast(err.data.message)
-        })
+        userApi
+          .updateFollowSinger(singer.id, follow)
+          .then((res) => {
+            if (res.data.code === ERR_OK) {
+              this.singer.followed = true;
+              this.$toast("关注成功");
+            } else {
+              this.$toast(res.data.message);
+            }
+          })
+          .catch((err) => {
+            this.$toast(err.data.message);
+          });
       }
-    }
-  }
-
-}
+    },
+  },
+};
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';

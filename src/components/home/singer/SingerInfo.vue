@@ -611,7 +611,7 @@ export default {
         }).then(() => {
           userApi.updateFollowSinger(singer.id, follow).then(res => {
             if (res.data.code === ERR_OK) {
-              this.$set(singer, 'followed', false)
+              singer.followed = false
               this.$toast('已取消关注')
             } else {
               this.$toast(res.data.message)
@@ -623,8 +623,8 @@ export default {
       } else {
         userApi.updateFollowSinger(singer.id, follow).then(res => {
           if (res.data.code === ERR_OK) {
-            this.$set(singer, 'followed', true)
-            this.$set(singer, 'followDay', '已关注1天')
+            singer.followed = true
+            singer.followDay = '已关注1天'
             this.$toast('关注成功')
           } else {
             this.$toast(res.data.message)
