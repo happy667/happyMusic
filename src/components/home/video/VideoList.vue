@@ -9,7 +9,8 @@
       <div class="video-list"
            ref="container">
         <template v-if="videoList.length>0">
-          <template v-for="item in videoList" :key="item.id">
+          <template v-for="item in videoList"
+                    :key="item.id">
             <video-item :videoParams="item"></video-item>
           </template>
         </template>
@@ -84,7 +85,7 @@ export default {
         const offset = this.videoList.length;
         const { data: res } = await videoApi.getRecommendVideo(offset, LIMIT);
         if (res.code !== ERR_OK) {
-          this.$toast.fail('系统出错');
+          this.$failToast('系统出错');
           return
         }
 
@@ -94,7 +95,7 @@ export default {
         const videoPromises = data.map(async (item) => {
           const { data: singerRes } = await singerApi.getSinger(item.artistId);
           if (singerRes.code !== ERR_OK) {
-            this.$toast.fail('系统出错');
+            this.$failToast('系统出错');
             return
           }
 

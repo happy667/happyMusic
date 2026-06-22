@@ -216,7 +216,6 @@ const routes = [
         beforeEnter (to, from, next) {
           if (!store.state.searchKeywords) {
             next({ path: '/search/searchPage', replace: true })
-            return
           } else if (from.name === 'searchPage') {
             // 添加不缓存路由
             store.commit('setAddNoCacheComponents', 'search')
@@ -224,7 +223,6 @@ const routes = [
             // 移除不缓存路由
             store.commit('setRemoveNoCacheComponents', 'search')
           }
-
           next()
         }
 
@@ -541,7 +539,6 @@ const router = createRouter({
   }
 })
 router.beforeEach((to, from, next) => {
-
   if (to.matched.some(record => record.meta.requireLogin)) { // 判断该路由是否需要登录权限
     if (utils.isLogin()) { // 判断是否登录
       next()
@@ -564,16 +561,16 @@ router.beforeEach((to, from, next) => {
             }) // 回到个人主页
           }
         })
-      return
     } else {
       if (from.name !== 'user') {
         next({
           name: 'user'
         }) // 回到个人主页
       }
-      return
+      next()
     }
   } else {
+ 
     if (store.state.playerFullScreen) {
       store.commit('setPlayerFullScreen', false)
     }

@@ -3,64 +3,84 @@
     <slot></slot>
     <div class="swiper-container sw-song">
       <div class="swiper-wrapper">
-        <div class="swiper-slide"
-             v-for="(item,index) in recommendNewSong"
-             :key="item.id"
-             @click.stop="handleSelect(item,index)">
-          <song-item :showImage="true"
-                     :showIndex="false"
-                     :song="item"></song-item>
+        <div
+          class="swiper-slide"
+          v-for="(item, index) in recommendNewSong"
+          :key="item.id"
+          @click.stop="handleSelect(item, index)"
+        >
+          <song-item :showImage="true" :showIndex="false" :song="item"></song-item>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-import Swiper from 'swiper'
-import SongItem from './SongItem'
+import Swiper from "swiper";
+import SongItem from "./SongItem";
 
 export default {
   props: {
-    recommendNewSong: Array
+    recommendNewSong: Array,
   },
   methods: {
     // 初始化轮播图组件
-    initSwiper () {
+    initSwiper() {
       // 这里的this是vue对象，提前声明(需要在swiper中应用)
-      // let _this = this
       // 通过settimeout 解决数据还没有完全加载的时候就已经渲染swiper，导致loop失效。
       setTimeout(() => {
         // eslint-disable-next-line no-unused-vars
-        var mySwiper = new Swiper('.sw-song', {
+        var mySwiper = new Swiper(".sw-song", {
           slidesPerView: 1,
           slidesPerGroup: 1,
           touchRatio: 1.2,
-          // 解决与vant标签页切换冲突问题
-          observer: true,
-          observeParents: true,
+          nested: true, // capture阶段监听document touchmove，先于Vant处理
           loop: true,
-          on: {
-            sliderMove (e) {
-              e.stopPropagation()
+        });
+        // 解决 Swiper 12 与 Vant Swipe 的滑动冲突
+        // 仅水平滑动时 stopPropagation 阻断 Vant，垂直滑动不拦截
+        const swiperEl = mySwiper.el;
+        let startX = 0,
+          startY = 0;
+        swiperEl.addEventListener(
+          "touchstart",
+          (e) => {
+            if (e.touches.length === 1) {
+              startX = e.touches[0].clientX;
+              startY = e.touches[0].clientY;
             }
-          }
-        })
-      }, 0)
+          },
+          { passive: true }
+        );
+        swiperEl.addEventListener(
+          "touchmove",
+          (e) => {
+            if (e.touches.length !== 1) return;
+            const dx = e.touches[0].clientX - startX;
+            const dy = e.touches[0].clientY - startY;
+            if (Math.abs(dx) > Math.abs(dy)) {
+              e.stopPropagation(); // 水平滑动：阻断 Vant track
+            }
+            // 垂直滑动不拦截，允许 BetterScroll/Vant 正常处理
+          },
+          { passive: false, capture: true }
+        );
+      }, 0);
     },
-    handleSelect (item, index) {
-      this.$emit('select', item, index)
-    }
+    handleSelect(item, index) {
+      this.$emit("select", item, index);
+    },
   },
-  mounted () {
+  mounted() {
     this.$nextTick(() => {
-      this.initSwiper()
-    })
+      this.initSwiper();
+    });
   },
   components: {
     // SongImgItem,
-    SongItem
-  }
-}
+    SongItem,
+  },
+};
 </script>
 <style lang="stylus" scoped>
 .song-swiper-container>>>.swiper-container .swiper-wrapper .swiper-slide .song-list-item-containter {

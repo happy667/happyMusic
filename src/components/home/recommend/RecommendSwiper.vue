@@ -2,13 +2,15 @@
   <div class="recommend-swiper-container">
     <div class="swiper-container sw-banner">
       <div class="swiper-wrapper">
-        <div class="swiper-slide"
-             @click.stop="selectItem(item)"
-             v-for="(item,index) in banners"
-             :key="index">
+        <div
+          class="swiper-slide"
+          @click.stop="selectItem(item)"
+          v-for="(item, index) in banners"
+          :key="index"
+        >
           <div class="image animated fadeIn" :style="loadBgStyle">
-            <img :src="item.imageUrl">
-            <div class="title">{{item.typeTitle}}</div>
+            <img :src="item.imageUrl" loading="lazy" />
+            <div class="title">{{ item.typeTitle }}</div>
           </div>
         </div>
       </div>
@@ -17,75 +19,72 @@
   </div>
 </template>
 <script>
-import Swiper from 'swiper'
-import Song from '@/assets/common/js/song.js'
-import Album from '@/assets/common/js/album.js'
-import Singer from '@/assets/common/js/singer.js'
-import songApi from '@/api/song.js'
-import {
-  ERR_OK
-} from '@/api/config.js'
-import {
-  TARGET_TYPE
-} from '@/assets/common/js/config.js'
-import {
-  mapGetters
-} from 'vuex'
+import Swiper from "swiper";
+import { Pagination, Autoplay } from "swiper/modules"; // 导入分页器模块
+import Song from "@/assets/common/js/song.js";
+import Album from "@/assets/common/js/album.js";
+import Singer from "@/assets/common/js/singer.js";
+import songApi from "@/api/song.js";
+import { ERR_OK } from "@/api/config.js";
+import { TARGET_TYPE } from "@/assets/common/js/config.js";
+import { mapGetters } from "vuex";
 export default {
   props: {
     // 轮播图数据
     banners: {
-      type: Array
-    }
+      type: Array,
+    },
   },
-  mounted () {
-    this.initSwiper()
+  mounted() {
+    this.initSwiper();
   },
   computed: {
-    ...mapGetters(['currentSong']),
-    loadBgStyle () {
-      return !this.banners ? "background:#f2f3f5" : ''
+    ...mapGetters(["currentSong"]),
+    loadBgStyle() {
+      return !this.banners ? "background:#f2f3f5" : "";
     },
   },
   methods: {
-    selectItem (item) {
-      let id = item.targetId
-      let type = parseInt(item.targetType)
+    selectItem(item) {
+      console.log(item);
+      let id = item.targetId;
+      let type = parseInt(item.targetType);
       switch (type) {
         case TARGET_TYPE.song: // 歌曲
-          this.selectSong(id)
-          break
+          this.selectSong(id);
+          break;
         case TARGET_TYPE.video: // 视频
-          this.$router.push(`/videoInfo/${id}`)
-          break
+          this.$router.push(`/videoInfo/${id}`);
+          break;
         case TARGET_TYPE.album: // 专辑
-          this.$router.push(`/singerAlbum/${id}`)
-          break
+          this.$router.push(`/singerAlbum/${id}`);
+          break;
         case TARGET_TYPE.songSheet: // 歌单
-          this.$router.push(`/songSheetDisc/${id}`)
-          break
+          this.$router.push(`/songSheetDisc/${id}`);
+          break;
       }
     },
-    async getSongDetail (id) {
+    async getSongDetail(id) {
       // 获取歌曲详情
-      const {
-        data: res
-      } = await songApi.getSongDetail(id)
+      const { data: res } = await songApi.getSongDetail(id);
       if (res.code === ERR_OK) {
-        let item = res.songs[0]
-        let singers = item.ar.map(item => item.name).join('/')
+        let item = res.songs[0];
+        let singers = item.ar.map((item) => item.name).join("/");
         // 处理歌手
-        let singersList = []
+        let singersList = [];
         // 处理歌手
-        item.ar.forEach(item => {
-          singersList.push(new Singer({
-            id: item.id,
-            name: item.name
-          }))
-        })
+        item.ar.forEach((item) => {
+          singersList.push(
+            new Singer({
+              id: item.id,
+              name: item.name,
+            })
+          );
+        });
         let song = new Song({
           id: item.id,
-          name: item.alia.length > 0 ? `${item.name} (${item.alia.join('/')})` : item.name,
+          name:
+            item.alia.length > 0 ? `${item.name} (${item.alia.join("/")})` : item.name,
           singers,
           singersList,
           picUrl: item.al.picUrl,
@@ -94,58 +93,74 @@ export default {
           album: new Album({
             id: item.al.id,
             name: item.al.name,
-            picUrl: item.al.picUrl
-          })
-        })
-        return Promise.resolve(song)
+            picUrl: item.al.picUrl,
+          }),
+        });
+        return Promise.resolve(song);
       }
     },
     // 初始化轮播图组件
-    initSwiper () {
+    initSwiper() {
       // 通过settimeout 解决数据还没有完全加载的时候就已经渲染swiper，导致loop失效。
       setTimeout(() => {
-        // eslint-disable-next-line no-unused-vars
-        var mySwiper = new Swiper('.sw-banner', {
+        var mySwiper = new Swiper(".sw-banner", {
+          modules: [Autoplay, Pagination],
           pagination: {
-            el: '.swiper-pagination',
-            clickable: true
+            el: ".swiper-pagination",
+            clickable: true,
           },
-          observer: true, // 修改swiper自己或子元素时，自动初始化swiper
-          observeParents: true, // 修改swiper的父元素时，自动初始化swiper
           autoplay: {
             disableOnInteraction: false,
-            delay: 5000
+            delay: 5000,
           },
+          nested: true, // capture阶段监听document touchmove，先于Vant处理
           loop: true,
-          // 使用图片懒加载
-          lazy: {
-            loadPrevNext: true,
-            loadOnTransitionStart: true,
-            loadPrevNextAmount: 1
-          },
-          on: {
-            sliderMove (e) {
-              e.stopPropagation()
-            }
+        });
 
-          }
-        })
-      }, 0)
+        // 解决 Swiper 12 与 Vant Swipe 的滑动冲突
+        // 仅水平滑动时 stopPropagation 阻断 Vant，垂直滑动不拦截
+        const swiperEl = mySwiper.el;
+        let startX = 0,
+          startY = 0;
+        swiperEl.addEventListener(
+          "touchstart",
+          (e) => {
+            if (e.touches.length === 1) {
+              startX = e.touches[0].clientX;
+              startY = e.touches[0].clientY;
+            }
+          },
+          { passive: true }
+        );
+        swiperEl.addEventListener(
+          "touchmove",
+          (e) => {
+            if (e.touches.length !== 1) return;
+            const dx = e.touches[0].clientX - startX;
+            const dy = e.touches[0].clientY - startY;
+            if (Math.abs(dx) > Math.abs(dy)) {
+              e.stopPropagation(); // 水平滑动：阻断 Vant track
+            }
+            // 垂直滑动不拦截，允许 BetterScroll/Vant 正常处理
+          },
+          { passive: false, capture: true }
+        );
+      }, 0);
     },
-    selectSong (id) {
-      this.getSongDetail(id).then(res => {
+    selectSong(id) {
+      this.getSongDetail(id).then((res) => {
         // 比较两首歌曲
         let result = this.$utils.compareSong(this.currentSong, {
-          id: res.id
-        })
+          id: res.id,
+        });
         if (!result) {
           // 引入vue原型上的utils
-          this.$utils.playMusic(res)
+          this.$utils.playMusic(res);
         }
-      })
-    }
-  }
-}
+      });
+    },
+  },
+};
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
@@ -163,6 +178,8 @@ export default {
   padding-bottom: 3.4rem;
 
   .swiper-container {
+    position: relative;
+
     .swiper-wrapper {
       width: 100%;
       border-radius: 0.3rem;
