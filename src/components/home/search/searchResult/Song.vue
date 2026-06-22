@@ -2,7 +2,8 @@
   <div class="search-song-container">
     <!-- loading -->
     <loading :loading="pageLoading" />
-    <template v-if="song.songList.length!==0">
+    
+    <template v-if="song.songList.length !== 0">
       <play-all :length="song.songList.length"
                 @play="handlePlayAll(song.songList)"></play-all>
       <van-list v-model="loading"
@@ -14,10 +15,10 @@
                    :songsList="song.songList"></song-list>
       </van-list>
     </template>
-    <template v-if="song.songCount===0">
-      <no-result text="暂无相关歌曲"
-                 image="search"></no-result>
-    </template>
+    
+    <no-result v-else-if="song.songCount === 0"
+               text="暂无相关歌曲"
+               image="search"></no-result>
   </div>
 </template>
 <script>

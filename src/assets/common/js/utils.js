@@ -195,20 +195,19 @@ const utils = {
     return store.state.token
   },
   // 弹出跳转登录页面对话框
-  alertLogin (redirectPath) {
-    utils.alertConfirm({ // 未登录跳转到登录页面
-      message: '您还没有登录哦',
-      confirmButtonText: '去登录'
-    }).then(() => {
-      // 未登录则跳转到登陆界面
-      console.dir(router)
+  async alertLogin (redirectPath) {
+    try {
+      await utils.alertConfirm({
+        message: '您还没有登录哦',
+        confirmButtonText: '去登录'
+      })
       router.push({
         name: 'login',
-        query: {
-          redirect: redirectPath
-        }
+        query: { redirect: redirectPath }
       })
-    }).catch(() => { })
+    } catch (e) {
+      // 用户点击取消，不处理
+    }
   },
   // 防抖
   debounce (fn, delay = 500) {

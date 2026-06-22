@@ -1,28 +1,33 @@
-import Vue from '@vue/compat'
 import { createApp } from 'vue'
 import App from './App.vue'
-import router from './router'
 import store from './store'
+import router from './router'
 import animate from 'animate.css'
 import 'lib-flexible/flexible'
 import 'common/stylus/index.styl'
 import '@/assets/common/font/iconfont.css'
-import 'vant/lib/index.css'
-import 'swiper/css/swiper.css'
+import 'swiper/css'
+import 'swiper/css/pagination'
 import '@/assets/common/js/globalComponents.js'
+import registerGlobalComponents from '@/assets/common/js/globalComponents.js'
 
 // 插件
-import vantPlugin from './plugins/vant.js'
+import Vant from './plugins/vant'
 import VueLazyload from 'vue-lazyload'
 import utils from '@/assets/common/js/utils.js'
-
-Vue.config.productionTip = false
+import * as filters from '@/assets/common/js/convert.js'
 
 const app = createApp(App)
+app.config.globalProperties.$utils = utils
+app.config.globalProperties.$filters = filters
+// 注册全局组件
+registerGlobalComponents(app)
+
+// 注册插件
 app.use(router)
 app.use(store)
+app.use(Vant)
 app.use(animate)
 app.use(VueLazyload, { preLoad: 1.3 })
-app.use(vantPlugin)
+// 最后挂载应用
 app.mount('#app')
-app.config.globalProperties.$utils = utils

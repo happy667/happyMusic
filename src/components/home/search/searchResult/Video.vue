@@ -2,21 +2,21 @@
   <div class="search-mv-container">
     <!-- loading -->
     <loading :loading="pageLoading" />
-    <template v-if="mv.mvList.length!==0">
-      <van-list v-model="loading"
-                :finished="finished"
-                finished-text="没有更多了"
-                @load="handlePullingUp">
-        <div class="mv-list">
-          <mv-list @select="goToVideoInfo"
-                   :list="mv.mvList"></mv-list>
-        </div>
-      </van-list>
-    </template>
-    <template v-if="mv.mvCount===0">
-      <no-result text="暂无相关MV"
-                 image="search"></no-result>
-    </template>
+    
+    <van-list v-if="mv.mvList.length !== 0"
+              v-model="loading"
+              :finished="finished"
+              finished-text="没有更多了"
+              @load="handlePullingUp">
+      <div class="mv-list">
+        <mv-list @select="goToVideoInfo"
+                 :list="mv.mvList"></mv-list>
+      </div>
+    </van-list>
+    
+    <no-result v-else-if="mv.mvCount === 0"
+               text="暂无相关MV"
+               image="search"></no-result>
   </div>
 </template>
 <script>

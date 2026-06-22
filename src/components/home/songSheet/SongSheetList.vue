@@ -2,40 +2,40 @@
   <div class="song-sheet-list-container">
     <slot></slot>
 
-    <template v-if="list&&list.length!==0">
-      <ul class="songs-sheet-list">
-        <li @click.stop="selectItem(item)"
-            class="songs-sheet-list-item"
-            v-for="item in list"
-            :key="item.id">
-          <song-sheet-item :song-sheet="item"></song-sheet-item>
-        </li>
-      </ul>
-    </template>
-    <template v-if="list&&list.length===0">
-      <no-result text="暂无相关歌单"></no-result>
-    </template>
+    <ul v-if="list && list.length !== 0" class="songs-sheet-list">
+      <li
+        @click.stop="selectItem(item)"
+        class="songs-sheet-list-item"
+        v-for="item in list"
+        :key="item.id"
+      >
+        <song-sheet-item :song-sheet="item"></song-sheet-item>
+      </li>
+    </ul>
+
+    <no-result v-else-if="list && list.length === 0" text="暂无相关歌单"></no-result>
   </div>
 </template>
 <script>
-import NoResult from '@/components/common/NoResult'
-import SongSheetItem from './SongSheetItem'
+import NoResult from "@/components/common/NoResult";
+import SongSheetItem from "./SongSheetItem";
 export default {
   props: {
-    list: Array // 列表
+    list: Array, // 列表
   },
   methods: {
     // 选择歌单进入歌单详情
-    selectItem (item) {
-      this.$router.push(`/songSheetDisc/${item.id}`)
-    }
+    selectItem(item) {
+      console.log(item.id);
+      this.$router.push(`/songSheetDisc/${item.id}`);
+    },
   },
 
   components: {
     SongSheetItem,
-    NoResult
-  }
-}
+    NoResult,
+  },
+};
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';

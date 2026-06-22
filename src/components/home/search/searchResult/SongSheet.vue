@@ -2,18 +2,18 @@
   <div class="search-songSheet-container">
     <!-- loading -->
     <loading :loading="pageLoading" />
-    <template v-if="songSheet.songSheetList.length!==0">
-      <van-list v-model="loading"
-                :finished="finished"
-                finished-text="没有更多了"
-                @load="handlePullingUp">
-        <song-sheet-list :list="songSheet.songSheetList"></song-sheet-list>
-      </van-list>
-    </template>
-    <template v-if="songSheet.songSheetCount===0">
-      <no-result text="暂无相关歌单"
-                 image="search"></no-result>
-    </template>
+    
+    <van-list v-if="songSheet.songSheetList.length !== 0"
+              v-model="loading"
+              :finished="finished"
+              finished-text="没有更多了"
+              @load="handlePullingUp">
+      <song-sheet-list :list="songSheet.songSheetList"></song-sheet-list>
+    </van-list>
+    
+    <no-result v-else-if="songSheet.songSheetCount === 0"
+               text="暂无相关歌单"
+               image="search"></no-result>
   </div>
 </template>
 <script>

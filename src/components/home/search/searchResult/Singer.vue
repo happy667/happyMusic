@@ -2,20 +2,20 @@
   <div class="search-singer-container">
     <!-- loading -->
     <loading :loading="pageLoading" />
-    <template v-if="singer.singerList.length!==0">
-      <van-list v-model="loading"
-                :finished="finished"
-                finished-text="没有更多了"
-                @load="handlePullingUp">
-        <singer-list :list="singer.singerList"
-                     imageSize="middle"
-                     @select="handleSelect"></singer-list>
-      </van-list>
-    </template>
-    <template v-if="singer.singerCount===0">
-      <no-result text="暂无相关歌手"
-                 image="search"></no-result>
-    </template>
+    
+    <van-list v-if="singer.singerList.length !== 0"
+              v-model="loading"
+              :finished="finished"
+              finished-text="没有更多了"
+              @load="handlePullingUp">
+      <singer-list :list="singer.singerList"
+                   imageSize="middle"
+                   @select="handleSelect"></singer-list>
+    </van-list>
+    
+    <no-result v-else-if="singer.singerCount === 0"
+               text="暂无相关歌手"
+               image="search"></no-result>
   </div>
 </template>
 <script>

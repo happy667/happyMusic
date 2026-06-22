@@ -2,7 +2,8 @@
   <div class="search-comprehensive-container">
     <!-- loading -->
     <loading :loading="loading" />
-    <template v-if="!loading&&result">
+    
+    <template v-if="!loading && result">
 
       <component v-for="(item,index) in order"
                  :is="item"
@@ -30,10 +31,10 @@
       <!-- <search-song-sheet :songSheet="result.songSheet"
                          @setIndex="setCurrentIndex" /> -->
     </template>
-    <template v-if="isNull">
-      <no-result text="暂无搜索结果"
-                 image="search"></no-result>
-    </template>
+    
+    <no-result v-else-if="isNull"
+               text="暂无搜索结果"
+               image="search"></no-result>
   </div>
 </template>
 <script>

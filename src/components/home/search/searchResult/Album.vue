@@ -2,21 +2,21 @@
   <div class="search-album-container">
     <!-- loading -->
     <loading :loading="pageLoading" />
-    <template v-if="album.albumList.length!==0">
-      <van-list v-model="loading"
-                :finished="finished"
-                finished-text="没有更多了"
-                @load="handlePullingUp">
-        <div class="album-list">
-          <album-list :list="album.albumList"
-                      @select="selectAlbum"></album-list>
-        </div>
-      </van-list>
-    </template>
-    <template v-if="album.albumCount===0">
-      <no-result text="暂无相关专辑"
-                 image="search"></no-result>
-    </template>
+    
+    <van-list v-if="album.albumList.length !== 0"
+              v-model="loading"
+              :finished="finished"
+              finished-text="没有更多了"
+              @load="handlePullingUp">
+      <div class="album-list">
+        <album-list :list="album.albumList"
+                    @select="selectAlbum"></album-list>
+      </div>
+    </van-list>
+    
+    <no-result v-else-if="album.albumCount === 0"
+               text="暂无相关专辑"
+               image="search"></no-result>
   </div>
 </template>
 <script>
