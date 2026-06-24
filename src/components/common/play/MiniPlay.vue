@@ -4,7 +4,7 @@
     <div class="mini-play-container"
          @click="handleShowFullPlay">
       <div class="fixed">
-        <div class="swiper-container player-swiper">
+        <div class="swiper player-swiper">
           <div class="swiper-wrapper">
             <div class="swiper-slide"
                  v-for="item in sequenceList"
@@ -14,19 +14,18 @@
                 <div class="left">
                   <div class="image-container">
                     <div class="image animated fadeIn">
-                      <img v-lazy="item.album.picUrl||item.picUrl">
+                      <img v-lazy="item.album.picUrl || item.picUrl" />
                     </div>
                     <div class="digital-album animated fadeIn">
-                      <img src="@/assets/images/digital-album.svg">
+                      <img src="@/assets/images/digital-album.svg" />
                     </div>
                   </div>
-
                 </div>
                 <div class="right">
                   <!--歌曲信息-->
                   <div class="song-info"
-                       :class="currentSong.id===item.id?'active':''">
-                    <p class="song-name">{{item.name+' - '+item.singers}}</p>
+                       :class="currentSong.id === item.id ? 'active' : ''">
+                    <p class="song-name">{{ item.name + " - " + item.singers }}</p>
                   </div>
                 </div>
               </div>
@@ -65,104 +64,95 @@
   </transition>
 </template>
 <script>
-import Swiper from 'swiper'
-import {
-  DEFAULT_IMAGE
-} from 'common/js/config.js'
-import {
-  mapMutations,
-  mapGetters,
-  mapState,
-  mapActions
-} from 'vuex'
-let vm = null
+import Swiper from "swiper";
+import { DEFAULT_IMAGE } from "common/js/config.js";
+import { mapMutations, mapGetters, mapState, mapActions } from "vuex";
+let vm = null;
 export default {
   data () {
     return {
-      isLoop: false
-    }
+      isLoop: false,
+    };
   },
-  inject: ['playerParams'],
+  inject: ["playerParams"],
   computed: {
-    ...mapGetters(['currentSong']),
-    ...mapState(['playing', 'audio', 'sequenceList', 'currentPlayIndex', 'songLoading']),
+    ...mapGetters(["currentSong"]),
+    ...mapState(["playing", "audio", "sequenceList", "currentPlayIndex", "songLoading"]),
     playIcon () {
-      return this.playing ? 'icon-zanting' : 'icon-bofang'
+      return this.playing ? "icon-zanting" : "icon-bofang";
     },
     cdCls () {
-      return this.playing ? 'play' : 'play pause'
+      return this.playing ? "play" : "play pause";
     },
     iconStyle () {
       return {
-        marginLeft: this.playing ? '0.03rem' : '0.07rem'
-      }
-    }
+        marginLeft: this.playing ? "0.03rem" : "0.07rem",
+      };
+    },
   },
   mounted () {
     this.$nextTick(() => {
       // 初始化轮播图组件
-      this.initSwiper()
-      console.log(this.sequenceList)
-    })
+      this.initSwiper();
+      console.log(this.sequenceList);
+    });
   },
   created () {
-    vm = this
+    vm = this;
   },
   watch: {
     currentSong () {
       if (this.currentSong) {
-        let index = this.sequenceList.findIndex(item => item.id === this.currentSong.id)
-        this.swiper.slideTo(index, 0, false)
+        let index = this.sequenceList.findIndex(
+          (item) => item.id === this.currentSong.id
+        );
+        this.swiper.slideTo(index, 0, false);
       }
-    }
+    },
   },
 
   methods: {
-    ...mapMutations(['setPlayerFullScreen', 'setIsPlayerClick', 'setTogglePlayList']),
-    ...mapActions([
-      'next',
-      'prev',
-      'handleTogglePlaying'
-    ]),
+    ...mapMutations(["setPlayerFullScreen", "setIsPlayerClick", "setTogglePlayList"]),
+    ...mapActions(["next", "prev", "handleTogglePlaying"]),
     handleShowFullPlay () {
-      this.setPlayerFullScreen(true)
-      this.setIsPlayerClick(false)
+      this.setPlayerFullScreen(true);
+      this.setIsPlayerClick(false);
     },
     // 查看歌曲列表
     handlePlayList () {
-      this.setTogglePlayList(true)
+      this.setTogglePlayList(true);
     },
     // 初始化轮播图组件
     initSwiper () {
       // 通过settimeout 解决数据还没有完全加载的时候就已经渲染swiper，导致loop失效。
       setTimeout(() => {
-        let index = this.sequenceList.findIndex(item => item.id === this.currentSong.id)
+        let index = this.sequenceList.findIndex(
+          (item) => item.id === this.currentSong.id
+        );
         // eslint-disable-next-line no-new
-        vm.swiper = new Swiper('.player-swiper', {
+        vm.swiper = new Swiper(".player-swiper", {
           // 解决与vant标签页切换冲突问题
           observer: true,
           observeParents: true,
           initialSlide: index,
           centeredSlides: true,
-          slidesPerView: 'auto',
+          slidesPerView: "auto",
           on: {
-            sliderMove (e) {
-              e.stopPropagation()
+            sliderMove (swiper, e) {
+              e.stopPropagation();
             },
             slidePrevTransitionEnd () {
-              vm.prev()
+              vm.prev();
             },
-
             slideNextTransitionEnd () {
-              vm.next()
-            }
-          }
-        })
-      }, 20)
-    }
-  }
-
-}
+              vm.next();
+            },
+          },
+        });
+      }, 20);
+    },
+  },
+};
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
@@ -183,6 +173,7 @@ export default {
 
     .player-swiper {
       flex: 1;
+      min-width: 0;
 
       .swiper-slide {
         .swiper-list-item {
@@ -237,6 +228,7 @@ export default {
           .right {
             flex: 1;
             overflow: hidden;
+            min-width: 0;
 
             .song-info {
               display: flex;
@@ -246,6 +238,7 @@ export default {
 
               &.active {
                 color: $color-common;
+                no-wrap();
 
                 .singer {
                   color: $color-common;
@@ -266,6 +259,7 @@ export default {
     }
 
     .player-controller {
+      flex-shrink: 0;
       margin: 0 0.15rem;
       display: flex;
       justify-content: space-between;

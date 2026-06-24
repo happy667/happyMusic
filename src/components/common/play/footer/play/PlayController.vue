@@ -1,80 +1,54 @@
 <template>
   <div class="play-controller-container">
     <!-- 播放类型 -->
-    <div class="play-type icon"
-         @click="changeMode">
-      <i class="iconfont"
-         :class="playModeIcon"></i>
+    <div class="play-type icon" @click="changeMode">
+      <i class="iconfont" :class="playModeIcon"></i>
     </div>
     <!-- 上一首 -->
-    <div class="prev icon"
-         @click="prev">
+    <div class="prev icon" @click="prev">
       <i class="iconfont icon-shangyishoushangyige"></i>
     </div>
     <!-- 播放暂停 -->
-    <div class="play icon"
-         @click="handleTogglePlaying">
-      <van-icon v-if="!songLoading"
-                :name="playIcon"
-                size="60" />
-      <i v-if="songLoading"
-         class="loading iconfont icon-loading rotate"></i>
+    <div class="play icon" @click="handleTogglePlaying">
+      <van-icon v-if="!songLoading" :name="playIcon" size="60" />
+      <i v-if="songLoading" class="loading iconfont icon-loading rotate"></i>
     </div>
     <!--下一曲-->
-    <div class="next icon"
-         @click="next">
+    <div class="next icon" @click="next">
       <i class="iconfont icon-xiayigexiayishou"></i>
     </div>
     <!-- 歌曲列表 -->
-    <div class="play-list icon"
-         @click="handlePlayList">
+    <div class="play-list icon" @click="handlePlayList">
       <i class="iconfont icon-bofangliebiao"></i>
     </div>
   </div>
 </template>
 <script>
-import {
-  mapState,
-  mapMutations
-} from 'vuex'
-import {
-  PLAY_MODE
-} from '@/assets/common/js/config.js'
+import { mapState, mapMutations, mapActions } from "vuex";
+import { PLAY_MODE } from "@/assets/common/js/config.js";
 export default {
   computed: {
-    ...mapState(['playing', 'playMode', 'songLoading']),
-    playIcon () {
-      return this.playing ? 'pause-circle-o' : 'play-circle-o'
+    ...mapState(["playing", "playMode", "songLoading"]),
+    playIcon() {
+      return this.playing ? "pause-circle-o" : "play-circle-o";
     },
-    playModeIcon () {
-      return this.playMode === PLAY_MODE.sequence ? 'icon-xunhuanbofang' : this.playMode === PLAY_MODE.loop ? 'icon-danquxunhuan' : 'icon-suijibofang'
-    }
+    playModeIcon() {
+      return this.playMode === PLAY_MODE.sequence
+        ? "icon-xunhuanbofang"
+        : this.playMode === PLAY_MODE.loop
+        ? "icon-danquxunhuan"
+        : "icon-suijibofang";
+    },
   },
   methods: {
-    ...mapMutations(['setTogglePlayList']),
-    // 切换播放暂停
-    handleTogglePlaying () {
-      this.$parent.$parent.$parent.handleTogglePlaying()
-    },
-    // 上一曲
-    prev () {
-      this.$parent.$parent.$parent.prev()
-    },
-    // 下一曲
-    next () {
-      this.$parent.$parent.$parent.next()
-    },
-    // 切换播放类型
-    changeMode () {
-      this.$parent.$parent.$parent.changeMode()
-    },
+    ...mapMutations(["setTogglePlayList"]),
+    ...mapActions(["handleTogglePlaying", "changeMode", "prev", "next"]),
     // 查看歌曲列表
-    handlePlayList () {
-      this.setTogglePlayList(true)
-    }
-  }
-
-}
+    handlePlayList() {
+      this.setTogglePlayList(true);
+    },
+  },
+};
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
