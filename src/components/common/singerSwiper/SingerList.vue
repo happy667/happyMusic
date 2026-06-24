@@ -1,7 +1,7 @@
 <template>
   <div class="singer-swiper-container">
     <slot></slot>
-    <div class="swiper-container singer-swiper">
+    <div class="swiper singer-swiper">
       <div class="swiper-wrapper">
         <div class="swiper-slide"
              v-for="item in list"

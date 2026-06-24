@@ -1,7 +1,7 @@
 <template>
   <div class="song-swiper-container">
     <slot></slot>
-    <div class="swiper-container sw-song">
+    <div class="swiper sw-song">
       <div class="swiper-wrapper">
         <div
           class="swiper-slide"
@@ -83,14 +83,14 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-.song-swiper-container>>>.swiper-container .swiper-wrapper .swiper-slide .song-list-item-containter {
+.song-swiper-container>>> .swiper .swiper-wrapper .swiper-slide .song-list-item-containter {
   border-radius: 0.2rem;
   padding: 0.2rem;
   box-shadow: 0 0.06rem 0.16rem rgba(0 0 0 7%);
 }
 
 .song-swiper-container {
-  .swiper-container {
+  .swiper {
     .swiper-wrapper {
       .swiper-slide {
         width: 100%;

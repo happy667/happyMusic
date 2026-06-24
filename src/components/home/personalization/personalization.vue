@@ -1,7 +1,7 @@
 <template>
   <div class="personalization-container">
     <slot></slot>
-    <div class="swiper-container sw-personalization">
+    <div class="swiper sw-personalization">
       <div class="swiper-wrapper">
         <div class="swiper-slide">
           <div class="daily-recommendation item animated"
@@ -320,7 +320,7 @@ export default {
       }
     },
     async handleScenarioRecommendation () {
-      const toast=this.$loadingToast({
+      const toast = this.$loadingToast({
         duration: 0,
         forbidClick: true,
         message: '场景分析中...'
@@ -391,7 +391,7 @@ export default {
         return;
       }
       this.isRecommendingPlaylist = true;
-      const toast=this.$loadingToast({
+      const toast = this.$loadingToast({
         duration: 0,
         forbidClick: true,
         message: '查找最佳匹配歌单中...'
@@ -502,7 +502,7 @@ export default {
 @import '~common/stylus/variable';
 
 .personalization-container {
-  .swiper-container {
+  .swiper {
     .swiper-wrapper {
       padding: 0 0.4rem 0.5rem;
       display: flex;

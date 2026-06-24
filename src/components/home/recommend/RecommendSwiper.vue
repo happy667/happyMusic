@@ -1,15 +1,15 @@
 <template>
   <div class="recommend-swiper-container">
-    <div class="swiper-container sw-banner">
+    <div class="swiper sw-banner">
       <div class="swiper-wrapper">
-        <div
-          class="swiper-slide"
-          @click.stop="selectItem(item)"
-          v-for="(item, index) in banners"
-          :key="index"
-        >
-          <div class="image animated fadeIn" :style="loadBgStyle">
-            <img :src="item.imageUrl" loading="lazy" />
+        <div class="swiper-slide"
+             @click.stop="selectItem(item)"
+             v-for="(item, index) in banners"
+             :key="index">
+          <div class="image animated fadeIn"
+               :style="loadBgStyle">
+            <img :src="item.imageUrl"
+                 loading="lazy" />
             <div class="title">{{ item.typeTitle }}</div>
           </div>
         </div>
@@ -35,17 +35,17 @@ export default {
       type: Array,
     },
   },
-  mounted() {
+  mounted () {
     this.initSwiper();
   },
   computed: {
     ...mapGetters(["currentSong"]),
-    loadBgStyle() {
+    loadBgStyle () {
       return !this.banners ? "background:#f2f3f5" : "";
     },
   },
   methods: {
-    selectItem(item) {
+    selectItem (item) {
       console.log(item);
       let id = item.targetId;
       let type = parseInt(item.targetType);
@@ -64,7 +64,7 @@ export default {
           break;
       }
     },
-    async getSongDetail(id) {
+    async getSongDetail (id) {
       // 获取歌曲详情
       const { data: res } = await songApi.getSongDetail(id);
       if (res.code === ERR_OK) {
@@ -100,7 +100,7 @@ export default {
       }
     },
     // 初始化轮播图组件
-    initSwiper() {
+    initSwiper () {
       // 通过settimeout 解决数据还没有完全加载的时候就已经渲染swiper，导致loop失效。
       setTimeout(() => {
         var mySwiper = new Swiper(".sw-banner", {
@@ -147,7 +147,7 @@ export default {
         );
       }, 0);
     },
-    selectSong(id) {
+    selectSong (id) {
       this.getSongDetail(id).then((res) => {
         // 比较两首歌曲
         let result = this.$utils.compareSong(this.currentSong, {
@@ -177,7 +177,7 @@ export default {
   height: 0;
   padding-bottom: 3.4rem;
 
-  .swiper-container {
+  .swiper {
     position: relative;
 
     .swiper-wrapper {

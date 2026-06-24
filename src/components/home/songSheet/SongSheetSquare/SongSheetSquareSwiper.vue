@@ -1,10 +1,16 @@
 <template>
   <div class="song-sheet-square-swiper-container">
-    <div class="swiper-container square-swiper">
+    <div class="swiper square-swiper">
       <div class="swiper-wrapper">
-        <div class="swiper-slide" :data-id="item.id" v-for="item in list" :key="item.id">
-          <div class="swiper-list-item" @click="selectItem(item)">
-            <song-Sheet-swiper-item :item="item" :showPlayCount="true" :key="item.id"></song-Sheet-swiper-item>
+        <div class="swiper-slide"
+             :data-id="item.id"
+             v-for="item in list"
+             :key="item.id">
+          <div class="swiper-list-item"
+               @click="selectItem(item)">
+            <song-Sheet-swiper-item :item="item"
+                                    :showPlayCount="true"
+                                    :key="item.id"></song-Sheet-swiper-item>
           </div>
         </div>
       </div>
@@ -82,7 +88,7 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .song-sheet-square-swiper-container {
-  .swiper-container {
+  .swiper {
     padding: 0.5rem 0.3rem 0.4rem;
 
     .swiper-slide {
