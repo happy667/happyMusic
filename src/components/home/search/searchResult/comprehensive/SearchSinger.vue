@@ -2,9 +2,9 @@
   <div class="search"
        v-if="singer&&singer.singerList.length!==0">
     <div class="search-singer">
-      <Title title="歌手"></Title>
+      <AppTitle title="歌手"></AppTitle>
       <singer-list :list="singer.singerList"
-                  imageSize="middle"
+                   imageSize="middle"
                    @select="selectSinger"></singer-list>
       <div class="more"
            v-if="singer.moreText"
@@ -21,26 +21,26 @@
   </div>
 </template>
 <script>
-    import Title from '@/components/common/Title'
-    import SingerList from '@/components/common/singer_desc/SingerList'
-    import {
-        mapMutations
-    } from 'vuex'
-    export default {
-        props: {
-            singer: Object
-        },
-        methods: {
-            ...mapMutations(['setSingerCurrentIndex']),
-            // 选择歌手
-            selectSinger(item) {
-                this.setSingerCurrentIndex(0)
-                this.$router.push(`/singerInfo/${item.id}`)
-            }
-        },
-        components: {
-            SingerList,
-            Title
-        }
+import AppTitle from '@/components/common/Title'
+import SingerList from '@/components/common/singer_desc/SingerList'
+import {
+  mapMutations
+} from 'vuex'
+export default {
+  props: {
+    singer: Object
+  },
+  methods: {
+    ...mapMutations(['setSingerCurrentIndex']),
+    // 选择歌手
+    selectSinger (item) {
+      this.setSingerCurrentIndex(0)
+      this.$router.push(`/singerInfo/${item.id}`)
     }
+  },
+  components: {
+    SingerList,
+    AppTitle
+  }
+}
 </script>

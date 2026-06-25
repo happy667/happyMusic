@@ -2,7 +2,7 @@
   <div class="search"
        v-if="simQuery&&simQuery.length!==0">
     <div class="search-album">
-      <Title title="大家还在搜"></Title>
+      <AppTitle title="大家还在搜"></AppTitle>
       <search-list :list="simQuery"
                    @select="handleSimSearch">
       </search-list>
@@ -10,7 +10,7 @@
   </div>
 </template>
 <script>
-import Title from '@/components/common/Title'
+import AppTitle from '@/components/common/Title'
 import SearchList from '@/components/home/search/SearchList'
 import { mapMutations } from 'vuex'
 export default {
@@ -28,7 +28,7 @@ export default {
     }
   },
   components: {
-    Title,
+    AppTitle,
     SearchList
   }
 }

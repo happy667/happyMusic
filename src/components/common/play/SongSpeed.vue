@@ -1,6 +1,6 @@
 <template>
   <div class="song-speed-container">
-    <van-popup v-model="showPopup"
+    <van-popup v-model:show="showPopup"
                position="bottom"
                :get-container="getContainer"
                round>

@@ -2,29 +2,38 @@
   <div class="time-filter">
     <!-- 主弹窗 -->
 
-    <van-popup v-model="_showPopup" round position="bottom" class="main-popup">
+    <van-popup v-model:show="_showPopup"
+               round
+               position="bottom"
+               class="main-popup">
       <div class="filter-content">
         <div class="header">
           <div class="title">筛选歌曲</div>
-          <van-icon name="cross" class="close-icon" @click="handleClose" />
+          <van-icon name="cross"
+                    class="close-icon"
+                    @click="handleClose" />
         </div>
 
         <div class="time-filter-content">
           <div class="time-range">
             <div class="title">时间范围</div>
             <div class="time-picker">
-              <div class="date-item start-date" @click="openPicker('start')">
+              <div class="date-item start-date"
+                   @click="openPicker('start')">
                 <div class="label">起始时间</div>
                 <div class="value">{{ startTimeText }}</div>
-                <van-icon name="arrow-down" class="arrow-icon" />
+                <van-icon name="arrow-down"
+                          class="arrow-icon" />
               </div>
 
               <div class="divider">至</div>
 
-              <div class="date-item end-date" @click="openPicker('end')">
+              <div class="date-item end-date"
+                   @click="openPicker('end')">
                 <div class="label">结束时间</div>
                 <div class="value">{{ endTimeText }}</div>
-                <van-icon name="arrow-down" class="arrow-icon" />
+                <van-icon name="arrow-down"
+                          class="arrow-icon" />
               </div>
             </div>
           </div>
@@ -32,11 +41,17 @@
           <div class="play-count">
             <div class="title">播放次数</div>
             <div class="count-range">
-              <van-field v-model="minPlayCount" type="number" placeholder="最小播放次数" :maxlength="10"
-                @input="validateMinCount" />
+              <van-field v-model="minPlayCount"
+                         type="number"
+                         placeholder="最小播放次数"
+                         :maxlength="10"
+                         @input="validateMinCount" />
               <div class="divider">至</div>
-              <van-field v-model="maxPlayCount" type="number" placeholder="最大播放次数" :maxlength="10"
-                @input="validateMaxCount" />
+              <van-field v-model="maxPlayCount"
+                         type="number"
+                         placeholder="最大播放次数"
+                         :maxlength="10"
+                         @input="validateMaxCount" />
             </div>
           </div>
         </div>
@@ -47,16 +62,30 @@
         </div>
 
         <div class="action-buttons">
-          <van-button plain block color="#999" @click="handleReset">重置</van-button>
-          <van-button type="primary" class="confirm-btn" color="#fd4979" @click="handleConfirm">确定</van-button>
+          <van-button plain
+                      block
+                      color="#999"
+                      @click="handleReset">重置</van-button>
+          <van-button type="primary"
+                      class="confirm-btn"
+                      color="#fd4979"
+                      @click="handleConfirm">确定</van-button>
         </div>
       </div>
     </van-popup>
 
     <!-- 日期选择器弹窗 -->
-    <van-popup v-model="showDatePicker" round position="bottom" class="picker-popup">
-      <van-time-picker v-model="currentDate" type="date" :title="pickerTitle" :min-date="minDate"
-        :max-date="maxDate" @confirm="handleDateConfirm" @cancel="closeDatePicker" />
+    <van-popup v-model:show="showDatePicker"
+               round
+               position="bottom"
+               class="picker-popup">
+      <van-time-picker v-model="currentDate"
+                       type="date"
+                       :title="pickerTitle"
+                       :min-date="minDate"
+                       :max-date="maxDate"
+                       @confirm="handleDateConfirm"
+                       @cancel="closeDatePicker" />
     </van-popup>
   </div>
 </template>
@@ -343,17 +372,20 @@ export default {
       }
 
       .time-filter-content {
-        .time-range{
+        .time-range {
           margin-bottom: 0.5rem;
         }
+
         .title {
-            font-size: $font-size-smaller;
-            color: var(--text-secondary);
-            margin-bottom: 0.2rem;
-            padding: 0 0.1rem;
-          }
+          font-size: $font-size-smaller;
+          color: var(--text-secondary);
+          margin-bottom: 0.2rem;
+          padding: 0 0.1rem;
+        }
+
         .play-count {
           margin-bottom: 0.3rem;
+
           .count-range {
             display: flex;
             align-items: center;
@@ -377,7 +409,6 @@ export default {
         }
 
         .time-picker {
-         
           display: flex;
           align-items: center;
           gap: 0.2rem;

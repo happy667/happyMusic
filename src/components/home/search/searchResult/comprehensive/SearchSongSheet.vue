@@ -3,9 +3,7 @@
        v-if="songSheet&&songSheet.songSheetList.length!==0">
     <div class="search-songSheet">
       <song-sheet-list :list="songSheet.songSheetList">
-        <template>
-          <Title title="歌单"></Title>
-        </template>
+        <AppTitle title="歌单"></AppTitle>
       </song-sheet-list>
       <div class="more"
            v-if="songSheet.moreText"
@@ -22,7 +20,7 @@
   </div>
 </template>
 <script>
-import Title from '@/components/common/Title'
+import AppTitle from '@/components/common/Title'
 import SongSheetList from '@/components/home/songSheet/SongSheetList'
 export default {
   props: {
@@ -30,7 +28,7 @@ export default {
   },
   components: {
     SongSheetList,
-    Title
+    AppTitle
   }
 }
 </script>

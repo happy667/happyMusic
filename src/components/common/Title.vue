@@ -1,8 +1,14 @@
 <template>
-  <div class="title-container" :class="borderLeft?'border-left':''" :style="styleInfo">
+  <div class="title-container"
+       :class="borderLeft?'border-left':''"
+       :style="styleInfo">
     <h2 class="title">{{title}}</h2>
-    <router-link v-if="loadMore" :to="path" custom v-slot="{ navigate }">
-      <div @click="navigate" class="viewMore">
+    <router-link v-if="loadMore"
+                 :to="path"
+                 custom
+                 v-slot="{ navigate }">
+      <div @click="navigate"
+           class="viewMore">
         更多
         <van-icon name="arrow" />
       </div>
@@ -10,49 +16,54 @@
   </div>
 </template>
 <script>
-    export default {
-        props: {
-            title: String,
-            // 显示更多
-            loadMore: {
-                type: Boolean,
-                default: () => false
-            },
-            borderLeft: {
-                type: Boolean,
-                default: () => false
-            },
-            styleInfo: String,
-            path: String
-        }
-    }
+export default {
+  name: 'AppTitle',
+  props: {
+    title: String,
+    // 显示更多
+    loadMore: {
+      type: Boolean,
+      default: () => false
+    },
+    borderLeft: {
+      type: Boolean,
+      default: () => false
+    },
+    styleInfo: String,
+    path: String
+  }
+}
 </script>
 <style lang="stylus" scoped>
-    @import '~common/stylus/variable';
-    .border-left {
-        padding-left: 0.2rem;
-        border-left: 0.08rem solid $color-common;
+@import '~common/stylus/variable';
+
+.border-left {
+  padding-left: 0.2rem;
+  border-left: 0.08rem solid $color-common;
+}
+
+.title-container {
+  display: flex;
+  justify-content: space-between;
+  background: $color-common-background;
+
+  .title {
+    height: 0.8rem;
+    line-height: 0.8rem;
+    font-weight: bold;
+    font-size: $font-size-smaller;
+  }
+
+  .viewMore {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: $font-size-smaller-x;
+    color: $color-common-b2;
+
+    a {
+      margin-right: 0.1rem;
     }
-    
-    .title-container {
-        display: flex;
-        justify-content: space-between;
-        background: $color-common-background;
-        .title {
-            height: 0.8rem;
-            line-height: 0.8rem;
-            font-weight: bold;
-            font-size: $font-size-smaller;
-        }
-        .viewMore {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: $font-size-smaller-x;
-            color: $color-common-b2;
-            a {
-                margin-right: 0.1rem;
-            }
-        }
-    }
+  }
+}
 </style>

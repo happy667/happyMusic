@@ -1,45 +1,33 @@
 <template>
-  <div class="play-container" ref="play" v-show="playList.length > 0">
+  <div class="play-container"
+       ref="play"
+       v-show="playList.length > 0">
     <!-- 全屏播放器 -->
-    <FullScreenPlay
-      ref="FullScreenPlay"
-      v-show="playerFullScreen"
-      @prev="prev"
-    ></FullScreenPlay>
+    <FullScreenPlay ref="FullScreenPlay"
+                    v-show="playerFullScreen"
+                    @prev="prev"></FullScreenPlay>
 
     <!-- 迷你播放器 -->
     <mini-play v-show="!hideMiniPlayer"></mini-play>
 
     <!-- 音频组件 -->
     <div class="audio">
-      <audio
-        ref="audio"
-        id="audio"
-        :playbackRate="songSpeed"
-        preload="auto"
-        @canplay="ready"
-        @error="error"
-        @timeupdate="handleUpdateTime"
-        @ended="handleEnd"
-        :src="url"
-      ></audio>
+      <audio ref="audio"
+             id="audio"
+             :playbackRate="songSpeed"
+             preload="auto"
+             @canplay="ready"
+             @error="error"
+             @timeupdate="handleUpdateTime"
+             @ended="handleEnd"
+             :src="url"></audio>
     </div>
 
     <!-- 歌曲列表 -->
-    <transition
-      enter-active-class="animated fadeIn faster"
-      leave-active-class="animated fadeOut faster"
-    >
-      <play-list v-show="togglePlayList" @close="togglePlayList"></play-list>
-    </transition>
+    <play-list @close="togglePlayList"></play-list>
 
     <!-- 播放速度 -->
-    <transition
-      enter-active-class="animated fadeIn faster"
-      leave-active-class="animated fadeOut faster"
-    >
-      <song-speed v-show="songSpeedPopup"></song-speed>
-    </transition>
+    <song-speed></song-speed>
   </div>
 </template>
 
@@ -55,7 +43,7 @@ import { PLAY_MODE } from "@/assets/common/js/config.js";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 
 export default {
-  data() {
+  data () {
     return {
       url: "", // 播放路径
       playerParams: {
@@ -66,13 +54,13 @@ export default {
       },
     };
   },
-  provide() {
+  provide () {
     return {
       playerParams: this.playerParams,
     };
   },
   watch: {
-    currentSong(newSong, oldSong) {
+    currentSong (newSong, oldSong) {
       if (!newSong.id || newSong.id === oldSong.id) return;
       if (this.currentLyric) {
         this.currentLyric.stop();
@@ -86,13 +74,13 @@ export default {
       this.scrobble(this.currentSong.id, this.currentSong.album.id);
       this.setIsLoadPlayerImage(true);
     },
-    playing(newPlaying) {
+    playing (newPlaying) {
       const audio = this.audio;
       clearInterval(this.t1);
       clearInterval(this.t2);
       if (newPlaying) {
         this.$nextTick(() => {
-          audio.play().catch(() => {});
+          audio.play().catch(() => { });
           let v = 0;
           audio.volume = 0;
           this.t1 = setInterval(() => {
@@ -117,13 +105,13 @@ export default {
         });
       }
     },
-    togglePlayList() {
+    togglePlayList () {
       this.togglePlayList ? this.closeScroll() : this.openScroll();
     },
-    songSpeed() {
+    songSpeed () {
       this.applyPlaybackRate();
     },
-    playerFullScreen() {
+    playerFullScreen () {
       //关闭播放器页面则关闭歌词页面
       if (this.playerFullScreen === false) {
         // 等待关闭动画结束后再切换到图片状态
@@ -133,7 +121,7 @@ export default {
       }
     },
   },
-  unmounted() {
+  unmounted () {
     // 清理定时器，防止内存泄漏
     clearInterval(this.t1);
     clearInterval(this.t2);
@@ -159,15 +147,15 @@ export default {
     ]),
     ...mapGetters(["currentSong"]),
     togglePlayList: {
-      get() {
+      get () {
         return this.$store.state.togglePlayList;
       },
-      set(newVal) {
+      set (newVal) {
         this.$store.commit("setTogglePlayList", newVal);
       },
     },
   },
-  mounted() {
+  mounted () {
     this.setAudio(this.$refs.audio);
   },
   methods: {
@@ -189,21 +177,21 @@ export default {
     ]),
     ...mapActions(["deleteSong", "loop", "next", "prev", "handleTogglePlaying"]),
     // 统一应用播放速度
-    applyPlaybackRate() {
+    applyPlaybackRate () {
       if (this.audio) {
         this.$nextTick(() => {
           this.audio.playbackRate = this.songSpeed;
         });
       }
     },
-    ready() {
+    ready () {
       this.playerParams.duration = audio.duration;
       this.setSongReady(true);
     },
-    error() {
+    error () {
       this.setSongReady(true);
     },
-    async getSong(song) {
+    async getSong (song) {
       this.setSongLoading(true);
       this.playerParams.width = 0;
       try {
@@ -235,15 +223,15 @@ export default {
         this.applyPlaybackRate();
       }
     },
-    handleUpdateTime(e) {
+    handleUpdateTime (e) {
       this.playerParams.currentTime = e.target.currentTime;
       this.playerParams.width =
         (this.playerParams.currentTime / this.playerParams.duration) * 100;
     },
-    handleEnd() {
+    handleEnd () {
       this.playMode === PLAY_MODE.loop ? this.loop() : this.next();
     },
-    changeMode() {
+    changeMode () {
       const mode = (this.playMode + 1) % 3;
       this.setPlayMode(mode);
       const list =
@@ -254,17 +242,17 @@ export default {
       this.setPlayList(list);
       this.$toast(["列表循环", "单曲循环", "随机播放"][mode]);
     },
-    scrobble(id, sourceId) {
+    scrobble (id, sourceId) {
       songApi.scrobble(id, sourceId);
     },
-    resetCurrentIndex(list) {
+    resetCurrentIndex (list) {
       const index = list.findIndex((item) => item.id === this.currentSong.id);
       this.setCurrentPlayIndex(index);
     },
-    closeScroll() {
+    closeScroll () {
       document.body.style.overflow = "hidden";
     },
-    openScroll() {
+    openScroll () {
       document.body.style.overflow = "";
     },
   },

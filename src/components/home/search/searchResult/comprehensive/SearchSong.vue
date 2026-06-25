@@ -4,8 +4,11 @@
     <div class="search-song">
       <song-list @select="selectSong" :showIndex="false" :songsList="song.songList">
         <div class="header">
-          <Title title="单曲"></Title>
-          <play-all :length="song.songList.length" @play="handlePlayAll(song.songList)"></play-all>
+          <AppTitle title="单曲"></AppTitle>
+          <play-all
+            :length="song.songList.length"
+            @play="handlePlayAll(song.songList)"
+          ></play-all>
         </div>
       </song-list>
       <div class="more" v-if="song.moreText" @click="$emit('setIndex', 1)">
@@ -15,46 +18,45 @@
         <div class="icon">
           <van-icon name="arrow" />
         </div>
-
       </div>
     </div>
   </div>
 </template>
 <script>
-import Title from '@/components/common/Title'
-import PlayAll from '@/components/common/PlayAll'
-import SongList from '@/components/home/song/SongList'
-import { mapGetters } from 'vuex'
+import AppTitle from "@/components/common/Title";
+import PlayAll from "@/components/common/PlayAll";
+import SongList from "@/components/home/song/SongList";
+import { mapGetters } from "vuex";
 export default {
   props: {
-    song: Object
+    song: Object,
   },
   computed: {
-    ...mapGetters(['currentSong'])
+    ...mapGetters(["currentSong"]),
   },
   methods: {
     // 播放全部歌曲
-    handlePlayAll (list) {
+    handlePlayAll(list) {
       // 引入vue原型上的utils
-      this.$utils.playAllSong(list)
+      this.$utils.playAllSong(list);
     },
     // 选择歌曲播放
-    async selectSong (item, index) {
-      this.$emit('closeList')
+    async selectSong(item, index) {
+      this.$emit("closeList");
       // 比较两首歌曲
-      let result = this.$utils.compareSong(this.currentSong, item)
+      let result = this.$utils.compareSong(this.currentSong, item);
       if (!result) {
         // 引入vue原型上的utils
-        this.$utils.playMusic(item)
+        this.$utils.playMusic(item);
       }
-    }
+    },
   },
   components: {
     PlayAll,
     SongList,
-    Title
-  }
-}
+    AppTitle,
+  },
+};
 </script>
 <style lang="stylus" scoped>
 .search>>>.play-all-container {

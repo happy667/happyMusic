@@ -3,7 +3,7 @@
   <div class="search"
        v-if="video&&video.videoList.length!==0">
     <div class="search-video">
-      <Title title="视频"></Title>
+      <AppTitle title="视频"></AppTitle>
       <video-list @select="goToVideoInfo"
                   :list="video.videoList"></video-list>
       <div class="more"
@@ -20,7 +20,7 @@
   </div>
 </template>
 <script>
-import Title from '@/components/common/Title'
+import AppTitle from '@/components/common/Title'
 import videoList from '@/components/common/video/VideoList'
 export default {
   props: {
@@ -33,7 +33,7 @@ export default {
   },
   components: {
     videoList,
-    Title
+    AppTitle
   }
 }
 </script>

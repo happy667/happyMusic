@@ -10,10 +10,10 @@
       <template v-else>
         <div class="singer-synopsis-container">
           <div class="title">
-            <Title title="歌手简介"
-                   :loadMore="moreInfo"
-                   :path="`/singerMoreDesc/${singerDesc.singerId}`"
-                   @click="handleClickTitle"></Title>
+            <AppTitle title="歌手简介"
+                      :loadMore="moreInfo"
+                      :path="`/singerMoreDesc/${singerDesc.singerId}`"
+                      @click="handleClickTitle"></AppTitle>
           </div>
           <div class="singer-synopsis">
             <article class="context">{{singerDesc.briefDesc}}</article>
@@ -22,7 +22,7 @@
         <div class="sim-singer-container"
              v-if="simSingerList.length!==0">
           <div class="title">
-            <Title title="相似歌手"></Title>
+            <AppTitle title="相似歌手"></AppTitle>
           </div>
           <div class="sim-singer-list-container">
             <singer-swiper-list :list="simSingerList"
@@ -32,12 +32,12 @@
 
       </template>
     </template>
-</article>
+  </article>
 
 </template>
 <script>
 import NoResult from '@/components/common/NoResult'
-import Title from '@/components/common/Title'
+import AppTitle from '@/components/common/Title'
 import SingerSwiperList from '@/components/common/singerSwiper/SingerList'
 import {
   mapMutations
@@ -72,7 +72,7 @@ export default {
   },
   components: {
     NoResult,
-    Title,
+    AppTitle,
     SingerSwiperList
   }
 }

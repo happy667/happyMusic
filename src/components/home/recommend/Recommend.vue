@@ -13,15 +13,11 @@
           v-if="this.recommendNewSong.length > 0"
           @select="selectSong"
         >
-          <template>
-            <Title title="新歌推送"></Title>
-          </template>
+          <AppTitle title="新歌推送"></AppTitle>
         </song-swiper>
         <!--个性化区域-->
         <personalization v-if="this.recommendNewSong.length > 0">
-          <template>
-            <Title title="个性化推荐"></Title>
-          </template>
+          <AppTitle title="个性化推荐"></AppTitle>
         </personalization>
         <!-- 推荐歌单区域 -->
         <song-sheet-list
@@ -29,9 +25,7 @@
           :list="recommendSongSheet"
           v-if="this.recommendSongSheet.length > 0"
         >
-          <template>
-            <Title path="/songSheetSquare" loadMore title="推荐歌单"></Title>
-          </template>
+          <AppTitle path="/songSheetSquare" loadMore title="推荐歌单"></AppTitle>
         </song-sheet-list>
 
         <!-- 新碟上线 -->
@@ -40,9 +34,7 @@
           :list="recommendNewAlbum"
           v-if="this.recommendNewAlbum.length > 0"
         >
-          <template>
-            <Title title="新碟上线"></Title>
-          </template>
+          <AppTitle title="新碟上线"></AppTitle>
         </album-swiper>
         <!-- loading -->
         <loading :loading="loadMore" height="3rem" />
@@ -56,7 +48,7 @@ import recommendSwiper from "./RecommendSwiper";
 import SongSheetList from "@/components/home/songSheet/SongSheetList";
 import SongSwiper from "@/components/home/song/SongSwiper";
 import AlbumSwiper from "@/components/common/miniSwiper/MiniSwiper";
-import Title from "@/components/common/Title";
+import AppTitle from "@/components/common/Title";
 import Personalization from "@/components/home/personalization/Personalization";
 import recommendApi from "@/api/recommend.js";
 import Song from "@/assets/common/js/song.js";
@@ -216,7 +208,7 @@ export default {
     SongSheetList,
     SongSwiper,
     AlbumSwiper,
-    Title,
+    AppTitle,
     Scroll,
     Personalization,
   },

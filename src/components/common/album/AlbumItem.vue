@@ -27,7 +27,7 @@
          @click.stop="handleHpenFunctions">
       <van-icon name="ellipsis" />
     </div>
-    <van-popup v-model="showPopup"
+    <van-popup v-model:show="showPopup"
                round
                position="bottom"
                :get-container="getContainer">
