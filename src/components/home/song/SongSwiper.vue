@@ -1,7 +1,7 @@
 <template>
   <div class="song-swiper-container">
     <slot></slot>
-    <div class="swiper sw-song">
+    <div class="swiper sw-song" v-swiper-nested>
       <div class="swiper-wrapper">
         <div
           class="swiper-slide"
@@ -34,37 +34,9 @@ export default {
           slidesPerView: 1,
           slidesPerGroup: 1,
           touchRatio: 1.2,
-          nested: true, // capture阶段监听document touchmove，先于Vant处理
+          nested: true,
           loop: true,
         });
-        // 解决 Swiper 12 与 Vant Swipe 的滑动冲突
-        // 仅水平滑动时 stopPropagation 阻断 Vant，垂直滑动不拦截
-        const swiperEl = mySwiper.el;
-        let startX = 0,
-          startY = 0;
-        swiperEl.addEventListener(
-          "touchstart",
-          (e) => {
-            if (e.touches.length === 1) {
-              startX = e.touches[0].clientX;
-              startY = e.touches[0].clientY;
-            }
-          },
-          { passive: true }
-        );
-        swiperEl.addEventListener(
-          "touchmove",
-          (e) => {
-            if (e.touches.length !== 1) return;
-            const dx = e.touches[0].clientX - startX;
-            const dy = e.touches[0].clientY - startY;
-            if (Math.abs(dx) > Math.abs(dy)) {
-              e.stopPropagation(); // 水平滑动：阻断 Vant track
-            }
-            // 垂直滑动不拦截，允许 BetterScroll/Vant 正常处理
-          },
-          { passive: false, capture: true }
-        );
       }, 0);
     },
     handleSelect(item, index) {

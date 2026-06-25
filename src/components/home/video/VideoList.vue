@@ -1,92 +1,104 @@
 <template>
   <div class="videoList-container">
     <!-- 正在加载 -->
-    <loading :loading="videoList.length===0" />
-    <scroll :data="videoList"
-            ref="videoListScroll"
-            :pullUp="pullUp"
-            @pullingUpLoad="handlePullingUp">
-      <div class="video-list"
-           ref="container">
-        <template v-if="videoList.length>0">
-          <template v-for="item in videoList"
-                    :key="item.id">
+    <loading :loading="videoList.length === 0" />
+    <scroll
+      :data="videoList"
+      ref="videoListScroll"
+      :pullUp="pullUp"
+      @pullingUpLoad="handlePullingUp"
+    >
+      <div class="video-list" ref="container">
+        <template v-if="videoList.length > 0">
+          <template v-for="item in videoList" :key="item.id">
             <video-item :videoParams="item"></video-item>
           </template>
         </template>
         <!-- loading -->
-        <loading :loading="loadMore"
-                 height="3rem" />
-
+        <loading :loading="loadMore" height="3rem" />
       </div>
     </scroll>
-
   </div>
 </template>
 <script>
-import VideoItem from './VideoItem'
-import Scroll from '@/components/common/Scroll'
-import videoApi from '@/api/video.js'
-import singerApi from '@/api/singer.js'
-import Video from '@/assets/common/js/video.js'
-import {
-  ERR_OK
-} from '@/api/config.js'
-const LIMIT = 3;//一次请求的数据
+import VideoItem from "./VideoItem";
+import Scroll from "@/components/common/Scroll";
+import videoApi from "@/api/video.js";
+import singerApi from "@/api/singer.js";
+import Video from "@/assets/common/js/video.js";
+import { ERR_OK } from "@/api/config.js";
+import { mapState } from "vuex";
+const LIMIT = 3; //一次请求的数据
 export default {
-  data () {
+  data() {
     return {
       loadMore: false,
-      videoList: [] // 视频列表
-    }
+      videoList: [], // 视频列表
+      hasLoaded: false, // 是否已加载过数据
+    };
   },
-  activated () {
-    if (this.videoList.length === 0) {
-      this.getVideoList()
+  activated() {
+    if (this.videoList.length === 0 && this.homeCurrentIndex === 3) {
+      this.loadData();
     }
-    this.$refs.videoListScroll.refresh()
+    if (this.$refs.videoListScroll) {
+      this.$refs.videoListScroll.refresh();
+    }
   },
 
-  created () {
-    this.pullUp = true
+  created() {
+    this.pullUp = true;
   },
-  mounted () {
-    // 获取推荐视频
-    this.$nextTick(() => {
-      if (this.videoList.length === 0) {
-        this.getVideoList()
-      }
-    })
+  mounted() {
+    // 如果当前已是MV tab（index=3），直接加载数据
+    if (this.homeCurrentIndex === 3) {
+      this.loadData();
+    }
+  },
+  computed: {
+    ...mapState(["homeCurrentIndex"]),
   },
   watch: {
-    loadMore () {
+    homeCurrentIndex(val) {
+      if (val === 3 && !this.hasLoaded) {
+        this.loadData();
+      }
+    },
+    loadMore() {
       this.$nextTick(() => {
-        this.refresh()
-      })
-    }
+        this.refresh();
+      });
+    },
   },
   methods: {
     // 上拉加载
-    handlePullingUp () {
-      if (this.loadMore) { // 如果请求未完成就不继续请求数据
-        return
+    handlePullingUp() {
+      if (this.loadMore) {
+        // 如果请求未完成就不继续请求数据
+        return;
       }
-      clearTimeout(this.loadTimer)
-      this.loadMore = true
+      clearTimeout(this.loadTimer);
+      this.loadMore = true;
       this.loadTimer = setTimeout(async () => {
-        await this.getVideoList()
+        await this.getVideoList();
         this.$nextTick(() => {
-          this.$refs.videoListScroll.finishPullUp()
-        })
-      }, 300)
+          this.$refs.videoListScroll.finishPullUp();
+        });
+      }, 300);
     },
-    async getVideoList () {
+    // 加载视频数据
+    async loadData() {
+      if (this.hasLoaded) return;
+      this.hasLoaded = true;
+      await this.getVideoList();
+    },
+    async getVideoList() {
       try {
         const offset = this.videoList.length;
         const { data: res } = await videoApi.getRecommendVideo(offset, LIMIT);
         if (res.code !== ERR_OK) {
-          this.$failToast('系统出错');
-          return
+          this.$failToast("系统出错");
+          return;
         }
 
         const data = res.data;
@@ -95,8 +107,8 @@ export default {
         const videoPromises = data.map(async (item) => {
           const { data: singerRes } = await singerApi.getSinger(item.artistId);
           if (singerRes.code !== ERR_OK) {
-            this.$failToast('系统出错');
-            return
+            this.$failToast("系统出错");
+            return;
           }
 
           return new Video({
@@ -117,20 +129,20 @@ export default {
         this.videoList = [...this.videoList, ...newVideos];
         this.loadMore = false; // 请求完成，关闭加载更多状态
       } catch (error) {
-        this.$toast('获取视频列表失败');
+        this.$toast("获取视频列表失败");
         this.loadMore = false; // 请求失败，关闭加载更多状态
       }
     },
     // 刷新
-    refresh () {
-      this.$refs.videoListScroll.refresh()
-    }
+    refresh() {
+      this.$refs.videoListScroll.refresh();
+    },
   },
   components: {
     VideoItem,
-    Scroll
-  }
-}
+    Scroll,
+  },
+};
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';

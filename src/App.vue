@@ -1,14 +1,14 @@
 <template>
   <div id="app">
-    <transition name="fade" mode="out-in">
-      <!-- 使用 v-slot 插槽获取组件 -->
-      <router-view v-slot="{ Component }">
+    <!-- 使用 v-slot 插槽获取组件 -->
+    <router-view v-slot="{ Component }">
+      <transition name="fade" mode="out-in">
         <!-- 将 v-if 移到此处，控制是否渲染 -->
         <keep-alive :exclude="noCacheComponents" v-if="isRouterAlive">
           <component :is="Component" />
         </keep-alive>
-      </router-view>
-    </transition>
+      </transition>
+    </router-view>
     <player></player>
   </div>
 </template>

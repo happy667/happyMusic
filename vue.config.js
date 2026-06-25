@@ -15,6 +15,7 @@ module.exports = {
     }))
     config.plugin('vue-components').use(Components({
       resolvers: [VantResolver({ importStyle: true })],
+      dirs: [], // 禁止自动扫描本地组件，避免同名组件冲突
     }))
     // 发布模式
     config.when(process.env.NODE_ENV === 'production', config => {

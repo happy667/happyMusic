@@ -2,13 +2,12 @@
   <div class="header-navBar-container" ref="navBar">
     <!-- 头部导航栏 -->
     <van-tabs
-      v-model="currentIndex"
-      @change="handleChange"
+      v-model:active="currentIndex"
+      @click-tab="handleChange"
       title-active-color="#FD4979"
       color="#FD4979"
       animated
       swipeable
-      lazy-render
     >
       <!-- 推荐页 -->
       <van-tab title="推荐">
@@ -16,15 +15,15 @@
       </van-tab>
       <!-- 排行页 -->
       <van-tab title="排行">
-        <ranking ref="ranking" @refreshList="handlePlaylist(this.playList)" />
+        <Ranking ref="ranking" />
       </van-tab>
       <!-- 歌手页 -->
       <van-tab title="歌手">
-        <singer ref="singer" />
+        <Singer ref="singer" />
       </van-tab>
       <!-- 搜索页 -->
       <van-tab title="MV">
-        <video-list ref="mv" />
+        <VideoList ref="mv" />
       </van-tab>
     </van-tabs>
   </div>
@@ -38,48 +37,6 @@ import { playlistMixin } from "@/assets/common/js/mixin.js";
 import { mapState } from "vuex";
 export default {
   mixins: [playlistMixin],
-  mounted() {
-    // Vant 4 升级后 swipeable tabs 滑动仍会合成 click，需在 capture 阶段拦截
-    if (!window.__tabSwipeClickFix) {
-      window.__tabSwipeClickFix = true;
-      let swiped = false,
-        sx = 0,
-        sy = 0;
-      document.addEventListener(
-        "touchstart",
-        (e) => {
-          if (e.touches.length === 1) {
-            sx = e.touches[0].clientX;
-            sy = e.touches[0].clientY;
-            swiped = false;
-          }
-        },
-        { passive: true }
-      );
-      document.addEventListener(
-        "touchmove",
-        (e) => {
-          if (e.touches.length === 1) {
-            const dx = e.touches[0].clientX - sx,
-              dy = e.touches[0].clientY - sy;
-            if (Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)) swiped = true;
-          }
-        },
-        { passive: true, capture: true }
-      );
-      document.addEventListener(
-        "click",
-        (e) => {
-          if (swiped) {
-            swiped = false;
-            e.stopPropagation();
-            e.preventDefault();
-          }
-        },
-        true
-      );
-    }
-  },
   computed: {
     ...mapState(["oldVideo"]),
     currentIndex: {
@@ -131,4 +88,3 @@ export default {
   },
 };
 </script>
-<style lang="stylus" scoped></style>

@@ -2,9 +2,7 @@
   <div class="song-sheet-square-container">
     <!-- 头部导航栏 -->
     <van-sticky>
-      <van-nav-bar :title="$route.meta.title"
-                   left-arrow
-                   @click-left="routerBack" />
+      <van-nav-bar :title="$route.meta.title" left-arrow @click-left="routerBack" />
     </van-sticky>
 
     <!-- loading -->
@@ -13,148 +11,148 @@
     <template v-if="!loading">
       <section>
         <scroll ref="song_sheet_square_scroll">
-          <div class="container"
-               ref="container">
-            <van-tabs v-model="currentIndex"
-                      @change="handleChange"
-                      title-active-color="#FD4979"
-                      color="#FD4979"
-                      animated
-                      swipe-threshold="6"
-                      swipeable>
+          <div class="container" ref="container">
+            <van-tabs
+              v-model:avtive="currentIndex"
+              @click-tab="handleChange"
+              title-active-color="#FD4979"
+              color="#FD4979"
+              animated
+              swipe-threshold="6"
+              swipeable
+            >
               <van-tab title="推荐">
                 <div class="recommend-list">
                   <swiper-list :list="swiperList"></swiper-list>
                   <song-sheet-list :list="newRecommendSongSheet"></song-sheet-list>
                 </div>
               </van-tab>
-              <van-tab v-for="(item, index) in songSheetCagetory"
-                       :key="item.id"
-                       :title="item.playlistTag.name">
-
+              <van-tab
+                v-for="(item, index) in songSheetCagetory"
+                :key="item.id"
+                :title="item.playlistTag.name"
+              >
                 <div class="song-sheet-cagetory-list">
-                  <van-loading v-if="loading || !songSheetCagetoryList[index + 1]"
-                               size="24px"
-                               color="#FD4979"
-                               class="load"
-                               vertical>加载中...</van-loading>
-                  <song-sheet-list v-else
-                                   :list="songSheetCagetoryList[index + 1]"></song-sheet-list>
+                  <van-loading
+                    v-if="loading || !songSheetCagetoryList[index + 1]"
+                    size="24px"
+                    color="#FD4979"
+                    class="load"
+                    vertical
+                    >加载中...</van-loading
+                  >
+                  <song-sheet-list
+                    v-else
+                    :list="songSheetCagetoryList[index + 1]"
+                  ></song-sheet-list>
                 </div>
               </van-tab>
             </van-tabs>
           </div>
         </scroll>
       </section>
-
     </template>
   </div>
 </template>
 <script>
-import Scroll from '@/components/common/Scroll'
-import SongSheetList from './SongSheetList'
-import SwiperList from './SongSheetSquare/SongSheetSquareSwiper'
-import recommendApi from '@/api/recommend.js'
-import {
-  ERR_OK
-} from '@/api/config.js'
-import {
-  playlistMixin
-} from '@/assets/common/js/mixin.js'
+import Scroll from "@/components/common/Scroll";
+import SongSheetList from "./SongSheetList";
+import SwiperList from "./SongSheetSquare/SongSheetSquareSwiper";
+import recommendApi from "@/api/recommend.js";
+import { ERR_OK } from "@/api/config.js";
+import { playlistMixin } from "@/assets/common/js/mixin.js";
 export default {
-  data () {
+  data() {
     return {
       currentIndex: 0, // 当前索引
       recommendSongSheet: [], // 推荐歌单列表
       songSheetCagetory: [], // 歌单分类
       songSheetCagetoryList: {}, // 歌单分类列表
-      loading: true
-    }
+      loading: true,
+    };
   },
-  name: 'songSheetSquare',
+  name: "songSheetSquare",
   mixins: [playlistMixin],
   computed: {
-    swiperList () {
-      return this.recommendSongSheet.slice(0, 3)
+    swiperList() {
+      return this.recommendSongSheet.slice(0, 3);
     },
-    newRecommendSongSheet () {
-      return this.recommendSongSheet.slice(3)
-    }
+    newRecommendSongSheet() {
+      return this.recommendSongSheet.slice(3);
+    },
   },
   methods: {
     // 返回上一个路由
-    routerBack () {
-      this.$utils.routerBack()
+    routerBack() {
+      this.$utils.routerBack();
     },
     // 获取歌单分类
-    async getSongSheetCatList () {
-      const {
-        data: res
-      } = await recommendApi.getSongSheetCatList()
-      if (res.code === ERR_OK) { // 成功获取歌单分类
-        this.songSheetCagetory = res.tags
+    async getSongSheetCatList() {
+      const { data: res } = await recommendApi.getSongSheetCatList();
+      if (res.code === ERR_OK) {
+        // 成功获取歌单分类
+        this.songSheetCagetory = res.tags;
       }
     },
     // 根据参数获取歌单
-    async getSongSheet (tag) {
-      const {
-        data: res
-      } = await recommendApi.getSongSheet(tag)
-      if (res.code === ERR_OK) { // 成功获取歌单数据
-        return res
+    async getSongSheet(tag) {
+      const { data: res } = await recommendApi.getSongSheet(tag);
+      if (res.code === ERR_OK) {
+        // 成功获取歌单数据
+        return res;
       }
     },
     // 获取推荐歌单
-    async getRecommendSongSheet () {
-      this.loading = true
-      this.getSongSheet("全部歌单").then(res => {
-        if (res.code === ERR_OK) { // 成功获取推荐歌单
-          this.recommendSongSheet = res.playlists
-          this.loading = false
-          this.handlePlaylist(this.playList)
+    async getRecommendSongSheet() {
+      this.loading = true;
+      this.getSongSheet("全部歌单").then((res) => {
+        if (res.code === ERR_OK) {
+          // 成功获取推荐歌单
+          this.recommendSongSheet = res.playlists;
+          this.loading = false;
+          this.handlePlaylist(this.playList);
         }
-      })
+      });
     },
-    handleChange (name, title) {
+    handleChange(name, title) {
       if (title == "推荐") {
-        return
+        return;
       }
-      if (!this.songSheetCagetoryList[name]) { // 说明还没有该分类的歌单
-        this.getSongSheet(title).then(res => {
-          this.songSheetCagetoryList[name] = res.playlists
-        })
+      if (!this.songSheetCagetoryList[name]) {
+        // 说明还没有该分类的歌单
+        this.getSongSheet(title).then((res) => {
+          this.songSheetCagetoryList[name] = res.playlists;
+        });
       }
     },
-    handlePlaylist (playList) {
+    handlePlaylist(playList) {
       if (!this.loading) {
         // 适配播放器与页面底部距离
-        const bottom = playList.length > 0 ? '1.5rem' : ''
+        const bottom = playList.length > 0 ? "1.5rem" : "";
         this.$nextTick(() => {
-          this.$refs.container.style.paddingBottom = bottom
-          this.refresh()
-        })
+          this.$refs.container.style.paddingBottom = bottom;
+          this.refresh();
+        });
       }
     },
-    refresh () {
+    refresh() {
       this.$nextTick(() => {
-        this.$refs.song_sheet_square_scroll.refresh()
-      })
-    }
-
+        this.$refs.song_sheet_square_scroll.refresh();
+      });
+    },
   },
   components: {
     SwiperList,
     SongSheetList,
-    Scroll
+    Scroll,
   },
-  mounted () {
+  mounted() {
     // 获取分类列表
-    this.getSongSheetCatList()
+    this.getSongSheetCatList();
     // 获取推荐列表
-    this.getRecommendSongSheet()
-  }
-
-}
+    this.getRecommendSongSheet();
+  },
+};
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';

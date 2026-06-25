@@ -1,15 +1,15 @@
 <template>
   <div class="recommend-swiper-container">
-    <div class="swiper sw-banner">
+    <div class="swiper sw-banner" v-swiper-nested>
       <div class="swiper-wrapper">
-        <div class="swiper-slide"
-             @click.stop="selectItem(item)"
-             v-for="(item, index) in banners"
-             :key="index">
-          <div class="image animated fadeIn"
-               :style="loadBgStyle">
-            <img :src="item.imageUrl"
-                 loading="lazy" />
+        <div
+          class="swiper-slide"
+          @click.stop="selectItem(item)"
+          v-for="(item, index) in banners"
+          :key="index"
+        >
+          <div class="image animated fadeIn" :style="loadBgStyle">
+            <img :src="item.imageUrl" loading="lazy" />
             <div class="title">{{ item.typeTitle }}</div>
           </div>
         </div>
@@ -35,17 +35,17 @@ export default {
       type: Array,
     },
   },
-  mounted () {
+  mounted() {
     this.initSwiper();
   },
   computed: {
     ...mapGetters(["currentSong"]),
-    loadBgStyle () {
+    loadBgStyle() {
       return !this.banners ? "background:#f2f3f5" : "";
     },
   },
   methods: {
-    selectItem (item) {
+    selectItem(item) {
       console.log(item);
       let id = item.targetId;
       let type = parseInt(item.targetType);
@@ -64,7 +64,7 @@ export default {
           break;
       }
     },
-    async getSongDetail (id) {
+    async getSongDetail(id) {
       // 获取歌曲详情
       const { data: res } = await songApi.getSongDetail(id);
       if (res.code === ERR_OK) {
@@ -100,7 +100,7 @@ export default {
       }
     },
     // 初始化轮播图组件
-    initSwiper () {
+    initSwiper() {
       // 通过settimeout 解决数据还没有完全加载的时候就已经渲染swiper，导致loop失效。
       setTimeout(() => {
         var mySwiper = new Swiper(".sw-banner", {
@@ -116,38 +116,9 @@ export default {
           nested: true, // capture阶段监听document touchmove，先于Vant处理
           loop: true,
         });
-
-        // 解决 Swiper 12 与 Vant Swipe 的滑动冲突
-        // 仅水平滑动时 stopPropagation 阻断 Vant，垂直滑动不拦截
-        const swiperEl = mySwiper.el;
-        let startX = 0,
-          startY = 0;
-        swiperEl.addEventListener(
-          "touchstart",
-          (e) => {
-            if (e.touches.length === 1) {
-              startX = e.touches[0].clientX;
-              startY = e.touches[0].clientY;
-            }
-          },
-          { passive: true }
-        );
-        swiperEl.addEventListener(
-          "touchmove",
-          (e) => {
-            if (e.touches.length !== 1) return;
-            const dx = e.touches[0].clientX - startX;
-            const dy = e.touches[0].clientY - startY;
-            if (Math.abs(dx) > Math.abs(dy)) {
-              e.stopPropagation(); // 水平滑动：阻断 Vant track
-            }
-            // 垂直滑动不拦截，允许 BetterScroll/Vant 正常处理
-          },
-          { passive: false, capture: true }
-        );
       }, 0);
     },
-    selectSong (id) {
+    selectSong(id) {
       this.getSongDetail(id).then((res) => {
         // 比较两首歌曲
         let result = this.$utils.compareSong(this.currentSong, {
