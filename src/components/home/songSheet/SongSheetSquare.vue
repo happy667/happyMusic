@@ -13,8 +13,8 @@
         <scroll ref="song_sheet_square_scroll">
           <div class="container" ref="container">
             <van-tabs
-              v-model:avtive="currentIndex"
-              @click-tab="handleChange"
+              v-model:active="currentIndex"
+              @change="handleChange"
               title-active-color="#FD4979"
               color="#FD4979"
               animated
@@ -24,7 +24,9 @@
               <van-tab title="推荐">
                 <div class="recommend-list">
                   <swiper-list :list="swiperList"></swiper-list>
-                  <song-sheet-list :list="newRecommendSongSheet"></song-sheet-list>
+                  <SwipeGuard>
+                    <song-sheet-list :list="newRecommendSongSheet"></song-sheet-list>
+                  </SwipeGuard>
                 </div>
               </van-tab>
               <van-tab
@@ -32,20 +34,22 @@
                 :key="item.id"
                 :title="item.playlistTag.name"
               >
-                <div class="song-sheet-cagetory-list">
-                  <van-loading
-                    v-if="loading || !songSheetCagetoryList[index + 1]"
-                    size="24px"
-                    color="#FD4979"
-                    class="load"
-                    vertical
-                    >加载中...</van-loading
-                  >
-                  <song-sheet-list
-                    v-else
-                    :list="songSheetCagetoryList[index + 1]"
-                  ></song-sheet-list>
-                </div>
+                <SwipeGuard>
+                  <div class="song-sheet-cagetory-list">
+                    <van-loading
+                      v-if="loading || !songSheetCagetoryList[index + 1]"
+                      size="24px"
+                      color="#FD4979"
+                      class="load"
+                      vertical
+                      >加载中...</van-loading
+                    >
+                    <song-sheet-list
+                      v-else
+                      :list="songSheetCagetoryList[index + 1]"
+                    ></song-sheet-list>
+                  </div>
+                </SwipeGuard>
               </van-tab>
             </van-tabs>
           </div>
@@ -58,6 +62,7 @@
 import Scroll from "@/components/common/Scroll";
 import SongSheetList from "./SongSheetList";
 import SwiperList from "./SongSheetSquare/SongSheetSquareSwiper";
+import SwipeGuard from "@/components/common/SwipeGuard";
 import recommendApi from "@/api/recommend.js";
 import { ERR_OK } from "@/api/config.js";
 import { playlistMixin } from "@/assets/common/js/mixin.js";
@@ -115,7 +120,7 @@ export default {
       });
     },
     handleChange(name, title) {
-      if (title == "推荐") {
+      if (title === "推荐" || !title) {
         return;
       }
       if (!this.songSheetCagetoryList[name]) {
@@ -145,6 +150,7 @@ export default {
     SwiperList,
     SongSheetList,
     Scroll,
+    SwipeGuard,
   },
   mounted() {
     // 获取分类列表

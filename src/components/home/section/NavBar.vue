@@ -1,9 +1,9 @@
-<template>
+﻿<template>
   <div class="header-navBar-container" ref="navBar">
     <!-- 头部导航栏 -->
     <van-tabs
       v-model:active="currentIndex"
-      @click-tab="handleChange"
+      @change="handleChange"
       title-active-color="#FD4979"
       color="#FD4979"
       animated
@@ -11,19 +11,27 @@
     >
       <!-- 推荐页 -->
       <van-tab title="推荐">
-        <Recommend ref="recommend" />
+        <SwipeGuard>
+          <Recommend ref="recommend" />
+        </SwipeGuard>
       </van-tab>
       <!-- 排行页 -->
       <van-tab title="排行">
-        <Ranking ref="ranking" />
+        <SwipeGuard>
+          <Ranking ref="ranking" />
+        </SwipeGuard>
       </van-tab>
       <!-- 歌手页 -->
       <van-tab title="歌手">
-        <Singer ref="singer" />
+        <SwipeGuard>
+          <Singer ref="singer" />
+        </SwipeGuard>
       </van-tab>
       <!-- 搜索页 -->
       <van-tab title="MV">
-        <VideoList ref="mv" />
+        <SwipeGuard>
+          <VideoList ref="mv" />
+        </SwipeGuard>
       </van-tab>
     </van-tabs>
   </div>
@@ -33,6 +41,7 @@ import Recommend from "@/components/home/recommend/Recommend";
 import Ranking from "@/components/home/ranking/Ranking";
 import Singer from "@/components/home/singer/Singer";
 import VideoList from "@/components/home/video/VideoList";
+import SwipeGuard from "@/components/common/SwipeGuard";
 import { playlistMixin } from "@/assets/common/js/mixin.js";
 import { mapState } from "vuex";
 export default {
@@ -85,6 +94,7 @@ export default {
     Ranking,
     Singer,
     VideoList,
+    SwipeGuard,
   },
 };
 </script>
