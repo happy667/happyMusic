@@ -1,7 +1,7 @@
 <template>
   <div class="image-wrapper animated fadeIn"
        :style="imgStyle">
-    <img v-lazy="src"
+    <img v-lazy="src" :style="loadBgStyle"
          :key="src" />
   </div>
 </template>
@@ -34,7 +34,10 @@ export default {
         }
       }
       return style
-    }
+    },
+     loadBgStyle() {
+      return !this.src ? "background:#f2f3f5" : "";
+    },
   }
 }
 </script>
@@ -43,7 +46,6 @@ export default {
 
 .image-wrapper {
   border-radius: 50%;
-  background-color: $color-common-b;
 
   img {
     display: block;

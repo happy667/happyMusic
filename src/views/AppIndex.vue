@@ -45,7 +45,7 @@ export default {
       return true
     })
   },
-  beforeRouteLeave (to, from, next) {
+  beforeRouteLeave (to, from) {
     // 如果有歌曲播放就显示迷你播放器
     if (this.$store.state.currentPlayIndex !== -1) {
       this.$store.commit('setHideMiniPlayer', false)

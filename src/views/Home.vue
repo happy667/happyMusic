@@ -14,7 +14,7 @@ export default {
   computed: {
     ...mapState(['oldVideo'])
   },
-  beforeRouteLeave (to, from, next) {
+  beforeRouteLeave (to, from) {
     if (this.oldVideo.$data && this.oldVideo.$data.isPlay) {
       this.oldVideo.pauseCurrentVideo()
     }

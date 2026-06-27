@@ -538,8 +538,6 @@ const router = createRouter({
     }
   }
 })
-
-// 全局前置守卫 
 router.beforeEach((to, from) => {
   if (to.matched.some(record => record.meta.requireLogin)) { // 判断该路由是否需要登录权限
     if (utils.isLogin()) { // 判断是否登录

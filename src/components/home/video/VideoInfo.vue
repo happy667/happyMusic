@@ -177,7 +177,7 @@ export default {
       fixed: true // 固定视频
     }
   },
-  beforeRouteLeave (to, from, next) {
+  beforeRouteLeave (to, from) {
     // 如果播放就显示迷你播放器
     if (this.currentPlayIndex !== -1) {
       this.setHideMiniPlayer(false)
