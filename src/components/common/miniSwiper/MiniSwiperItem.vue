@@ -1,18 +1,14 @@
 <template>
-  <div class="mini-swiper-item-container"
-       @click.stop="handleClick">
+  <div class="mini-swiper-item-container" @click.stop="handleClick">
     <div class="mini-swiper-item">
       <div class="image-wrapper">
         <div class="image animated fadeIn">
-          <img :data-src="picUrl"
-               class="swiper-lazy"
-               :key="picUrl">
-          <div class="playCount"
-               v-if="showPlayCount">
-            <i class="iconfont icon-bofang"></i> {{ $filters.convertCount(item.playCount) }}
+          <img v-lazy="picUrl" :key="picUrl" />
+          <div class="playCount" v-if="showPlayCount">
+            <i class="iconfont icon-bofang"></i>
+            {{ $filters.convertCount(item.playCount) }}
           </div>
-          <div class="icon"
-               v-if="showIcon">
+          <div class="icon" v-if="showIcon">
             <van-icon name="play-circle-o" />
           </div>
         </div>
@@ -27,24 +23,24 @@ export default {
     item: Object,
     showPlayCount: {
       type: Boolean,
-      default: false
+      default: false,
     },
     showIcon: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   computed: {
-    picUrl () {
-      return this.item.picUrl || this.item.coverImgUrl
-    }
+    picUrl() {
+      return this.item.picUrl || this.item.coverImgUrl;
+    },
   },
   methods: {
-    handleClick () {
-      this.$emit('select', this.item)
-    }
-  }
-}
+    handleClick() {
+      this.$emit("select", this.item);
+    },
+  },
+};
 </script>
 
 <style lang="stylus" scoped>

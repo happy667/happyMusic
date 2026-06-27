@@ -9,7 +9,7 @@
           :key="index"
         >
           <div class="image animated fadeIn" :style="loadBgStyle">
-            <img :src="item.imageUrl" loading="lazy" />
+            <img v-lazy="item.imageUrl" />
             <div class="title">{{ item.typeTitle }}</div>
           </div>
         </div>

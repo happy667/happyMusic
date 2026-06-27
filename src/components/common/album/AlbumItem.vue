@@ -2,138 +2,135 @@
   <div class="album-container">
     <div class="album-image">
       <div class="image-container">
-        <div class="image animated fadeIn"
-             :style="loadBgStyle">
-          <img v-lazy="item.picUrl">
+        <div class="image animated fadeIn" :style="loadBgStyle">
+          <img v-if="item.picUrl" v-lazy="item.picUrl" />
         </div>
         <div class="digital-album">
-          <img src="@/assets/images/digital-album.svg">
+          <img src="@/assets/images/digital-album.svg" />
         </div>
       </div>
     </div>
     <article class="info">
-      <div class="name">{{item.name}}</div>
+      <div class="name">{{ item.name }}</div>
       <div class="desc">
-        <span class="singer"
-              v-if="showSinger">{{item.singerName}}</span>
-        <span class="time"
-              v-if="showTime">{{ $filters.convertDate(item.publishTime, '.') }}</span>
-        <span class="song-Size"
-              v-if="showSongSize">{{item.size}}首</span>
+        <span class="singer" v-if="showSinger">{{ item.singerName }}</span>
+        <span class="time" v-if="showTime">{{
+          $filters.convertDate(item.publishTime, ".")
+        }}</span>
+        <span class="song-Size" v-if="showSongSize">{{ item.size }}首</span>
       </div>
     </article>
-    <div class="functions"
-         v-if="showFunctions"
-         @click.stop="handleHpenFunctions">
+    <div class="functions" v-if="showFunctions" @click.stop="handleHpenFunctions">
       <van-icon name="ellipsis" />
     </div>
-    <van-popup v-model:show="showPopup"
-               round
-               position="bottom"
-               :get-container="getContainer">
+    <van-popup
+      v-model:show="showPopup"
+      round
+      position="bottom"
+      :get-container="getContainer"
+    >
       <div class="popup-content">
-        <div class="title">{{'专辑: '+item.name}}</div>
+        <div class="title">{{ "专辑: " + item.name }}</div>
         <div class="functions">
-          <div class="delete"
-               @click="handleDelete">
+          <div class="delete" @click="handleDelete">
             <div class="icon">
               <i class="iconfont icon-shanchu"></i>
             </div>
             <div class="text">取消收藏</div>
           </div>
-
         </div>
-        <div class="cancle"
-             @click="showPopup=false">取消</div>
+        <div class="cancle" @click="showPopup = false">取消</div>
       </div>
     </van-popup>
-
   </div>
 </template>
 <script>
-import userApi from '@/api/user.js'
-import {
-  ERR_OK
-} from '@/api/config.js'
-import {
-  mapState
-} from 'vuex'
+import userApi from "@/api/user.js";
+import { ERR_OK } from "@/api/config.js";
+import { mapState } from "vuex";
 export default {
   props: {
     item: {
-      type: Object
+      type: Object,
     },
     showSinger: {
       type: Boolean,
-      default: () => true
+      default: () => true,
     },
     showSongSize: {
       type: Boolean,
-      default: () => false
+      default: () => false,
     },
     showTime: {
       type: Boolean,
-      default: () => true
+      default: () => true,
     },
     showFunctions: {
       type: Boolean,
-      default: () => false
-    }
+      default: () => false,
+    },
   },
-  data () {
+  data() {
     return {
-      actions: [{
-        name: '删除'
-      }, {
-        name: '选项二'
-      }, {
-        name: '选项三'
-      }],
-      showPopup: false
-    }
+      actions: [
+        {
+          name: "删除",
+        },
+        {
+          name: "选项二",
+        },
+        {
+          name: "选项三",
+        },
+      ],
+      showPopup: false,
+    };
   },
   computed: {
-    ...mapState(['user']),
-    loadBgStyle () {
-      return !this.item.picUrl ? "background:#f2f3f5" : ''
-    }
+    ...mapState(["user"]),
+    loadBgStyle() {
+      return !this.item.picUrl ? "background:#f2f3f5" : "";
+    },
   },
   methods: {
-    goToSongSheetInfo () {
+    goToSongSheetInfo() {
       if (!this.showPopup) {
-        this.$router.push(`/songSheetDisc/${this.item.id}`)
+        this.$router.push(`/songSheetDisc/${this.item.id}`);
       }
-
     },
-    handleHpenFunctions () {
+    handleHpenFunctions() {
       this.showPopup = !this.showPopup;
     },
-    handleDelete () {
+    handleDelete() {
       this.showPopup = false;
-      this.$utils.alertConfirm({
-        message: '你确定要取消收藏吗',
-        confirmButtonText: '确定'
-      }).then(async () => {
-        userApi.updateFollowAlbum(this.item.id, 0).then(res => {
-          if (res.data.code === ERR_OK) {
-            this.$toast("已取消收藏!")
-            this.$emit("removeAlbumItem", this.item.id);
-          } else {
-            this.$toast(res.data.message)
-          }
-        }).catch(err => {
-          this.$toast(err.data.message)
+      this.$utils
+        .alertConfirm({
+          message: "你确定要取消收藏吗",
+          confirmButtonText: "确定",
         })
+        .then(async () => {
+          userApi
+            .updateFollowAlbum(this.item.id, 0)
+            .then((res) => {
+              if (res.data.code === ERR_OK) {
+                this.$toast("已取消收藏!");
+                this.$emit("removeAlbumItem", this.item.id);
+              } else {
+                this.$toast(res.data.message);
+              }
+            })
+            .catch((err) => {
+              this.$toast(err.data.message);
+            });
 
-        this.showActionSheet = false;
-      })
+          this.showActionSheet = false;
+        });
     },
-    getContainer () {
-      return document.querySelector('#app')
-    }
-
-  }
-}
+    getContainer() {
+      return document.querySelector("#app");
+    },
+  },
+};
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';

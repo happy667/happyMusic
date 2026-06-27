@@ -4,8 +4,7 @@
     <div class="singer-swiper-item">
       <div class="image animated fadeIn"
            :style="loadBgStyle">
-        <img :data-src="item.avatar"
-             class="swiper-lazy"
+        <img v-lazy="item.avatar"
              :key="item.avatar">
       </div>
       <div class="name">{{item.name}}</div>
