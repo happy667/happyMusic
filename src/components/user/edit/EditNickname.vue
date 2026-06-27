@@ -93,7 +93,7 @@ export default {
   background-color: $color-common-background;
 }
 
-.editNikename-container>>>.van-nav-bar__text {
+.editNikename-container :deep(.van-nav-bar__text){
   color: $color-common;
 }
 </style>

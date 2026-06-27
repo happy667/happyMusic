@@ -50,7 +50,7 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.loading-container>>>.van-loading {
+.loading-container :deep(.van-loading){
   justify-content: center;
   background: $color-common-background;
 }

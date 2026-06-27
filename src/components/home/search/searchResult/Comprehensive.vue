@@ -333,23 +333,23 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.search-comprehensive-container>>>.album-container {
+.search-comprehensive-container :deep(.album-container){
   padding: 0.25rem 0.4rem;
 }
 
-.search-comprehensive-container>>>.video-list-container {
+.search-comprehensive-container :deep(.video-list-container){
   padding: 0 0.4rem;
 }
 
-.search-comprehensive-container>>>.title-container {
+.search-comprehensive-container :deep(.title-container){
   padding: 0 0.4rem;
 }
 
-.search-comprehensive-container>>>.search-list-container .list {
+.search-comprehensive-container :deep(.search-list-container .list){
   padding: 0.15rem 0.4rem;
 }
 
-.search-comprehensive-container>>>.search {
+.search-comprehensive-container :deep(.search){
   .more {
     margin-bottom: 0.5rem;
     display: flex;

@@ -32,7 +32,7 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.song-sheet-mini-list-container>>>.song-sheet-mini-item-container {
+.song-sheet-mini-list-container :deep(.song-sheet-mini-item-container){
   &:last-child {
     margin-bottom: 0;
   }

@@ -196,7 +196,7 @@ export default {
       }
     }
 
-    .login-form>>>.van-cell {
+    .login-form :deep(.van-cell){
       margin-bottom: 0.1rem;
     }
 

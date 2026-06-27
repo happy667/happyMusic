@@ -177,13 +177,13 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.album-comment-container>>>.song-list-item-containter {
+.album-comment-container :deep(.song-list-item-containter){
   border-radius: 0.2rem;
   padding: 0.2rem;
   box-shadow: 0 0.1rem 0.8rem rgba(0, 0, 0, 0.1);
 }
 
-.album-comment-container>>>.comment {
+.album-comment-container :deep(.comment){
   padding: 0.1rem 0.4rem;
 }
 

@@ -312,7 +312,7 @@ export default {
       }
     }
 
-    .register-form>>>.van-cell {
+    .register-form :deep(.van-cell){
       margin-bottom: 0.35rem;
 
       &:last-child {

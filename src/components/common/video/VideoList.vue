@@ -32,7 +32,7 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.video-list-container>>>.video-list-item-container {
+.video-list-container :deep(.video-list-item-container){
   &:last-child {
     margin-bottom: 0;
   }

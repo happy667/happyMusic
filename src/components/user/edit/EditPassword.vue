@@ -221,7 +221,7 @@ export default {
   background-color: $color-common-background;
 }
 
-.editPassword-container>>>.van-nav-bar__text {
+.editPassword-container :deep(.van-nav-bar__text){
   color: $color-common;
 }
 </style>

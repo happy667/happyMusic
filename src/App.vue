@@ -130,7 +130,7 @@ export default {
   opacity: 0;
 }
 
-#app>>>.van-popup .singerList {
+#app :deep(.van-popup .singerList){
   max-height: 6rem;
   padding-top: 0.1rem;
 }

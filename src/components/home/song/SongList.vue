@@ -70,7 +70,7 @@ export default {
 .song-list-containter {
   .songs-list {
     .songs-list-item {
-      &.active>>>.song-list-item-containter {
+      &.active :deep(.song-list-item-containter){
         .sg-info, .song-name, .song-index {
           color: $color-common;
         }

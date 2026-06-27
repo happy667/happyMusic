@@ -164,29 +164,29 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.play-ranking-container>>>.scroll {
+.play-ranking-container :deep(.scroll){
   position: absolute;
   width: 100%;
   height: 100%;
   overflow: hidden;
 }
 
-.play-ranking-container>>>.song-list-container {
+.play-ranking-container :deep(.song-list-container){
   padding-top: 0.1rem;
 }
 
-.play-ranking-container>>>.van-tabs {
+.play-ranking-container :deep(.van-tabs){
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
-.play-ranking-container>>>.van-tabs__content {
+.play-ranking-container :deep(.van-tabs__content){
   position: relative;
   flex: 1;
 }
 
-.play-ranking-container>>>.van-tabs__content .van-tabs__track, .play-ranking-container>>>.van-tabs__content .van-tab__pane {
+.play-ranking-container :deep(.van-tabs__content .van-tabs__track), .play-ranking-container :deep(.van-tabs__content .van-tab__pane){
   position: absolute;
   top: 0;
   bottom: 0;

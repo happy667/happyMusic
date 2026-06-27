@@ -163,14 +163,14 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.song-sheet-square-container>>>.scroll {
+.song-sheet-square-container :deep(.scroll){
   position: absolute;
   width: 100%;
   height: 100%;
   overflow: hidden;
 }
 
-.song-sheet-square-container>>>.container {
+.song-sheet-square-container :deep(.container){
   position: absolute;
   width: 100%;
   min-height: 100%;
@@ -179,13 +179,13 @@ export default {
   flex-direction: column;
 }
 
-.song-sheet-square-container>>>.van-tabs {
+.song-sheet-square-container :deep(.van-tabs){
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
-.song-sheet-square-container>>>.van-tabs__content {
+.song-sheet-square-container :deep(.van-tabs__content){
   flex: 1;
 }
 
@@ -201,7 +201,7 @@ export default {
     position: relative;
     flex: 1;
 
-    .recommend-list>>>.song-sheet-list-container {
+    .recommend-list :deep(.song-sheet-list-container){
       width: 100%;
       margin-top: 0.3rem;
       box-sizing: border-box;

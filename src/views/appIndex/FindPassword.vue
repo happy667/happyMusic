@@ -262,7 +262,7 @@ export default {
       }
     }
 
-    .find-password-form>>>.van-cell {
+    .find-password-form :deep(.van-cell){
       margin-bottom: 0.35rem;
 
       &:last-child {

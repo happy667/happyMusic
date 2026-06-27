@@ -182,13 +182,13 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.song-sheet-comment-container>>>.songs-list-item-containter {
+.song-sheet-comment-container :deep(.songs-list-item-containter){
   border-radius: 0.2rem;
   padding: 0.2rem;
   box-shadow: 0 0.1rem 0.8rem rgba(0, 0, 0, 0.1);
 }
 
-.song-sheet-comment-container>>>.comment {
+.song-sheet-comment-container :deep(.comment){
   padding: 0.2rem 0.4rem 0.4rem 0.4rem;
 }
 

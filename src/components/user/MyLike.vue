@@ -352,7 +352,7 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.my-like-container>>>.scroll {
+.my-like-container :deep(.scroll){
   position: absolute;
   width: 100%;
   height: 100%;

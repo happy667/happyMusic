@@ -653,25 +653,25 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.singer-info-container>>>.scroll {
+.singer-info-container :deep(.scroll){
   position: absolute;
   width: 100%;
   height: 100%;
   overflow: hidden;
 }
 
-.singer-info-container>>>.van-skeleton {
+.singer-info-container :deep(.van-skeleton){
   padding: 0;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
 }
 
-.singer-info-container>>>.van-skeleton__row {
+.singer-info-container :deep(.van-skeleton__row){
   margin: 0 auto;
 }
 
-.singer-info-container>>>.van-skeleton__avatar {
+.singer-info-container :deep(.van-skeleton__avatar){
   margin: 0 0 0.2rem 0;
 }
 
@@ -679,50 +679,50 @@ export default {
   padding: 0;
 }
 
-.singer-info-container>>>.van-skeleton__row:nth-child(1) {
+.singer-info-container :deep(.van-skeleton__row:nth-child(1) ){
   width: 60% !important;
   margin: 0.8rem auto 0.3rem;
   height: 0.6rem;
 }
 
-.singer-info-container>>>.van-skeleton__row:nth-child(2) {
+.singer-info-container :deep(.van-skeleton__row:nth-child(2) ){
   width: 35% !important;
   margin: 0 auto 0.35rem;
   height: 0.5rem;
 }
 
-.singer-info-container>>>.van-skeleton__row:nth-child(3) {
+.singer-info-container :deep(.van-skeleton__row:nth-child(3) ){
   margin: 0 auto 0.2rem;
   height: 0.5rem;
 }
 
-.singer-info-container>>>.van-skeleton__row:nth-child(4) {
+.singer-info-container :deep(.van-skeleton__row:nth-child(4) ){
   height: 0.8rem;
   background-color: transparent;
 }
 
-.singer-info-container>>>.van-tabs__wrap {
+.singer-info-container :deep(.van-tabs__wrap){
   margin-bottom: 0.25rem;
 }
 
-.singer-info-container>>>.van-tabs {
+.singer-info-container :deep(.van-tabs){
   margin-top: 3.8rem;
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
-.singer-info-container>>>.van-tabs__content {
+.singer-info-container :deep(.van-tabs__content){
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
-.singer-info-container>>>.van-tabs__track {
+.singer-info-container :deep(.van-tabs__track){
   flex: 1;
 }
 
-.singer-info-container>>>.album-list-container {
+.singer-info-container :deep(.album-list-container){
   .list {
     .item:first-child {
       .album-container {

@@ -91,13 +91,13 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-.recent-play-container>>>.van-tabs {
+.recent-play-container :deep(.van-tabs){
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
-.recent-play-container>>>.van-tabs__content {
+.recent-play-container :deep(.van-tabs__content){
   flex: 1;
 }
 

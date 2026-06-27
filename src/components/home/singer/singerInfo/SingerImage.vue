@@ -35,7 +35,7 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.singer-synopsis-container>>>.singer-img>#image>.van-image {
+.singer-synopsis-container :deep(.singer-img>#image>.van-image){
   width: 100%;
   height: 100%;
 }

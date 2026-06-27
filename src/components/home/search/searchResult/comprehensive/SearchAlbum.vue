@@ -39,7 +39,7 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-.search-album>>>.album-list-container .album-container .image-container {
+.search-album :deep(.album-list-container .album-container .image-container){
   width: 1.5rem;
   height: 1.5rem;
 }

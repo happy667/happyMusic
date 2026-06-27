@@ -59,7 +59,7 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-.search>>>.play-all-container {
+.search :deep(.play-all-container){
   padding-left: 0;
   padding-right: 0.4rem;
 }

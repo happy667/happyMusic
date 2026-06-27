@@ -417,7 +417,7 @@ export default {
   }
 }
 
-.video-container>>>.van-loading {
+.video-container :deep(.van-loading){
   position: absolute;
   width: 100%;
   z-index: 90;
