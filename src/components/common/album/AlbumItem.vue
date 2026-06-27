@@ -3,7 +3,7 @@
     <div class="album-image">
       <div class="image-container">
         <div class="image animated fadeIn" :style="loadBgStyle">
-          <img v-if="item.picUrl" v-lazy="item.picUrl" />
+          <img v-lazy="item.picUrl" />
         </div>
         <div class="digital-album">
           <img src="@/assets/images/digital-album.svg" />
@@ -135,7 +135,7 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.album-container .functions>>>.van-icon-ellipsis {
+.album-container .functions :deep(.van-icon-ellipsis){
   transform: rotate(90deg);
 }
 

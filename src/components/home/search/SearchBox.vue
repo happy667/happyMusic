@@ -170,14 +170,14 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.search-box-container>>>.scroll {
+.search-box-container :deep(.scroll){
   position: absolute;
   width: 100%;
   height: 100%;
   overflow: hidden;
 }
 
-.search-box-container>>>.van-search {
+.search-box-container :deep(.van-search){
   position: absolute;
   width: 100%;
   height: 100%;

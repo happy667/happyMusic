@@ -182,7 +182,7 @@ export default {
     if (this.currentPlayIndex !== -1) {
       this.setHideMiniPlayer(false)
     }
-    next()
+    return true
   },
   activated () {
     // 初始化加载图片

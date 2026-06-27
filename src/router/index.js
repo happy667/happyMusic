@@ -1,6 +1,7 @@
 import store from '@/store/index.js'
 import { createRouter, createWebHistory } from 'vue-router'
 import utils from '@/assets/common/js/utils.js'
+
 const Login = () =>
   import( /* webpackChunkName:"login_index_register_findPassword_appIndex" */ '../views/appIndex/Login')
 const Index = () =>
@@ -61,8 +62,6 @@ const UserEditNickname = () =>
 const UserEditPassword = () =>
   import( /* webpackChunkName:"user_myFollow_myLike_playRanking_userRecommend_userEdit" */ '../components/user/edit/EditPassword')
 
-
-
 const routes = [
   // 重定向到登录页
   {
@@ -119,7 +118,7 @@ const routes = [
     meta: {
       title: '歌单广场'
     },
-    beforeEnter (to, from, next) {
+    beforeEnter (to, from) {
       if (from.name === 'home') {
         // 添加不缓存路由
         store.commit('setAddNoCacheComponents', 'songSheetSquare')
@@ -127,7 +126,7 @@ const routes = [
         // 移除不缓存路由
         store.commit('setRemoveNoCacheComponents', 'songSheetSquare')
       }
-      next()
+      return true
     }
   },
   // 歌单详情
@@ -140,7 +139,7 @@ const routes = [
       isBack: false,
       title: '歌单详情'
     },
-    beforeEnter (to, from, next) {
+    beforeEnter (to, from) {
       if (from.name === 'home' || from.name === 'searchResult' || from.name === 'songSheetSquare' || from.name === 'user') {
         // 添加不缓存路由
         store.commit('setAddNoCacheComponents', 'songSheetDisc')
@@ -151,7 +150,7 @@ const routes = [
         // 移除不缓存路由
         store.commit('setRemoveNoCacheComponents', 'songSheetDisc')
       }
-      next()
+      return true
     }
   },
   // 歌单评论列表
@@ -163,7 +162,7 @@ const routes = [
     meta: {
       title: '评论列表'
     },
-    beforeEnter (to, from, next) {
+    beforeEnter (to, from) {
       if (from.name === 'songSheetDisc' && !from.meta.isBack) {
         // 添加不缓存路由
         store.commit('setAddNoCacheComponents', 'songSheetComment')
@@ -171,7 +170,7 @@ const routes = [
         // 移除不缓存路由
         store.commit('setRemoveNoCacheComponents', 'songSheetComment')
       }
-      next()
+      return true
     }
 
   },
@@ -193,7 +192,7 @@ const routes = [
         meta: {
           title: '搜索'
         },
-        beforeEnter (to, from, next) {
+        beforeEnter (to, from) {
           console.log(from.name)
           if (from.name === 'home') {
             // 添加不缓存路由
@@ -202,7 +201,7 @@ const routes = [
             // 移除不缓存路由
             store.commit('setRemoveNoCacheComponents', 'search')
           }
-          next()
+          return true
         }
       },
       // 搜索结果
@@ -213,9 +212,10 @@ const routes = [
         meta: {
           title: '搜索结果'
         },
-        beforeEnter (to, from, next) {
+        beforeEnter (to, from) {
           if (!store.state.searchKeywords) {
-            next({ path: '/search/searchPage', replace: true })
+            // 无关键词，重定向到搜索页
+            return { path: '/search/searchPage', replace: true }
           } else if (from.name === 'searchPage') {
             // 添加不缓存路由
             store.commit('setAddNoCacheComponents', 'search')
@@ -223,7 +223,7 @@ const routes = [
             // 移除不缓存路由
             store.commit('setRemoveNoCacheComponents', 'search')
           }
-          next()
+          return true
         }
 
       }
@@ -239,7 +239,7 @@ const routes = [
       isBack: false,
       title: '视频详情'
     },
-    beforeEnter (to, from, next) {
+    beforeEnter (to, from) {
       // 如果有歌曲播放就隐藏迷你播放器
       if (store.state.currentPlayIndex !== -1) {
         store.commit('setHideMiniPlayer', true)
@@ -251,7 +251,7 @@ const routes = [
         // 移除不缓存路由
         store.commit('setRemoveNoCacheComponents', 'videoInfo')
       }
-      next()
+      return true
     }
   },
   // 播放页面
@@ -280,7 +280,7 @@ const routes = [
     meta: {
       title: '评论列表'
     },
-    beforeEnter (to, from, next) {
+    beforeEnter (to, from) {
       if (from.name === 'singerAlbum' && !from.meta.isBack) {
         // 添加不缓存路由
         store.commit('setAddNoCacheComponents', 'albumComment')
@@ -288,7 +288,7 @@ const routes = [
         // 移除不缓存路由
         store.commit('setRemoveNoCacheComponents', 'albumComment')
       }
-      next()
+      return true
     }
 
   },
@@ -301,7 +301,7 @@ const routes = [
     meta: {
       title: '歌手详情'
     },
-    beforeEnter (to, from, next) {
+    beforeEnter (to, from) {
       if (from.name === 'home' || from.name === 'searchResult' || from.name === 'singerInfo' || (from.name === 'videoInfo' && !from.meta.isBack) || (from.name === 'singerMoreDesc' && !from.meta.isBack) || from.name === 'myFollow' || store.state.isPlayerClick) {
         // 添加不缓存路由
         store.commit('setAddNoCacheComponents', 'singerInfo')
@@ -309,7 +309,7 @@ const routes = [
         // 移除不缓存路由
         store.commit('setRemoveNoCacheComponents', 'singerInfo')
       }
-      next()
+      return true
     }
   },
   // 歌手更多描述
@@ -322,7 +322,7 @@ const routes = [
       isBack: false,
       title: '歌手介绍'
     },
-    beforeEnter (to, from, next) {
+    beforeEnter (to, from) {
       if (from.name === 'singerInfo') {
         // 添加不缓存路由
         store.commit('setAddNoCacheComponents', 'singerMoreDesc')
@@ -330,7 +330,7 @@ const routes = [
         // 移除不缓存路由
         store.commit('setRemoveNoCacheComponents', 'singerMoreDesc')
       }
-      next()
+      return true
     }
   },
 
@@ -344,7 +344,7 @@ const routes = [
       isBack: false,
       title: '专辑详情'
     },
-    beforeEnter (to, from, next) {
+    beforeEnter (to, from) {
       if (from.name === 'singerInfo' || from.name === 'home' || from.name === 'user' || from.name === 'searchResult') {
         // 添加不缓存路由
         store.commit('setAddNoCacheComponents', 'singerAlbum')
@@ -355,7 +355,7 @@ const routes = [
         // 移除不缓存路由
         store.commit('setRemoveNoCacheComponents', 'singerAlbum')
       }
-      next()
+      return true
     }
   },
   // 我的主页
@@ -363,7 +363,7 @@ const routes = [
     path: '/user',
     name: 'user',
     component: User,
-    beforeEnter (to, from, next) {
+    beforeEnter (to, from) {
       // 如果有歌曲播放就显示迷你播放器
       if (store.state.currentPlayIndex !== -1) {
         store.commit('setHideMiniPlayer', false)
@@ -376,7 +376,7 @@ const routes = [
         // 移除不缓存路由
         store.commit('setRemoveNoCacheComponents', 'user')
       }
-      next()
+      return true
     }
   },
   // 我的关注
@@ -385,10 +385,10 @@ const routes = [
     name: 'myFollow',
     component: MyFollow,
     meta: {
-      requireLogin: true, // 当前路由需要校验，不需要就不用写
+      requireLogin: true, // 需要登录
       title: '我的关注'
     },
-    beforeEnter (to, from, next) {
+    beforeEnter (to, from) {
       if (from.name === 'user') {
         // 添加不缓存路由
         store.commit('setAddNoCacheComponents', 'myFollow')
@@ -396,7 +396,7 @@ const routes = [
         // 移除不缓存路由
         store.commit('setRemoveNoCacheComponents', 'myFollow')
       }
-      next()
+      return true
     }
   },
   // 我的最爱
@@ -405,10 +405,10 @@ const routes = [
     name: 'myLike',
     component: MyLike,
     meta: {
-      requireLogin: true, // 当前路由需要校验，不需要就不用写
+      requireLogin: true, // 需要登录
       title: '我的最爱'
     },
-    beforeEnter (to, from, next) {
+    beforeEnter (to, from) {
       if (from.name === 'user') {
         // 添加不缓存路由
         store.commit('setAddNoCacheComponents', 'myLike')
@@ -416,7 +416,7 @@ const routes = [
         // 移除不缓存路由
         store.commit('setRemoveNoCacheComponents', 'myLike')
       }
-      next()
+      return true
     }
   },
   // 听歌排行
@@ -425,10 +425,10 @@ const routes = [
     name: 'playRanking',
     component: PlayRanking,
     meta: {
-      requireLogin: true, // 当前路由需要校验，不需要就不用写
+      requireLogin: true, // 需要登录
       title: '听歌排行'
     },
-    beforeEnter (to, from, next) {
+    beforeEnter (to, from) {
       if (from.name === 'user') {
         // 添加不缓存路由
         store.commit('setAddNoCacheComponents', 'playRanking')
@@ -436,7 +436,7 @@ const routes = [
         // 移除不缓存路由
         store.commit('setRemoveNoCacheComponents', 'playRanking')
       }
-      next()
+      return true
     }
 
   },
@@ -446,10 +446,10 @@ const routes = [
     name: 'userRecentPlay',
     component: UserRecentPlay,
     meta: {
-      requireLogin: true, // 当前路由需要校验，不需要就不用写
+      requireLogin: true, // 需要登录
       title: '最近播放'
     },
-    beforeEnter (to, from, next) {
+    beforeEnter (to, from) {
       if (from.name === 'user') {
         // 添加不缓存路由
         store.commit('setAddNoCacheComponents', 'recentPlay')
@@ -457,7 +457,7 @@ const routes = [
         // 移除不缓存路由
         store.commit('setRemoveNoCacheComponents', 'recentPlay')
       }
-      next()
+      return true
     }
   },
   // 个人主页编辑
@@ -466,10 +466,10 @@ const routes = [
     name: 'userEdit',
     component: UserEdit,
     meta: {
-      requireLogin: true, // 当前路由需要校验，不需要就不用写
+      requireLogin: true, // 需要登录
       title: '个人信息'
     },
-    beforeEnter (to, from, next) {
+    beforeEnter (to, from) {
       if (from.name === 'user') {
         // 添加不缓存路由
         store.commit('setAddNoCacheComponents', 'userEdit')
@@ -480,7 +480,7 @@ const routes = [
         // 移除不缓存路由
         store.commit('setRemoveNoCacheComponents', 'userEdit')
       }
-      next()
+      return true
     }
 
   },
@@ -490,15 +490,15 @@ const routes = [
     name: 'editNickname',
     component: UserEditNickname,
     meta: {
-      requireLogin: true, // 当前路由需要校验，不需要就不用写
+      requireLogin: true, // 需要登录
       title: '修改昵称',
       isBack: false
     },
-    beforeEnter (to, from, next) {
+    beforeEnter (to, from) {
       to.meta.isBack = false
       // 添加不缓存路由
       store.commit('setAddNoCacheComponents', 'editNickname')
-      next()
+      return true
     }
 
   },
@@ -508,19 +508,19 @@ const routes = [
     name: 'editPassword',
     component: UserEditPassword,
     meta: {
-      requireLogin: true, // 当前路由需要校验，不需要就不用写
+      requireLogin: true, // 需要登录
       title: '修改密码',
       isBack: false
     },
-    beforeEnter (to, from, next) {
+    beforeEnter (to, from) {
       to.meta.isBack = false
       // 添加不缓存路由
       store.commit('setAddNoCacheComponents', 'editPassword')
-      next()
+      return true
     }
 
   },
-  // 通配符路由必须放在最后，处理所有未匹配的路由
+  //处理所有未匹配的路由
   {
     path: '/:pathMatch(.*)*',
     redirect: '/home'
@@ -538,45 +538,51 @@ const router = createRouter({
     }
   }
 })
-router.beforeEach((to, from, next) => {
+
+// 全局前置守卫 
+router.beforeEach((to, from) => {
   if (to.matched.some(record => record.meta.requireLogin)) { // 判断该路由是否需要登录权限
     if (utils.isLogin()) { // 判断是否登录
-      next()
+      return true
     } else if (from.name !== 'login') {
-      utils.alertConfirm({ // 未登录跳转到登录页面
+      // 未登录，弹出确认框
+      return utils.alertConfirm({ // 未登录跳转到登录页面
           message: '您还没有登录哦',
           confirmButtonText: '去登陆',
           confirmButtonColor: '#FD4979'
         }).then(() => {
-          next({
+          // 用户点击确认，跳转登录页
+          return {
             name: 'login',
             query: {
               redirect: to.fullPath // 未登录则跳转到登陆界面，query:{ redirect: to.fullPath}表示把当前路由信息传递过去方便登录后跳转回来；
             }
-          })
+          }
         }).catch(() => {
+          // 用户取消，回到个人主页或取消导航
           if (from.name !== 'user') {
-            next({
-              name: 'user'
-            }) // 回到个人主页
+            return { name: 'user' } // 回到个人主页
+          } else {
+            return false // 取消导航
           }
         })
     } else {
+      // 已在登录页，但未登录，跳转到 user
       if (from.name !== 'user') {
-        next({
-          name: 'user'
-        }) // 回到个人主页
+        return { name: 'user' }
+      } else {
+        return true
       }
-      next()
     }
   } else {
- 
+    // 不需要登录的路由
     if (store.state.playerFullScreen) {
       store.commit('setPlayerFullScreen', false)
     }
-    next()
     // 恢复isPlayerClick(这个属性用来判断是否为播放页面点击，如果是则返回时显示全屏播放器)
     store.commit('setIsPlayerClick', false)
+    return true
   }
 })
+
 export default router

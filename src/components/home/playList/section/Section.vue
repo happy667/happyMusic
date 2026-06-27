@@ -134,7 +134,7 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.section-container>>>.scroll {
+.section-container :deep(.scroll){
   height: 9rem;
   overflow: hidden;
 }

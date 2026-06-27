@@ -218,7 +218,7 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.recommend-container>>>.title-container {
+.recommend-container :deep(.title-container){
   padding: 0 0.4rem;
 }
 

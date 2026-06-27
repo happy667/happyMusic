@@ -136,7 +136,7 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.recommend-swiper-container>>>.swiper-pagination-bullet-active {
+.recommend-swiper-container :deep(.swiper-pagination-bullet-active){
   background: $color-common;
 }
 

@@ -43,7 +43,7 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.comment-item-container>>>.avatar-wrapper {
+.comment-item-container :deep(.avatar-wrapper){
   width: 0.9rem;
   height: 0.9rem;
 }

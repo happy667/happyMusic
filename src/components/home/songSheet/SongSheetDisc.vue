@@ -511,30 +511,30 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.song-sheet-desc-container>>>.image .van-image {
+.song-sheet-desc-container :deep(.image .van-image){
   width: 100%;
 }
 
-.nav-bar>>>.van-nav-bar__title, .nav-bar>>>.van-icon {
+.nav-bar :deep(.van-nav-bar__title), .nav-bar :deep(.van-icon){
   color: #fff !important;
 }
 
-.song-sheet-desc-container>>>.van-skeleton {
+.song-sheet-desc-container :deep(.van-skeleton){
   padding: 0;
 }
 
-.song-sheet-desc-container>>>.van-skeleton__row {
+.song-sheet-desc-container :deep(.van-skeleton__row){
   width: 75% !important;
   height: 0.6rem;
   line-height: 0.6rem;
 }
 
-.song-sheet-desc-container>>>.van-skeleton__row:nth-child(2) {
+.song-sheet-desc-container :deep(.van-skeleton__row:nth-child(2) ){
   margin-top: 0.2rem;
   width: 100% !important;
 }
 
-.song-sheet-desc-container>>>.song-list-containter {
+.song-sheet-desc-container :deep(.song-list-containter){
   padding-bottom: 0.2rem;
 }
 

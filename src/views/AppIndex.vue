@@ -42,7 +42,7 @@ export default {
       if (vm.$store.state.currentPlayIndex !== -1) {
         vm.$store.commit('setHideMiniPlayer', true)
       }
-      next()
+      return true
     })
   },
   beforeRouteLeave (to, from, next) {
@@ -50,7 +50,7 @@ export default {
     if (this.$store.state.currentPlayIndex !== -1) {
       this.$store.commit('setHideMiniPlayer', false)
     }
-    next()
+    return true
   },
   data () {
     return {

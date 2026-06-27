@@ -268,7 +268,7 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.play-container>>>.singerList {
+.play-container :deep(.singerList){
   max-height: 6rem;
 }
 </style>

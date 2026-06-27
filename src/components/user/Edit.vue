@@ -387,11 +387,11 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.edit-container>>>.van-picker__cancel, .edit-container>>>.van-picker__confirm {
+.edit-container :deep(.van-picker__cancel), .edit-container :deep(.van-picker__confirm){
   color: $color-common;
 }
 
-.edit-container>>>.van-popup {
+.edit-container :deep(.van-popup){
   width: 90%;
 }
 
@@ -430,7 +430,7 @@ export default {
     }
   }
 
-  .address>>>.van-cell .van-cell__title {
+  .address :deep(.van-cell .van-cell__title){
     flex: 0.5;
   }
 }

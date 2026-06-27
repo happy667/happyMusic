@@ -86,13 +86,13 @@
   }
 </script>
 <style lang="stylus" scoped>
-  .search-result-container>>>.van-tabs {
+  .search-result-container :deep(.van-tabs){
     flex: 1;
     display: flex;
     flex-direction: column;
   }
 
-  .search-result-container>>>.van-tabs__content {
+  .search-result-container :deep(.van-tabs__content){
     flex: 1;
   }
 

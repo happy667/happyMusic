@@ -23,7 +23,7 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.comment-list-container>>>.comment-item-container {
+.comment-list-container :deep(.comment-item-container){
   &:first-child {
     padding-top: 0;
   }

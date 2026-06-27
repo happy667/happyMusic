@@ -15,11 +15,10 @@ export default {
     ...mapState(['oldVideo'])
   },
   beforeRouteLeave (to, from, next) {
-    console.log(1111)
     if (this.oldVideo.$data && this.oldVideo.$data.isPlay) {
       this.oldVideo.pauseCurrentVideo()
     }
-    next()
+    return true
   },
   components: {
     HomeHeader,
@@ -30,31 +29,31 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.home-container>>>.header-navBar-container {
+.home-container :deep(.header-navBar-container) {
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
-.home-container>>> .scroll {
+.home-container :deep(.scroll) {
   position: absolute;
   width: 100%;
   height: 100%;
   overflow: hidden;
 }
 
-.home-container>>>.van-tabs {
+.home-container :deep(.van-tabs) {
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
-.home-container>>>.van-tabs__content {
+.home-container :deep(.van-tabs__content) {
   position: relative;
   flex: 1;
 }
 
-.home-container>>>.van-tabs__content .van-tabs__track, .home-container>>>.van-tabs__content .van-tab__pane {
+.home-container :deep(.van-tabs__content .van-tabs__track), .home-container :deep(.van-tabs__content .van-tab__pane) {
   position: absolute;
   top: 0;
   bottom: 0;

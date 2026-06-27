@@ -435,27 +435,27 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.album-container>>>.list-box {
+.album-container :deep(.list-box){
   position: relative;
   flex: 1;
 }
 
-.album-container>>>.scroll {
+.album-container :deep(.scroll){
   position: absolute;
   width: 100%;
   height: 100%;
   overflow: hidden;
 }
 
-.album-container>>>.song-list-item-containter {
+.album-container :deep(.song-list-item-containter){
   padding: 0rem 0.2rem 0 0.4rem;
 }
 
-.album-container>>>.van-skeleton {
+.album-container :deep(.van-skeleton){
   padding: 0;
 }
 
-.album-container>>>.van-skeleton__row {
+.album-container :deep(.van-skeleton__row){
   margin: 0.2rem 0;
   width: 100% !important;
   height: 0.4rem;

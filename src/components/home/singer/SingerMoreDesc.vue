@@ -113,7 +113,7 @@ export default {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.singer-more-desc-container>>>.scroll {
+.singer-more-desc-container :deep(.scroll){
   position: absolute;
   width: 100%;
   height: 100%;
