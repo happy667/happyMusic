@@ -1,4 +1,4 @@
-import store from '@/store/index.js'
+import { useAppStore, usePlayerStore, useUserStore, useSearchStore } from '@/stores'
 import { createRouter, createWebHistory } from 'vue-router'
 import utils from '@/assets/common/js/utils.js'
 
@@ -119,12 +119,14 @@ const routes = [
       title: '歌单广场'
     },
     beforeEnter (to, from) {
+      const appStore = useAppStore();
+      const playerStore = usePlayerStore();
       if (from.name === 'home') {
         // 添加不缓存路由
-        store.commit('setAddNoCacheComponents', 'songSheetSquare')
+        appStore.addNoCacheComponent('songSheetSquare')
       } else {
         // 移除不缓存路由
-        store.commit('setRemoveNoCacheComponents', 'songSheetSquare')
+        appStore.removeNoCacheComponent('songSheetSquare')
       }
       return true
     }
@@ -140,15 +142,17 @@ const routes = [
       title: '歌单详情'
     },
     beforeEnter (to, from) {
+      const appStore = useAppStore();
+      const playerStore = usePlayerStore();
       if (from.name === 'home' || from.name === 'searchResult' || from.name === 'songSheetSquare' || from.name === 'user') {
         // 添加不缓存路由
-        store.commit('setAddNoCacheComponents', 'songSheetDisc')
+        appStore.addNoCacheComponent('songSheetDisc')
       } else if (from.name === 'songSheetComment' && !from.meta.isBack) {
         // 添加不缓存路由
-        store.commit('setAddNoCacheComponents', 'songSheetDisc')
+        appStore.addNoCacheComponent('songSheetDisc')
       } else {
         // 移除不缓存路由
-        store.commit('setRemoveNoCacheComponents', 'songSheetDisc')
+        appStore.removeNoCacheComponent('songSheetDisc')
       }
       return true
     }
@@ -163,12 +167,14 @@ const routes = [
       title: '评论列表'
     },
     beforeEnter (to, from) {
+      const appStore = useAppStore();
+      const playerStore = usePlayerStore();
       if (from.name === 'songSheetDisc' && !from.meta.isBack) {
         // 添加不缓存路由
-        store.commit('setAddNoCacheComponents', 'songSheetComment')
+        appStore.addNoCacheComponent('songSheetComment')
       } else {
         // 移除不缓存路由
-        store.commit('setRemoveNoCacheComponents', 'songSheetComment')
+        appStore.removeNoCacheComponent('songSheetComment')
       }
       return true
     }
@@ -193,13 +199,15 @@ const routes = [
           title: '搜索'
         },
         beforeEnter (to, from) {
+      const appStore = useAppStore();
+      const playerStore = usePlayerStore();
           console.log(from.name)
           if (from.name === 'home') {
             // 添加不缓存路由
-            store.commit('setAddNoCacheComponents', 'search')
+            appStore.addNoCacheComponent('search')
           } else {
             // 移除不缓存路由
-            store.commit('setRemoveNoCacheComponents', 'search')
+            appStore.removeNoCacheComponent('search')
           }
           return true
         }
@@ -213,15 +221,18 @@ const routes = [
           title: '搜索结果'
         },
         beforeEnter (to, from) {
-          if (!store.state.searchKeywords) {
+      const appStore = useAppStore();
+      const playerStore = usePlayerStore();
+          const searchStore = useSearchStore()
+          if (!searchStore.searchKeywords) {
             // 无关键词，重定向到搜索页
             return { path: '/search/searchPage', replace: true }
           } else if (from.name === 'searchPage') {
             // 添加不缓存路由
-            store.commit('setAddNoCacheComponents', 'search')
+            appStore.addNoCacheComponent('search')
           } else {
             // 移除不缓存路由
-            store.commit('setRemoveNoCacheComponents', 'search')
+            appStore.removeNoCacheComponent('search')
           }
           return true
         }
@@ -240,16 +251,18 @@ const routes = [
       title: '视频详情'
     },
     beforeEnter (to, from) {
+      const appStore = useAppStore();
+      const playerStore = usePlayerStore();
       // 如果有歌曲播放就隐藏迷你播放器
-      if (store.state.currentPlayIndex !== -1) {
-        store.commit('setHideMiniPlayer', true)
+      if (playerStore.currentPlayIndex !== -1) {
+        playerStore.hideMiniPlayer = true
       }
       if (from.name === 'home' || from.name === 'searchResult') {
         // 添加不缓存路由
-        store.commit('setAddNoCacheComponents', 'videoInfo')
+        appStore.addNoCacheComponent('videoInfo')
       } else {
         // 移除不缓存路由
-        store.commit('setRemoveNoCacheComponents', 'videoInfo')
+        appStore.removeNoCacheComponent('videoInfo')
       }
       return true
     }
@@ -281,12 +294,14 @@ const routes = [
       title: '评论列表'
     },
     beforeEnter (to, from) {
+      const appStore = useAppStore();
+      const playerStore = usePlayerStore();
       if (from.name === 'singerAlbum' && !from.meta.isBack) {
         // 添加不缓存路由
-        store.commit('setAddNoCacheComponents', 'albumComment')
+        appStore.addNoCacheComponent('albumComment')
       } else {
         // 移除不缓存路由
-        store.commit('setRemoveNoCacheComponents', 'albumComment')
+        appStore.removeNoCacheComponent('albumComment')
       }
       return true
     }
@@ -302,12 +317,14 @@ const routes = [
       title: '歌手详情'
     },
     beforeEnter (to, from) {
-      if (from.name === 'home' || from.name === 'searchResult' || from.name === 'singerInfo' || (from.name === 'videoInfo' && !from.meta.isBack) || (from.name === 'singerMoreDesc' && !from.meta.isBack) || from.name === 'myFollow' || store.state.isPlayerClick) {
+      const appStore = useAppStore();
+      const playerStore = usePlayerStore();
+      if (from.name === 'home' || from.name === 'searchResult' || from.name === 'singerInfo' || (from.name === 'videoInfo' && !from.meta.isBack) || (from.name === 'singerMoreDesc' && !from.meta.isBack) || from.name === 'myFollow' || playerStore.isPlayerClick) {
         // 添加不缓存路由
-        store.commit('setAddNoCacheComponents', 'singerInfo')
+        appStore.addNoCacheComponent('singerInfo')
       } else {
         // 移除不缓存路由
-        store.commit('setRemoveNoCacheComponents', 'singerInfo')
+        appStore.removeNoCacheComponent('singerInfo')
       }
       return true
     }
@@ -323,12 +340,14 @@ const routes = [
       title: '歌手介绍'
     },
     beforeEnter (to, from) {
+      const appStore = useAppStore();
+      const playerStore = usePlayerStore();
       if (from.name === 'singerInfo') {
         // 添加不缓存路由
-        store.commit('setAddNoCacheComponents', 'singerMoreDesc')
+        appStore.addNoCacheComponent('singerMoreDesc')
       } else {
         // 移除不缓存路由
-        store.commit('setRemoveNoCacheComponents', 'singerMoreDesc')
+        appStore.removeNoCacheComponent('singerMoreDesc')
       }
       return true
     }
@@ -345,15 +364,17 @@ const routes = [
       title: '专辑详情'
     },
     beforeEnter (to, from) {
+      const appStore = useAppStore();
+      const playerStore = usePlayerStore();
       if (from.name === 'singerInfo' || from.name === 'home' || from.name === 'user' || from.name === 'searchResult') {
         // 添加不缓存路由
-        store.commit('setAddNoCacheComponents', 'singerAlbum')
+        appStore.addNoCacheComponent('singerAlbum')
       } else if (from.name === 'albumComment' && !from.meta.isBack) {
         // 添加不缓存路由
-        store.commit('setAddNoCacheComponents', 'singerAlbum')
+        appStore.addNoCacheComponent('singerAlbum')
       } else {
         // 移除不缓存路由
-        store.commit('setRemoveNoCacheComponents', 'singerAlbum')
+        appStore.removeNoCacheComponent('singerAlbum')
       }
       return true
     }
@@ -364,17 +385,20 @@ const routes = [
     name: 'user',
     component: User,
     beforeEnter (to, from) {
+      const appStore = useAppStore();
+      const playerStore = usePlayerStore();
       // 如果有歌曲播放就显示迷你播放器
-      if (store.state.currentPlayIndex !== -1) {
-        store.commit('setHideMiniPlayer', false)
+      if (playerStore.currentPlayIndex !== -1) {
+        playerStore.hideMiniPlayer = false
       }
-      let user = store.state.user
+      const userStore = useUserStore()
+      let user = userStore.user
       if (from.name === 'home' || !user) {
         // 添加不缓存路由
-        store.commit('setAddNoCacheComponents', 'user')
+        appStore.addNoCacheComponent('user')
       } else {
         // 移除不缓存路由
-        store.commit('setRemoveNoCacheComponents', 'user')
+        appStore.removeNoCacheComponent('user')
       }
       return true
     }
@@ -389,12 +413,14 @@ const routes = [
       title: '我的关注'
     },
     beforeEnter (to, from) {
+      const appStore = useAppStore();
+      const playerStore = usePlayerStore();
       if (from.name === 'user') {
         // 添加不缓存路由
-        store.commit('setAddNoCacheComponents', 'myFollow')
+        appStore.addNoCacheComponent('myFollow')
       } else {
         // 移除不缓存路由
-        store.commit('setRemoveNoCacheComponents', 'myFollow')
+        appStore.removeNoCacheComponent('myFollow')
       }
       return true
     }
@@ -409,12 +435,14 @@ const routes = [
       title: '我的最爱'
     },
     beforeEnter (to, from) {
+      const appStore = useAppStore();
+      const playerStore = usePlayerStore();
       if (from.name === 'user') {
         // 添加不缓存路由
-        store.commit('setAddNoCacheComponents', 'myLike')
+        appStore.addNoCacheComponent('myLike')
       } else {
         // 移除不缓存路由
-        store.commit('setRemoveNoCacheComponents', 'myLike')
+        appStore.removeNoCacheComponent('myLike')
       }
       return true
     }
@@ -429,12 +457,14 @@ const routes = [
       title: '听歌排行'
     },
     beforeEnter (to, from) {
+      const appStore = useAppStore();
+      const playerStore = usePlayerStore();
       if (from.name === 'user') {
         // 添加不缓存路由
-        store.commit('setAddNoCacheComponents', 'playRanking')
+        appStore.addNoCacheComponent('playRanking')
       } else {
         // 移除不缓存路由
-        store.commit('setRemoveNoCacheComponents', 'playRanking')
+        appStore.removeNoCacheComponent('playRanking')
       }
       return true
     }
@@ -450,12 +480,14 @@ const routes = [
       title: '最近播放'
     },
     beforeEnter (to, from) {
+      const appStore = useAppStore();
+      const playerStore = usePlayerStore();
       if (from.name === 'user') {
         // 添加不缓存路由
-        store.commit('setAddNoCacheComponents', 'recentPlay')
+        appStore.addNoCacheComponent('recentPlay')
       } else {
         // 移除不缓存路由
-        store.commit('setRemoveNoCacheComponents', 'recentPlay')
+        appStore.removeNoCacheComponent('recentPlay')
       }
       return true
     }
@@ -470,15 +502,17 @@ const routes = [
       title: '个人信息'
     },
     beforeEnter (to, from) {
+      const appStore = useAppStore();
+      const playerStore = usePlayerStore();
       if (from.name === 'user') {
         // 添加不缓存路由
-        store.commit('setAddNoCacheComponents', 'userEdit')
+        appStore.addNoCacheComponent('userEdit')
       } else if (from.name === 'editNickname' && !from.meta.isBack) {
         // 添加不缓存路由
-        store.commit('setAddNoCacheComponents', 'userEdit')
+        appStore.addNoCacheComponent('userEdit')
       } else {
         // 移除不缓存路由
-        store.commit('setRemoveNoCacheComponents', 'userEdit')
+        appStore.removeNoCacheComponent('userEdit')
       }
       return true
     }
@@ -495,9 +529,11 @@ const routes = [
       isBack: false
     },
     beforeEnter (to, from) {
+      const appStore = useAppStore();
+      const playerStore = usePlayerStore();
       to.meta.isBack = false
       // 添加不缓存路由
-      store.commit('setAddNoCacheComponents', 'editNickname')
+      appStore.addNoCacheComponent('editNickname')
       return true
     }
 
@@ -513,9 +549,11 @@ const routes = [
       isBack: false
     },
     beforeEnter (to, from) {
+      const appStore = useAppStore();
+      const playerStore = usePlayerStore();
       to.meta.isBack = false
       // 添加不缓存路由
-      store.commit('setAddNoCacheComponents', 'editPassword')
+      appStore.addNoCacheComponent('editPassword')
       return true
     }
 
@@ -539,6 +577,8 @@ const router = createRouter({
   }
 })
 router.beforeEach((to, from) => {
+  const playerStore = usePlayerStore();
+  const userStore = useUserStore();
   if (to.matched.some(record => record.meta.requireLogin)) { // 判断该路由是否需要登录权限
     if (utils.isLogin()) { // 判断是否登录
       return true
@@ -574,11 +614,11 @@ router.beforeEach((to, from) => {
     }
   } else {
     // 不需要登录的路由
-    if (store.state.playerFullScreen) {
-      store.commit('setPlayerFullScreen', false)
+    if (playerStore.playerFullScreen) {
+      playerStore.playerFullScreen = false
     }
     // 恢复isPlayerClick(这个属性用来判断是否为播放页面点击，如果是则返回时显示全屏播放器)
-    store.commit('setIsPlayerClick', false)
+    playerStore.isPlayerClick = false
     return true
   }
 })

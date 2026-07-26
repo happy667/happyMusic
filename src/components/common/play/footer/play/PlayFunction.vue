@@ -21,29 +21,28 @@
 <script>
 import userApi from "@/api/user.js";
 import { ERR_OK } from "@/api/config.js";
-import { mapGetters, mapMutations, mapState } from "vuex";
+import { mapWritableState, mapState, mapActions } from 'pinia'
+
+import { useUserStore, usePlayerStore, useAppStore } from '@/stores'
 export default {
   computed: {
-    ...mapState(["user"]),
-    ...mapGetters(["currentSong"]),
+    ...mapWritableState(useUserStore, ['user']),
+    ...mapWritableState(usePlayerStore, ['isPlayerClick', 'playerFullScreen', 'songSpeedPopup', 'togglePlayList']),
+    ...mapWritableState(useAppStore, ['noCacheComponents']),
+    ...mapState(usePlayerStore, ['currentSong']),
     loveIcon() {
       return this.currentSong.isLike ? "icon-aixin" : "icon-icon-test";
     },
   },
   methods: {
-    ...mapMutations([
-      "setPlayerFullScreen",
-      "setAddNoCacheComponents",
-      "setIsPlayerClick",
-      "setSongSpeedPopup",
-    ]),
+    ...mapActions(useAppStore, ['addNoCacheComponent', 'removeNoCacheComponent']),
     // 点击评论
     handleCommentClick() {
       // 设置从播放器页面点击
-      this.setIsPlayerClick(true);
+      this.isPlayerClick = true;
       // 添加不缓存路由
-      this.setAddNoCacheComponents("songComment");
-      this.setPlayerFullScreen(false);
+      this.addNoCacheComponent("songComment");
+      this.playerFullScreen = false;
       if (this.$route.path !== `/songComment/${this.currentSong.id}`) {
         this.$router.push(`/songComment/${this.currentSong.id}`);
       }
@@ -51,10 +50,10 @@ export default {
     // 点击tv
     handleVideoClick() {
       // 设置从播放器页面点击
-      this.setIsPlayerClick(true);
+      this.isPlayerClick = true;
       // 添加不缓存路由
-      this.setAddNoCacheComponents("videoInfo");
-      this.setPlayerFullScreen(false);
+      this.addNoCacheComponent("videoInfo");
+      this.playerFullScreen = false;
       if (this.$route.path !== `/videoInfo/${this.currentSong.mv}`) {
         this.$router.push(`/videoInfo/${this.currentSong.mv}`);
       }
@@ -89,7 +88,7 @@ export default {
         });
     },
     handleSongSpeedClick() {
-      this.setSongSpeedPopup(true);
+      this.songSpeedPopup = true;
     },
   },
 };

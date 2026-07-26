@@ -25,7 +25,7 @@
                   <div
                     class="song-info"
                     :class="currentSong.id === item.id ? 'active' : ''"
-                  >
+                >
                     <p class="song-name">{{ item.name + " - " + item.singers }}</p>
                   </div>
                 </div>
@@ -41,7 +41,7 @@
               size="35"
               color="#fd4979"
               layer-color="#E2E2E2"
-            >
+          >
             </van-circle>
             <div v-if="!songLoading" class="icon">
               <i class="iconfont" :style="iconStyle" :class="playIcon"></i>
@@ -63,7 +63,9 @@
 <script>
 import Swiper from "swiper";
 import { DEFAULT_IMAGE } from "common/js/config.js";
-import { mapMutations, mapGetters, mapState, mapActions } from "vuex";
+import { mapWritableState, mapState, mapActions } from 'pinia'
+
+import { usePlayerStore, useAppStore } from '@/stores'
 let vm = null;
 export default {
   data() {
@@ -73,8 +75,10 @@ export default {
   },
   inject: ["playerParams"],
   computed: {
-    ...mapGetters(["currentSong"]),
-    ...mapState(["playing", "audio", "sequenceList", "currentPlayIndex", "songLoading"]),
+    ...mapState(usePlayerStore, ['currentSong']),
+    ...mapWritableState(usePlayerStore, ['playing', 'sequenceList', 'currentPlayIndex', 'songLoading']),
+    ...mapWritableState(useAppStore, ['audio']),
+    ...mapWritableState(usePlayerStore, ['playerFullScreen', 'isPlayerClick', 'togglePlayList']),
     playIcon() {
       return this.playing ? "icon-zanting" : "icon-bofang";
     },
@@ -109,15 +113,14 @@ export default {
   },
 
   methods: {
-    ...mapMutations(["setPlayerFullScreen", "setIsPlayerClick", "setTogglePlayList"]),
-    ...mapActions(["next", "prev", "handleTogglePlaying"]),
+    ...mapActions(usePlayerStore, ['next', 'prev', 'handleTogglePlaying']),
     handleShowFullPlay() {
-      this.setPlayerFullScreen(true);
-      this.setIsPlayerClick(false);
+      this.playerFullScreen = true;
+      this.isPlayerClick = false;
     },
     // 查看歌曲列表
     handlePlayList() {
-      this.setTogglePlayList(true);
+      this.togglePlayList = true;
     },
     // 初始化轮播图组件
     initSwiper() {

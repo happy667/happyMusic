@@ -40,8 +40,9 @@ import MiniPlay from "./play/MiniPlay";
 import PlayList from "@/components/home/playList/PlayList";
 import SongSpeed from "./play/SongSpeed";
 import { PLAY_MODE } from "@/assets/common/js/config.js";
-import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import { mapWritableState, mapState, mapActions } from 'pinia'
 
+import { usePlayerStore, useAppStore } from '@/stores'
 export default {
   data () {
     return {
@@ -65,14 +66,14 @@ export default {
       if (this.currentLyric) {
         this.currentLyric.stop();
         this.audio.currentTime = 0;
-        this.setCurrentLyric(null);
-        this.setCurrentPlayLyric("");
-        this.setCurrentLineNum(0);
+        this.currentLyric = null;
+        this.currentPlayLyric = "";
+        this.currentLineNum = 0;
       }
-      this.setPlaying(false);
+      this.playing = false;
       this.getSong(this.currentSong);
       this.scrobble(this.currentSong.id, this.currentSong.album.id);
-      this.setIsLoadPlayerImage(true);
+      this.isLoadPlayerImage = true;
     },
     playing (newPlaying) {
       const audio = this.audio;
@@ -116,7 +117,7 @@ export default {
       if (this.playerFullScreen === false) {
         // 等待关闭动画结束后再切换到图片状态
         setTimeout(() => {
-          this.setPlayerShowImage(true);
+          this.playerShowImage = true;
         }, 400); // fadeOut动画的持续时间是400ms
       }
     },
@@ -129,53 +130,16 @@ export default {
     this.t2 = null;
   },
   computed: {
-    ...mapState([
-      "playerFullScreen",
-      "songReady",
-      "playing",
-      "audio",
-      "currentPlayIndex",
-      "playList",
-      "playMode",
-      "sequenceList",
-      "currentLyric",
-      "isPlay",
-      "hideMiniPlayer",
-      "songLoading",
-      "songSpeed",
-      "songSpeedPopup",
-    ]),
-    ...mapGetters(["currentSong"]),
-    togglePlayList: {
-      get () {
-        return this.$store.state.togglePlayList;
-      },
-      set (newVal) {
-        this.$store.commit("setTogglePlayList", newVal);
-      },
-    },
+    ...mapWritableState(usePlayerStore, ['playerFullScreen', 'songReady', 'playing', 'currentPlayIndex', 'playList', 'playMode', 'sequenceList', 'currentLyric', 'isPlay', 'hideMiniPlayer', 'songLoading', 'songSpeed', 'songSpeedPopup', 'togglePlayList']),
+    ...mapWritableState(useAppStore, ['audio']),
+    ...mapState(usePlayerStore, ['currentSong']),
+
   },
   mounted () {
-    this.setAudio(this.$refs.audio);
+    this.audio = this.$refs.audio;
   },
   methods: {
-    ...mapMutations([
-      "setAudio",
-      "setTogglePlayList",
-      "setSongReady",
-      "setPlaying",
-      "setPlayMode",
-      "setPlayList",
-      "setCurrentPlayIndex",
-      "setSequenceList",
-      "setPlayerShowImage",
-      "setCurrentPlayLyric",
-      "setCurrentLineNum",
-      "setIsLoadPlayerImage",
-      "setCurrentLyric",
-      "setSongLoading",
-    ]),
-    ...mapActions(["deleteSong", "loop", "next", "prev", "handleTogglePlaying"]),
+    ...mapActions(usePlayerStore, ['deleteSong', 'loop', 'next', 'prev', 'handleTogglePlaying']),
     // 统一应用播放速度
     applyPlaybackRate () {
       if (this.audio) {
@@ -186,13 +150,13 @@ export default {
     },
     ready () {
       this.playerParams.duration = audio.duration;
-      this.setSongReady(true);
+      this.songReady = true;
     },
     error () {
-      this.setSongReady(true);
+      this.songReady = true;
     },
     async getSong (song) {
-      this.setSongLoading(true);
+      this.songLoading = true;
       this.playerParams.width = 0;
       try {
         const { data: res } = await songApi.getMusicUrl(song.id);
@@ -202,7 +166,7 @@ export default {
         if (!url) {
           song.st = -1;
           this.deleteSong(song);
-          this.setSongReady(true);
+          this.songReady = true;
           this.$toast("该歌曲暂时不能播放");
           return;
         }
@@ -215,11 +179,11 @@ export default {
           await this.$refs.FullScreenPlay.$refs.playSection.getLyric(this.currentSong.id);
         });
         if (this.currentLyric) this.currentLyric.play();
-        this.setPlaying(true);
+        this.playing = true;
       } catch (error) {
         this.$toast("获取歌曲失败");
       } finally {
-        this.setSongLoading(false);
+        this.songLoading = false;
         this.applyPlaybackRate();
       }
     },
@@ -233,13 +197,13 @@ export default {
     },
     changeMode () {
       const mode = (this.playMode + 1) % 3;
-      this.setPlayMode(mode);
+      this.playMode = mode;
       const list =
         mode === PLAY_MODE.random
           ? this.$utils.randomList(this.sequenceList)
           : this.sequenceList;
       this.resetCurrentIndex(list);
-      this.setPlayList(list);
+      this.playList = list;
       this.$toast(["列表循环", "单曲循环", "随机播放"][mode]);
     },
     scrobble (id, sourceId) {
@@ -247,7 +211,7 @@ export default {
     },
     resetCurrentIndex (list) {
       const index = list.findIndex((item) => item.id === this.currentSong.id);
-      this.setCurrentPlayIndex(index);
+      this.currentPlayIndex = index;
     },
     closeScroll () {
       document.body.style.overflow = "hidden";

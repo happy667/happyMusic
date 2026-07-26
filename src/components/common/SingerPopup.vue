@@ -19,7 +19,9 @@
 </template>
 <script>
 import SingerItem from "@/components/home/singer/SingerItem";
-import { mapMutations } from "vuex";
+import { mapWritableState, mapActions } from 'pinia'
+
+import { useSingerStore, useAppStore } from '@/stores'
 import { ERR_OK } from "@/api/config.js";
 import singerApi from "@/api/singer.js";
 export default {
@@ -39,6 +41,8 @@ export default {
     },
   },
   computed: {
+    ...mapWritableState(useSingerStore, ['singerCurrentIndex']),
+    ...mapWritableState(useAppStore, ['noCacheComponents']),
     // 显示弹出层
     _showPopup: {
       get() {
@@ -63,7 +67,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(["setSingerCurrentIndex", "setAddNoCacheComponents"]),
+    ...mapActions(useAppStore, ['addNoCacheComponent', 'removeNoCacheComponent']),
     // 选择歌手
     getSingerListImage() {
       if (this.isLoadImage) {
@@ -98,9 +102,9 @@ export default {
     handleSelect(item) {
       this.$emit("clickListItem", item);
       if (this.$route.path !== `/singerInfo/${item.id}`) {
-        this.setSingerCurrentIndex(0);
+        this.singerCurrentIndex = 0;
         // 添加不缓存路由
-        this.setAddNoCacheComponents("singerInfo");
+        this.addNoCacheComponent("singerInfo");
         this.$router.push(`/singerInfo/${item.id}`);
       }
     },

@@ -19,7 +19,10 @@ import { ERR_OK } from "@/api/config.js";
 import { USER_TOKEN, NEED_LOGIN_COMPONENTS } from "@/assets/common/js/config.js";
 import { getItem, clearItem } from "common/js/localStorage.js";
 import Player from "@/components/common/Player";
-import { mapActions, mapState, mapMutations, mapGetters } from "vuex";
+import { mapWritableState, mapState, mapActions } from 'pinia'
+
+import { useUserStore, useAppStore, usePlayerStore } from '@/stores'
+
 export default {
   provide() {
     return {
@@ -33,8 +36,9 @@ export default {
     };
   },
   computed: {
-    ...mapState(["user", "token", "noCacheComponents"]),
-    ...mapGetters(["currentSong"]),
+    ...mapWritableState(useUserStore, ['user', 'token']),
+    ...mapWritableState(useAppStore, ['noCacheComponents']),
+    ...mapState(usePlayerStore, ['currentSong']),
   },
   mounted() {
     if (this.token) {
@@ -51,8 +55,7 @@ export default {
     this.removeListenerNetWork();
   },
   methods: {
-    ...mapMutations(["setToken", "setLoginUser", "setUserLikeList"]),
-    ...mapActions(["getLoginUserInfo", "getUserLikeList"]),
+    ...mapActions(useUserStore, ['getLoginUserInfo', 'getUserLikeList']),
     reload() {
       this.isRouterAlive = false;
       this.$nextTick(() => {
@@ -79,14 +82,14 @@ export default {
         if (res.data.code === ERR_OK) {
           // 清空用户所有信息
           clearItem(USER_TOKEN);
-          this.setLoginUser(null);
-          this.setToken(null);
-          this.setUserLikeList(null);
+          this.user = null;
+          this.token = null;
+          this.userLikeList = null;
           let name = this.$route.name;
           // 判断当前路由是否为需要登录，如果是的话就刷新页面,否则跳转到用户首页
           if (NEED_LOGIN_COMPONENTS.includes(this.$route.name)) {
             // 添加不缓存路由
-            this.$store.commit("setAddNoCacheComponents", "user");
+            this.addNoCacheComponent("user");
             if (name === "user") {
               this.reload();
             } else {

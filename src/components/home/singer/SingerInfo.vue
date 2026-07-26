@@ -146,7 +146,9 @@ import Album from "@/assets/common/js/album.js";
 import overlay from "@/components/common/OverlayImage";
 import { ERR_OK } from "@/api/config.js";
 import "common/js/convert.js";
-import { mapState, mapMutations, mapGetters } from "vuex";
+import { mapWritableState, mapState, mapActions } from 'pinia'
+
+import { useUserStore, useSingerStore, usePlayerStore, useAppStore } from '@/stores'
 import Scroll from "@/components/common/Scroll";
 import { playlistMixin } from "@/assets/common/js/mixin.js";
 export default {
@@ -204,22 +206,17 @@ export default {
   },
 
   computed: {
-    ...mapState([
-      "user",
-      "singerCurrentIndex",
-      "playerFullScreen",
-      "singer",
-      "currentPlayIndex",
-      "isPlayerClick",
-      "hideMiniPlayer",
-    ]),
-    ...mapGetters(["currentSong"]),
+    ...mapWritableState(useUserStore, ['user']),
+    ...mapWritableState(useSingerStore, ['singerCurrentIndex', 'singer']),
+    ...mapWritableState(useAppStore, ['noCacheComponents']),
+    ...mapWritableState(usePlayerStore, ['playerFullScreen', 'currentPlayIndex', 'isPlayerClick', 'hideMiniPlayer']),
+    ...mapState(usePlayerStore, ['currentSong']),
     currentIndex: {
       get() {
         return this.singerCurrentIndex;
       },
       set(index) {
-        this.setSingerCurrentIndex(index);
+        this.singerCurrentIndex = index;
       },
     },
     followCount() {
@@ -257,17 +254,10 @@ export default {
     },
   },
   methods: {
-    ...mapMutations([
-      "setSingerCurrentIndex",
-      "setSinger",
-      "setPlayerFullScreen",
-      "setIsPlayerClick",
-      "setHideMiniPlayer",
-      "setAddNoCacheComponents",
-    ]),
+    ...mapActions(useAppStore, ['addNoCacheComponent', 'removeNoCacheComponent']),
     routerBack() {
       if (!this.playerFullScreen && this.isPlayerClick) {
-        this.setPlayerFullScreen(true);
+        this.playerFullScreen = true;
       }
       this.$utils.routerBack();
     },
@@ -484,7 +474,7 @@ export default {
         followCount: singer.followCount,
         followDay: singer.followDay,
       });
-      this.setSinger(newSinger);
+      this.singer = newSinger;
     },
     // 上拉加载
     handlePullingUp() {
@@ -587,7 +577,7 @@ export default {
       this.showImage = !this.showImage;
       this.handleHidePosition();
       if (this.currentPlayIndex !== -1) {
-        this.setHideMiniPlayer(!this.hideMiniPlayer);
+        this.hideMiniPlayer = !this.hideMiniPlayer;
       }
     },
     //点击背景图片
@@ -602,8 +592,8 @@ export default {
     },
     // 选择相似歌手
     selectSimSinger(item) {
-      this.setSingerCurrentIndex(0);
-      this.setAddNoCacheComponents("singerInfo");
+      this.singerCurrentIndex = 0;
+      this.addNoCacheComponent("singerInfo");
       this.$router.push(`/singerInfo/${item.id}`);
     },
     // 选中收藏歌手

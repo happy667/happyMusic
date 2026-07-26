@@ -158,10 +158,9 @@ import {
 import {
   clearItem
 } from 'common/js/localStorage.js'
-import {
-  mapState,
-  mapMutations
-} from 'vuex'
+import { mapWritableState, mapActions } from 'pinia'
+
+import { useUserStore, usePlayerStore, useAppStore } from '@/stores'
 import {
   ERR_OK
 } from '@/api/config.js'
@@ -197,7 +196,9 @@ export default {
   },
 
   computed: {
-    ...mapState(['user', 'currentPlayIndex']),
+    ...mapWritableState(useUserStore, ['user']),
+    ...mapWritableState(useAppStore, ['noCacheComponents']),
+    ...mapWritableState(usePlayerStore, ['currentPlayIndex']),
     // 性别处理
     genderValue () {
       let gender = ''
@@ -251,7 +252,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setLoginUser', 'setUserLikeList', 'setToken', 'setHideMiniPlayer']),
+    ...mapActions(useAppStore, ['addNoCacheComponent', 'removeNoCacheComponent']),
     // 返回上一个路由
     routerBack () {
       this.$utils.routerBack()
@@ -296,11 +297,11 @@ export default {
           if (res.data.code === ERR_OK) {
             // 清空用户所有信息
             clearItem(USER_TOKEN)
-            this.setLoginUser(null)
-            this.setUserLikeList(null)
-            this.setToken(null)
+            this.user = null
+            this.userLikeList = null
+            this.token = null
             // 添加不缓存路由
-            this.$store.commit('setAddNoCacheComponents', 'user')
+            this.addNoCacheComponent('user')
             this.$router.replace('/user') // 跳转到个人首页
           }
         })
