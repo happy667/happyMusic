@@ -54,7 +54,9 @@ import SearchVideo from "./comprehensive/SearchVideo";
 import searchApi from "@/api/search.js";
 import singerApi from "@/api/singer.js";
 
-import { mapState, mapMutations } from "vuex";
+import { mapWritableState, mapState, mapActions } from 'pinia'
+
+import { useSearchStore, useSingerStore, usePlayerStore } from '@/stores'
 export default {
   name: "searchResultComprehensive",
   data() {
@@ -67,19 +69,13 @@ export default {
     };
   },
   computed: {
-    ...mapState(["searchKeywords"]),
+    ...mapWritableState(useSearchStore, ['searchKeywords', 'searchCurrentIndex']),
   },
   mounted() {
     this.getSearchComprehensive();
     this.loading = true;
   },
   methods: {
-    ...mapMutations([
-      "setSearchCurrentIndex",
-      "setSingerCurrentIndex",
-      "setPlayerFullScreen",
-      "setSelectSearchWord",
-    ]),
     // 查询综合结果
     async getSearchComprehensive() {
       // 显示加载logo
@@ -315,7 +311,7 @@ export default {
 
     setCurrentIndex(index) {
       document.documentElement.scrollTop = 0;
-      this.setSearchCurrentIndex(index);
+      this.searchCurrentIndex = index;
     },
   },
 

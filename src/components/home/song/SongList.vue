@@ -23,9 +23,9 @@
 </template>
 <script>
 import SongItem from './SongItem'
-import {
-  mapGetters
-} from 'vuex'
+import { mapState } from 'pinia'
+
+import { usePlayerStore } from '@/stores'
 export default {
   props: {
     songsList: Array,
@@ -47,7 +47,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['currentSong'])
+    ...mapState(usePlayerStore, ['currentSong'])
   },
 
   methods: {

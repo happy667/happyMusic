@@ -16,7 +16,8 @@
       <template v-else>
         <section class="section">
           <div class="song"
-               @click="selectSong(song)">
+               @click="selectSong(song)"
+               v-if="song">
             <song-item :song="song"
                        :showImage="true"></song-item>
           </div>
@@ -47,11 +48,10 @@
 <script>
 import SongItem from '@/components/home/song/SongItem'
 import CommentList from '@/components/home/comment/CommentList'
-import {
-  mapState,
-  mapGetters,
-  mapMutations
-} from 'vuex'
+import NoResult from '@/components/common/NoResult'
+import { mapWritableState, mapState, mapActions } from 'pinia'
+
+import { usePlayerStore } from '@/stores'
 import Song from '@/assets/common/js/song.js'
 import Album from '@/assets/common/js/album.js'
 import Singer from '@/assets/common/js/singer.js'
@@ -82,18 +82,17 @@ export default {
     this.getSongComment(this.id)
   },
   computed: {
-    ...mapState(['playerFullScreen', 'isPlayerClick']),
-    ...mapGetters(['currentSong']),
+    ...mapWritableState(usePlayerStore, ['playerFullScreen', 'isPlayerClick']),
+    ...mapState(usePlayerStore, ['currentSong']),
     commentText () {
       return this.commentCount === 0 ? '' : this.commentCount
     }
   },
   methods: {
-    ...mapMutations(['setPlayerFullScreen', 'setIsPlayerClick']),
     // 返回上一个路由
     routerBack () {
       if (!this.playerFullScreen && this.currentSong && this.isPlayerClick) {
-        this.setPlayerFullScreen(true)
+        this.playerFullScreen = true
       }
       this.$utils.routerBack()
     },
@@ -112,6 +111,7 @@ export default {
     },
     // 上拉加载
     handlePullingUp () {
+      this.loading = true
       setTimeout(async () => {
         await this.getSongComment(this.id)
         if (this.commentList.length >= this.commentCount) {
@@ -128,7 +128,7 @@ export default {
         this.$utils.playMusic(item)
       }
       // 不是由播放器页面点击
-      this.setIsPlayerClick(false)
+      this.isPlayerClick = false
     },
     async getSongDetail (id) {
       // 获取歌曲详情
@@ -173,7 +173,8 @@ export default {
   },
   components: {
     SongItem,
-    CommentList
+    CommentList,
+    NoResult
   }
 }
 </script>

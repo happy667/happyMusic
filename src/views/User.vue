@@ -181,10 +181,9 @@ import {
 import {
   ERR_OK
 } from '@/api/config.js'
-import {
-  mapState,
-  mapMutations
-} from 'vuex'
+import { mapWritableState, mapState, mapActions } from 'pinia'
+
+import { useUserStore, usePlayerStore } from '@/stores'
 export default {
   name: 'user',
   data () {
@@ -202,7 +201,8 @@ export default {
   },
   mixins: [playlistMixin],
   computed: {
-    ...mapState(['user', 'userLikeList', 'currentPlayIndex']),
+    ...mapWritableState(useUserStore, ['user', 'userLikeList']),
+    ...mapWritableState(usePlayerStore, ['currentPlayIndex', 'hideMiniPlayer']),
     myLikeCount () {
       return this.userLikeList ? this.userLikeList.length + '首' : ''
     },
@@ -239,7 +239,6 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['setHideMiniPlayer']),
     // 返回上一个路由
     routerBack () {
       this.$router.push('/home')
@@ -344,7 +343,7 @@ export default {
     handleEdit () {
       // 如果有歌曲播放就隐藏迷你播放器
       if (this.currentPlayIndex !== -1) {
-        this.setHideMiniPlayer(true)
+        this.hideMiniPlayer = true
       }
       this.$router.push('/user/edit')
     },

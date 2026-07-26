@@ -26,13 +26,15 @@
 import AppTitle from "@/components/common/Title";
 import PlayAll from "@/components/common/PlayAll";
 import SongList from "@/components/home/song/SongList";
-import { mapGetters } from "vuex";
+import { mapState } from 'pinia'
+
+import { usePlayerStore } from '@/stores'
 export default {
   props: {
     song: Object,
   },
   computed: {
-    ...mapGetters(["currentSong"]),
+    ...mapState(usePlayerStore, ['currentSong']),
   },
   methods: {
     // 播放全部歌曲

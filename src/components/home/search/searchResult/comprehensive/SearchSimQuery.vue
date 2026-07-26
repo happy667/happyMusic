@@ -1,35 +1,36 @@
 <template>
-  <div class="search"
-       v-if="simQuery&&simQuery.length!==0">
+  <div class="search" v-if="simQuery && simQuery.length !== 0">
     <div class="search-album">
       <AppTitle title="大家还在搜"></AppTitle>
-      <search-list :list="simQuery"
-                   @select="handleSimSearch">
-      </search-list>
+      <search-list :list="simQuery" @select="handleSimSearch"> </search-list>
     </div>
   </div>
 </template>
 <script>
-import AppTitle from '@/components/common/Title'
-import SearchList from '@/components/home/search/SearchList'
-import { mapMutations } from 'vuex'
+import AppTitle from "@/components/common/Title";
+import SearchList from "@/components/home/search/SearchList";
+import { mapWritableState } from "pinia";
+
+import { useSearchStore } from "@/stores";
 export default {
+  computed: {
+    ...mapWritableState(useSearchStore, ["selectSearchWord"]),
+  },
   props: {
     simQuery: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   methods: {
-    ...mapMutations(['setSelectSearchWord']),
     // 处理相关查询
-    handleSimSearch (item) {
-      this.setSelectSearchWord(item)
-    }
+    handleSimSearch(item) {
+      this.selectSearchWord = item;
+    },
   },
   components: {
     AppTitle,
-    SearchList
-  }
-}
+    SearchList,
+  },
+};
 </script>

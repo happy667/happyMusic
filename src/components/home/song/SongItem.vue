@@ -63,10 +63,9 @@ import {
 import {
   DEFAULT_IMAGE
 } from 'common/js/config.js'
-import {
-  mapState,
-  mapGetters
-} from 'vuex'
+import { mapWritableState, mapState } from 'pinia'
+
+import { useUserStore, usePlayerStore } from '@/stores'
 export default {
   props: {
     song: Object,
@@ -90,8 +89,8 @@ export default {
     }
   },
   computed: {
-    ...mapState(['user', 'userLikeList']),
-    ...mapGetters(['currentSong']),
+    ...mapWritableState(useUserStore, ['user', 'userLikeList']),
+    ...mapState(usePlayerStore, ['currentSong']),
     loveIcon () {
       return this.song.isLike ? 'icon-aixin' : 'icon-icon-test'
     },

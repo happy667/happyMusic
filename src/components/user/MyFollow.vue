@@ -38,10 +38,9 @@ import userApi from '@/api/user.js'
 import {
   ERR_OK
 } from '@/api/config.js'
-import {
-  mapState,
-  mapMutations
-} from 'vuex'
+import { mapWritableState, mapState, mapActions } from 'pinia'
+
+import { useUserStore, useSingerStore } from '@/stores'
 import {
   playlistMixin
 } from '@/assets/common/js/mixin.js'
@@ -55,7 +54,7 @@ export default {
   },
   mixins: [playlistMixin],
   computed: {
-    ...mapState(['user'])
+    ...mapWritableState(useUserStore, ['user'])
   },
   mounted () {
     if (this.user) {
@@ -72,7 +71,6 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setSingerCurrentIndex']),
     // 返回上一个路由
     routerBack () {
       this.$utils.routerBack()
@@ -101,7 +99,7 @@ export default {
     },
     // 选择歌手
     selectItem (item) {
-      this.setSingerCurrentIndex(0)
+      this.singerCurrentIndex = 0
       this.$router.push(`/singerInfo/${item.id}`)
     },
     handleClickFollow (singer) {

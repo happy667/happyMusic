@@ -1,23 +1,17 @@
 <template>
   <div class="search-box-container">
-    <scroll ref="search_scroll"
-            @scroll="scroll"
-            :listenScroll="listenScroll">
-      <section class="container"
-               ref="container">
+    <scroll ref="search_scroll" @scroll="scroll" :listenScroll="listenScroll">
+      <section class="container" ref="container">
         <!-- 历史搜索 -->
-        <div class="old-search"
-             v-if="localSearchList&&localSearchList.length!==0">
+        <div class="old-search" v-if="localSearchList && localSearchList.length !== 0">
           <!-- 搜索头部 -->
           <div class="search-list-header">
             <p class="title">历史搜索</p>
-            <div class="icon"
-                 @click="clearLocalList">
+            <div class="icon" @click="clearLocalList">
               <i class="iconfont icon-shanchu"></i>
             </div>
           </div>
-          <search-list :list="localSearchList"
-                       @select="selectItem"></search-list>
+          <search-list :list="localSearchList" @select="selectItem"></search-list>
         </div>
         <!-- 热门搜索 -->
         <div class="recommend-search">
@@ -28,144 +22,142 @@
           <!-- loading -->
           <loading :loading="load" />
           <!-- 搜索列表 -->
-          <ul class="hot-search-list"
-              v-if="this.hotSearchList.length!==0">
-            <li class="hot-search-list-item"
-                @click="selectItem(item)"
-                v-for="(item,index) in hotSearchList"
-                :key="item.searchWord">
-              <div class="left"
-                   :class="index < 3 ? 'top' : ''">
-                <div class="index">{{index+1}}</div>
+          <ul class="hot-search-list" v-if="this.hotSearchList.length !== 0">
+            <li
+              class="hot-search-list-item"
+              @click="selectItem(item)"
+              v-for="(item, index) in hotSearchList"
+              :key="item.searchWord"
+            >
+              <div class="left" :class="index < 3 ? 'top' : ''">
+                <div class="index">{{ index + 1 }}</div>
                 <div class="search-info">
                   <div class="top">
-                    <span class="name">{{item.searchWord}}</span>
-                    <span class="icon"
-                          v-if="item.iconUrl">
-                      <img :src="item.iconUrl">
+                    <span class="name">{{ item.searchWord }}</span>
+                    <span class="icon" v-if="item.iconUrl">
+                      <img :src="item.iconUrl" />
                     </span>
                   </div>
-                  <p class="bottom">{{item.content?item.content:item.searchWord}}</p>
+                  <p class="bottom">
+                    {{ item.content ? item.content : item.searchWord }}
+                  </p>
                 </div>
               </div>
-              <div class="right">{{item.score}}</div>
+              <div class="right">{{ item.score }}</div>
             </li>
           </ul>
         </div>
       </section>
     </scroll>
   </div>
-
 </template>
 <script>
-import Scroll from '@/components/common/Scroll'
-import SearchList from './SearchList'
-import searchApi from '@/api/search.js'
-import {
-  ERR_OK
-} from '@/api/config.js'
-import {
-  mapState,
-  mapMutations
-} from 'vuex'
+import Scroll from "@/components/common/Scroll";
+import SearchList from "./SearchList";
+import searchApi from "@/api/search.js";
+import { ERR_OK } from "@/api/config.js";
+import { mapWritableState } from "pinia";
+
+import { useSearchStore } from "@/stores";
 import {
   getLocalList,
   clearLocalList,
-  addLocalSearch
-} from '@/assets/common/js/localStorage.js'
-import {
-  playlistMixin
-} from '@/assets/common/js/mixin.js'
+  addLocalSearch,
+} from "@/assets/common/js/localStorage.js";
+import { playlistMixin } from "@/assets/common/js/mixin.js";
 export default {
-  name: 'searchPage',
-  data () {
+  name: "searchPage",
+  data() {
     return {
       hotSearchList: [], // 热搜列表
       localSearchList: [], // 历史搜索列表
-      load: false
-    }
+      load: false,
+    };
   },
   mixins: [playlistMixin],
   computed: {
-    ...mapState(['searchKeywords', 'showSearchList'])
+    ...mapWritableState(useSearchStore, [
+      "searchKeywords",
+      "showSearchList",
+      "searchCurrentIndex",
+    ]),
   },
-  created () {
-    this.listenScroll = true
+  created() {
+    this.listenScroll = true;
   },
   watch: {
-    localSearchList () {
-      this.handlePlaylist(this.playList)
-    }
+    localSearchList() {
+      this.handlePlaylist(this.playList);
+    },
   },
-  mounted () {
+  mounted() {
     // 获取热门搜索
-    this.getHotSearchList()
+    this.getHotSearchList();
     if (getLocalList()) {
-      this.localSearchList = getLocalList()
+      this.localSearchList = getLocalList();
     } // 如果本地存在历史记录就赋值
   },
   methods: {
-    ...mapMutations(['setSearchKeywords', 'setSearchCurrentIndex', 'selectSearchItem', 'setShowSearchList']),
     // 获取热门搜索
-    async getHotSearchList () {
-      this.load = true
-      const {
-        data: res
-      } = await searchApi.getHotSearchList()
+    async getHotSearchList() {
+      this.load = true;
+      const { data: res } = await searchApi.getHotSearchList();
       if (res.code === ERR_OK) {
-        this.hotSearchList = res.data
-        this.load = false
+        this.hotSearchList = res.data;
+        this.load = false;
       }
     },
     // 选择搜索名称
-    selectItem (item) {
-      this.closeSearchList()
+    selectItem(item) {
+      this.closeSearchList();
       // 重置标签页到第一个
-      this.setSearchCurrentIndex(0)
-      this.setSearchKeywords(item.searchWord || item)
+      this.searchCurrentIndex = 0;
+      this.searchKeywords = item.searchWord || item;
       // 将搜索的内容保存在本地
-      addLocalSearch(this.searchKeywords)
-      this.$router.push('/search/searchResult')
+      addLocalSearch(this.searchKeywords);
+      this.$router.push("/search/searchResult");
     },
     // 清空历史搜索记录
-    clearLocalList () {
+    clearLocalList() {
       this.$confirmDialog({
-        message: '确定要清空历史搜索?',
-        confirmButtonColor: '#FD4979',
-        width: '265px'
-      }).then(() => {
-        clearLocalList()
-        this.localSearchList = [] // 清空当前数组
-      }).catch(() => { })
+        message: "确定要清空历史搜索?",
+        confirmButtonColor: "#FD4979",
+        width: "265px",
+      })
+        .then(() => {
+          clearLocalList();
+          this.localSearchList = []; // 清空当前数组
+        })
+        .catch(() => {});
     },
     // 关闭搜索列表
-    closeSearchList () {
+    closeSearchList() {
       if (this.showSearchList) {
-        this.setShowSearchList(false)
+        this.showSearchList = false;
       }
     },
-    scroll (pos) {
-      this.closeSearchList()
+    scroll(pos) {
+      this.closeSearchList();
     },
-    handlePlaylist (playList) {
+    handlePlaylist(playList) {
       // 适配播放器与页面底部距离
-      const bottom = playList.length > 0 ? '1.5rem' : ''
+      const bottom = playList.length > 0 ? "1.5rem" : "";
       this.$nextTick(() => {
-        this.$refs.container.style.paddingBottom = bottom
-        this.$refs.search_scroll.refresh()
-      })
-    }
+        this.$refs.container.style.paddingBottom = bottom;
+        this.$refs.search_scroll.refresh();
+      });
+    },
   },
-  activated () {
+  activated() {
     if (getLocalList()) {
-      this.localSearchList = getLocalList()
+      this.localSearchList = getLocalList();
     } // 如果本地存在历史记录就赋值
   },
   components: {
     Scroll,
-    SearchList
-  }
-}
+    SearchList,
+  },
+};
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';

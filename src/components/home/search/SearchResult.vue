@@ -38,33 +38,31 @@
   import SongSheet from './searchResult/SongSheet'
   import Video from './searchResult/Video'
   import Album from './searchResult/Album'
-  import {
-    mapState,
-    mapMutations
-  } from 'vuex'
-  import {
+  import { mapWritableState } from 'pinia'
+  
+import { useSearchStore } from '@/stores'
+import {
     playlistMixin
   } from '@/assets/common/js/mixin.js'
   export default {
     name: 'searchResult',
     mixins: [playlistMixin],
     computed: {
-      ...mapState(['searchKeywords', 'searchCurrentIndex', 'showSearchList']),
+      ...mapWritableState(useSearchStore, ['searchKeywords', 'searchCurrentIndex', 'showSearchList']),
       currentIndex: {
         get() {
           return this.searchCurrentIndex
         },
         set(index) {
-          this.setSearchCurrentIndex(index)
+          this.searchCurrentIndex = index
         }
       }
     },
     methods: {
-      ...mapMutations(['setSearchCurrentIndex', 'setShowSearchList']),
       // 关闭搜索列表
       closeSearchList() {
         if (this.showSearchList) {
-          this.setShowSearchList(false)
+          this.showSearchList = false
         }
       },
       handlePlaylist(playList) {

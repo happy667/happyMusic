@@ -55,7 +55,9 @@ import Song from "@/assets/common/js/song.js";
 import Album from "@/assets/common/js/album.js";
 import Singer from "@/assets/common/js/singer.js";
 import { ERR_OK } from "@/api/config.js";
-import { mapState, mapGetters, mapMutations } from "vuex";
+import { mapWritableState, mapState } from "pinia";
+
+import { useAppStore, usePlayerStore } from "@/stores";
 export default {
   data() {
     return {
@@ -69,8 +71,8 @@ export default {
     };
   },
   computed: {
-    ...mapState(["homeCurrentIndex"]),
-    ...mapGetters(["currentSong"]),
+    ...mapWritableState(useAppStore, ["homeCurrentIndex"]),
+    ...mapState(usePlayerStore, ["currentSong"]),
     load() {
       return this.banners.length === 0;
     },
@@ -86,7 +88,6 @@ export default {
     this.refresh();
   },
   methods: {
-    ...mapMutations(["setPlayerFullScreen", "setRank"]),
     // 获取轮播图数据
     async getBanner() {
       const { data: res } = await recommendApi.getBanner();

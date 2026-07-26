@@ -23,18 +23,20 @@
 <script>
 import AppTitle from '@/components/common/Title'
 import SingerList from '@/components/common/singer_desc/SingerList'
-import {
-  mapMutations
-} from 'vuex'
+import { mapWritableState, mapActions } from 'pinia'
+
+import { useSingerStore } from '@/stores'
 export default {
+  computed: {
+    ...mapWritableState(useSingerStore, ['singerCurrentIndex']),
+  },
   props: {
     singer: Object
   },
   methods: {
-    ...mapMutations(['setSingerCurrentIndex']),
     // 选择歌手
     selectSinger (item) {
-      this.setSingerCurrentIndex(0)
+      this.singerCurrentIndex = 0
       this.$router.push(`/singerInfo/${item.id}`)
     }
   },

@@ -38,7 +38,9 @@ import Follow from "@/components/common/Follow";
 import userApi from "@/api/user.js";
 import { ERR_OK } from "@/api/config.js";
 import { DEFAULT_SINGER_IMAGE } from "@/assets/common/js/config.js";
-import { mapState, mapMutations } from "vuex";
+import { mapWritableState, mapState, mapActions } from 'pinia'
+
+import { useUserStore, useSingerStore } from '@/stores'
 export default {
   props: {
     singer: Object,
@@ -60,7 +62,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(["user"]),
+    ...mapWritableState(useUserStore, ['user']),
     _singer() {
       return this.singer;
     },
@@ -80,7 +82,6 @@ export default {
     Follow,
   },
   methods: {
-    ...mapMutations(["setSingerCurrentIndex"]),
     // 选择歌手
     selectItem(item) {
       this.$emit("select", item);

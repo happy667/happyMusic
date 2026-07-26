@@ -63,10 +63,9 @@ import {
   checkPassword,
   PASSWORD_VALID_TEXT
 } from 'common/js/valid.js'
-import {
-  mapMutations
-} from 'vuex'
+import { mapWritableState, mapActions } from 'pinia'
 
+import { useUserStore } from '@/stores'
 export default {
   name: 'login',
   data () {
@@ -89,7 +88,6 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setLoginUser', 'setToken']),
     // 显示隐藏密码
     handleShowPwd () {
       this.showPassword = !this.showPassword
@@ -145,8 +143,8 @@ export default {
           if (res.data.code === ERR_OK) { // 登录成功
             // 保存token信息
             setItem(USER_TOKEN, res.data.token)
-            this.setToken(res.data.token)
-            this.setLoginUser(res.data.profile)
+            this.token = res.data.token
+            this.user = res.data.profile
 
             if (this.$route.query.redirect) { // 跳回到原来页面
               // 使用replace是为了不保留登录页面历史记录

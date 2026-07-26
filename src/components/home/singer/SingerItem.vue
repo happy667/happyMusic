@@ -28,7 +28,9 @@ import Follow from '@/components/common/Follow'
 import {
   DEFAULT_SINGER_IMAGE
 } from '@/assets/common/js/config.js'
-import { mapMutations } from 'vuex'
+import { mapWritableState, mapActions } from 'pinia'
+
+import { useSingerStore } from '@/stores'
 export default {
   props: {
     singer: Object,
@@ -54,7 +56,6 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setSingerCurrentIndex']),
     // 选择歌手
     selectItem (item) {
       this.$emit('select', item)

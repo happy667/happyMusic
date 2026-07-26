@@ -24,11 +24,14 @@
   </div>
 </template>
 <script>
-import { mapState, mapMutations, mapActions } from "vuex";
+import { mapWritableState, mapActions } from "pinia";
+
+import { usePlayerStore } from "@/stores";
 import { PLAY_MODE } from "@/assets/common/js/config.js";
 export default {
   computed: {
-    ...mapState(["playing", "playMode", "songLoading"]),
+    ...mapWritableState(usePlayerStore, ["playing", "playMode", "songLoading"]),
+    ...mapWritableState(usePlayerStore, ["togglePlayList"]),
     playIcon() {
       return this.playing ? "pause-circle-o" : "play-circle-o";
     },
@@ -41,11 +44,10 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(["setTogglePlayList"]),
-    ...mapActions(["handleTogglePlaying", "changeMode", "prev", "next"]),
+    ...mapActions(usePlayerStore, ["handleTogglePlaying", "changeMode", "prev", "next"]),
     // 查看歌曲列表
     handlePlayList() {
-      this.setTogglePlayList(true);
+      this.togglePlayList = true;
     },
   },
 };

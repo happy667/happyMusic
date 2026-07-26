@@ -19,19 +19,16 @@
   </header>
 </template>
 <script>
-import {
-  mapState,
-  mapMutations,
-  mapGetters,
-  mapActions
-} from 'vuex'
+import { mapWritableState, mapState, mapActions } from 'pinia'
+
+import { usePlayerStore } from '@/stores'
 import {
   PLAY_MODE
 } from '@/assets/common/js/config.js'
 export default {
   computed: {
-    ...mapState(['playMode', 'sequenceList', 'currentPlayIndex']),
-    ...mapGetters(['currentSong']),
+    ...mapWritableState(usePlayerStore, ['playMode', 'sequenceList', 'currentPlayIndex']),
+    ...mapState(usePlayerStore, ['currentSong']),
     playModeIcon () {
       return this.playMode === PLAY_MODE.sequence ? 'icon-xunhuanbofang' : this.playMode === PLAY_MODE.loop ? 'icon-danquxunhuan' : 'icon-suijibofang'
     },
@@ -40,8 +37,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setPlayMode', 'setCurrentPlayIndex', 'setPlayList']),
-    ...mapActions(['deleteSongList']),
+    ...mapActions(usePlayerStore, ['deleteSongList']),
     clearPlayList () {
       this.$confirmDialog({
         message: '确定要清空播放列表?',
@@ -56,7 +52,7 @@ export default {
     // 切换播放类型
     changeMode () {
       const mode = (this.playMode + 1) % 3
-      this.setPlayMode(mode)
+      this.playMode = mode
       let list = null
       if (mode === PLAY_MODE.random) { // 随机播放
         list = this.$utils.randomList(this.sequenceList)
@@ -64,12 +60,12 @@ export default {
         list = this.sequenceList
       }
       this.resetCurrentIndex(list)
-      this.setPlayList(list)
+      this.playList = list
     },
     // 重置当前索引
     resetCurrentIndex (list) {
       let index = list.findIndex(item => item.id === this.currentSong.id)
-      this.setCurrentPlayIndex(index)
+      this.currentPlayIndex = index
     }
   }
 }

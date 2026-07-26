@@ -47,7 +47,9 @@
 <script>
 import userApi from "@/api/user.js";
 import { ERR_OK } from "@/api/config.js";
-import { mapState } from "vuex";
+import { mapWritableState } from "pinia";
+
+import { useUserStore } from "@/stores";
 export default {
   props: {
     item: {
@@ -87,7 +89,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["user"]),
+    ...mapWritableState(useUserStore, ["user"]),
     loadBgStyle() {
       return !this.item.picUrl ? "background:#f2f3f5" : "";
     },

@@ -32,8 +32,9 @@
 
 <script>
 import { Slider, Popup } from 'vant'
-import { mapState, mapMutations } from 'vuex'
+import { mapWritableState, mapState, mapActions } from 'pinia'
 
+import { usePlayerStore } from '@/stores'
 export default {
   name: 'SongSpeed',
   data () {
@@ -42,18 +43,17 @@ export default {
     }
   },
   computed: {
-    ...mapState(['songSpeed', 'songSpeedPopup']),
+    ...mapWritableState(usePlayerStore, ['songSpeed', 'songSpeedPopup']),
     showPopup: {
       get () { return this.songSpeedPopup },
-      set (value) { this.setSongSpeedPopup(value) }
+      set (value) { this.songSpeedPopup = value }
     },
     currentSpeed: {
       get () { return this.songSpeed },
-      set (value) { this.setSongSpeed(value) }
+      set (value) { this.songSpeed = value }
     }
   },
   methods: {
-    ...mapMutations(['setSongSpeed', 'setSongSpeedPopup']),
     handleSpeedChange (speed) {
       this.currentSpeed = speed
       this.$toast('当前倍速:' + (speed === 1 ? '正常' : `${speed}X`))

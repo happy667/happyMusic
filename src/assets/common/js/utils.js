@@ -1,5 +1,5 @@
 import router from '@/router/index.js'
-import store from '@/store/index.js'
+import { usePlayerStore, useAppStore } from '@/stores'
 // import songApi from '@/api/song.js'
 import {
   getPositionTop
@@ -8,6 +8,8 @@ import {
   PLAY_MODE
 } from '@/assets/common/js/config.js'
 import { showToast, showConfirmDialog, showDialog } from 'vant'
+const getPlayerStore = () => usePlayerStore();
+const getAppStore = () => useAppStore();
 const utils = {
   playMusic (song, list = null, index) {
     if (song && song.st < 0) {
@@ -18,25 +20,25 @@ const utils = {
   },
   handlePlayList (song, list = null, index) {
     // 同步播放模式
-    let mode = store.state.playMode
+    let mode = getPlayerStore().playMode
     console.log(list)
     if (mode === PLAY_MODE.random) { // 随机播放
-      let list = utils.randomList(store.state.sequenceList)
-      store.commit('setPlayList', list)
+      let list = utils.randomList(getPlayerStore().sequenceList)
+      getPlayerStore().playList = list
     }
     if (list === null) { // 传入列表为空
-      let list = store.state.playList
+      let list = getPlayerStore().playList
       console.log(list)
       const listIndex = utils.findIndex(list, song)
       if (listIndex === -1) { // 如果不存在该歌曲就添加到歌曲列表中
         list.unshift(song)
-        store.dispatch('setSelectPlay', {
+        getPlayerStore().setSelectPlay({
           list,
           index: 0
         })
       } else {
         // 播放索引为index的歌曲
-        store.commit('setCurrentPlayIndex', listIndex)
+        getPlayerStore().currentPlayIndex = listIndex
       }
     } else {
       if (song) {
@@ -45,8 +47,8 @@ const utils = {
         list = list.filter(item => item.st >= 0)
         index = list.findIndex(item => item.id === song.id)
       }
-      store.state.songSpeed = 1; // 重置播放速度
-      store.dispatch('setSelectPlay', {
+      getPlayerStore().songSpeed = 1; // 重置播放速度
+      getPlayerStore().setSelectPlay({
         list,
         index
       })
@@ -54,8 +56,9 @@ const utils = {
   },
   // 重置播放进度
   resetPlayProgress () {
-    let state = store.state
-    state.audio.currentTime = 0 // 重新播放
+    let playerStore = getPlayerStore()
+    let state = playerStore
+    getAppStore().audio.currentTime = 0 // 重新播放
     if (state.currentLyric) {
       state.currentLyric.seek(0)
     }
@@ -68,13 +71,13 @@ const utils = {
     }
     utils.handlePlayList(null, list, 0)
     utils.resetPlayProgress()
-    store.commit('setPlayerFullScreen', true)
+    getPlayerStore().playerFullScreen = true
   },
   // 比较歌曲
   compareSong (item1, item2) {
     // 判断点击的是否是当前播放的歌曲
     if (item1.id === item2.id) {
-      store.commit('setPlayerFullScreen', true)
+      getPlayerStore().playerFullScreen = true
       return true
     } else {
       return false
@@ -84,7 +87,7 @@ const utils = {
   //   // 打乱数组
   //   let randomList = utils.randomList(list)
   //   // 获取当前播放歌曲
-  //   let currentPlaySong = store.state.currentSong
+  //   let currentPlaySong = getPlayerStore().currentSong
   //   // 播放全部歌曲，默认将第一首歌作为播放全部时的歌曲
   //   let willPlaySong = randomList[0]
   //   if (currentPlaySong) { // 存在当前播放歌曲
@@ -192,7 +195,7 @@ const utils = {
     })
   },
   isLogin () {
-    return store.state.token
+    return getPlayerStore().token
   },
   // 弹出跳转登录页面对话框
   async alertLogin (redirectPath) {

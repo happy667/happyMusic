@@ -55,7 +55,9 @@
 <script>
 import Scroll from "@/components/common/Scroll";
 import SingerItem from "@/components/common/singer_desc/SingerItem";
-import { mapState, mapMutations } from "vuex";
+import { mapWritableState, mapState, mapActions } from 'pinia'
+
+import { useAppStore, useSingerStore } from '@/stores'
 import singerApi from "@/api/singer.js";
 import Singer from "@/assets/common/js/singer.js";
 import { ERR_OK } from "@/api/config.js";
@@ -82,7 +84,7 @@ export default {
     this.pullUp = true;
   },
   computed: {
-    ...mapState(['homeCurrentIndex']),
+    ...mapWritableState(useAppStore, ['homeCurrentIndex']),
   },
   watch: {
     homeCurrentIndex (val) {
@@ -97,7 +99,6 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(["setSingerCurrentIndex"]),
     // 获取歌手列表
     async loadData () {
       if (this.hasLoaded) return;
@@ -157,7 +158,7 @@ export default {
     },
     // 选择歌手
     handleSelect (item) {
-      this.setSingerCurrentIndex(0);
+      this.singerCurrentIndex = 0;
       this.$router.push(`/singerInfo/${item.id}`);
     },
     // 上拉加载

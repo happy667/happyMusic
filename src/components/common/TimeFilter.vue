@@ -92,8 +92,9 @@
 
 <script>
 import { convertDate } from '@/assets/common/js/convert.js'
-import { mapMutations, mapState } from 'vuex'
+import { mapWritableState, mapState, mapActions } from 'pinia'
 
+import { usePlayerStore } from '@/stores'
 export default {
   name: 'TimeFilter',
   props: {
@@ -141,7 +142,7 @@ export default {
     this.initFilterCondition()
   },
   computed: {
-    ...mapState(['hideMiniPlayer']),
+    ...mapWritableState(usePlayerStore, ['hideMiniPlayer']),
     // 主弹窗显示控制（双向绑定）
     _showPopup: {
       get () {
@@ -180,14 +181,13 @@ export default {
     },
     _showPopup (val) {
       if (val) {
-        this.setHideMiniPlayer(true)
+        this.hideMiniPlayer = true
       } else {
-        this.setHideMiniPlayer(false)
+        this.hideMiniPlayer = false
       }
     }
   },
   methods: {
-    ...mapMutations(['setHideMiniPlayer']),
     // 打开日期选择器
     openPicker (type) {
       this.currentPickerType = type // 设置当前操作类型
@@ -229,7 +229,7 @@ export default {
         minPlayCount: minCount,
         maxPlayCount: maxCount
       })
-      this.setHideMiniPlayer(false)
+      this.hideMiniPlayer = false
     },
     //重置筛选数据
     handleReset () {

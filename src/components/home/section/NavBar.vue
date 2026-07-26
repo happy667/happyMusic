@@ -43,17 +43,19 @@ import Singer from "@/components/home/singer/Singer";
 import VideoList from "@/components/home/video/VideoList";
 import SwipeGuard from "@/components/common/SwipeGuard";
 import { playlistMixin } from "@/assets/common/js/mixin.js";
-import { mapState } from "vuex";
+import { mapWritableState } from "pinia";
+
+import { useAppStore } from "@/stores";
 export default {
   mixins: [playlistMixin],
   computed: {
-    ...mapState(["oldVideo"]),
+    ...mapWritableState(useAppStore, ["oldVideo", "homeCurrentIndex"]),
     currentIndex: {
       get() {
-        return this.$store.state.homeCurrentIndex;
+        return this.homeCurrentIndex;
       },
       set(index) {
-        this.$store.commit("setHomeCurrentIndex", index);
+        this.homeCurrentIndex = index;
       },
     },
   },

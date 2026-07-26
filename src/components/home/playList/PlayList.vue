@@ -1,5 +1,5 @@
 <template>
-  <van-popup :show="$store.state.togglePlayList"
+  <van-popup :show="togglePlayList"
              position="bottom"
              round
              @update:show="handleUpdateShow"
@@ -12,9 +12,14 @@
   </van-popup>
 </template>
 <script>
+import { mapWritableState } from 'pinia'
+import { usePlayerStore } from '@/stores'
 import PLHeader from './header/Header'
 import PLSection from './section/Section'
 export default {
+  computed: {
+    ...mapWritableState(usePlayerStore, ['togglePlayList']),
+  },
   components: {
     PLHeader,
     PLSection
@@ -22,7 +27,7 @@ export default {
   methods: {
     handleUpdateShow (val) {
       if (!val) {
-        this.$store.commit('setTogglePlayList', false)
+        this.togglePlayList = false
       }
     }
   }

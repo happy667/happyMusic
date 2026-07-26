@@ -54,9 +54,9 @@
 <script>
 import MyImage from '@/components/common/img/Image'
 import 'common/js/convert.js'
-import {
-  mapMutations
-} from 'vuex'
+import { mapWritableState, mapActions } from 'pinia'
+
+import { useSingerStore } from '@/stores'
 export default {
   props: {
     videoParams: {
@@ -66,7 +66,6 @@ export default {
 
   },
   methods: {
-    ...mapMutations(['setSingerCurrentIndex']),
     // 跳转到video详情页
     goToVideoInfo () {
       // 说明不是视频详情页
@@ -79,7 +78,7 @@ export default {
 
     // 选择歌手
     selectSinger (item) {
-      this.setSingerCurrentIndex(0)
+      this.singerCurrentIndex = 0
       this.$router.push(`/singerInfo/${item.id}`)
     }
   },

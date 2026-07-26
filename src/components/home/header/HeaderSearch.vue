@@ -19,7 +19,9 @@
 <script>
 import searchApi from "@/api/search.js";
 import { ERR_OK } from "@/api/config.js";
-import { mapState, mapMutations } from "vuex";
+import { mapWritableState, mapState, mapActions } from 'pinia'
+
+import { useUserStore, useSearchStore } from '@/stores'
 export default {
   name: "headerSearchContainer",
   data: function () {
@@ -28,7 +30,8 @@ export default {
     };
   },
   computed: {
-    ...mapState(["user"]),
+    ...mapWritableState(useUserStore, ['user']),
+    ...mapWritableState(useSearchStore, ['searchKeywords']),
     image() {
       return this.user ? this.user.avatarUrl : require("@/assets/images/logo.png");
     },
@@ -37,11 +40,10 @@ export default {
     this.getSearchDefault();
   },
   methods: {
-    ...mapMutations(["setSearchKeywords"]),
     // 点击搜索跳转搜索页面
     handleSearchClick() {
       // 清空搜索内容
-      this.setSearchKeywords("");
+      this.searchKeywords = "";
       console.log("点击搜索");
       this.$router.push("/search/searchPage");
     },

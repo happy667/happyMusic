@@ -1,67 +1,61 @@
 <template>
-  <div class="video-container"
-       ref="container">
+  <div class="video-container" ref="container">
     <!-- 播放器区域 -->
-    <div class="player"
-         ref="player"
-         :class="isFullScreen?'full':''"
-         @click.stop="handleClickScreen">
+    <div
+      class="player"
+      ref="player"
+      :class="isFullScreen ? 'full' : ''"
+      @click.stop="handleClickScreen"
+    >
       <!-- loading -->
-      <loading :loading="videoLoad"
-               height="5rem"
-               size="1.5rem"
-               noValue />
-      <div class="cover-image"
-           v-if="showCoverImage">
-        <img v-lazy="videoParams.coverUrl"
-             class="animated fadeIn">
+      <loading :loading="videoLoad" height="5rem" size="1.5rem" noValue />
+      <div class="cover-image" v-if="showCoverImage">
+        <img v-lazy="videoParams.coverUrl" class="animated fadeIn" />
       </div>
-      <div class="videoBox"
-           ref="videoBox">
-        <video :src="videoParams.url"
-               class="animated fadeIn"
-               preload='metadata'
-               ref="video"
-               muted
-               :id="videoParams.id"
-               playsinline=""
-               webkit-playsinline=""
-               x5-playsinline=""
-               x-webkit-airplay
-               x5-video-ignore-metadata
-               @canplay="handleCanplay"></video>
+      <div class="videoBox" ref="videoBox">
+        <video
+          :src="videoParams.url"
+          class="animated fadeIn"
+          preload="metadata"
+          ref="video"
+          muted
+          :id="videoParams.id"
+          playsinline=""
+          webkit-playsinline=""
+          x5-playsinline=""
+          x-webkit-airplay
+          x5-video-ignore-metadata
+          @canplay="handleCanplay"
+        ></video>
 
-        <div class="cover-controller"
-             ref="coverController">
+        <div class="cover-controller" ref="coverController">
           <!-- 头部导航 -->
-          <transition enter-active-class="animated fadeInDown faster"
-                      leave-active-class="animated fadeOutUp faster">
-
-            <div class="top-container"
-                 v-if="isClickScreen||isFirstPlay">
-              <div class="back"
-                   @click.stop="routerBack">
+          <transition
+            enter-active-class="animated fadeInDown faster"
+            leave-active-class="animated fadeOutUp faster"
+          >
+            <div class="top-container" v-if="isClickScreen || isFirstPlay">
+              <div class="back" @click.stop="routerBack">
                 <van-icon name="arrow-left" />
               </div>
               <div class="title">
-                <p :class="!isFirstPlay?'active':''">{{videoParams.name}}</p>
+                <p :class="!isFirstPlay ? 'active' : ''">{{ videoParams.name }}</p>
               </div>
             </div>
           </transition>
           <!-- 播放按钮 -->
-          <template v-if=" isFirstPlay">
-            <div class="big-btn"
-                 v-show="isFirstPlay">
+          <template v-if="isFirstPlay">
+            <div class="big-btn" v-show="isFirstPlay">
               <van-icon name="play-circle-o" />
             </div>
           </template>
           <template v-else>
-            <transition enter-active-class="animated fadeIn faster"
-                        leave-active-class="animated fadeOut faster">
-              <div class="big-btn"
-                   v-show="isClickScreen">
-                <van-icon @click.stop="handleTogglePlay"
-                          :name="playIcon" />
+            <transition
+              enter-active-class="animated fadeIn faster"
+              leave-active-class="animated fadeOut faster"
+            >
+              <div class="big-btn" v-show="isClickScreen">
+                <van-icon @click.stop="handleTogglePlay" :name="playIcon" />
               </div>
             </transition>
           </template>
@@ -72,8 +66,7 @@
                 <div class="play-controller">
                   <div class="play-left">
                     <!-- 播放次数 -->
-                    <div class="play-count"
-                         v-show="isFirstPlay">
+                    <div class="play-count" v-show="isFirstPlay">
                       <i class="iconfont icon-bofang"></i>
                       <span>{{ $filters.convertCount(videoParams.playCount) }}</span>
                     </div>
@@ -81,8 +74,7 @@
 
                   <div class="play-right">
                     <!-- 播放时长-->
-                    <div class="play-time"
-                         v-show="isFirstPlay">
+                    <div class="play-time" v-show="isFirstPlay">
                       <i class="iconfont icon-shichang"></i>
                       <span>{{ $filters.convertTime(duration) }}</span>
                     </div>
@@ -91,47 +83,41 @@
               </div>
             </template>
             <template v-else>
-              <transition enter-active-class="animated fadeInUp faster"
-                          leave-active-class="animated fadeOutDown faster">
-                <div class="controller-box"
-                     v-if="isClickScreen">
+              <transition
+                enter-active-class="animated fadeInUp faster"
+                leave-active-class="animated fadeOutDown faster"
+              >
+                <div class="controller-box" v-if="isClickScreen">
                   <div class="play-controller">
                     <div class="play-left">
                       <!-- 播放进度-->
-                      <div class="play-progress"
-                           v-show="isClickScreen">
-                        {{ $filters.convertTime(currenTime) }} / {{ $filters.convertTime(duration) }}
+                      <div class="play-progress" v-show="isClickScreen">
+                        {{ $filters.convertTime(currenTime) }} /
+                        {{ $filters.convertTime(duration) }}
                       </div>
-
                     </div>
                     <div class="play-right">
                       <!-- 全屏-->
-                      <div class="full"
-                           v-show="isClickScreen"
-                           @click.stop="handleFullScreen">
-                        <i class="iconfont"
-                           :class="fullIcon"></i>
+                      <div
+                        class="full"
+                        v-show="isClickScreen"
+                        @click.stop="handleFullScreen"
+                      >
+                        <i class="iconfont" :class="fullIcon"></i>
                       </div>
                     </div>
                   </div>
                 </div>
               </transition>
-
             </template>
-
           </div>
         </div>
       </div>
       <!-- 进度条-->
-      <div class="progress"
-           :style="progressStyle">
-        <van-slider active-color="#FD4979"
-                    @input="handleSlideChange"
-                    v-model="slideVal">
+      <div class="progress" :style="progressStyle">
+        <van-slider active-color="#FD4979" @input="handleSlideChange" v-model="slideVal">
           <template>
-            <div v-show="isClickScreen"
-                 :class="isClickScreen?'button':''">
-            </div>
+            <div v-show="isClickScreen" :class="isClickScreen ? 'button' : ''"></div>
           </template>
         </van-slider>
       </div>
@@ -140,20 +126,19 @@
   </div>
 </template>
 <script>
-import 'common/js/convert.js'
-import screenfull from 'screenfull'
-import {
-  mapMutations,
-  mapState
-} from 'vuex'
+import "common/js/convert.js";
+import screenfull from "screenfull";
+import { mapWritableState } from "pinia";
+
+import { useAppStore, usePlayerStore } from "@/stores";
 export default {
   props: {
     videoParams: {
       type: Object,
-      default: () => { }
-    }
+      default: () => {},
+    },
   },
-  data () {
+  data() {
     return {
       slideVal: 0,
       isFirstPlay: true, // 是否是第一次播放
@@ -162,104 +147,104 @@ export default {
       currenTime: 0, // 当前播放时长
       videoLoad: true, // video是否加载
       showCoverImage: true, // 是否显示封面
-      isFullScreen: false // 是否全屏
-    }
+      isFullScreen: false, // 是否全屏
+    };
   },
-  mounted () {
+  mounted() {
     // 获取播放时长时间
     this.$nextTick(() => {
-      this.video = this.$refs.video
+      this.video = this.$refs.video;
       // 关闭静音
       // 静音 告诉谷歌浏览器, 这个视频是安全的, 可以默默播放.
-      this.video.muted = false
-    })
+      this.video.muted = false;
+    });
   },
 
   computed: {
-    ...mapState(['oldVideo', 'playing', 'audio', 'playerFullScreen', 'isPlayerClick']),
-    playIcon () {
-      return this.isPlay ? 'pause-circle-o' : 'play-circle-o'
+    ...mapWritableState(useAppStore, ["oldVideo", "audio"]),
+    ...mapWritableState(usePlayerStore, ["playing", "playerFullScreen", "isPlayerClick"]),
+    playIcon() {
+      return this.isPlay ? "pause-circle-o" : "play-circle-o";
     },
-    duration () {
-      return this.videoParams.duration / 1000
+    duration() {
+      return this.videoParams.duration / 1000;
     },
-    fullIcon () {
-      return this.isFullScreen ? 'icon-suoxiao' : 'icon-fangda'
+    fullIcon() {
+      return this.isFullScreen ? "icon-suoxiao" : "icon-fangda";
     },
-    progressStyle () {
-      let transform = ''
+    progressStyle() {
+      let transform = "";
       // 全屏并且点击屏幕
       if (this.isFullScreen && this.isClickScreen) {
-        transform = `translate3d(0,-0.2rem,0)`
+        transform = `translate3d(0,-0.2rem,0)`;
       }
       return {
-        transform
-      }
-    }
+        transform,
+      };
+    },
   },
   watch: {
-    currenTime () {
+    currenTime() {
       // 当视频播放完了就初始化
       if (this.currenTime >= this.duration) {
-        this.initVideo(this.video)
+        this.initVideo(this.video);
       }
     },
-    isPlay () {
+    isPlay() {
       // 如果有歌曲播放就暂停
       if (this.playing && this.isPlay) {
-        this.setPlaying(false)
+        this.playing = false;
         this.$nextTick(() => {
-          this.audio.pause()
-        })
+          this.audio.pause();
+        });
       }
     },
-    isFullScreen () {
+    isFullScreen() {
       if (this.isFullScreen) {
-        this.setOpenFullScreenStyle()
-        this.$emit('openFullScreen')
+        this.setOpenFullScreenStyle();
+        this.$emit("openFullScreen");
       } else {
-        this.setCloseFullScreenStyle()
-        this.$emit('closeFullScreen')
+        this.setCloseFullScreenStyle();
+        this.$emit("closeFullScreen");
       }
-    }
+    },
   },
   methods: {
-    ...mapMutations(['setOldVideo', 'setPlaying', 'setPlayerFullScreen']),
     // 可以播放
-    handleCanplay () {
+    handleCanplay() {
       setTimeout(() => {
         this.$nextTick(() => {
-          this.videoLoad = false
+          this.videoLoad = false;
           // 更新时间
-          this.updateTime()
+          this.updateTime();
           // 如果网络为wifi则自动播放
-          let netWork = this.$utils.getNetworkType()
-          if (netWork === 'wifi') {
-            this.handleClickScreen() // 自动播放
+          let netWork = this.$utils.getNetworkType();
+          if (netWork === "wifi") {
+            this.handleClickScreen(); // 自动播放
           }
-        })
+        });
 
-        this.$forceUpdate() // 由于获取推荐视频中触发了多个异步请求,导致页面无法随时更新，需要刷新才可以重新渲染，使用forceUpdate解决这个问题，使他可以重新渲染
-      }, 20)
+        this.$forceUpdate(); // 由于获取推荐视频中触发了多个异步请求,导致页面无法随时更新，需要刷新才可以重新渲染，使用forceUpdate解决这个问题，使他可以重新渲染
+      }, 20);
     },
     // 更新时间
-    updateTime () {
+    updateTime() {
       this.video.ontimeupdate = () => {
         // 更新滚动条
-        let width = (this.video.currentTime / this.duration) * 100
-        this.currenTime = this.video.currentTime
-        this.slideVal = width
-      }
+        let width = (this.video.currentTime / this.duration) * 100;
+        this.currenTime = this.video.currentTime;
+        this.slideVal = width;
+      };
     },
     // 重置视频
-    initVideo (video) {
+    initVideo(video) {
       // 重置播放
-      this.currentTime = 0
-      this.slideVal = 0
-      this.isPlay = false
-      this.isClickScreen = false
-      this.isFirstPlay = true
-      this.showCoverImage = true
+      this.currentTime = 0;
+      this.slideVal = 0;
+      this.isPlay = false;
+      this.isClickScreen = false;
+      this.isFirstPlay = true;
+      this.showCoverImage = true;
       // video.load()
     },
     // 暂停上一个视频
@@ -271,138 +256,138 @@ export default {
     //   }
     // },
     // 暂停视频
-    pauseVideo (obj) {
+    pauseVideo(obj) {
       if (obj.isPlay) {
-        obj.isPlay = false
-        obj.video.pause()
+        obj.isPlay = false;
+        obj.video.pause();
       }
-      obj.isFirstPlay = true
-      obj.isClickScreen = false
+      obj.isFirstPlay = true;
+      obj.isClickScreen = false;
     },
     // 暂停当前视频
-    pauseCurrentVideo () {
+    pauseCurrentVideo() {
       if (this.video) {
-        this.pauseVideo(this)
+        this.pauseVideo(this);
       }
     },
     // 滑动进度条
-    handleSlideChange () {
-      this.video.currentTime = this.slideVal * this.duration / 100
+    handleSlideChange() {
+      this.video.currentTime = (this.slideVal * this.duration) / 100;
     },
     // 点击屏幕
-    handleToggleScreen () {
-      this.isClickScreen = !this.isClickScreen
-      this.hideBtn()
+    handleToggleScreen() {
+      this.isClickScreen = !this.isClickScreen;
+      this.hideBtn();
     },
     // 隐藏按钮
-    hideBtn (waiting = true) {
+    hideBtn(waiting = true) {
       if (waiting) {
-        if (this.timer) clearTimeout(this.timer)
-        this.timer = setTimeout(() => { // 超过三秒如果没有操作就关掉控件
+        if (this.timer) clearTimeout(this.timer);
+        this.timer = setTimeout(() => {
+          // 超过三秒如果没有操作就关掉控件
           if (this.isClickScreen) {
             // 判断是否为播放状态,如果是就隐藏
-            if (this.isPlay) this.isClickScreen = false
+            if (this.isPlay) this.isClickScreen = false;
           }
-        }, 5000)
+        }, 5000);
       } else {
         if (this.isClickScreen) {
           // 判断是否为播放状态,如果是就隐藏
-          if (this.isPlay) this.isClickScreen = false
+          if (this.isPlay) this.isClickScreen = false;
         }
       }
     },
     // 点击播放暂停
-    handleTogglePlay () {
-      this.isPlay = !this.isPlay
+    handleTogglePlay() {
+      this.isPlay = !this.isPlay;
       if (this.isPlay) {
-        this.video.play()
+        this.video.play();
       } else {
-        this.video.pause()
+        this.video.pause();
       }
-      this.hideBtn()
+      this.hideBtn();
     },
     // 处理点击屏幕
-    handleClickScreen () {
-      if (this.videoLoad) return
+    handleClickScreen() {
+      if (this.videoLoad) return;
       if (this.isFirstPlay) {
         // 暂停上一次正在播放的video
         // this.pauseOldVideo(this.oldVideo)
         if (this !== this.oldVideo) {
-          this.setOldVideo(this)
+          this.oldVideo = this;
         }
         // 隐藏封面
-        this.showCoverImage = false
+        this.showCoverImage = false;
         // 将video宽由1px变为100%(因为poster兼容性不好)
         // 设置video样式
-        this.setVideoStyle()
-        this.isFirstPlay = false
-        this.handleTogglePlay()
+        this.setVideoStyle();
+        this.isFirstPlay = false;
+        this.handleTogglePlay();
       } else {
-        this.handleToggleScreen()
+        this.handleToggleScreen();
       }
     },
     // 切换全屏播放
-    handleFullScreen () {
-      if (!screenfull.isEnabled) { // 如果不允许进入全屏，发出不允许提示
+    handleFullScreen() {
+      if (!screenfull.isEnabled) {
+        // 如果不允许进入全屏，发出不允许提示
         this.$toast({
-          message: '不支持全屏',
-          type: 'fail'
-        })
+          message: "不支持全屏",
+          type: "fail",
+        });
       } else {
         if (!this.isFullScreen) {
-          this.isFullScreen = true
-          this.hideBtn(false)
+          this.isFullScreen = true;
+          this.hideBtn(false);
         } else {
-          this.isFullScreen = false
+          this.isFullScreen = false;
         }
       }
     },
-    setVideoStyle () {
+    setVideoStyle() {
       this.$nextTick(() => {
-        let video = this.$refs.video
-        video.style.width = '100%'
-      })
+        let video = this.$refs.video;
+        video.style.width = "100%";
+      });
     },
     // 设置打开全屏样式
-    setOpenFullScreenStyle () {
-      let player = this.$refs.player
-      let w = document.documentElement.clientWidth || document.body.clientWidth
-      let h = document.documentElement.clientHeight || document.body.clientHeigth
-      let cha = Math.abs(h - w) / 2
-      player.style.width = h + 'px'
-      player.style.height = w + 'px'
-      player.style.top = window.scrollY + 'px'
-      player.style.transform = 'translate(-' + cha + 'px,' + cha + 'px) rotate(90deg)'
-      document.body.style.overflow = 'hidden'
+    setOpenFullScreenStyle() {
+      let player = this.$refs.player;
+      let w = document.documentElement.clientWidth || document.body.clientWidth;
+      let h = document.documentElement.clientHeight || document.body.clientHeigth;
+      let cha = Math.abs(h - w) / 2;
+      player.style.width = h + "px";
+      player.style.height = w + "px";
+      player.style.top = window.scrollY + "px";
+      player.style.transform = "translate(-" + cha + "px," + cha + "px) rotate(90deg)";
+      document.body.style.overflow = "hidden";
     },
     // 设置关闭全屏样式
-    setCloseFullScreenStyle () {
-      let player = this.$refs.player
-      player.style.width = '100%'
-      player.style.height = '5rem'
-      player.style.top = 0
-      player.style.transform = ''
-      document.body.style.overflow = ''
+    setCloseFullScreenStyle() {
+      let player = this.$refs.player;
+      player.style.width = "100%";
+      player.style.height = "5rem";
+      player.style.top = 0;
+      player.style.transform = "";
+      document.body.style.overflow = "";
     },
-    routerBack () {
+    routerBack() {
       if (this.isFullScreen) {
-        this.isFullScreen = false
+        this.isFullScreen = false;
       } else {
-        console.log(!this.playerFullScreen + "===========" + this.isPlayerClick)
+        console.log(!this.playerFullScreen + "===========" + this.isPlayerClick);
         if (!this.playerFullScreen && this.isPlayerClick) {
-          this.setPlayerFullScreen(true)
-          this.routerBack()
+          this.playerFullScreen = true;
+          this.routerBack();
         } else {
-          console.log(123)
-          this.$route.meta.isBack = true
-          this.$utils.routerBack()
+          console.log(123);
+          this.$route.meta.isBack = true;
+          this.$utils.routerBack();
         }
-
       }
-
-    }
-  }
-}
+    },
+  },
+};
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';

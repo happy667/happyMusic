@@ -27,7 +27,9 @@ import Singer from "@/assets/common/js/singer.js";
 import songApi from "@/api/song.js";
 import { ERR_OK } from "@/api/config.js";
 import { TARGET_TYPE } from "@/assets/common/js/config.js";
-import { mapGetters } from "vuex";
+import { mapState } from 'pinia'
+
+import { usePlayerStore } from '@/stores'
 export default {
   props: {
     // 轮播图数据
@@ -39,7 +41,7 @@ export default {
     this.initSwiper();
   },
   computed: {
-    ...mapGetters(["currentSong"]),
+    ...mapState(usePlayerStore, ['currentSong']),
     loadBgStyle() {
       return !this.banners ? "background:#f2f3f5" : "";
     },

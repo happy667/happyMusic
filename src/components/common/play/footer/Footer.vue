@@ -1,6 +1,5 @@
 <template>
-  <footer class="footer-container"
-          :style="playerShowImage?'':'paddingTop:0.5rem'">
+  <footer class="footer-container" :style="playerShowImage ? '' : 'paddingTop:0.5rem'">
     <!-- 功能区 -->
     <transition enter-active-class="animated fadeIn faster">
       <play-function v-show="playerShowImage"></play-function>
@@ -12,20 +11,22 @@
   </footer>
 </template>
 <script>
-import PlayFunction from './play/PlayFunction'
-import PlayProgress from './play/PlayProgress'
-import PlayController from './play/PlayController'
-import { mapState } from 'vuex'
+import PlayFunction from "./play/PlayFunction";
+import PlayProgress from "./play/PlayProgress";
+import PlayController from "./play/PlayController";
+import { mapWritableState } from "pinia";
+
+import { usePlayerStore } from "@/stores";
 export default {
   computed: {
-    ...mapState(['playerShowImage'])
+    ...mapWritableState(usePlayerStore, ["playerShowImage"]),
   },
   components: {
     PlayFunction,
     PlayProgress,
-    PlayController
-  }
-}
+    PlayController,
+  },
+};
 </script>
 <style lang="stylus" scoped>
 .footer-container {

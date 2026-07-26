@@ -43,7 +43,9 @@ import Song from "@/assets/common/js/song.js";
 import Album from "@/assets/common/js/album.js";
 import userApi from "@/api/user.js";
 import { ERR_OK } from "@/api/config.js";
-import { mapState } from "vuex";
+import { mapWritableState } from "pinia";
+
+import { useUserStore } from "@/stores";
 import { playlistMixin } from "@/assets/common/js/mixin.js";
 export default {
   name: "playRanking",
@@ -57,7 +59,7 @@ export default {
   },
   mixins: [playlistMixin],
   computed: {
-    ...mapState(["user"]),
+    ...mapWritableState(useUserStore, ["user"]),
   },
   provide() {
     return {

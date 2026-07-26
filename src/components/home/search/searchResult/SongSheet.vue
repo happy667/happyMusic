@@ -2,114 +2,124 @@
   <div class="search-songSheet-container">
     <!-- loading -->
     <loading :loading="pageLoading" />
-    
-    <van-list v-if="songSheet.songSheetList.length !== 0"
-              v-model="loading"
-              :finished="finished"
-              finished-text="没有更多了"
-              @load="handlePullingUp">
+
+    <van-list
+      v-if="songSheet.songSheetList.length !== 0"
+      v-model="loading"
+      :finished="finished"
+      finished-text="没有更多了"
+      @load="handlePullingUp"
+    >
       <song-sheet-list :list="songSheet.songSheetList"></song-sheet-list>
     </van-list>
-    
-    <no-result v-else-if="songSheet.songSheetCount === 0"
-               text="暂无相关歌单"
-               image="search"></no-result>
+
+    <no-result
+      v-else-if="songSheet.songSheetCount === 0"
+      text="暂无相关歌单"
+      image="search"
+    ></no-result>
   </div>
 </template>
 <script>
-import SongSheetList from '@/components/home/songSheet/SongSheetList'
-import NoResult from '@/components/common/NoResult'
-import searchApi from '@/api/search.js'
-import { ERR_OK } from '@/api/config.js'
-import {
-  SEARCH_TYPE
-} from '@/assets/common/js/config.js'
-import { mapState } from 'vuex'
+import SongSheetList from "@/components/home/songSheet/SongSheetList";
+import NoResult from "@/components/common/NoResult";
+import searchApi from "@/api/search.js";
+import { ERR_OK } from "@/api/config.js";
+import { SEARCH_TYPE } from "@/assets/common/js/config.js";
+import { mapWritableState, mapState } from "pinia";
+
+import { useSearchStore } from "@/stores";
 export default {
-  name: 'searchResultSongSheet',
-  data () {
+  name: "searchResultSongSheet",
+  data() {
     return {
       songSheet: {
         songSheetCount: -1,
         songSheetList: [],
-        isNull: false
+        isNull: false,
       },
       loading: false,
-      finished: false
-    }
+      finished: false,
+    };
   },
   computed: {
-    ...mapState(['searchKeywords', 'searchCurrentIndex']),
-    pageLoading () {
-      return this.songSheet.songSheetList.length === 0 && !this.songSheet.isNull
-    }
+    ...mapWritableState(useSearchStore, ["searchKeywords", "searchCurrentIndex"]),
+    pageLoading() {
+      return this.songSheet.songSheetList.length === 0 && !this.songSheet.isNull;
+    },
   },
-  mounted () {
+  mounted() {
     if (this.searchKeywords.trim().length === 0) {
-      this.songSheet.isNull = true
-      return
+      this.songSheet.isNull = true;
+      return;
     }
-    this.getSearchSongSheet()
+    this.getSearchSongSheet();
   },
   methods: {
     // 查询歌单
-    async getSearchSongSheet () {
+    async getSearchSongSheet() {
       // 显示加载logo
-      this.loading = true
+      this.loading = true;
       // 设置偏移量=歌单列表长度
-      let offset = this.songSheet.songSheetList.length
-      const { data: res } = await searchApi.getSearchResult(this.searchKeywords, SEARCH_TYPE.songSheet, offset, 12)
+      let offset = this.songSheet.songSheetList.length;
+      const { data: res } = await searchApi.getSearchResult(
+        this.searchKeywords,
+        SEARCH_TYPE.songSheet,
+        offset,
+        12
+      );
       if (res.code === ERR_OK) {
         // 没有查询到数据
 
         if (!res.result.playlists || res.result.playlistCount === 0) {
           if (this.songSheet.songSheetCount === -1) {
-            this.songSheet.songSheetCount = 0
+            this.songSheet.songSheetCount = 0;
           }
-          this.songSheet.isNull = true
-          return
+          this.songSheet.isNull = true;
+          return;
         }
         if (this.songSheet.songSheetCount === -1) {
-          this.songSheet.songSheetCount = res.result.playlistCount
+          this.songSheet.songSheetCount = res.result.playlistCount;
         }
 
         // 将每次查询的歌单追加到songSheet.songSheetList 中
         // 因为可能存在重复数据，所以需要去重处理
-        let list = this.songSheet.songSheetList.concat(res.result.playlists)
-        const map = new Map()
-        list = list.filter(item => !map.has(item.id) && map.set(item.id, 1))
-        this.songSheet.songSheetList = list
+        let list = this.songSheet.songSheetList.concat(res.result.playlists);
+        const map = new Map();
+        list = list.filter((item) => !map.has(item.id) && map.set(item.id, 1));
+        this.songSheet.songSheetList = list;
         // 关闭加载logo
-        this.loading = false
+        this.loading = false;
       }
     },
     // 上拉加载更多歌单
-    handlePullingUp () {
+    handlePullingUp() {
       // 加载时判断当前滚动的页面是否为该页面，因为其他页面在上拉加载时会干扰该页面
       if (this.searchCurrentIndex === 4) {
-        if (this.songSheet.isNull) { // 没有结果了
-          this.finished = true
-          return
+        if (this.songSheet.isNull) {
+          // 没有结果了
+          this.finished = true;
+          return;
         }
         setTimeout(async () => {
           if (this.songSheet.songSheetList.length >= this.songSheet.songSheetCount) {
-            this.finished = true
+            this.finished = true;
           } else {
-            await this.getSearchSongSheet()
+            await this.getSearchSongSheet();
           }
-          this.loading = false
-        }, 500)
+          this.loading = false;
+        }, 500);
       } else {
-        this.loading = false
+        this.loading = false;
       }
-    }
+    },
   },
 
   components: {
     SongSheetList,
-    NoResult
-  }
-}
+    NoResult,
+  },
+};
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';

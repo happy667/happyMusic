@@ -6,25 +6,27 @@
   </div>
 </template>
 <script>
-import HomeHeader from '@/components/home/Header'
-import HomeSection from '@/components/home/Section'
-import { mapState } from 'vuex'
+import HomeHeader from "@/components/home/Header";
+import HomeSection from "@/components/home/Section";
+import { mapWritableState } from "pinia";
+
+import { useAppStore } from "@/stores";
 export default {
-  name: 'home',
+  name: "home",
   computed: {
-    ...mapState(['oldVideo'])
+    ...mapWritableState(useAppStore, ["oldVideo"]),
   },
-  beforeRouteLeave (to, from) {
+  beforeRouteLeave(to, from) {
     if (this.oldVideo.$data && this.oldVideo.$data.isPlay) {
-      this.oldVideo.pauseCurrentVideo()
+      this.oldVideo.pauseCurrentVideo();
     }
-    return true
+    return true;
   },
   components: {
     HomeHeader,
-    HomeSection
-  }
-}
+    HomeSection,
+  },
+};
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';

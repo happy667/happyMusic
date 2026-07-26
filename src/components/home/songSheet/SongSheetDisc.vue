@@ -197,13 +197,9 @@ import TagList from '@/components/common/Tag'
 import {
   playlistMixin
 } from '@/assets/common/js/mixin.js'
-import {
-  mapMutations,
-  mapGetters,
-  mapActions,
-  mapState
-} from 'vuex'
+import { mapWritableState, mapState, mapActions } from 'pinia'
 
+import { useUserStore, usePlayerStore } from '@/stores'
 export default {
   name: 'songSheetDisc',
   props: {
@@ -212,7 +208,7 @@ export default {
   mixins: [playlistMixin],
   data () {
     return {
-      songSheetDisc: {},
+      songSheetDisc: null,
       showPosition: false,
       loading: true,
       showOverlay: false // 是否显示遮罩层
@@ -239,11 +235,12 @@ export default {
     this.removeScrollListner()
   },
   computed: {
-    ...mapState(['user', 'hideMiniPlayer', 'currentPlayIndex']),
-    ...mapGetters(['currentSong']),
+    ...mapWritableState(useUserStore, ['user']),
+    ...mapWritableState(usePlayerStore, ['hideMiniPlayer', 'currentPlayIndex']),
+    ...mapState(usePlayerStore, ['currentSong']),
     // 是否显示定位
     isShowPosition () {
-      if (!this.songSheetDisc.songs) return
+      if (!this.songSheetDisc || !this.songSheetDisc.songs) return false
       // 判断当前歌曲列表是否有正在播放的歌曲（-1表示没有)
       let index = this.$utils.findIndex(this.songSheetDisc.songs, this.currentSong)
       return this.showPosition && index !== -1
@@ -264,6 +261,7 @@ export default {
       return this.songSheetDisc ? this.songSheetDisc.followed : false
     },
     image () {
+      if (!this.songSheetDisc) return ''
       let bgImage = this.songSheetDisc.backgroundCoverUrl ? this.songSheetDisc.backgroundCoverUrl : this.songSheetDisc.picUrl
       return bgImage
     },
@@ -278,8 +276,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setRank', 'setHideMiniPlayer']),
-    ...mapActions(['setSelectPlay']),
+    ...mapActions(usePlayerStore, ['setSelectPlay']),
     // 返回上一个路由
     routerBack () {
       this.$route.meta.isBack = true
@@ -447,14 +444,14 @@ export default {
     openOverlay () {
       if (this.loading) return
       this.showOverlay = true
-      this.setHideMiniPlayer(true)
+      this.hideMiniPlayer = true
       // 不让页面滚动
       document.body.style.overflow = 'hidden'
     },
     // 关闭遮罩层
     closeOverlay () {
       this.showOverlay = false
-      this.setHideMiniPlayer(false)
+      this.hideMiniPlayer = false
       document.body.style.overflow = ''
     },
     // 监听页面滚动

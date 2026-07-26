@@ -2,15 +2,10 @@
   <div class="song-sheet-comment-container">
     <header class="header">
       <van-sticky>
-        <van-nav-bar :title="$route.meta.title"
-                     left-arrow
-                     @click-left="routerBack" />
+        <van-nav-bar :title="$route.meta.title" left-arrow @click-left="routerBack" />
       </van-sticky>
-
     </header>
-    <section class="container"
-             ref="container">
-
+    <section class="container" ref="container">
       <template v-if="!commentList">
         <!-- loading -->
         <loading />
@@ -23,23 +18,26 @@
               <div class="song-sheet-info">
                 <div class="container">
                   <div class="left-img">
-                    <div class="song-sheet-image"
-                         :style="loadBgStyle">
-                      <img v-lazy="songSheet.picUrl"
-                           :key="songSheet.picUrl"
-                           class="animated fadeIn" />
+                    <div class="song-sheet-image" :style="loadBgStyle">
+                      <img
+                        v-lazy="songSheet.picUrl"
+                        :key="songSheet.picUrl"
+                        class="animated fadeIn"
+                      />
                     </div>
                   </div>
                   <div class="right-info">
-                    <div class="song-sheet-name">{{songSheet.name}}</div>
-                    <div class="song-sheet-singer">创作者:{{songSheet.creator.nickname}}
+                    <div class="song-sheet-name">{{ songSheet.name }}</div>
+                    <div class="song-sheet-singer">
+                      创作者:{{ songSheet.creator.nickname }}
                     </div>
                   </div>
                 </div>
-                <div class="bg"
-                     v-lazy:background-image="bgImage"
-                     v-if="songSheet.picUrl">
-                </div>
+                <div
+                  class="bg"
+                  v-lazy:background-image="bgImage"
+                  v-if="songSheet.picUrl"
+                ></div>
               </div>
             </div>
           </div>
@@ -47,15 +45,16 @@
       </template>
       <!-- 评论列表 -->
       <template v-if="commentList">
-        <div class="comment"
-             ref="container">
-          <div class="comment-title">精彩评论 {{commentText}}</div>
-          <van-list v-model="loading"
-                    :immediate-check='false'
-                    :finished="finished"
-                    :finished-text="commentCount===0?'':'没有更多了'"
-                    @load="handlePullingUp">
-            <template v-if="commentList.length!==0">
+        <div class="comment" ref="container">
+          <div class="comment-title">精彩评论 {{ commentText }}</div>
+          <van-list
+            v-model="loading"
+            :immediate-check="false"
+            :finished="finished"
+            :finished-text="commentCount === 0 ? '' : '没有更多了'"
+            @load="handlePullingUp"
+          >
+            <template v-if="commentList.length !== 0">
               <comment-list :commentList="commentList"></comment-list>
             </template>
             <template v-else>
@@ -64,69 +63,64 @@
           </van-list>
         </div>
       </template>
-
     </section>
   </div>
 </template>
 <script>
-import SongSheetDetail from '@/assets/common/js/songSheetDetail.js'
-import User from '@/assets/common/js/user.js'
-import NoResult from '@/components/common/NoResult'
-import CommentList from '@/components/home/comment/CommentList'
-import recommendApi from '@/api/recommend.js'
-import {
-  ERR_OK
-} from '@/api/config.js'
-import {
-  playlistMixin
-} from '@/assets/common/js/mixin.js'
+import SongSheetDetail from "@/assets/common/js/songSheetDetail.js";
+import User from "@/assets/common/js/user.js";
+import NoResult from "@/components/common/NoResult";
+import CommentList from "@/components/home/comment/CommentList";
+import recommendApi from "@/api/recommend.js";
+import { ERR_OK } from "@/api/config.js";
+import { playlistMixin } from "@/assets/common/js/mixin.js";
 export default {
-  name: 'songSheetComment',
+  name: "songSheetComment",
   props: {
-    id: String
+    id: String,
   },
   mixins: [playlistMixin],
-  data () {
+  data() {
     return {
       loading: false, // 加载中
       finished: false, // 加载完所有数据
       commentList: null, // 评论列表
       commentCount: 0, // 评论数量
-      songSheet: {} // 歌单
-    }
+      songSheet: null, // 歌单
+    };
   },
-  mounted () {
+  mounted() {
     // 获取歌单详情
-    this.getSongSheetInfo(this.id)
-    this.getSongSheetComment(this.id)
+    this.getSongSheetInfo(this.id);
+    this.getSongSheetComment(this.id);
   },
   computed: {
-    commentText () {
-      return this.commentCount === 0 ? '' : this.commentCount
+    commentText() {
+      return this.commentCount === 0 ? "" : this.commentCount;
     },
-    bgImage () {
-      let bgImage = this.songSheet.backgroundCoverUrl ? this.songSheet.backgroundCoverUrl : this.songSheet.picUrl
-      return bgImage
+    bgImage() {
+      let bgImage = this.songSheet.backgroundCoverUrl
+        ? this.songSheet.backgroundCoverUrl
+        : this.songSheet.picUrl;
+      return bgImage;
     },
-    loadBgStyle () {
-      return !this.songSheet.picUrl ? "background:#f2f3f5" : ''
+    loadBgStyle() {
+      return !this.songSheet.picUrl ? "background:#f2f3f5" : "";
     },
   },
   methods: {
     // 返回上一个路由
-    routerBack () {
-      this.$route.meta.isBack = true
-      this.$utils.routerBack()
+    routerBack() {
+      this.$route.meta.isBack = true;
+      this.$utils.routerBack();
     },
     // 获取歌单详情
-    async getSongSheetInfo (id) {
-      const {
-        data: res
-      } = await recommendApi.getSongSheetById(id)
+    async getSongSheetInfo(id) {
+      const { data: res } = await recommendApi.getSongSheetById(id);
       if (res.code === ERR_OK) {
         // 处理歌单创作者名称
-        let playlist = res.playlist
-        let creator = res.playlist.creator
+        let playlist = res.playlist;
+        let creator = res.playlist.creator;
         let songSheet = new SongSheetDetail({
           id: playlist.id,
           picUrl: playlist.coverImgUrl,
@@ -135,49 +129,47 @@ export default {
           creator: new User({
             userId: creator.userId,
             nickname: creator.nickname,
-            avatarUrl: creator.avatarUrl
-          })
-        })
-        this.songSheet = songSheet
-        this.commentCount = playlist.commentCount
+            avatarUrl: creator.avatarUrl,
+          }),
+        });
+        this.songSheet = songSheet;
+        this.commentCount = playlist.commentCount;
       }
     },
     // 获取该歌单评论
-    async getSongSheetComment (id) {
-      let offset = this.commentList ? this.commentList.length : 0
-      let list = this.commentList ? this.commentList : []
-      const {
-        data: res
-      } = await recommendApi.getSongSheetComment(id, offset)
+    async getSongSheetComment(id) {
+      let offset = this.commentList ? this.commentList.length : 0;
+      let list = this.commentList ? this.commentList : [];
+      const { data: res } = await recommendApi.getSongSheetComment(id, offset);
       if (res.code === ERR_OK) {
-        this.commentCount = res.total
-        this.commentList = list.concat(res.comments)
+        this.commentCount = res.total;
+        this.commentList = list.concat(res.comments);
       }
     },
 
     // 上拉加载
-    handlePullingUp () {
+    handlePullingUp() {
       setTimeout(async () => {
-        await this.getSongSheetComment(this.id)
+        await this.getSongSheetComment(this.id);
         if (this.commentList.length >= this.commentCount) {
-          this.finished = true
+          this.finished = true;
         }
-        this.loading = false
-      }, 500)
+        this.loading = false;
+      }, 500);
     },
-    handlePlaylist (playList) {
+    handlePlaylist(playList) {
       // 适配播放器与页面底部距离
-      const bottom = playList.length > 0 ? '1.5rem' : ''
+      const bottom = playList.length > 0 ? "1.5rem" : "";
       this.$nextTick(() => {
-        this.$refs.container.style.paddingBottom = bottom
-      })
-    }
+        this.$refs.container.style.paddingBottom = bottom;
+      });
+    },
   },
   components: {
     CommentList,
-    NoResult
-  }
-}
+    NoResult,
+  },
+};
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';

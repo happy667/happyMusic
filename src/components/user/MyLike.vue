@@ -70,11 +70,9 @@ import userApi from '@/api/user.js'
 import {
   ERR_OK
 } from '@/api/config.js'
-import {
-  mapState,
-  mapActions,
-  mapGetters
-} from 'vuex'
+import { mapWritableState, mapState, mapActions } from 'pinia'
+
+import { useUserStore, usePlayerStore } from '@/stores'
 import {
   playlistMixin
 } from '@/assets/common/js/mixin.js'
@@ -103,8 +101,9 @@ export default {
     }
   },
   computed: {
-    ...mapState(['user', 'currentPlayIndex']),
-    ...mapGetters(['currentSong']),
+    ...mapWritableState(useUserStore, ['user']),
+    ...mapWritableState(usePlayerStore, ['currentPlayIndex']),
+    ...mapState(usePlayerStore, ['currentSong']),
     // 是否显示定位
     isShowPosition () {
       if (!this.songList) return
@@ -117,7 +116,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getUserLikeList']),
+    ...mapActions(useUserStore, ['getUserLikeList']),
     // 返回上一个路由
     routerBack () {
       this.$utils.routerBack()

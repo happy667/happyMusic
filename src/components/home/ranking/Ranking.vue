@@ -62,11 +62,14 @@ import OfficialList from "./OfficialList";
 import CommonList from "./List";
 import RankingTitle from "@/components/common/Title";
 import rankingApi from "@/api/ranking.js";
-import { mapState } from "vuex";
+import { mapWritableState, mapState } from 'pinia'
+
+import { useAppStore, usePlayerStore } from '@/stores'
 import { ERR_OK } from "@/api/config.js";
 export default {
   computed: {
-    ...mapState(["homeCurrentIndex", "currentPlayIndex"]),
+    ...mapWritableState(useAppStore, ['homeCurrentIndex']),
+    ...mapWritableState(usePlayerStore, ['currentPlayIndex']),
     load () {
       return this.rankingList1.length === 0;
     },

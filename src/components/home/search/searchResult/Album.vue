@@ -25,7 +25,9 @@ import NoResult from '@/components/common/NoResult'
 import searchApi from '@/api/search.js'
 import Album from '@/assets/common/js/album.js'
 import { ERR_OK } from '@/api/config.js'
-import { mapState } from 'vuex'
+import { mapWritableState } from 'pinia'
+
+import { useSearchStore } from '@/stores'
 import {
   SEARCH_TYPE
 } from '@/assets/common/js/config.js'
@@ -43,7 +45,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['searchKeywords', 'searchCurrentIndex']),
+    ...mapWritableState(useSearchStore, ['searchKeywords', 'searchCurrentIndex']),
     listenChange () {
       const { searchKeywords, searchCurrentIndex } = this
       return { searchKeywords, searchCurrentIndex }

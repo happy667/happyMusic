@@ -1,12 +1,9 @@
-import {
-  mapState
-} from 'vuex'
+import { mapWritableState } from 'pinia'
+import { usePlayerStore } from '@/stores'
 
 export const playlistMixin = {
   computed: {
-    ...mapState([
-      'playList'
-    ])
+    ...mapWritableState(usePlayerStore, ['playList'])
   },
   mounted() {
     this.handlePlaylist(this.playList)

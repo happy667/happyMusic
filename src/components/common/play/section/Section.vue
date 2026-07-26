@@ -53,12 +53,9 @@ import {
 import {
   ERR_OK
 } from '@/api/config.js'
-import {
-  mapGetters,
-  mapState,
-  mapMutations
-} from 'vuex'
+import { mapWritableState, mapState, mapActions } from 'pinia'
 
+import { usePlayerStore } from '@/stores'
 export default {
   data () {
     return {
@@ -68,8 +65,8 @@ export default {
   },
   inject: ['playerParams'],
   computed: {
-    ...mapState(['playing', 'playerShowImage', 'currentLyric', 'currentLineNum', 'currentPlayLyric', 'playerFullScreen']),
-    ...mapGetters(['currentSong']),
+    ...mapWritableState(usePlayerStore, ['playing', 'playerShowImage', 'currentLyric', 'currentLineNum', 'currentPlayLyric', 'playerFullScreen']),
+    ...mapState(usePlayerStore, ['currentSong']),
     cdCls () {
       return this.playing ? 'play' : 'play pause'
     },
@@ -82,8 +79,6 @@ export default {
 
   },
   methods: {
-    ...mapMutations(['setPlayerShowImage', 'setCurrentLyric', 'setCurrentLineNum', 'setCurrentPlayLyric']),
-
 
     // 获取歌词
     getLyric (id) {
@@ -95,7 +90,7 @@ export default {
           // 没有歌词
           if (res.nolyric || !res.lrc.lyric) {
             this.text = '暂无歌词'
-            this.setCurrentLyric(null)
+            this.currentLyric = null
           } else {
             // 先解析歌词
             let lyric = res.lrc.lyric
@@ -107,11 +102,11 @@ export default {
               //同步歌词和翻译
               this.handleSynchronousTranslation(currentLyric, translateLyric)
             }
-            this.setCurrentLyric(currentLyric)
+            this.currentLyric = currentLyric
             // 若解析出来没有歌词说明该歌曲没有歌词
             if (currentLyric.lines.length === 1) {
               this.text = currentLyric.lines[0].txt
-              this.setCurrentLyric(null)
+              this.currentLyric = null
             }
 
             if (this.playing && this.currentLyric) {
@@ -127,8 +122,8 @@ export default {
       }).catch((e) => {
         console.log(e)
         this.text = '暂无歌词'
-        this.setCurrentLyric(null)
-        this.setCurrentLineNum(0)
+        this.currentLyric = null
+        this.currentLineNum = 0
       })
     },
     // lyric-parse中的方法
@@ -136,7 +131,7 @@ export default {
       lineNum,
       txt
     }) {
-      this.setCurrentLineNum(lineNum)
+      this.currentLineNum = lineNum
       if (lineNum > 4) {
         if (this.currentLyric) {
           let lineEl = this.$refs.lyricLine[lineNum - 4] // 滚动到元素
@@ -147,7 +142,7 @@ export default {
           this.$refs.lyricList.scrollTo(0, 0, 1000) // 滚动到顶部
         }
       }
-      this.setCurrentPlayLyric(txt)
+      this.currentPlayLyric = txt
     },
     refresh () {
       if (this.$refs.lyricList) {
@@ -158,7 +153,7 @@ export default {
     },
     // 歌词和图片
     toggleImage () {
-      this.setPlayerShowImage(!this.playerShowImage)
+      this.playerShowImage = !this.playerShowImage
     },
     //同步歌词和翻译
     handleSynchronousTranslation (lyric, tlyric) {

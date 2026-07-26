@@ -39,9 +39,9 @@
 import NoResult from '@/components/common/NoResult'
 import AppTitle from '@/components/common/Title'
 import SingerSwiperList from '@/components/common/singerSwiper/SingerList'
-import {
-  mapMutations
-} from 'vuex'
+import { mapWritableState, mapActions } from 'pinia'
+
+import { useSingerStore } from '@/stores'
 export default {
   props: {
     singerDesc: {
@@ -62,7 +62,6 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setSingerCurrentIndex']),
     handleClickTitle () {
       this.$emit('goToIntroduce')
     },

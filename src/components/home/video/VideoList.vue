@@ -27,7 +27,9 @@ import videoApi from "@/api/video.js";
 import singerApi from "@/api/singer.js";
 import Video from "@/assets/common/js/video.js";
 import { ERR_OK } from "@/api/config.js";
-import { mapState } from "vuex";
+import { mapWritableState } from "pinia";
+
+import { useAppStore } from "@/stores";
 const LIMIT = 3; //一次请求的数据
 export default {
   data() {
@@ -56,7 +58,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(["homeCurrentIndex"]),
+    ...mapWritableState(useAppStore, ["homeCurrentIndex"]),
   },
   watch: {
     homeCurrentIndex(val) {
