@@ -6,7 +6,7 @@
 
 - vue
 - vue-cli
-- vuex
+- pinia
 - vue-router
 - vue-lazyLoad
 - vant
