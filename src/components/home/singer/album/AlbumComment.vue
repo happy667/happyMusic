@@ -90,7 +90,7 @@ export default {
       finished: false, // 加载完所有数据
       commentList: null, // 评论列表
       commentCount: 0, // 评论数量
-      album: {} // 专辑
+      album: null // 专辑
     }
   },
   mounted () {

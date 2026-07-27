@@ -6,78 +6,74 @@
       <loading />
     </template>
     <template v-else>
-      <div class="video"
-           ref="video">
-        <video-component :videoParams="video"
-                         :class="fixed?'fixed':''"
-                         @openFullScreen="fixed=false"
-                         @closeFullScreen="fixed=true"
-                         @toggleInfo="handleToggleInfo">
+      <div class="video" ref="video">
+        <video-component
+          :videoParams="video"
+          :class="fixed ? 'fixed' : ''"
+          @openFullScreen="fixed = false"
+          @closeFullScreen="fixed = true"
+          @toggleInfo="handleToggleInfo"
+        >
         </video-component>
         <div class="fixed-box"></div>
       </div>
       <section class="container">
         <!-- 视频信息 -->
-        <div class="video-info"
-             v-if="!loadVideoInfo">
-          <div class="info-top"
-               @click="handleToggleInfo">
+        <div class="video-info" v-if="!loadVideoInfo">
+          <div class="info-top" @click="handleToggleInfo">
             <div class="content">
               <!-- 视频标题 -->
               <div class="title">
                 <div class="icon">
-                  <van-tag size="large"
-                           plain
-                           color="#FD4979">mv</van-tag>
+                  <van-tag size="large" plain color="#FD4979">mv</van-tag>
                 </div>
-                <div class="name">{{video.name}}</div>
+                <div class="name">{{ video.name }}</div>
               </div>
               <div class="right-icon">
                 <van-icon :name="rightIcon" />
               </div>
-
             </div>
 
             <!-- 视频描述 -->
-            <div class="video-desc-container animated fadeIn"
-                 v-show="showMoreInfo">
+            <div class="video-desc-container animated fadeIn" v-show="showMoreInfo">
               <div class="top">
-                <div class="video-num">{{video.playCount}} 次观看</div>
-                <div class="video-time">{{video.publishTime}} 发布</div>
+                <div class="video-num">{{ video.playCount }} 次观看</div>
+                <div class="video-time">{{ video.publishTime }} 发布</div>
               </div>
               <div class="bottom">
-                <div class="desc">{{video.desc}}</div>
+                <div class="desc">{{ video.desc }}</div>
               </div>
             </div>
           </div>
           <!-- 视频收藏、分享、点赞、评论 -->
           <div class="info-center van-hairline--bottom">
-            <div class="item"
-                 :class="video.liked?'active':''"
-                 @click="handleClickLike">
+            <div
+              class="item"
+              :class="video.liked ? 'active' : ''"
+              @click="handleClickLike"
+            >
               <div class="love icon">
                 <i class="iconfont icon-dianzan"></i>
               </div>
               <p class="text">{{ $filters.convertCount(video.likeCount) }}</p>
             </div>
-            <div class="item"
-                 :class="video.followed?'active':''"
-                 @click="handleClickFollow">
+            <div
+              class="item"
+              :class="video.followed ? 'active' : ''"
+              @click="handleClickFollow"
+            >
               <div class="follow icon">
                 <van-icon :name="followIcon" />
               </div>
               <p class="text">{{ $filters.convertCount(video.subCount) }}</p>
             </div>
-            <div class="item"
-                 @click="handleClickComment">
+            <div class="item" @click="handleClickComment">
               <div class="comment icon">
                 <van-icon name="more-o" />
               </div>
               <p class="text">{{ $filters.convertCount(video.commentCount) }}</p>
             </div>
-            <div class="item"
-                 ref="share"
-                 @click="handleClickShare()">
+            <div class="item" ref="share" @click="handleClickShare()">
               <div class="share icon">
                 <i class="iconfont icon-fenxiang"></i>
               </div>
@@ -85,36 +81,32 @@
             </div>
           </div>
           <!-- 视频出处 -->
-          <div class="info-bottom"
-               @click="selectCreator(video.creatorList)">
+          <div class="info-bottom" @click="selectCreator(video.creatorList)">
             <div class="play-source-img">
               <my-image :src="video.artist.avatar" />
             </div>
             <div class="play-source-author">
-              {{video.creatorName}}
+              {{ video.creatorName }}
             </div>
           </div>
         </div>
-        <div class="other-info"
-             v-if="!loadVideoInfo">
+        <div class="other-info" v-if="!loadVideoInfo">
           <!-- 相关mv -->
-          <div class="related-mv"
-               v-if="simiMVList">
+          <div class="related-mv" v-if="simiMVList">
             <p>相关视频</p>
-            <video-list :list="simiMVList"
-                        @select="goToVideoInfo"></video-list>
+            <video-list :list="simiMVList" @select="goToVideoInfo"></video-list>
           </div>
           <!-- 评论列表 -->
-          <div class="comment"
-               ref="commentContainer"
-               v-if="simiMVList&&commentList">
-            <div class="comment-title">精彩评论 {{commentText}}</div>
-            <van-list v-model="loading"
-                      :immediate-check='false'
-                      :finished="finished"
-                      :finished-text="commentCount===0?'':'没有更多了'"
-                      @load="handlePullingUp">
-              <template v-if="commentList.length!==0">
+          <div class="comment" ref="commentContainer" v-if="simiMVList && commentList">
+            <div class="comment-title">精彩评论 {{ commentText }}</div>
+            <van-list
+              v-model="loading"
+              :immediate-check="false"
+              :finished="finished"
+              :finished-text="commentCount === 0 ? '' : '没有更多了'"
+              @load="handlePullingUp"
+            >
+              <template v-if="commentList.length !== 0">
                 <comment-list :commentList="commentList"></comment-list>
               </template>
               <template v-else>
@@ -123,47 +115,44 @@
             </van-list>
           </div>
         </div>
-        <loading :loading="loadVideoInfo||!simiMVList||!commentList" />
+        <loading :loading="loadVideoInfo || !simiMVList || !commentList" />
       </section>
-      <singer-popup :list="video.creatorList"
-                    :showPopup="showSingerPopup"
-                    @closePopup="showSingerPopup=false"
-                    @finishedLoadImage="handleFinished"
-                    @clickListItem="clickListItem"
-                    :isLoadImage="isLoadImage"></singer-popup>
+      <singer-popup
+        :list="video.creatorList"
+        :showPopup="showSingerPopup"
+        @closePopup="showSingerPopup = false"
+        @finishedLoadImage="handleFinished"
+        @clickListItem="clickListItem"
+        :isLoadImage="isLoadImage"
+      ></singer-popup>
     </template>
   </div>
 </template>
 <script>
-import Clipboard from 'clipboard'
-import MyImage from '@/components/common/img/Image'
-import VideoComponent from './Video'
-import CommentList from '@/components/home/comment/CommentList'
-import VideoList from '@/components/common/video/VideoList'
-import NoResult from '@/components/common/NoResult'
-import videoApi from '@/api/video.js'
-import VideoDetail from '@/assets/common/js/videoDetail.js'
-import Video from '@/assets/common/js/video.js'
-import Singer from '@/assets/common/js/singer.js'
-import SingerPopup from '@/components/common/SingerPopup'
-import userApi from '@/api/user.js'
-import {
-  mapMutations,
-  mapState,
-} from 'vuex'
-import {
-  ERR_OK
-} from '@/api/config.js'
-import {
-  RECOURCE_TYPE
-} from '@/assets/common/js/config.js'
+import Clipboard from "clipboard";
+import MyImage from "@/components/common/img/Image";
+import VideoComponent from "./Video";
+import CommentList from "@/components/home/comment/CommentList";
+import VideoList from "@/components/common/video/VideoList";
+import NoResult from "@/components/common/NoResult";
+import videoApi from "@/api/video.js";
+import VideoDetail from "@/assets/common/js/videoDetail.js";
+import Video from "@/assets/common/js/video.js";
+import Singer from "@/assets/common/js/singer.js";
+import SingerPopup from "@/components/common/SingerPopup";
+import userApi from "@/api/user.js";
+import { mapWritableState, mapState, mapActions } from "pinia";
+
+import { usePlayerStore, useUserStore, useSingerStore, useAppStore } from "@/stores";
+import { ERR_OK } from "@/api/config.js";
+import { RECOURCE_TYPE } from "@/assets/common/js/config.js";
 
 export default {
-  name: 'videoInfo',
+  name: "videoInfo",
   props: {
-    id: String
+    id: String,
   },
-  data () {
+  data() {
     return {
       loading: false, // 加载中
       loadVideoInfo: false, // 加载视频详情
@@ -174,69 +163,71 @@ export default {
       commentCount: 0, // 评论数量
       showMoreInfo: false, // 是否显示更多信息
       showSingerPopup: false, // 显示歌手弹出层
-      fixed: true // 固定视频
-    }
+      fixed: true, // 固定视频
+    };
   },
-  beforeRouteLeave (to, from) {
+  beforeRouteLeave(to, from) {
     // 如果播放就显示迷你播放器
     if (this.currentPlayIndex !== -1) {
-      this.setHideMiniPlayer(false)
+      this.hideMiniPlayer = false;
     }
-    return true
+    return true;
   },
-  activated () {
+  activated() {
     // 初始化加载图片
-    this.isLoadImage = true
+    this.isLoadImage = true;
   },
-  inject: ['reload'],
+  inject: ["reload"],
   computed: {
-    ...mapState(['currentPlayIndex', 'user']),
-    commentText () {
-      return this.commentCount === 0 ? '' : this.commentCount
+    ...mapWritableState(usePlayerStore, ["currentPlayIndex", "hideMiniPlayer"]),
+    ...mapWritableState(useUserStore, ["user"]),
+    ...mapWritableState(useSingerStore, ["isLoadVideoInfoImage", "singerCurrentIndex"]),
+    ...mapWritableState(useAppStore, ["noCacheComponents"]),
+    commentText() {
+      return this.commentCount === 0 ? "" : this.commentCount;
     },
-    rightIcon () {
-      return this.showMoreInfo ? 'arrow-up' : 'arrow-down'
+    rightIcon() {
+      return this.showMoreInfo ? "arrow-up" : "arrow-down";
     },
-    followIcon () {
-      return this.video.followed ? 'like' : 'like-o'
+    followIcon() {
+      return this.video.followed ? "like" : "like-o";
     },
     // 是否要加载图片
     isLoadImage: {
-      get () {
-        return this.$store.state.isLoadVideoInfoImage
+      get() {
+        return this.isLoadVideoInfoImage;
       },
-      set (val) {
-        this.$store.commit('setIsLoadVideoInfoImage', val)
-      }
-    }
+      set(val) {
+        this.isLoadVideoInfoImage = val;
+      },
+    },
   },
-  mounted () {
+  mounted() {
     this.$nextTick(async () => {
-      await this.getVideoDetail(this.id)
-      await this.getSimiMV(this.id)
-      await this.getVideoComment(this.id)
+      await this.getVideoDetail(this.id);
+      await this.getSimiMV(this.id);
+      await this.getVideoComment(this.id);
       // 初始化加载图片
-      this.isLoadImage = true
+      this.isLoadImage = true;
       // 初始化分享
-      this.initShare()
-
-    })
+      this.initShare();
+    });
   },
   methods: {
-    ...mapMutations(['setHideMiniPlayer', 'setSingerCurrentIndex', 'setAddNoCacheComponents']),
+    ...mapActions(useAppStore, ["addNoCacheComponent", "removeNoCacheComponent"]),
     // 获取视频详情
-    async getVideoDetail (id) {
+    async getVideoDetail(id) {
       try {
         // 获取视频详情
         const { data: videoDetailRes } = await videoApi.getVideoDetail(id);
         if (videoDetailRes.code !== ERR_OK) {
-          this.$failToast('系统出错');
+          this.$failToast("系统出错");
           return;
         }
         // 获取视频 URL
         const { data: videoUrlRes } = await videoApi.getVideoUrl(id);
         if (videoUrlRes.code !== ERR_OK) {
-          this.$failToast('系统出错');
+          this.$failToast("系统出错");
           return;
         }
         const videoData = videoDetailRes.data;
@@ -254,7 +245,7 @@ export default {
           publishTime: videoData.publishTime,
           desc: videoData.desc,
           duration: videoData.duration,
-          creatorName: videoData.artists.map(item => item.name).join(' / '),
+          creatorName: videoData.artists.map((item) => item.name).join(" / "),
           creatorList,
           artist: creatorList[0],
           followed: videoDetailRes.subed,
@@ -273,12 +264,12 @@ export default {
         this.commentCount = videoData.commentCount;
         this.video = video;
       } catch (error) {
-        this.$failToast('系统出错');
-        this.$router.replace('/');
+        this.$failToast("系统出错");
+        this.$router.replace("/");
       }
     },
     //获取歌手信息
-    getSingerInfo (artists) {
+    getSingerInfo(artists) {
       const creatorList = [];
       for (const item of artists) {
         const artist = item;
@@ -293,176 +284,191 @@ export default {
       return creatorList;
     },
     // 获取相似mv
-    async getSimiMV (id) {
-      const {
-        data: res
-      } = await videoApi.getSimiMV(id)
+    async getSimiMV(id) {
+      const { data: res } = await videoApi.getSimiMV(id);
       if (res.code === ERR_OK) {
         // 用于保存处理后的视频列表
-        let videoList = []
-        res.mvs.forEach(item => {
+        let videoList = [];
+        res.mvs.forEach((item) => {
           let video = new Video({
             id: item.id,
             coverUrl: item.cover,
             name: item.name,
             playCount: item.playCount,
             duration: item.duration,
-            creatorName: item.artists.map(item => item.name).join('/')
-          })
-          videoList.push(video)
-        })
-        this.simiMVList = videoList
+            creatorName: item.artists.map((item) => item.name).join("/"),
+          });
+          videoList.push(video);
+        });
+        this.simiMVList = videoList;
       }
     },
     // 获取该mv评论
-    async getVideoComment (id) {
-      let offset = this.commentList ? this.commentList.length : 0
-      let list = this.commentList ? this.commentList : []
-      const {
-        data: res
-      } = await videoApi.getVideoComment(id, offset)
+    async getVideoComment(id) {
+      let offset = this.commentList ? this.commentList.length : 0;
+      let list = this.commentList ? this.commentList : [];
+      const { data: res } = await videoApi.getVideoComment(id, offset);
       if (res.code === ERR_OK) {
-        this.commentList = list.concat(res.comments)
-        console.log(this.commentList)
+        this.commentList = list.concat(res.comments);
+        console.log(this.commentList);
       }
     },
     // 上拉加载
-    handlePullingUp () {
+    handlePullingUp() {
       setTimeout(async () => {
-        await this.getVideoComment(this.id)
+        await this.getVideoComment(this.id);
         if (this.commentList.length >= this.commentCount) {
-          this.finished = true
+          this.finished = true;
         }
-        this.loading = false
-      }, 500)
+        this.loading = false;
+      }, 500);
     },
-    goToVideoInfo (mv) {
+    goToVideoInfo(mv) {
       // 初始化加载图片
-      this.isLoadImage = true
-      this.setAddNoCacheComponents('videoInfo')
-      this.$router.push(`/videoInfo/${mv.id}`)
+      this.isLoadImage = true;
+      this.addNoCacheComponent("videoInfo");
+      this.$router.push(`/videoInfo/${mv.id}`);
     },
     // 切换显示隐藏视频详情信息
-    handleToggleInfo () {
-      this.showMoreInfo = !this.showMoreInfo
+    handleToggleInfo() {
+      this.showMoreInfo = !this.showMoreInfo;
     },
     // 选择创作者
-    selectCreator () {
-      let list = this.video.creatorList
-      if (list.length === 1) { // 只有一个歌手直接跳转到歌手页面
-        this.setSingerCurrentIndex(0)
-        this.$router.push(`/singerInfo/${list[0].id}`)
+    selectCreator() {
+      let list = this.video.creatorList;
+      if (list.length === 1) {
+        // 只有一个歌手直接跳转到歌手页面
+        this.singerCurrentIndex = 0;
+        this.$router.push(`/singerInfo/${list[0].id}`);
       } else {
-        this.showSingerPopup = true
+        this.showSingerPopup = true;
       }
     },
     // 选择列表中歌手
-    clickListItem () {
-      this.showSingerPopup = false
+    clickListItem() {
+      this.showSingerPopup = false;
     },
-    handleClickFollow () {
-      if (this.user) { // 说明已经登录
-        this.follow() // 收藏/取消收藏专辑
-      } else { // 弹窗提示去登录
-        this.$utils.alertLogin(this.$route.fullPath)
+    handleClickFollow() {
+      if (this.user) {
+        // 说明已经登录
+        this.follow(); // 收藏/取消收藏专辑
+      } else {
+        // 弹窗提示去登录
+        this.$utils.alertLogin(this.$route.fullPath);
       }
     },
     // 收藏/取消收藏专辑
-    follow () {
-      let follow = !this.video.followed
-      follow = follow ? 1 : 0 // 1代表收藏，0代表不收藏
-      if (follow) { // 收藏
-        userApi.updateFollowVideo(this.video.id, follow).then(res => {
-          if (res.data.code === ERR_OK) {
-            this.video.followed = true
-            this.video.subCount += 1
-            this.$toast('收藏成功')
-          }
-        }).catch(err => {
-          this.$toast(err.data.message)
-        })
-      } else {
-        this.$utils.alertConfirm({
-          message: '确定取消收藏该视频',
-          confirmButtonText: '确定'
-        }).then(async () => {
-          userApi.updateFollowVideo(this.id, follow).then(res => {
+    follow() {
+      let follow = !this.video.followed;
+      follow = follow ? 1 : 0; // 1代表收藏，0代表不收藏
+      if (follow) {
+        // 收藏
+        userApi
+          .updateFollowVideo(this.video.id, follow)
+          .then((res) => {
             if (res.data.code === ERR_OK) {
-              this.video.followed = false
-              this.video.subCount -= 1
-              this.$toast('已取消收藏')
+              this.video.followed = true;
+              this.video.subCount += 1;
+              this.$toast("收藏成功");
             }
-          }).catch(err => {
-            this.$toast(err.data.message)
           })
-        }).catch(() => { })
+          .catch((err) => {
+            this.$toast(err.data.message);
+          });
+      } else {
+        this.$utils
+          .alertConfirm({
+            message: "确定取消收藏该视频",
+            confirmButtonText: "确定",
+          })
+          .then(async () => {
+            userApi
+              .updateFollowVideo(this.id, follow)
+              .then((res) => {
+                if (res.data.code === ERR_OK) {
+                  this.video.followed = false;
+                  this.video.subCount -= 1;
+                  this.$toast("已取消收藏");
+                }
+              })
+              .catch((err) => {
+                this.$toast(err.data.message);
+              });
+          })
+          .catch(() => {});
       }
     },
     // 选中歌曲喜欢
-    handleClickLike () {
-      let video = this.video
-      if (this.user) { // 说明已经登录
-        this.likeVideo(video) // 点赞视频
-      } else { // 弹窗提示去登录
-        this.$utils.alertLogin(this.$route.fullPath)
+    handleClickLike() {
+      let video = this.video;
+      if (this.user) {
+        // 说明已经登录
+        this.likeVideo(video); // 点赞视频
+      } else {
+        // 弹窗提示去登录
+        this.$utils.alertLogin(this.$route.fullPath);
       }
     },
-    likeVideo (video) {
-      let like = !video.liked
-      userApi.resourceLike({
-        id: video.id,
-        type: RECOURCE_TYPE.mv,
-        t: like
-      }).then(res => {
-        if (res.data.code === ERR_OK) {
-          // 同步点赞状态
-          this.video.liked = like
-          if (like) { // 点赞加1
-            this.video.likeCount += 1
-            this.$toast('点赞成功')
-          } else { // 取消点赞加1
-            this.video.likeCount -= 1
-            this.$toast('已取消点赞')
+    likeVideo(video) {
+      let like = !video.liked;
+      userApi
+        .resourceLike({
+          id: video.id,
+          type: RECOURCE_TYPE.mv,
+          t: like,
+        })
+        .then((res) => {
+          if (res.data.code === ERR_OK) {
+            // 同步点赞状态
+            this.video.liked = like;
+            if (like) {
+              // 点赞加1
+              this.video.likeCount += 1;
+              this.$toast("点赞成功");
+            } else {
+              // 取消点赞加1
+              this.video.likeCount -= 1;
+              this.$toast("已取消点赞");
+            }
           }
-        }
-      }).catch(err => {
-        this.$toast(err.data.message)
-      })
+        })
+        .catch((err) => {
+          this.$toast(err.data.message);
+        });
     },
     // 点击评论
-    handleClickComment () {
-      let element = this.$refs.commentContainer
-      let player = this.$refs.video
-      let top = element.offsetTop - player.offsetHeight
-      window.scrollTo(0, top)
+    handleClickComment() {
+      let element = this.$refs.commentContainer;
+      let player = this.$refs.video;
+      let top = element.offsetTop - player.offsetHeight;
+      window.scrollTo(0, top);
     },
     // 分享
-    handleClickShare () {
-      this.clipboard.on('success', e => {
-        this.$toast('已复制到剪贴板')
-      })
-      this.clipboard.on('error', e => {
-        this.$toast('浏览器不支持自动复制')
-      })
+    handleClickShare() {
+      this.clipboard.on("success", (e) => {
+        this.$toast("已复制到剪贴板");
+      });
+      this.clipboard.on("error", (e) => {
+        this.$toast("浏览器不支持自动复制");
+      });
     },
     // 初始化分享
-    initShare () {
+    initShare() {
       // 分享
       this.clipboard = new Clipboard(this.$refs.share, {
         text: () => {
           if (this.user) {
-            return `${this.video.creatorName}的视频《${this.video.name}》:\rhttps://music.163.com/#/mv/${this.video.id}/?userid=${this.user.userId}(来自@网易云音乐)`
+            return `${this.video.creatorName}的视频《${this.video.name}》:\rhttps://music.163.com/#/mv/${this.video.id}/?userid=${this.user.userId}(来自@网易云音乐)`;
           } else {
-            return `${this.video.creatorName}的视频《${this.video.name}》:\rhttps://music.163.com/#/mv/${this.video.id}(来自@网易云音乐)`
+            return `${this.video.creatorName}的视频《${this.video.name}》:\rhttps://music.163.com/#/mv/${this.video.id}(来自@网易云音乐)`;
           }
-        }
-      })
+        },
+      });
     },
     // 数据获取完成
-    handleFinished () {
-      this.isLoadImage = false
-    }
-
+    handleFinished() {
+      this.isLoadImage = false;
+    },
   },
   components: {
     VideoComponent,
@@ -470,9 +476,9 @@ export default {
     VideoList,
     NoResult,
     MyImage,
-    SingerPopup
-  }
-}
+    SingerPopup,
+  },
+};
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';

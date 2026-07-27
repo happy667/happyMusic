@@ -1,14 +1,14 @@
 <template>
   <section class="section-container">
-    <scroll ref="section_scroll">
-      <div class="container"
-           ref="container">
-        <!-- 播放列表 -->
-        <ul class="play-list"
-            ref="list">
+    <div class="scroll-wrapper"
+         ref="scrollWrapper"
+         @scroll="handleScroll">
+      <div class="content">
+        <ul class="play-list">
           <li class="play-list-item"
-              ref="listGroup"
-              @click.stop="selectItem($event,item,index)"
+              @click.prevent
+              @touchstart="onTouchStart($event)"
+              @touchend="onTouchEnd($event, item, index)"
               :class="item.id===currentSong.id ? 'active':''"
               v-for="(item,index) in playList"
               :key="item.id">
@@ -27,122 +27,125 @@
             <div class="right delete"
                  @click.stop="handleDelete(item)">
               <div class="icon">
-                <van-icon name="cross"
-                          size="16" />
+                <van-icon name="cross" size="16" />
               </div>
             </div>
           </li>
         </ul>
       </div>
-    </scroll>
+    </div>
   </section>
 </template>
 <script>
-import Scroll from '@/components/common/Scroll'
-import {
-  mapGetters,
-  mapMutations,
-  mapState,
-  mapActions
-} from 'vuex'
+import { mapWritableState, mapState, mapActions } from 'pinia'
 
+import { usePlayerStore } from '@/stores'
 export default {
+  data () {
+    return {
+      touchStartY: 0,
+      touchMoved: false
+    }
+  },
   computed: {
-    ...mapState(['togglePlayList', 'currentSong', 'playList']),
-    ...mapGetters(['currentSong']),
+    ...mapState(usePlayerStore, ['currentSong']),
+    ...mapWritableState(usePlayerStore, ['togglePlayList', 'playList', 'sequenceList']),
     playList: {
       get () {
-        return this.$store.state.sequenceList
+        return this.sequenceList
       },
       set (list) {
-        this.$nextTick(() => {
-          this.$store.commit('setSequenceList', list)
-        })
+        this.sequenceList = list
       }
     }
   },
   watch: {
     playList (newList) {
-      // 如果播放列表为空就隐藏
       if (newList.length === 0) {
-        this.setTogglePlayList(false)
+        this.togglePlayList = false
       }
       this.$nextTick(() => {
-        setTimeout(() => {
-          this.refresh()
-        }, 20)
+        setTimeout(() => this.refresh(), 20)
       })
-
     },
     togglePlayList: {
       immediate: true,
       handler (newVal) {
         if (newVal) {
           this.$nextTick(() => {
-            setTimeout(() => {
-              this.refresh()
-              this.scrollList()
-            }, 20)
+            this.scrollList()
           })
         }
       }
-
     }
   },
   methods: {
-    ...mapMutations(['setCurrentPlayIndex', 'setPlayerFullScreen', 'setTogglePlayList']),
-    ...mapActions(['deleteSong']),
-    // 移动元素
-    scrollList () {
-      if (this.playList.length === 0) return
-      let playIndex = this.playList.findIndex(item => item.id === this.currentSong.id)
-      let element = this.$refs.listGroup[playIndex - 3]
-      if (element) {
-        this.$refs.section_scroll.scrollToElement(element, 0)
-      } else {
-        // 移动到第一个元素
-        element = this.$refs.listGroup[0]
-        this.$refs.section_scroll.scrollToElement(element, 0)
-        this.$refs.section_scroll.refresh()
+    ...mapActions(usePlayerStore, ['deleteSong']),
+    onTouchStart (e) {
+      this.touchStartY = e.touches[0].clientY
+      this.touchMoved = false
+    },
+    onTouchEnd (e, item, index) {
+      const endY = e.changedTouches[0].clientY
+      const moved = endY !== this.touchStartY
+      if (!moved) {
+        this.$utils.playMusic(item, null, index)
       }
     },
-    // 选择歌曲
-    selectItem (e, item, index) {
-      // 引入vue原型上的utils
-      this.$utils.playMusic(item, null, index)
+    handleScroll () {
+      // native scroll fallback - not active with better-scroll
     },
-
-    // 移除歌曲
+    scrollList () {
+      if (this.playList.length === 0) return
+      const playIndex = this.playList.findIndex(item => item.id === this.currentSong.id)
+      if (playIndex === -1) return
+      const wrapper = this.$refs.scrollWrapper
+      if (!wrapper) return
+      const items = wrapper.querySelectorAll('.play-list-item')
+      if (items.length === 0) return
+      // 第一个直接滚到顶部，否则当前歌曲上方留 3 首作为上下文
+      const target = playIndex <= 2 ? 0 : playIndex - 3
+      if (items[target]) {
+        items[target].scrollIntoView({ behavior: 'instant', block: 'start' })
+      }
+    },
     handleDelete (song) {
-      // 移除该歌曲
       this.deleteSong(song)
     },
     refresh () {
       this.$nextTick(() => {
-        if (this.$refs.section_scroll) {
-          this.$refs.section_scroll.refresh()
+        if (this.$refs.scrollWrapper) {
+          // no-op with native scroll, kept for API compatibility
         }
       })
     }
-
   },
   components: {
-    Scroll
   }
 }
 </script>
 <style lang="stylus" scoped>
 @import '~common/stylus/variable';
 
-.section-container :deep(.scroll){
+.scroll-wrapper {
+  position: relative;
   height: 9rem;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .section-container {
   width: 100%;
 
-  .container {
+  .content {
     .play-list {
       .play-list-item {
         display: flex;

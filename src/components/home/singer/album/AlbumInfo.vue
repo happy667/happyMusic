@@ -165,11 +165,9 @@ import SingerPopup from '@/components/common/SingerPopup'
 import {
   ERR_OK
 } from '@/api/config.js'
-import {
-  mapMutations,
-  mapGetters,
-  mapState
-} from 'vuex'
+import { mapWritableState, mapState, mapActions } from 'pinia'
+
+import { useUserStore, usePlayerStore, useSingerStore } from '@/stores'
 import {
   playlistMixin
 } from '@/assets/common/js/mixin.js'
@@ -189,8 +187,8 @@ export default {
     }
   },
   computed: {
-    ...mapState(['user']),
-    ...mapGetters(['currentSong']),
+    ...mapWritableState(useUserStore, ['user']),
+    ...mapState(usePlayerStore, ['currentSong']),
     followIcon () {
       return this.followed ? 'like' : 'like-o'
     },
@@ -201,27 +199,27 @@ export default {
       return this.followed ? '已收藏' : '收藏'
     },
     loadBgStyle () {
-      return !this.albumObj.songs ? "background:#f2f3f5" : ''
+      return !this.albumObj || !this.albumObj.songs ? "background:#f2f3f5" : ''
     },
     loadAlbumBgStyle () {
-      return !this.albumObj.album ? "background:#f2f3f5" : ''
+      return !this.albumObj || !this.albumObj.album ? "background:#f2f3f5" : ''
     },
     // 是否要加载图片
     isLoadImage: {
       get () {
-        return this.$store.state.isLoadAlbumInfoImage
+        return this.isLoadAlbumInfoImage
       },
       set (val) {
-        this.$store.commit('setIsLoadAlbumInfoImage', val)
+        this.isLoadAlbumInfoImage = val
       }
     }
   },
   watch: {
     showSingerPopup () {
       if (this.showSingerPopup) {
-        this.setHideMiniPlayer(true)
+        this.hideMiniPlayer = true
       } else {
-        this.setHideMiniPlayer(false)
+        this.hideMiniPlayer = false
       }
     },
     // 获取用户收藏的专辑
@@ -239,7 +237,6 @@ export default {
     this.isLoadImage = true
   },
   methods: {
-    ...mapMutations(['setSingerCurrentIndex', 'setHideMiniPlayer']),
     routerBack () {
       this.$route.meta.isBack = true
       this.$utils.routerBack()
@@ -394,21 +391,21 @@ export default {
     openOverlay () {
       if (!this.albumObj.album) return
       this.showOverlay = true
-      this.setHideMiniPlayer(true)
+      this.hideMiniPlayer = true
       // 不让页面滚动
       document.body.style.overflow = 'hidden'
     },
     // 关闭遮罩层
     closeOverlay () {
       this.showOverlay = false
-      this.setHideMiniPlayer(false)
+      this.hideMiniPlayer = false
       document.body.style.overflow = ''
     },
     // 选择歌手
     selectSingers () {
       let list = this.albumObj.album.singerList
       if (list.length === 1) { // 只有一个歌手直接跳转到歌手页面
-        this.setSingerCurrentIndex(0)
+        this.singerCurrentIndex = 0
         this.$router.push(`/singerInfo/${list[0].id}`)
       } else {
         this.showSingerPopup = true
