@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { showToast } from 'vant'
-import apiConfig from './api.config.js'
+import { baseUrl } from './config.js'
 import {
     USER_TOKEN
 } from '@/assets/common/js/config.js'
@@ -14,7 +14,7 @@ const service = axios.create({
         withCredentials: true
     })
     // 配置请求根路径
-service.defaults.baseURL = apiConfig.baseUrl
+service.defaults.baseURL = baseUrl
 axios.defaults.withCredentials = true
     // request拦截器设置
 service.interceptors.request.use(request => {

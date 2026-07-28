@@ -5,8 +5,8 @@ import request from '@/axios/request.js'
 import { DEBUG_CONFIG } from '@/assets/common/js/ai-emotion-radio/config.js'
 import { generateMusicKeywords as analyzeEmotion } from '@/assets/common/js/ai-emotion-radio/emotion-analyzer.js'
 
-const AK = process.env.VUE_APP_AK
-const SK = process.env.VUE_APP_SK
+const AK = import.meta.VITE_APP_AK
+const SK = import.meta.VITE_APP_SK
 
 // 调试模式开关，从配置文件中获取
 const DEBUG_MODE = DEBUG_CONFIG.useDebugData

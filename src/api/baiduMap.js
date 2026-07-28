@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // 从环境变量获取百度地图API密钥
-const BAIDU_MAP_AK = process.env.VUE_APP_BAIDU_MAP_AK;
+const BAIDU_MAP_AK = import.meta.VITE_APP_BAIDU_MAP_AK;
 
 // 创建百度地图专用的axios实例
 const baiduMapRequest = axios.create({
