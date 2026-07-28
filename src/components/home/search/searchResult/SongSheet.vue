@@ -3,21 +3,17 @@
     <!-- loading -->
     <loading :loading="pageLoading" />
 
-    <van-list
-      v-if="songSheet.songSheetList.length !== 0"
-      v-model="loading"
-      :finished="finished"
-      finished-text="没有更多了"
-      @load="handlePullingUp"
-    >
+    <van-list v-if="songSheet.songSheetList.length !== 0"
+              v-model="loading"
+              :finished="finished"
+              finished-text="没有更多了"
+              @load="handlePullingUp">
       <song-sheet-list :list="songSheet.songSheetList"></song-sheet-list>
     </van-list>
 
-    <no-result
-      v-else-if="songSheet.songSheetCount === 0"
-      text="暂无相关歌单"
-      image="search"
-    ></no-result>
+    <no-result v-else-if="songSheet.songSheetCount === 0"
+               text="暂无相关歌单"
+               image="search"></no-result>
   </div>
 </template>
 <script>
@@ -31,7 +27,7 @@ import { mapWritableState, mapState } from "pinia";
 import { useSearchStore } from "@/stores";
 export default {
   name: "searchResultSongSheet",
-  data() {
+  data () {
     return {
       songSheet: {
         songSheetCount: -1,
@@ -44,11 +40,11 @@ export default {
   },
   computed: {
     ...mapWritableState(useSearchStore, ["searchKeywords", "searchCurrentIndex"]),
-    pageLoading() {
+    pageLoading () {
       return this.songSheet.songSheetList.length === 0 && !this.songSheet.isNull;
     },
   },
-  mounted() {
+  mounted () {
     if (this.searchKeywords.trim().length === 0) {
       this.songSheet.isNull = true;
       return;
@@ -57,7 +53,7 @@ export default {
   },
   methods: {
     // 查询歌单
-    async getSearchSongSheet() {
+    async getSearchSongSheet () {
       // 显示加载logo
       this.loading = true;
       // 设置偏移量=歌单列表长度
@@ -93,7 +89,7 @@ export default {
       }
     },
     // 上拉加载更多歌单
-    handlePullingUp() {
+    handlePullingUp () {
       // 加载时判断当前滚动的页面是否为该页面，因为其他页面在上拉加载时会干扰该页面
       if (this.searchCurrentIndex === 4) {
         if (this.songSheet.isNull) {
@@ -122,8 +118,6 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .search-songSheet-container {
   padding-top: 0.25rem;
   box-sizing: border-box;

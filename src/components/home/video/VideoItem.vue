@@ -88,8 +88,6 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .video-item-container {
   padding-bottom: 0.3rem;
   background: $color-common-b;

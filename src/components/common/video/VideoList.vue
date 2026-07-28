@@ -1,10 +1,10 @@
 <template>
   <div class="video-list-container">
     <div class="video-list">
-      <template v-for="item in list" :key="item.id">
+      <template v-for="item in list"
+                :key="item.id">
         <video-item @click="handleClick"
-                    :video="item"
-                    ></video-item>
+                    :video="item"></video-item>
       </template>
 
     </div>
@@ -30,9 +30,7 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
-.video-list-container :deep(.video-list-item-container){
+.video-list-container :deep(.video-list-item-container) {
   &:last-child {
     margin-bottom: 0;
   }

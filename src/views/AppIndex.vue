@@ -1,7 +1,8 @@
 <template>
   <div class="appIndex-container">
     <!-- back -->
-    <div class="back" @click="$utils.routerBack()">
+    <div class="back"
+         @click="$utils.routerBack()">
       <van-icon name="arrow-left" />
     </div>
     <!-- 二维码登录 -->
@@ -28,7 +29,7 @@ import { setItem } from "common/js/localStorage.js";
 import { USER_TOKEN } from "@/assets/common/js/config.js";
 export default {
   name: "appIndex",
-  beforeRouteEnter(to, from, next) {
+  beforeRouteEnter (to, from, next) {
     next((vm) => {
       // 如果有歌曲播放就隐藏迷你播放器
       if (vm.currentPlayIndex !== -1) {
@@ -37,7 +38,7 @@ export default {
       return true;
     });
   },
-  beforeRouteLeave(to, from) {
+  beforeRouteLeave (to, from) {
     // 如果有歌曲播放就显示迷你播放器
     if (this.currentPlayIndex !== -1) {
       this.hideMiniPlayer = false;
@@ -47,7 +48,7 @@ export default {
   computed: {
     ...mapWritableState(usePlayerStore, ["hideMiniPlayer", "currentPlayIndex"]),
   },
-  data() {
+  data () {
     return {
       showQrLoginPopup: false,
       qrImg: "",
@@ -57,10 +58,10 @@ export default {
   },
 
   methods: {
-    clearQRInterval(interval) {
+    clearQRInterval (interval) {
       clearInterval(interval);
     },
-    async qrLogin() {
+    async qrLogin () {
       this.showQrLoginPopup = true;
       //生成二维码key
       const { data: res } = await loginApi.createQRKey();
@@ -76,14 +77,14 @@ export default {
       }
     },
     //获取二维码图片
-    async getQrLoginImg(key) {
+    async getQrLoginImg (key) {
       const { data: res } = await loginApi.createQR(key);
       if (res.code === ERR_OK) {
         this.qrImg = res.data.qrimg;
       }
     },
     //检查二维码登录状态
-    async checkQrLoginState(key) {
+    async checkQrLoginState (key) {
       const { data: res } = await loginApi.checkQR(key);
       switch (res.code) {
         case 800:
@@ -103,7 +104,7 @@ export default {
           break;
       }
     },
-    login(cookie) {
+    login (cookie) {
       console.log(cookie);
       this.$loadingToast({
         message: "登陆中...",
@@ -134,8 +135,6 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .appIndex-container {
   position: relative;
   display: flex;

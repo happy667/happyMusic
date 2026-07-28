@@ -1,8 +1,10 @@
 <template>
   <div class="song-sheet-mini-list-container">
     <div class="list">
-      <template v-for="item in list" :key="item.id">
-        <song-sheet-mini-item :item="item" @removeSongSheetItem="removeSongSheetItem">
+      <template v-for="item in list"
+                :key="item.id">
+        <song-sheet-mini-item :item="item"
+                              @removeSongSheetItem="removeSongSheetItem">
         </song-sheet-mini-item>
       </template>
 
@@ -30,9 +32,7 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
-.song-sheet-mini-list-container :deep(.song-sheet-mini-item-container){
+.song-sheet-mini-list-container :deep(.song-sheet-mini-item-container) {
   &:last-child {
     margin-bottom: 0;
   }

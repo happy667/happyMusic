@@ -142,7 +142,7 @@
         </div>
       </van-popup>
     </template>
-</div>
+  </div>
 </template>
 <script>
 import loginApi from '@/api/login.js'
@@ -386,13 +386,11 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
-.edit-container :deep(.van-picker__cancel), .edit-container :deep(.van-picker__confirm){
+.edit-container :deep(.van-picker__cancel), .edit-container :deep(.van-picker__confirm) {
   color: $color-common;
 }
 
-.edit-container :deep(.van-popup){
+.edit-container :deep(.van-popup) {
   width: 90%;
 }
 
@@ -431,7 +429,7 @@ export default {
     }
   }
 
-  .address :deep(.van-cell .van-cell__title){
+  .address :deep(.van-cell .van-cell__title) {
     flex: 0.5;
   }
 }

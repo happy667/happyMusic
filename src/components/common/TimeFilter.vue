@@ -326,8 +326,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .time-filter {
   --primary-color: #fd4979;
   --text-primary: $color-common-x;

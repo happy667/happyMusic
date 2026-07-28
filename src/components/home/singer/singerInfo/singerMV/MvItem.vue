@@ -37,8 +37,6 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .mv-item-container {
   width: 100%;
   box-sizing: border-box;
@@ -96,7 +94,7 @@ export default {
       height: 100%;
       background-image: linear-gradient(transparent 80%, rgba(0, 0, 0, 1));
       z-index: 90;
-      border-radius:0 0 0.1rem 0.1rem;
+      border-radius: 0 0 0.1rem 0.1rem;
     }
   }
 

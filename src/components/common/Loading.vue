@@ -48,9 +48,7 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
-.loading-container :deep(.van-loading){
+.loading-container :deep(.van-loading) {
   justify-content: center;
   background: $color-common-background;
 }

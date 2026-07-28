@@ -1,8 +1,6 @@
 <template>
-  <div class="image-wrapper animated fadeIn"
-       :style="imgStyle">
-    <img v-lazy="src" :style="loadBgStyle"
-         :key="src" />
+  <div class="image-wrapper animated fadeIn" :style="imgStyle">
+    <img v-lazy="src" :style="loadBgStyle" :key="src" />
   </div>
 </template>
 <script>
@@ -11,38 +9,37 @@ export default {
     src: String,
     size: {
       type: String,
-      default: () => 'normal'
-    }
+      default: () => "normal",
+    },
   },
   computed: {
-    imgStyle () {
-      let style = null
-      if (this.size === 'normal') {
+    imgStyle() {
+      let style = null;
+      if (this.size === "normal") {
         style = {
-          width: '1rem',
-          height: '1rem'
-        }
-      } else if (this.size === 'middle') {
+          width: "1rem",
+          height: "1rem",
+        };
+      } else if (this.size === "middle") {
         style = {
-          width: '1.25rem',
-          height: '1.25rem'
-        }
-      } else if (this.size === 'big') {
+          width: "1.25rem",
+          height: "1.25rem",
+        };
+      } else if (this.size === "big") {
         style = {
-          width: '1.6rem',
-          height: '1.6rem'
-        }
+          width: "1.6rem",
+          height: "1.6rem",
+        };
       }
-      return style
+      return style;
     },
-     loadBgStyle() {
+    loadBgStyle() {
       return !this.src ? "background:#f2f3f5" : "";
     },
-  }
-}
+  },
+};
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
 
 .image-wrapper {
   border-radius: 50%;

@@ -1,176 +1,156 @@
 <template>
-
-  <div class="song-sheet-desc-container"
-       @touchstart="handleTouchStart"
-       @touchmove="handleTouchMove"
-       @touchend="handleTouchEnd">
-
-    <div class="container"
-         ref="container">
+  <div
+    class="song-sheet-desc-container"
+    @touchstart="handleTouchStart"
+    @touchmove="handleTouchMove"
+    @touchend="handleTouchEnd"
+  >
+    <div class="container" ref="container">
       <!-- 头部导航栏 -->
-      <div class="nav-bar-container"
-           ref="navBar"
-           v-show="!loading">
-        <van-nav-bar :title="title"
-                     class="nav-bar"
-                     left-arrow
-                     @click-left="routerBack">
+      <div class="nav-bar-container" ref="navBar" v-show="!loading">
+        <van-nav-bar :title="title" class="nav-bar" left-arrow @click-left="routerBack">
           <template #right>
-            <div class="share"
-                 @click="handleClickShare"
-                 ref="share">
+            <div class="share" @click="handleClickShare" ref="share">
               <div class="icon">
                 <i class="iconfont icon-fenxiang"></i>
               </div>
             </div>
           </template>
         </van-nav-bar>
-        <div class="bg-layer"
-             ref="bgLayer"></div>
+        <div class="bg-layer" ref="bgLayer"></div>
       </div>
-      <header class="header-container animated fadeIn"
-              ref="headerContainer">
+      <header class="header-container animated fadeIn" ref="headerContainer">
         <!-- 背景 -->
-        <div class="bg"
-             v-if="image"
-             v-lazy:background-image="image"></div>
+        <div class="bg header-bg" v-if="image" v-lazy:background-image="image"></div>
         <!-- 歌单头部 -->
-        <section class="song-sheet-header"
-                 :style="loadBgStyle">
-          <div class="song-sheet-info"
-               v-if="!loading">
+        <section class="song-sheet-header" :style="loadBgStyle">
+          <div class="song-sheet-info" v-if="!loading">
             <div class="container header">
-              <div class="left-img"
-                   @click="openOverlay">
+              <div class="left-img" @click="openOverlay">
                 <div class="song-sheet-image">
                   <div class="image animated fadeIn">
-                    <img v-lazy="songSheetDisc.picUrl"
-                         :key="songSheetDisc.picUrl" />
+                    <img v-lazy="songSheetDisc.picUrl" :key="songSheetDisc.picUrl" />
                   </div>
                   <div class="playCount">
-                    <i class="iconfont icon-bofang"></i> {{ $filters.convertCount(songSheetDisc.playCount) }}
+                    <i class="iconfont icon-bofang"></i>
+                    {{ $filters.convertCount(songSheetDisc.playCount) }}
                   </div>
                 </div>
-
               </div>
               <article class="right-info">
-                <div class="creator animated fadeIn"
-                     :style="loadBgStyle">
-                  <img class="avatar"
-                       v-lazy="songSheetDisc.creator.avatarUrl" />
-                  <span class="name">{{songSheetDisc.creator.nickname}}</span>
+                <div class="creator animated fadeIn" :style="loadBgStyle">
+                  <img class="avatar" v-lazy="songSheetDisc.creator.avatarUrl" />
+                  <span class="name">{{ songSheetDisc.creator.nickname }}</span>
                 </div>
                 <div class="func">
-                  <div class="func-item"
-                       v-if="songSheetDisc.creator.userId!==userId"
-                       @click="handleClickFollow">
-                    <div class="icon"
-                         :class="followCls">
+                  <div
+                    class="func-item"
+                    v-if="songSheetDisc.creator.userId !== userId"
+                    @click="handleClickFollow"
+                  >
+                    <div class="icon" :class="followCls">
                       <van-icon :name="followIcon" />
                     </div>
-                    {{followText}}
+                    {{ followText }}
                   </div>
-                  <div class="func-item"
-                       @click="goToSongSheetComment">
+                  <div class="func-item" @click="goToSongSheetComment">
                     <div class="icon">
                       <van-icon name="more-o" />
                     </div>
-                    <div class="num">{{ $filters.convertCount(songSheetDisc.commentCount) }}</div>
+                    <div class="num">
+                      {{ $filters.convertCount(songSheetDisc.commentCount) }}
+                    </div>
                   </div>
                 </div>
               </article>
             </div>
-            <div class="bottom tags"
-                 v-if="songSheetDisc.tags&&songSheetDisc.tags.length!==0">
-              <tag-list bgColor="rgba(0, 0, 0, .3)"
-                        color="#fff"
-                        :tags="songSheetDisc.tags" />
+            <div
+              class="bottom tags"
+              v-if="songSheetDisc.tags && songSheetDisc.tags.length !== 0"
+            >
+              <tag-list
+                bgColor="rgba(0, 0, 0, .3)"
+                color="#fff"
+                :tags="songSheetDisc.tags"
+              />
             </div>
           </div>
         </section>
       </header>
 
-      <div class="section-container"
-           ref="sectionBox">
+      <div class="section-container" ref="sectionBox">
         <!-- 歌单描述 -->
-        <article class="songs-desc"
-                 @click="openOverlay">
-          <van-skeleton :row="2"
-                        :loading="loading"
-                        row-width="100%">
-            <p class="desc">{{songSheetDisc.description}}</p>
+        <article class="songs-desc" @click="openOverlay">
+          <van-skeleton :row="2" :loading="loading" row-width="100%">
+            <p class="desc">{{ songSheetDisc.description }}</p>
           </van-skeleton>
           <template v-if="!loading">
             <div class="songs-nt">
-              <span class="songs-num">{{songSheetDisc.songs.length}}首</span>
-              <span class="songs-time"
-                    v-if="songSheetDisc.songs.length!==0">{{ $filters.convertDate(songSheetDisc.updateTime) }}</span>
+              <span class="songs-num">{{ songSheetDisc.songs.length }}首</span>
+              <span class="songs-time" v-if="songSheetDisc.songs.length !== 0">{{
+                $filters.convertDate(songSheetDisc.updateTime)
+              }}</span>
             </div>
             <!-- 播放按钮 -->
-            <div class="playBtn"
-                 @click.stop="playAllSong(songSheetDisc.songs)">
+            <div class="playBtn" @click.stop="playAllSong(songSheetDisc.songs)">
               <i class="iconfont icon-bofang"></i>
             </div>
           </template>
-
         </article>
         <template v-if="!loading">
           <!-- 歌曲列表 -->
-          <songs-list :songsList="songSheetDisc.songs"
-                      ref="songList"
-                      :showImage="!rank"
-                      :showIndex="rank"
-                      :top="rank"
-                      @select="selectSong" />
+          <songs-list
+            :songsList="songSheetDisc.songs"
+            ref="songList"
+            :showImage="!rank"
+            :showIndex="rank"
+            :top="rank"
+            @select="selectSong"
+          />
 
-          <no-result v-if="songSheetDisc.songs.length===0"
-                     text="暂无相关资源"></no-result>
+          <no-result
+            v-if="songSheetDisc.songs.length === 0"
+            text="暂无相关资源"
+          ></no-result>
         </template>
         <!-- loading -->
         <loading :loading="loading"></loading>
       </div>
     </div>
     <!-- 定位 -->
-    <position v-show="isShowPosition"
-              @click="handlePosition"></position>
+    <position v-show="isShowPosition" @click="handlePosition"></position>
     <!-- 遮罩层 -->
-    <van-overlay :show="showOverlay"
-                 v-if="songSheetDisc"
-                 class="overlay-container">
-      <div class="container"
-           @click="closeOverlay"
-           @touchmove.stop>
+    <van-overlay :show="showOverlay" v-if="songSheetDisc" class="overlay-container">
+      <div class="container" @click="closeOverlay" @touchmove.stop>
         <div class="top">
           <div class="image-container">
             <div class="image animated fadeIn">
-              <img v-lazy="songSheetDisc.picUrl">
+              <img v-lazy="songSheetDisc.picUrl" />
             </div>
           </div>
 
-          <p class="title">{{songSheetDisc.name}}</p>
+          <p class="title">{{ songSheetDisc.name }}</p>
         </div>
         <div class="bottom">
           <article class="description">
-            <div class="tags"
-                 v-if="songSheetDisc.tags&&songSheetDisc.tags.length!==0">
+            <div
+              class="tags"
+              v-if="songSheetDisc.tags && songSheetDisc.tags.length !== 0"
+            >
               <span class="title">标签:</span>
-              <tag-list bgColor="rgba(0, 0, 0, .2)"
-                        color="#fff"
-                        :tags="songSheetDisc.tags" />
+              <tag-list
+                bgColor="rgba(0, 0, 0, .2)"
+                color="#fff"
+                :tags="songSheetDisc.tags"
+              />
             </div>
-            <div class="content"
-                 v-html="songSheetDisc.description"></div>
+            <div class="content" v-html="songSheetDisc.description"></div>
           </article>
         </div>
-
       </div>
       <!-- 背景 -->
-      <div class="bg"
-           v-if="image"
-           v-lazy:background-image="image">
-      </div>
-      <div class="close"
-           @click="closeOverlay">
+      <div class="bg" v-if="image" v-lazy:background-image="image"></div>
+      <div class="close" @click="closeOverlay">
         <div class="icon">
           <i class="iconfont icon-cha"></i>
         </div>
@@ -179,147 +159,148 @@
   </div>
 </template>
 <script>
-import Clipboard from 'clipboard'
-import recommendApi from '@/api/recommend.js'
-import userApi from '@/api/user.js'
-import {
-  ERR_OK
-} from '@/api/config.js'
-import Song from '@/assets/common/js/song.js'
-import Singer from '@/assets/common/js/singer.js'
-import SongsList from '@/components/home/song/SongList'
-import SongSheetDetail from '@/assets/common/js/songSheetDetail.js'
-import User from '@/assets/common/js/user.js'
-import Album from '@/assets/common/js/album.js'
-import NoResult from '@/components/common/NoResult'
-import Position from '@/components/common/Position'
-import TagList from '@/components/common/Tag'
-import {
-  playlistMixin
-} from '@/assets/common/js/mixin.js'
-import { mapWritableState, mapState, mapActions } from 'pinia'
+import Clipboard from "clipboard";
+import recommendApi from "@/api/recommend.js";
+import userApi from "@/api/user.js";
+import { ERR_OK } from "@/api/config.js";
+import Song from "@/assets/common/js/song.js";
+import Singer from "@/assets/common/js/singer.js";
+import SongsList from "@/components/home/song/SongList";
+import SongSheetDetail from "@/assets/common/js/songSheetDetail.js";
+import User from "@/assets/common/js/user.js";
+import Album from "@/assets/common/js/album.js";
+import NoResult from "@/components/common/NoResult";
+import Position from "@/components/common/Position";
+import TagList from "@/components/common/Tag";
+import { playlistMixin } from "@/assets/common/js/mixin.js";
+import { mapWritableState, mapState, mapActions } from "pinia";
 
-import { useUserStore, usePlayerStore } from '@/stores'
+import { useUserStore, usePlayerStore } from "@/stores";
 export default {
-  name: 'songSheetDisc',
+  name: "songSheetDisc",
   props: {
-    id: String
+    id: String,
   },
   mixins: [playlistMixin],
-  data () {
+  data() {
     return {
       songSheetDisc: null,
       showPosition: false,
       loading: true,
-      showOverlay: false // 是否显示遮罩层
-    }
+      showOverlay: false, // 是否显示遮罩层
+    };
   },
-  mounted () {
-    this.getSongSheetById(this.id)
+  mounted() {
+    this.getSongSheetById(this.id);
     // 初始化分享
-    this.initShare()
+    this.initShare();
     // 监听页面滚动
-    this.addScrollListner()
+    this.addScrollListner();
   },
 
-  activated () {
+  activated() {
     // 监听页面滚动
-    this.addScrollListner()
+    this.addScrollListner();
   },
-  deactivated () {
+  deactivated() {
     // 取消监听页面滚动
-    this.removeScrollListner()
+    this.removeScrollListner();
   },
-  destroyed () {
+  destroyed() {
     // 取消监听页面滚动
-    this.removeScrollListner()
+    this.removeScrollListner();
   },
   computed: {
-    ...mapWritableState(useUserStore, ['user']),
-    ...mapWritableState(usePlayerStore, ['hideMiniPlayer', 'currentPlayIndex']),
-    ...mapState(usePlayerStore, ['currentSong']),
+    ...mapWritableState(useUserStore, ["user"]),
+    ...mapWritableState(usePlayerStore, ["hideMiniPlayer", "currentPlayIndex"]),
+    ...mapState(usePlayerStore, ["currentSong"]),
     // 是否显示定位
-    isShowPosition () {
-      if (!this.songSheetDisc || !this.songSheetDisc.songs) return false
+    isShowPosition() {
+      if (!this.songSheetDisc || !this.songSheetDisc.songs) return false;
       // 判断当前歌曲列表是否有正在播放的歌曲（-1表示没有)
-      let index = this.$utils.findIndex(this.songSheetDisc.songs, this.currentSong)
-      return this.showPosition && index !== -1
+      let index = this.$utils.findIndex(this.songSheetDisc.songs, this.currentSong);
+      return this.showPosition && index !== -1;
     },
-    rank () {
-      return Boolean(this.$route.query.rank)
+    rank() {
+      return Boolean(this.$route.query.rank);
     },
-    followIcon () {
-      return this.followed ? 'like' : 'like-o'
+    followIcon() {
+      return this.followed ? "like" : "like-o";
     },
-    followCls () {
-      return this.followed ? 'followed' : ''
+    followCls() {
+      return this.followed ? "followed" : "";
     },
-    followText () {
-      return this.followed ? '已收藏' : '收藏'
+    followText() {
+      return this.followed ? "已收藏" : "收藏";
     },
-    followed () {
-      return this.songSheetDisc ? this.songSheetDisc.followed : false
+    followed() {
+      return this.songSheetDisc ? this.songSheetDisc.followed : false;
     },
-    image () {
-      if (!this.songSheetDisc) return ''
-      let bgImage = this.songSheetDisc.backgroundCoverUrl ? this.songSheetDisc.backgroundCoverUrl : this.songSheetDisc.picUrl
-      return bgImage
+    image() {
+      if (!this.songSheetDisc) return "";
+      let bgImage = this.songSheetDisc.backgroundCoverUrl
+        ? this.songSheetDisc.backgroundCoverUrl
+        : this.songSheetDisc.picUrl;
+      return bgImage;
     },
-    title () {
-      return this.songSheetDisc ? this.songSheetDisc.name : ''
+    title() {
+      return this.songSheetDisc ? this.songSheetDisc.name : "";
     },
-    userId () {
-      return this.user ? this.user.userId : null
+    userId() {
+      return this.user ? this.user.userId : null;
     },
-    loadBgStyle () {
-      return this.loading ? "background:#f2f3f5" : ''
-    }
+    loadBgStyle() {
+      return this.loading ? "background:#f2f3f5" : "";
+    },
   },
   methods: {
-    ...mapActions(usePlayerStore, ['setSelectPlay']),
+    ...mapActions(usePlayerStore, ["setSelectPlay"]),
     // 返回上一个路由
-    routerBack () {
-      this.$route.meta.isBack = true
-      this.$utils.routerBack()
+    routerBack() {
+      this.$route.meta.isBack = true;
+      this.$utils.routerBack();
     },
     // 根据id获取歌单列表
-    async getSongSheetById (id) {
-      this.loading = true
+    async getSongSheetById(id) {
+      this.loading = true;
       try {
-        const {
-          data: res
-        } = await recommendApi.getSongSheetById(id)
+        const { data: res } = await recommendApi.getSongSheetById(id);
         if (res.code === ERR_OK) {
-          let playlist = res.playlist
-          let songList = []
-          playlist.tracks.map((item) => { // 循环数组对象对每个数据进行处理 返回需要得数据
-            let singerName = item.ar.map(item => item.name).join('/')
-            let singersList = []
+          let playlist = res.playlist;
+          let songList = [];
+          playlist.tracks.map((item) => {
+            // 循环数组对象对每个数据进行处理 返回需要得数据
+            let singerName = item.ar.map((item) => item.name).join("/");
+            let singersList = [];
             // 处理歌手
-            item.ar.forEach(item => {
-              singersList.push(new Singer({
+            item.ar.forEach((item) => {
+              singersList.push(
+                new Singer({
+                  id: item.id,
+                  name: item.name,
+                  aliaName: item.alias.join(" / "),
+                  avatar: item.img1v1Url,
+                  picUrl: item.picUrl,
+                })
+              );
+            });
+            songList.push(
+              new Song({
                 id: item.id,
                 name: item.name,
-                aliaName: item.alias.join(' / '),
-                avatar: item.img1v1Url,
-                picUrl: item.picUrl
-              }))
-            })
-            songList.push(new Song({
-              id: item.id,
-              name: item.name,
-              singers: singerName,
-              singersList,
-              picUrl: item.al.picUrl,
-              album: new Album({
-                id: item.al.id,
-                name: item.al.name,
-                picUrl: item.al.picUrl
-              }),
-              mv: item.mv
-            }))
-          })
-          let creator = playlist.creator
+                singers: singerName,
+                singersList,
+                picUrl: item.al.picUrl,
+                album: new Album({
+                  id: item.al.id,
+                  name: item.al.name,
+                  picUrl: item.al.picUrl,
+                }),
+                mv: item.mv,
+              })
+            );
+          });
+          let creator = playlist.creator;
           this.songSheetDisc = new SongSheetDetail({
             id: playlist.id,
             picUrl: playlist.coverImgUrl,
@@ -333,205 +314,217 @@ export default {
             creator: new User({
               userId: creator.userId,
               nickname: creator.nickname,
-              avatarUrl: creator.avatarUrl
+              avatarUrl: creator.avatarUrl,
             }),
             commentCount: playlist.commentCount,
-            playCount: playlist.playCount
-          })
-          this.loading = false
+            playCount: playlist.playCount,
+          });
+          this.loading = false;
         } else {
-          this.$router.replace('/')
+          this.$router.replace("/");
         }
       } catch (e) {
-        console.log(e)
-        this.$toast(e.data.message)
-        this.$router.replace('/')
+        console.log(e);
+        this.$toast(e.data.message);
+        this.$router.replace("/");
       }
     },
-    selectSong (item, index) {
+    selectSong(item, index) {
       // 比较两首歌曲
-      let result = this.$utils.compareSong(this.currentSong, item)
+      let result = this.$utils.compareSong(this.currentSong, item);
       if (!result) {
         // 引入vue原型上的utils
-        this.$utils.playMusic(item, this.songSheetDisc.songs, index)
+        this.$utils.playMusic(item, this.songSheetDisc.songs, index);
       }
     },
     // 播放所有歌曲
-    playAllSong (list) {
+    playAllSong(list) {
       // 引入vue原型上的utils
-      this.$utils.playAllSong(list)
+      this.$utils.playAllSong(list);
     },
     // 收藏歌单
-    handleClickFollow () {
-      if (this.user) { // 说明已经登录
-        this.follow()
+    handleClickFollow() {
+      if (this.user) {
+        // 说明已经登录
+        this.follow();
       } else {
-        this.$utils.alertLogin(this.$route.fullPath)
+        this.$utils.alertLogin(this.$route.fullPath);
       }
     },
 
-    follow () {
-      let follow = !this.followed
-      if (follow) { // 1代表收藏，2代表不收藏
-        userApi.updateFollowSongSheet(this.id, 1).then(res => {
-          if (res.data.code === ERR_OK) {
-            this.songSheetDisc.followed = true
-            this.$toast('收藏成功')
-          }
-        }).catch(err => {
-          this.$toast(err.data.message)
-        })
-      } else {
-        this.$utils.alertConfirm({
-          message: '确定取消收藏该歌单',
-          confirmButtonText: '确定'
-        }).then(async () => {
-          userApi.updateFollowSongSheet(this.id, 2).then(res => {
+    follow() {
+      let follow = !this.followed;
+      if (follow) {
+        // 1代表收藏，2代表不收藏
+        userApi
+          .updateFollowSongSheet(this.id, 1)
+          .then((res) => {
             if (res.data.code === ERR_OK) {
-              this.songSheetDisc.followed = false
-              this.$toast('已取消收藏')
+              this.songSheetDisc.followed = true;
+              this.$toast("收藏成功");
             }
-          }).catch(err => {
-            this.$toast(err.data.message)
           })
-        }).catch(() => { })
+          .catch((err) => {
+            this.$toast(err.data.message);
+          });
+      } else {
+        this.$utils
+          .alertConfirm({
+            message: "确定取消收藏该歌单",
+            confirmButtonText: "确定",
+          })
+          .then(async () => {
+            userApi
+              .updateFollowSongSheet(this.id, 2)
+              .then((res) => {
+                if (res.data.code === ERR_OK) {
+                  this.songSheetDisc.followed = false;
+                  this.$toast("已取消收藏");
+                }
+              })
+              .catch((err) => {
+                this.$toast(err.data.message);
+              });
+          })
+          .catch(() => {});
       }
     },
-    handlePosition () {
+    handlePosition() {
       // 说明有歌曲在播放
       if (this.currentSong) {
         // 获取当前歌曲索引
-        let listNode = this.$refs.songList.$refs.list
-        let song = this.currentSong
-        let otherHeight = this.$refs.navBar.offsetHeight
+        let listNode = this.$refs.songList.$refs.list;
+        let song = this.currentSong;
+        let otherHeight = this.$refs.navBar.offsetHeight;
         this.$utils.positionSong({
           listNode,
           list: this.songSheetDisc.songs,
           song,
-          otherHeight
-        })
-        this.$toast('已定位到当前歌曲')
+          otherHeight,
+        });
+        this.$toast("已定位到当前歌曲");
       }
     },
     // 分享
-    handleClickShare () {
-      this.clipboard.on('success', e => {
-        this.$toast('已复制到剪贴板')
-      })
-      this.clipboard.on('error', e => {
-        this.$toast('浏览器不支持自动复制')
-      })
+    handleClickShare() {
+      this.clipboard.on("success", (e) => {
+        this.$toast("已复制到剪贴板");
+      });
+      this.clipboard.on("error", (e) => {
+        this.$toast("浏览器不支持自动复制");
+      });
     },
     // 初始化分享
-    initShare () {
+    initShare() {
       // 分享
       this.clipboard = new Clipboard(this.$refs.share, {
         text: () => {
           if (this.user) {
-            return `分享${this.songSheetDisc.creator.nickname}的歌单《${this.songSheetDisc.name}》: \rhttps://music.163.com/#/playlist/${this.songSheetDisc.id}/?userid=${this.user.userId}(来自@网易云音乐)`
+            return `分享${this.songSheetDisc.creator.nickname}的歌单《${this.songSheetDisc.name}》: \rhttps://music.163.com/#/playlist/${this.songSheetDisc.id}/?userid=${this.user.userId}(来自@网易云音乐)`;
           } else {
-            return `分享${this.songSheetDisc.creator.nickname}的歌单《${this.songSheetDisc.name}》:\rhttps://music.163.com/#/playlist/${this.songSheetDisc.id}(来自@网易云音乐)`
+            return `分享${this.songSheetDisc.creator.nickname}的歌单《${this.songSheetDisc.name}》:\rhttps://music.163.com/#/playlist/${this.songSheetDisc.id}(来自@网易云音乐)`;
           }
-        }
-      })
+        },
+      });
     },
     // 跳转到歌单评论列表
-    goToSongSheetComment () {
-      this.$route.meta.isBack = false
-      this.$router.push(`/songSheetComment/${this.id}`)
+    goToSongSheetComment() {
+      this.$route.meta.isBack = false;
+      this.$router.push(`/songSheetComment/${this.id}`);
     },
     // 打开遮罩层
-    openOverlay () {
-      if (this.loading) return
-      this.showOverlay = true
-      this.hideMiniPlayer = true
+    openOverlay() {
+      if (this.loading) return;
+      this.showOverlay = true;
+      this.hideMiniPlayer = true;
       // 不让页面滚动
-      document.body.style.overflow = 'hidden'
+      document.body.style.overflow = "hidden";
     },
     // 关闭遮罩层
-    closeOverlay () {
-      this.showOverlay = false
-      this.hideMiniPlayer = false
-      document.body.style.overflow = ''
+    closeOverlay() {
+      this.showOverlay = false;
+      this.hideMiniPlayer = false;
+      document.body.style.overflow = "";
     },
     // 监听页面滚动
-    handleScroll () {
-      let bgLayer = this.$refs.bgLayer
-      let navBar = this.$refs.navBar
-      let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
-      let height = this.$refs.headerContainer.offsetHeight - navBar.offsetHeight
-      if (scrollTop >= 0 && scrollTop <= height) { // 滚动大于0的时候
-        let opacity = scrollTop / height
+    handleScroll() {
+      let bgLayer = this.$refs.bgLayer;
+      let navBar = this.$refs.navBar;
+      let scrollTop =
+        window.pageYOffset ||
+        document.documentElement.scrollTop ||
+        document.body.scrollTop;
+      let height = this.$refs.headerContainer.offsetHeight - navBar.offsetHeight;
+      if (scrollTop >= 0 && scrollTop <= height) {
+        // 滚动大于0的时候
+        let opacity = scrollTop / height;
         if (opacity <= 0.8) {
-          bgLayer.style.opacity = opacity
+          bgLayer.style.opacity = opacity;
         }
       } else {
-        bgLayer.style.opacity = 0.8
+        bgLayer.style.opacity = 0.8;
       }
     },
     // 监听页面滚动
-    addScrollListner () {
-      window.addEventListener('scroll', this.handleScroll)
+    addScrollListner() {
+      window.addEventListener("scroll", this.handleScroll);
     },
     // 取消监听页面滚动
-    removeScrollListner () {
-      window.removeEventListener('scroll', this.handleScroll)
+    removeScrollListner() {
+      window.removeEventListener("scroll", this.handleScroll);
     },
-    handleTouchStart () {
-      clearTimeout(this.timer)
+    handleTouchStart() {
+      clearTimeout(this.timer);
     },
-    handleTouchMove () {
-      this.showPosition = true
+    handleTouchMove() {
+      this.showPosition = true;
     },
-    handleTouchEnd () {
+    handleTouchEnd() {
       this.timer = setTimeout(() => {
-        this.showPosition = false
-      }, 5000)
+        this.showPosition = false;
+      }, 5000);
     },
-    handlePlaylist (playList) {
+    handlePlaylist(playList) {
       // 适配播放器与页面底部距离
-      const bottom = playList.length > 0 ? '1.5rem' : ''
+      const bottom = playList.length > 0 ? "1.5rem" : "";
       this.$nextTick(() => {
-        this.$refs.container.style.paddingBottom = bottom
-      })
-    }
-
+        this.$refs.container.style.paddingBottom = bottom;
+      });
+    },
   },
   components: {
     SongsList,
     NoResult,
     Position,
-    TagList
-  }
-}
+    TagList,
+  },
+};
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
-.song-sheet-desc-container :deep(.image .van-image){
+.song-sheet-desc-container :deep(.image .van-image) {
   width: 100%;
 }
 
-.nav-bar :deep(.van-nav-bar__title), .nav-bar :deep(.van-icon){
+.nav-bar :deep(.van-nav-bar__title), .nav-bar :deep(.van-icon) {
   color: #fff !important;
 }
 
-.song-sheet-desc-container :deep(.van-skeleton){
+.song-sheet-desc-container :deep(.van-skeleton) {
   padding: 0;
 }
 
-.song-sheet-desc-container :deep(.van-skeleton__row){
+.song-sheet-desc-container :deep(.van-skeleton__row) {
   width: 75% !important;
   height: 0.6rem;
   line-height: 0.6rem;
 }
 
-.song-sheet-desc-container :deep(.van-skeleton__row:nth-child(2) ){
+.song-sheet-desc-container :deep(.van-skeleton__row:nth-child(2) ) {
   margin-top: 0.2rem;
   width: 100% !important;
 }
 
-.song-sheet-desc-container :deep(.song-list-containter){
+.song-sheet-desc-container :deep(.song-list-containter) {
   padding-bottom: 0.2rem;
 }
 
@@ -549,12 +542,13 @@ export default {
   top: 0;
   right: 0;
   bottom: 0;
-  z-index: -1;
-  background-color: #161824;
+  z-index: 0;
   width: 100%;
   height: 100%;
   transition: background-image 0.6s;
-  background: no-repeat 50% / cover;
+  background-size: cover
+  background-position: 50% 50%
+  background-repeat: no-repeat;
   transform-origin: center center;
   filter: blur(20px);
   transform: scale(1.5);
@@ -632,6 +626,10 @@ export default {
 
           .header {
             display: flex;
+
+            .header-bg{
+              z-index: 0;
+            }
 
             .left-img {
               position: relative;
@@ -818,7 +816,7 @@ export default {
       min-height: 100%;
       box-sizing: border-box;
       color: #fff;
-
+      z-index:1;
       .top {
         margin-bottom: 0.5rem;
         width: 100%;

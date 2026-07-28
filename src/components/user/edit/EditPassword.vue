@@ -212,8 +212,6 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .editPassword-container {
   position: fixed;
   width: 100%;
@@ -221,7 +219,7 @@ export default {
   background-color: $color-common-background;
 }
 
-.editPassword-container :deep(.van-nav-bar__text){
+.editPassword-container :deep(.van-nav-bar__text) {
   color: $color-common;
 }
 </style>

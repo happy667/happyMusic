@@ -59,8 +59,6 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .singer-swiper-container {
   margin-bottom: 0.4rem;
 }

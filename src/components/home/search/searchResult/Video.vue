@@ -3,19 +3,20 @@
     <!-- loading -->
     <loading :loading="pageLoading" />
 
-    <van-list
-      v-if="mv.mvList.length !== 0"
-      v-model="loading"
-      :finished="finished"
-      finished-text="没有更多了"
-      @load="handlePullingUp"
-    >
+    <van-list v-if="mv.mvList.length !== 0"
+              v-model="loading"
+              :finished="finished"
+              finished-text="没有更多了"
+              @load="handlePullingUp">
       <div class="mv-list">
-        <mv-list @select="goToVideoInfo" :list="mv.mvList"></mv-list>
+        <mv-list @select="goToVideoInfo"
+                 :list="mv.mvList"></mv-list>
       </div>
     </van-list>
 
-    <no-result v-else-if="mv.mvCount === 0" text="暂无相关MV" image="search"></no-result>
+    <no-result v-else-if="mv.mvCount === 0"
+               text="暂无相关MV"
+               image="search"></no-result>
   </div>
 </template>
 <script>
@@ -30,7 +31,7 @@ import { useSearchStore } from "@/stores";
 import { SEARCH_TYPE } from "@/assets/common/js/config.js";
 export default {
   name: "searchResultMV",
-  data() {
+  data () {
     return {
       mv: {
         mvCount: -1,
@@ -43,15 +44,15 @@ export default {
   },
   computed: {
     ...mapWritableState(useSearchStore, ["searchKeywords", "searchCurrentIndex"]),
-    listenChange() {
+    listenChange () {
       const { searchKeywords, searchCurrentIndex } = this;
       return { searchKeywords, searchCurrentIndex };
     },
-    pageLoading() {
+    pageLoading () {
       return this.mv.mvList.length === 0 && !this.mv.isNull;
     },
   },
-  mounted() {
+  mounted () {
     if (this.searchKeywords.trim().length === 0) {
       this.mv.isNull = true;
       return;
@@ -60,7 +61,7 @@ export default {
   },
   methods: {
     // 查询MV
-    async getSearchMV() {
+    async getSearchMV () {
       // 显示加载logo
       this.loading = true;
       // 设置偏移量=mv列表长度
@@ -107,7 +108,7 @@ export default {
       }
     },
     // 上拉加载更多mv
-    handlePullingUp() {
+    handlePullingUp () {
       // 加载时判断当前滚动的页面是否为该页面，因为其他页面在上拉加载时会干扰该页面
       if (this.searchCurrentIndex === 5) {
         if (this.mv.isNull) {
@@ -127,7 +128,7 @@ export default {
         this.loading = false;
       }
     },
-    goToVideoInfo(mv) {
+    goToVideoInfo (mv) {
       this.$router.push(`/videoInfo/${mv.id}`);
     },
   },
@@ -139,8 +140,6 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .search-mv-container {
   padding: 0.25rem 0.4rem 0;
   box-sizing: border-box;

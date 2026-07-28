@@ -4,17 +4,15 @@
     <loading :loading="loading" />
 
     <template v-if="!loading && result">
-      <component
-        v-for="(item, index) in order"
-        :is="item"
-        :key="index"
-        :song="result.song"
-        :singer="result.singer"
-        :album="result.album"
-        :songSheet="result.songSheet"
-        @setIndex="setCurrentIndex"
-        @closeList="$emit('closeList')"
-      ></component>
+      <component v-for="(item, index) in order"
+                 :is="item"
+                 :key="index"
+                 :song="result.song"
+                 :singer="result.singer"
+                 :album="result.album"
+                 :songSheet="result.songSheet"
+                 @setIndex="setCurrentIndex"
+                 @closeList="$emit('closeList')"></component>
       <!-- 歌曲 -->
       <!-- <search-song :song="result.song"
                    @closeList="$emit('closeList')"
@@ -33,7 +31,9 @@
                          @setIndex="setCurrentIndex" /> -->
     </template>
 
-    <no-result v-else-if="isNull" text="暂无搜索结果" image="search"></no-result>
+    <no-result v-else-if="isNull"
+               text="暂无搜索结果"
+               image="search"></no-result>
   </div>
 </template>
 <script>
@@ -59,7 +59,7 @@ import { mapWritableState, mapState, mapActions } from 'pinia'
 import { useSearchStore, useSingerStore, usePlayerStore } from '@/stores'
 export default {
   name: "searchResultComprehensive",
-  data() {
+  data () {
     return {
       result: null,
       loading: true,
@@ -71,13 +71,13 @@ export default {
   computed: {
     ...mapWritableState(useSearchStore, ['searchKeywords', 'searchCurrentIndex']),
   },
-  mounted() {
+  mounted () {
     this.getSearchComprehensive();
     this.loading = true;
   },
   methods: {
     // 查询综合结果
-    async getSearchComprehensive() {
+    async getSearchComprehensive () {
       // 显示加载logo
       this.loading = true;
       const { data: res } = await searchApi.getSearchComprehensive(this.searchKeywords);
@@ -113,7 +113,7 @@ export default {
       }
     },
     // 处理单曲结果
-    async handleSong(song) {
+    async handleSong (song) {
       if (!song) return { more: false, moreText: "", songList: [] }; // 返回一个默认对象
 
       // 用于存放处理后的歌曲列表
@@ -145,7 +145,7 @@ export default {
           }),
           isOriginal:
             !item.originSongSimpleData &&
-            (item.originCoverType === 0 || item.originCoverType === 1)
+              (item.originCoverType === 0 || item.originCoverType === 1)
               ? 1
               : 0,
         });
@@ -169,7 +169,7 @@ export default {
       };
     },
     // 处理歌手结果
-    handleSinger(singer) {
+    handleSinger (singer) {
       if (!singer) return null;
       // 用于存放处理后的歌手列表
       let singerList = [];
@@ -195,7 +195,7 @@ export default {
       return singerObj;
     },
     // 处理专辑结果
-    async handleAlbum(album) {
+    async handleAlbum (album) {
       if (!album) return null;
       // 用于存放处理后的专辑列表
       let albumList = [];
@@ -227,7 +227,7 @@ export default {
       return albumObj;
     },
     // 处理歌单结果
-    handleSongSheet(playList) {
+    handleSongSheet (playList) {
       if (!playList) return null;
       // 存放歌单搜索结果信息
       let songSheetObj = {
@@ -238,7 +238,7 @@ export default {
       return songSheetObj;
     },
     // 处理相关搜索结果
-    handleSimQuery(simQuery) {
+    handleSimQuery (simQuery) {
       console.log(simQuery);
       if (!simQuery) return null;
       // 存放歌单搜索结果信息
@@ -246,7 +246,7 @@ export default {
       return queryList;
     },
     // 处理视频结果
-    handleVideo(video) {
+    handleVideo (video) {
       if (!video) return null;
       // 用于存放处理后的视频列表
       let videoList = [];
@@ -275,7 +275,7 @@ export default {
       return videoObj;
     },
     // 处理排序结果
-    handleOrder(order) {
+    handleOrder (order) {
       if (!order) return null;
       let includeComponents = this.includeComponents;
       // 过滤包含的组件
@@ -309,7 +309,7 @@ export default {
       return filterOrder;
     },
 
-    setCurrentIndex(index) {
+    setCurrentIndex (index) {
       document.documentElement.scrollTop = 0;
       this.searchCurrentIndex = index;
     },
@@ -327,25 +327,23 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
-.search-comprehensive-container :deep(.album-container){
+.search-comprehensive-container :deep(.album-container) {
   padding: 0.25rem 0.4rem;
 }
 
-.search-comprehensive-container :deep(.video-list-container){
+.search-comprehensive-container :deep(.video-list-container) {
   padding: 0 0.4rem;
 }
 
-.search-comprehensive-container :deep(.title-container){
+.search-comprehensive-container :deep(.title-container) {
   padding: 0 0.4rem;
 }
 
-.search-comprehensive-container :deep(.search-list-container .list){
+.search-comprehensive-container :deep(.search-list-container .list) {
   padding: 0.15rem 0.4rem;
 }
 
-.search-comprehensive-container :deep(.search){
+.search-comprehensive-container :deep(.search) {
   .more {
     margin-bottom: 0.5rem;
     display: flex;

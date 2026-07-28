@@ -40,8 +40,6 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .official-list-container {
   margin-bottom: 0.4rem;
 

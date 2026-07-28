@@ -1,17 +1,23 @@
 <template>
   <div class="search-box-container">
-    <scroll ref="search_scroll" @scroll="scroll" :listenScroll="listenScroll">
-      <section class="container" ref="container">
+    <scroll ref="search_scroll"
+            @scroll="scroll"
+            :listenScroll="listenScroll">
+      <section class="container"
+               ref="container">
         <!-- 历史搜索 -->
-        <div class="old-search" v-if="localSearchList && localSearchList.length !== 0">
+        <div class="old-search"
+             v-if="localSearchList && localSearchList.length !== 0">
           <!-- 搜索头部 -->
           <div class="search-list-header">
             <p class="title">历史搜索</p>
-            <div class="icon" @click="clearLocalList">
+            <div class="icon"
+                 @click="clearLocalList">
               <i class="iconfont icon-shanchu"></i>
             </div>
           </div>
-          <search-list :list="localSearchList" @select="selectItem"></search-list>
+          <search-list :list="localSearchList"
+                       @select="selectItem"></search-list>
         </div>
         <!-- 热门搜索 -->
         <div class="recommend-search">
@@ -22,19 +28,20 @@
           <!-- loading -->
           <loading :loading="load" />
           <!-- 搜索列表 -->
-          <ul class="hot-search-list" v-if="this.hotSearchList.length !== 0">
-            <li
-              class="hot-search-list-item"
-              @click="selectItem(item)"
-              v-for="(item, index) in hotSearchList"
-              :key="item.searchWord"
-            >
-              <div class="left" :class="index < 3 ? 'top' : ''">
+          <ul class="hot-search-list"
+              v-if="this.hotSearchList.length !== 0">
+            <li class="hot-search-list-item"
+                @click="selectItem(item)"
+                v-for="(item, index) in hotSearchList"
+                :key="item.searchWord">
+              <div class="left"
+                   :class="index < 3 ? 'top' : ''">
                 <div class="index">{{ index + 1 }}</div>
                 <div class="search-info">
                   <div class="top">
                     <span class="name">{{ item.searchWord }}</span>
-                    <span class="icon" v-if="item.iconUrl">
+                    <span class="icon"
+                          v-if="item.iconUrl">
                       <img :src="item.iconUrl" />
                     </span>
                   </div>
@@ -67,7 +74,7 @@ import {
 import { playlistMixin } from "@/assets/common/js/mixin.js";
 export default {
   name: "searchPage",
-  data() {
+  data () {
     return {
       hotSearchList: [], // 热搜列表
       localSearchList: [], // 历史搜索列表
@@ -82,15 +89,15 @@ export default {
       "searchCurrentIndex",
     ]),
   },
-  created() {
+  created () {
     this.listenScroll = true;
   },
   watch: {
-    localSearchList() {
+    localSearchList () {
       this.handlePlaylist(this.playList);
     },
   },
-  mounted() {
+  mounted () {
     // 获取热门搜索
     this.getHotSearchList();
     if (getLocalList()) {
@@ -99,7 +106,7 @@ export default {
   },
   methods: {
     // 获取热门搜索
-    async getHotSearchList() {
+    async getHotSearchList () {
       this.load = true;
       const { data: res } = await searchApi.getHotSearchList();
       if (res.code === ERR_OK) {
@@ -108,7 +115,7 @@ export default {
       }
     },
     // 选择搜索名称
-    selectItem(item) {
+    selectItem (item) {
       this.closeSearchList();
       // 重置标签页到第一个
       this.searchCurrentIndex = 0;
@@ -118,7 +125,7 @@ export default {
       this.$router.push("/search/searchResult");
     },
     // 清空历史搜索记录
-    clearLocalList() {
+    clearLocalList () {
       this.$confirmDialog({
         message: "确定要清空历史搜索?",
         confirmButtonColor: "#FD4979",
@@ -128,18 +135,18 @@ export default {
           clearLocalList();
           this.localSearchList = []; // 清空当前数组
         })
-        .catch(() => {});
+        .catch(() => { });
     },
     // 关闭搜索列表
-    closeSearchList() {
+    closeSearchList () {
       if (this.showSearchList) {
         this.showSearchList = false;
       }
     },
-    scroll(pos) {
+    scroll (pos) {
       this.closeSearchList();
     },
-    handlePlaylist(playList) {
+    handlePlaylist (playList) {
       // 适配播放器与页面底部距离
       const bottom = playList.length > 0 ? "1.5rem" : "";
       this.$nextTick(() => {
@@ -148,7 +155,7 @@ export default {
       });
     },
   },
-  activated() {
+  activated () {
     if (getLocalList()) {
       this.localSearchList = getLocalList();
     } // 如果本地存在历史记录就赋值
@@ -160,16 +167,14 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
-.search-box-container :deep(.scroll){
+.search-box-container :deep(.scroll) {
   position: absolute;
   width: 100%;
   height: 100%;
   overflow: hidden;
 }
 
-.search-box-container :deep(.van-search){
+.search-box-container :deep(.van-search) {
   position: absolute;
   width: 100%;
   height: 100%;

@@ -71,8 +71,6 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .header {
   width: 100%;
   padding: 0 0.2rem 0 0.4rem;

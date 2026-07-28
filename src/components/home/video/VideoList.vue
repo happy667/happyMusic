@@ -2,20 +2,21 @@
   <div class="videoList-container">
     <!-- 正在加载 -->
     <loading :loading="videoList.length === 0" />
-    <scroll
-      :data="videoList"
-      ref="videoListScroll"
-      :pullUp="pullUp"
-      @pullingUpLoad="handlePullingUp"
-    >
-      <div class="video-list" ref="container">
+    <scroll :data="videoList"
+            ref="videoListScroll"
+            :pullUp="pullUp"
+            @pullingUpLoad="handlePullingUp">
+      <div class="video-list"
+           ref="container">
         <template v-if="videoList.length > 0">
-          <template v-for="item in videoList" :key="item.id">
+          <template v-for="item in videoList"
+                    :key="item.id">
             <video-item :videoParams="item"></video-item>
           </template>
         </template>
         <!-- loading -->
-        <loading :loading="loadMore" height="3rem" />
+        <loading :loading="loadMore"
+                 height="3rem" />
       </div>
     </scroll>
   </div>
@@ -32,14 +33,14 @@ import { mapWritableState } from "pinia";
 import { useAppStore } from "@/stores";
 const LIMIT = 3; //一次请求的数据
 export default {
-  data() {
+  data () {
     return {
       loadMore: false,
       videoList: [], // 视频列表
       hasLoaded: false, // 是否已加载过数据
     };
   },
-  activated() {
+  activated () {
     if (this.videoList.length === 0 && this.homeCurrentIndex === 3) {
       this.loadData();
     }
@@ -48,10 +49,10 @@ export default {
     }
   },
 
-  created() {
+  created () {
     this.pullUp = true;
   },
-  mounted() {
+  mounted () {
     // 如果当前已是MV tab（index=3），直接加载数据
     if (this.homeCurrentIndex === 3) {
       this.loadData();
@@ -61,12 +62,12 @@ export default {
     ...mapWritableState(useAppStore, ["homeCurrentIndex"]),
   },
   watch: {
-    homeCurrentIndex(val) {
+    homeCurrentIndex (val) {
       if (val === 3 && !this.hasLoaded) {
         this.loadData();
       }
     },
-    loadMore() {
+    loadMore () {
       this.$nextTick(() => {
         this.refresh();
       });
@@ -74,7 +75,7 @@ export default {
   },
   methods: {
     // 上拉加载
-    handlePullingUp() {
+    handlePullingUp () {
       if (this.loadMore) {
         // 如果请求未完成就不继续请求数据
         return;
@@ -89,12 +90,12 @@ export default {
       }, 300);
     },
     // 加载视频数据
-    async loadData() {
+    async loadData () {
       if (this.hasLoaded) return;
       this.hasLoaded = true;
       await this.getVideoList();
     },
-    async getVideoList() {
+    async getVideoList () {
       try {
         const offset = this.videoList.length;
         const { data: res } = await videoApi.getRecommendVideo(offset, LIMIT);
@@ -136,7 +137,7 @@ export default {
       }
     },
     // 刷新
-    refresh() {
+    refresh () {
       this.$refs.videoListScroll.refresh();
     },
   },
@@ -147,8 +148,6 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .videoList-container {
   position: absolute;
   width: 100%;

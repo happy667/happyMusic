@@ -54,8 +54,6 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .fade-enter {
   opacity: 0;
 }

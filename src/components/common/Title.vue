@@ -35,8 +35,6 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .border-left {
   padding-left: 0.2rem;
   border-left: 0.08rem solid $color-common;

@@ -171,8 +171,6 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .login-container {
   width: 100%;
   height: 100vh;
@@ -194,7 +192,7 @@ export default {
       }
     }
 
-    .login-form :deep(.van-cell){
+    .login-form :deep(.van-cell) {
       margin-bottom: 0.1rem;
     }
 

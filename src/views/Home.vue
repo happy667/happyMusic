@@ -16,7 +16,7 @@ export default {
   computed: {
     ...mapWritableState(useAppStore, ["oldVideo"]),
   },
-  beforeRouteLeave(to, from) {
+  beforeRouteLeave (to, from) {
     if (this.oldVideo.$data && this.oldVideo.$data.isPlay) {
       this.oldVideo.pauseCurrentVideo();
     }
@@ -29,8 +29,6 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .home-container :deep(.header-navBar-container) {
   flex: 1;
   display: flex;

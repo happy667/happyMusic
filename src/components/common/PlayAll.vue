@@ -4,12 +4,16 @@
       <div class="play-icon">
         <van-icon name="play-circle-o" />
       </div>
-      <div class="play-all" @click="$emit('play')">
+      <div class="play-all"
+           @click="$emit('play')">
         <span>播放全部({{ length }})</span>
       </div>
     </div>
-    <div class="right" v-if="showFilter" @click="$emit('filterClick')">
-      <i class="iconfont icon-shaixuan" :style="{ color: filterStatus ? '#fd4979' : '#999' }"></i>
+    <div class="right"
+         v-if="showFilter"
+         @click="$emit('filterClick')">
+      <i class="iconfont icon-shaixuan"
+         :style="{ color: filterStatus ? '#fd4979' : '#999' }"></i>
     </div>
   </div>
 </template>
@@ -31,8 +35,6 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .play-all-container {
   display: flex;
   padding: 0 0.4rem;
@@ -42,7 +44,7 @@ export default {
   .left {
     display: flex;
     align-items: center;
-    
+
     .play-icon {
       font-size: $font-size-large-x;
       color: $color-common;

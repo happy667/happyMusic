@@ -240,8 +240,6 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .find-password-container {
   width: 100%;
   height: 100vh;
@@ -262,7 +260,7 @@ export default {
       }
     }
 
-    .find-password-form :deep(.van-cell){
+    .find-password-form :deep(.van-cell) {
       margin-bottom: 0.35rem;
 
       &:last-child {

@@ -41,9 +41,9 @@
           </div>
         </section>
       </template>
-</section>
+    </section>
 
-</div>
+  </div>
 </template>
 <script>
 import SongItem from '@/components/home/song/SongItem'
@@ -179,9 +179,7 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
-.song-comment-container :deep(.song-list-item-containter){
+.song-comment-container :deep(.song-list-item-containter) {
   border-radius: 0.2rem;
   padding: 0.2rem;
   box-shadow: 0 0.06rem 0.16rem rgba(0 0 0, 7%);

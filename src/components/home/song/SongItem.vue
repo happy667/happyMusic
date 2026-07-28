@@ -200,8 +200,6 @@ export default {
 }
 </script>
 <style lang="stylus">
-@import '~common/stylus/variable';
-
 .song-list-item-containter {
   position: relative;
   display: flex;

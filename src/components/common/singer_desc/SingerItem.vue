@@ -38,9 +38,8 @@ import Follow from "@/components/common/Follow";
 import userApi from "@/api/user.js";
 import { ERR_OK } from "@/api/config.js";
 import { DEFAULT_SINGER_IMAGE } from "@/assets/common/js/config.js";
-import { mapWritableState, mapState, mapActions } from 'pinia'
-
-import { useUserStore, useSingerStore } from '@/stores'
+import { mapWritableState } from "pinia";
+import { useUserStore } from "@/stores";
 export default {
   props: {
     singer: Object,
@@ -62,7 +61,7 @@ export default {
     },
   },
   computed: {
-    ...mapWritableState(useUserStore, ['user']),
+    ...mapWritableState(useUserStore, ["user"]),
     _singer() {
       return this.singer;
     },
@@ -143,8 +142,6 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .singer-list-item-container {
   padding: 0.2rem 0.4rem;
 

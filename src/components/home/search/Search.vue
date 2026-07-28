@@ -2,49 +2,42 @@
   <div class="search-container">
     <!-- 头部导航 -->
     <van-sticky>
-      <van-nav-bar
-        :title="$route.meta.title"
-        ref="navBar"
-        left-arrow
-        @click-left="routerBack"
-      />
+      <van-nav-bar :title="$route.meta.title"
+                   ref="navBar"
+                   left-arrow
+                   @click-left="routerBack" />
     </van-sticky>
 
     <div class="container">
       <!--搜索框-->
-      <van-search
-        left-icon="search"
-        :placeholder="searchDefault.showKeyword"
-        shape="round"
-        show-action
-        @input="handleInput"
-        v-model="searchVal"
-        @search="handleSearch"
-      >
+      <van-search left-icon="search"
+                  :placeholder="searchDefault.showKeyword"
+                  shape="round"
+                  show-action
+                  @input="handleInput"
+                  v-model="searchVal"
+                  @search="handleSearch">
         <template #action>
           <div @click="handleSearch">搜索</div>
         </template>
       </van-search>
       <!-- 搜索列表 -->
-      <section class="search-list-container" v-show="showSearchList">
+      <section class="search-list-container"
+               v-show="showSearchList">
         <ul class="search-list">
-          <li
-            class="search-list-item van-hairline--bottom"
-            @click="selectItem(item)"
-            v-for="(item, index) in searchList"
-            :key="index"
-          >
+          <li class="search-list-item van-hairline--bottom"
+              @click="selectItem(item)"
+              v-for="(item, index) in searchList"
+              :key="index">
             <div class="icon">
               <van-icon name="search" />
             </div>
             {{ item }}
           </li>
         </ul>
-        <div
-          class="close-search-list"
-          v-show="searchList && searchList.length > 0"
-          @click="closeSearchList"
-        >
+        <div class="close-search-list"
+             v-show="searchList && searchList.length > 0"
+             @click="closeSearchList">
           关闭
         </div>
       </section>
@@ -65,7 +58,7 @@ import { SEARCH_TYPE } from "@/assets/common/js/config.js";
 
 export default {
   name: "search",
-  data() {
+  data () {
     return {
       searchDefault: "", // 搜索默认关键词
       searchList: null, // 搜索列表
@@ -82,44 +75,44 @@ export default {
     ...mapWritableState(useAppStore, ["noCacheComponents"]),
     // 搜索框的值
     searchVal: {
-      get() {
+      get () {
         return this.searchKeywords ? this.searchKeywords : "";
       },
-      set(val) {
+      set (val) {
         this.searchKeywords = val;
       },
     },
   },
   watch: {
-    selectSearchWord() {
+    selectSearchWord () {
       if (this.selectSearchWord) {
         this.searchKeywords = this.selectSearchWord;
         this.search();
       }
     },
   },
-  mounted() {
+  mounted () {
     this.$nextTick(() => {
       this.getSearchDefault();
     });
     // 监听页面滚动
     this.addScrollListner();
   },
-  activated() {
+  activated () {
     // 监听页面滚动
     this.addScrollListner();
   },
-  deactivated() {
+  deactivated () {
     // 取消监听页面滚动
     this.removeScrollListner();
   },
-  destroyed() {
+  destroyed () {
     // 取消监听页面滚动
     this.removeScrollListner();
   },
   methods: {
     // 返回上一个路由
-    routerBack() {
+    routerBack () {
       if (this.$route.path === "/search/searchPage") {
         this.$router.push("/home");
         return;
@@ -129,17 +122,17 @@ export default {
       this.$utils.routerBack();
     },
     // 关闭搜索列表
-    closeSearchList() {
+    closeSearchList () {
       if (this.showSearchList) {
         this.showSearchList = false;
       }
     },
     // 显示搜索列表
-    openSearchList() {
+    openSearchList () {
       this.showSearchList = true;
     },
     // 获取默认关键词
-    async getSearchDefault() {
+    async getSearchDefault () {
       const { data: res } = await searchApi.getSearchDefault();
       if (res.code === ERR_OK) {
         this.searchDefault = {
@@ -150,7 +143,7 @@ export default {
       }
     },
     // 搜索搜索建议
-    async getSearchSuggest() {
+    async getSearchSuggest () {
       const { data: res } = await searchApi.getSearchSuggest(this.searchKeywords);
       if (res.code === ERR_OK) {
         if (res.result.allMatch) {
@@ -161,7 +154,7 @@ export default {
         }
       }
     },
-    search(searchIndex = 0) {
+    search (searchIndex = 0) {
       this.closeSearchList();
       // 设置搜索标签页
       this.searchCurrentIndex = searchIndex;
@@ -177,7 +170,7 @@ export default {
       }
     },
     // 处理搜索索引
-    handleSearchIndex(type) {
+    handleSearchIndex (type) {
       let index = 0; // 默认为索引为0
       switch (type) {
         case SEARCH_TYPE.all:
@@ -202,7 +195,7 @@ export default {
       return index;
     },
     // 处理搜索请求
-    async handleSearch() {
+    async handleSearch () {
       // 没有输入按默认搜索关键词搜索
       if (this.searchKeywords.trim().length === 0) {
         this.searchKeywords = this.searchDefault.realkeyword;
@@ -226,12 +219,12 @@ export default {
       }
     }, 300),
     // 选择搜索名称
-    selectItem(item) {
+    selectItem (item) {
       this.searchKeywords = item;
       this.search();
     },
     // 监听页面滚动
-    handleScroll() {
+    handleScroll () {
       let scrollTop =
         window.pageYOffset ||
         document.documentElement.scrollTop ||
@@ -242,23 +235,21 @@ export default {
       }
     },
     // 监听页面滚动
-    addScrollListner() {
+    addScrollListner () {
       window.addEventListener("scroll", this.handleScroll);
     },
     // 取消监听页面滚动
-    removeScrollListner() {
+    removeScrollListner () {
       window.removeEventListener("scroll", this.handleScroll);
     },
   },
 };
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .van-search {
   display: flex;
   justify-content: center;
-  padding:0.4rem 0.2rem 0 0.4rem;
+  padding: 0.4rem 0.2rem 0 0.4rem;
   box-sizingrem: border-box;
 }
 

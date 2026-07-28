@@ -176,9 +176,7 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
-.ranking-container .list-container :deep(.official-list-container:last-child){
+.ranking-container .list-container :deep(.official-list-container:last-child) {
   margin-bottom: 0;
 }
 

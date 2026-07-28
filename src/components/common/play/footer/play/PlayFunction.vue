@@ -21,21 +21,26 @@
 <script>
 import userApi from "@/api/user.js";
 import { ERR_OK } from "@/api/config.js";
-import { mapWritableState, mapState, mapActions } from 'pinia'
+import { mapWritableState, mapState, mapActions } from "pinia";
 
-import { useUserStore, usePlayerStore, useAppStore } from '@/stores'
+import { useUserStore, usePlayerStore, useAppStore } from "@/stores";
 export default {
   computed: {
-    ...mapWritableState(useUserStore, ['user']),
-    ...mapWritableState(usePlayerStore, ['isPlayerClick', 'playerFullScreen', 'songSpeedPopup', 'togglePlayList']),
-    ...mapWritableState(useAppStore, ['noCacheComponents']),
-    ...mapState(usePlayerStore, ['currentSong']),
+    ...mapWritableState(useUserStore, ["user"]),
+    ...mapWritableState(usePlayerStore, [
+      "isPlayerClick",
+      "playerFullScreen",
+      "songSpeedPopup",
+      "togglePlayList",
+    ]),
+    ...mapWritableState(useAppStore, ["noCacheComponents"]),
+    ...mapState(usePlayerStore, ["currentSong"]),
     loveIcon() {
       return this.currentSong.isLike ? "icon-aixin" : "icon-icon-test";
     },
   },
   methods: {
-    ...mapActions(useAppStore, ['addNoCacheComponent', 'removeNoCacheComponent']),
+    ...mapActions(useAppStore, ["addNoCacheComponent", "removeNoCacheComponent"]),
     // 点击评论
     handleCommentClick() {
       // 设置从播放器页面点击
@@ -94,7 +99,6 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
 
 .function-container {
   display: flex;

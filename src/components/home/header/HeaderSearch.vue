@@ -19,9 +19,9 @@
 <script>
 import searchApi from "@/api/search.js";
 import { ERR_OK } from "@/api/config.js";
-import { mapWritableState, mapState, mapActions } from 'pinia'
-
-import { useUserStore, useSearchStore } from '@/stores'
+import { mapWritableState } from "pinia";
+import logo from "@/assets/images/logo.png";
+import { useUserStore, useSearchStore } from "@/stores";
 export default {
   name: "headerSearchContainer",
   data: function () {
@@ -30,10 +30,10 @@ export default {
     };
   },
   computed: {
-    ...mapWritableState(useUserStore, ['user']),
-    ...mapWritableState(useSearchStore, ['searchKeywords']),
+    ...mapWritableState(useUserStore, ["user"]),
+    ...mapWritableState(useSearchStore, ["searchKeywords"]),
     image() {
-      return this.user ? this.user.avatarUrl : require("@/assets/images/logo.png");
+      return this.user ? this.user.avatarUrl : logo;
     },
   },
   mounted() {
@@ -61,41 +61,46 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
+
 .header-search-container {
-    width: 100%;
+  width: 100%;
+  display: flex;
+  padding: 0.2rem 0.4rem 0 0.4rem;
+  box-sizing: border-box;
+  background: $color-common-background;
+
+  .logo {
+    padding-top: 10px;
     display: flex;
-    padding: 0.2rem 0.4rem 0 0.4rem;
+    flex-direction: column;
+    align-items: flex-end;
     box-sizing: border-box;
-    background: $color-common-background;
-    .logo {
-        padding-top: 10px;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        box-sizing: border-box;
-        text-align: center;
-        img {
-            display: block;
-            width: 0.7rem;
-        }
-        &.active {
-            margin-top: 6px;
-            padding-top: 0;
-            width: 1rem;
-            height: 1rem;
-            border-radius: 50%;
-            background: $color-common-b;
-            img {
-                display: block;
-                width: 100%;
-                height: 100%;
-                border-radius: 50%;
-            }
-        }
+    text-align: center;
+
+    img {
+      display: block;
+      width: 0.7rem;
     }
-    .search {
-        flex: 1;
+
+    &.active {
+      margin-top: 6px;
+      padding-top: 0;
+      width: 1rem;
+      height: 1rem;
+      border-radius: 50%;
+      background: $color-common-b;
+
+      img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+      }
     }
+  }
+
+  .search {
+    flex: 1;
+  }
 }
 </style>

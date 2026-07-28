@@ -172,15 +172,13 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
-.song-sheet-comment-container :deep(.songs-list-item-containter){
+.song-sheet-comment-container :deep(.songs-list-item-containter) {
   border-radius: 0.2rem;
   padding: 0.2rem;
   box-shadow: 0 0.1rem 0.8rem rgba(0, 0, 0, 0.1);
 }
 
-.song-sheet-comment-container :deep(.comment){
+.song-sheet-comment-container :deep(.comment) {
   padding: 0.2rem 0.4rem 0.4rem 0.4rem;
 }
 
@@ -191,11 +189,12 @@ export default {
   right: 0;
   bottom: 0;
   z-index: -1;
-  background-color: #161824;
   width: 100%;
   height: 100%;
   transition: background-image 0.6s;
-  background: no-repeat 50% / cover;
+  background-size: cover
+  background-position: 50% 50%
+  background-repeat: no-repeat;
   transform-origin: center center;
   filter: blur(10px);
   transform: scale(1.2);

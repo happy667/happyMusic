@@ -1,6 +1,7 @@
 <template>
   <scroll ref="recommend_scroll">
-    <div class="recommend-container" ref="container">
+    <div class="recommend-container"
+         ref="container">
       <!-- loading -->
       <loading :loading="load" />
       <template v-if="!load">
@@ -8,11 +9,9 @@
         <recommend-swiper :banners="banners"></recommend-swiper>
 
         <!-- 推荐新音乐 -->
-        <song-swiper
-          :recommendNewSong="recommendNewSong"
-          v-if="this.recommendNewSong.length > 0"
-          @select="selectSong"
-        >
+        <song-swiper :recommendNewSong="recommendNewSong"
+                     v-if="this.recommendNewSong.length > 0"
+                     @select="selectSong">
           <AppTitle title="新歌推送"></AppTitle>
         </song-swiper>
         <!--个性化区域-->
@@ -20,24 +19,23 @@
           <AppTitle title="个性化推荐"></AppTitle>
         </personalization>
         <!-- 推荐歌单区域 -->
-        <song-sheet-list
-          @select="selectSongSheet"
-          :list="recommendSongSheet"
-          v-if="this.recommendSongSheet.length > 0"
-        >
-          <AppTitle path="/songSheetSquare" loadMore title="推荐歌单"></AppTitle>
+        <song-sheet-list @select="selectSongSheet"
+                         :list="recommendSongSheet"
+                         v-if="this.recommendSongSheet.length > 0">
+          <AppTitle path="/songSheetSquare"
+                    loadMore
+                    title="推荐歌单"></AppTitle>
         </song-sheet-list>
 
         <!-- 新碟上线 -->
-        <album-swiper
-          :showIcon="true"
-          :list="recommendNewAlbum"
-          v-if="this.recommendNewAlbum.length > 0"
-        >
+        <album-swiper :showIcon="true"
+                      :list="recommendNewAlbum"
+                      v-if="this.recommendNewAlbum.length > 0">
           <AppTitle title="新碟上线"></AppTitle>
         </album-swiper>
         <!-- loading -->
-        <loading :loading="loadMore" height="3rem" />
+        <loading :loading="loadMore"
+                 height="3rem" />
       </template>
     </div>
   </scroll>
@@ -59,7 +57,7 @@ import { mapWritableState, mapState } from "pinia";
 
 import { useAppStore, usePlayerStore } from "@/stores";
 export default {
-  data() {
+  data () {
     return {
       banners: [], // 轮播图数据
       recommendSongSheet: [], // 推荐页歌单列表
@@ -73,23 +71,23 @@ export default {
   computed: {
     ...mapWritableState(useAppStore, ["homeCurrentIndex"]),
     ...mapState(usePlayerStore, ["currentSong"]),
-    load() {
+    load () {
       return this.banners.length === 0;
     },
   },
   watch: {
-    homeCurrentIndex(val) {
+    homeCurrentIndex (val) {
       if (val === 0 && !this.hasLoaded) {
         this.loadData();
       }
     },
   },
-  activated() {
+  activated () {
     this.refresh();
   },
   methods: {
     // 获取轮播图数据
-    async getBanner() {
+    async getBanner () {
       const { data: res } = await recommendApi.getBanner();
       if (res.code === ERR_OK) {
         // 成功获取轮播图数据
@@ -97,7 +95,7 @@ export default {
       }
     },
     // 选择歌曲
-    selectSong(item, index) {
+    selectSong (item, index) {
       // 比较两首歌曲
       let result = this.$utils.compareSong(this.currentSong, item);
       if (!result) {
@@ -106,12 +104,12 @@ export default {
       }
     },
     // 选择歌单
-    selectSongSheet(item) {
+    selectSongSheet (item) {
       this.setRank(false); // 不需要排行
       this.$router.push(`/songSheetDisc/${item.id}`);
     },
     // 获取推荐歌单
-    async getRecommendSongSheet() {
+    async getRecommendSongSheet () {
       this.loadMore = true;
       let res = null;
       if (this.$utils.isLogin()) {
@@ -129,7 +127,7 @@ export default {
       }
     },
     // 获取推荐新音乐
-    async getRecommendNewSong() {
+    async getRecommendNewSong () {
       this.loadMore = true;
       //判断用户是否登录，若登录则获取用户每日推荐歌单否则默认歌单
       const { data: res } = await recommendApi.getRecommendNewSong();
@@ -175,7 +173,7 @@ export default {
       }
     },
     // 获取推荐新碟
-    async getRecommendNewAlbum() {
+    async getRecommendNewAlbum () {
       this.loadMore = true;
       const { data: res } = await recommendApi.getRecommendNewAlbum();
       if (res.code === ERR_OK) {
@@ -185,11 +183,11 @@ export default {
       }
     },
     // 刷新
-    refresh() {
+    refresh () {
       this.$refs.recommend_scroll.refresh();
     },
     // 加载所有数据
-    async loadData() {
+    async loadData () {
       if (this.hasLoaded) return;
       this.hasLoaded = true;
       await this.getBanner();
@@ -198,7 +196,7 @@ export default {
       await this.getRecommendNewAlbum();
     },
   },
-  async mounted() {
+  async mounted () {
     // 如果当前已是推荐tab（index=0），直接加载数据
     if (this.homeCurrentIndex === 0) {
       this.loadData();
@@ -217,9 +215,7 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
-.recommend-container :deep(.title-container){
+.recommend-container :deep(.title-container) {
   padding: 0 0.4rem;
 }
 

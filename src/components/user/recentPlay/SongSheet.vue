@@ -55,8 +55,6 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .recent-songSheet-container {
   padding-top: 0.25rem;
   box-sizing: border-box;

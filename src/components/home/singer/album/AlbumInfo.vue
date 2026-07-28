@@ -430,7 +430,6 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
 
 .album-container :deep(.list-box){
   position: relative;

@@ -370,9 +370,7 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
-.user-container :deep(.scroll){
+.user-container :deep(.scroll) {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -380,25 +378,25 @@ export default {
   background: #fff;
 }
 
-.user-container :deep(.album-container){
+.user-container :deep(.album-container) {
   padding: 0;
   color: $color-common-x;
 }
 
-.user-container :deep(.loading-container .van-loading){
+.user-container :deep(.loading-container .van-loading) {
   background-color: #fff;
 }
 
-.user-container :deep(.van-skeleton){
+.user-container :deep(.van-skeleton) {
   padding: 0;
 }
 
-.user-container :deep(.van-skeleton__title){
+.user-container :deep(.van-skeleton__title) {
   height: 0.7rem;
   line-height: 0.7rem;
 }
 
-.user-container :deep(.van-skeleton__row){
+.user-container :deep(.van-skeleton__row) {
   margin-top: 0.2rem;
   width: 100% !important;
   height: 0.6rem;
@@ -615,7 +613,7 @@ export default {
             background-color: #fff;
           }
 
-:deep(.my-album .list .item){
+          :deep(.my-album .list .item) {
             margin-bottom: 0.3rem;
 
             &:last-child {

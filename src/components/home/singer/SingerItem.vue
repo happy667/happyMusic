@@ -69,8 +69,6 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .singer-list-item-container {
   padding: 0.2rem 0.4rem;
 

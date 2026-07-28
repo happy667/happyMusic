@@ -2,7 +2,8 @@
   <div class="album-container">
     <div class="album-image">
       <div class="image-container">
-        <div class="image animated fadeIn" :style="loadBgStyle">
+        <div class="image animated fadeIn"
+             :style="loadBgStyle">
           <img v-lazy="item.picUrl" />
         </div>
         <div class="digital-album">
@@ -13,33 +14,38 @@
     <article class="info">
       <div class="name">{{ item.name }}</div>
       <div class="desc">
-        <span class="singer" v-if="showSinger">{{ item.singerName }}</span>
-        <span class="time" v-if="showTime">{{
+        <span class="singer"
+              v-if="showSinger">{{ item.singerName }}</span>
+        <span class="time"
+              v-if="showTime">{{
           $filters.convertDate(item.publishTime, ".")
         }}</span>
-        <span class="song-Size" v-if="showSongSize">{{ item.size }}首</span>
+        <span class="song-Size"
+              v-if="showSongSize">{{ item.size }}首</span>
       </div>
     </article>
-    <div class="functions" v-if="showFunctions" @click.stop="handleHpenFunctions">
+    <div class="functions"
+         v-if="showFunctions"
+         @click.stop="handleHpenFunctions">
       <van-icon name="ellipsis" />
     </div>
-    <van-popup
-      v-model:show="showPopup"
-      round
-      position="bottom"
-      :get-container="getContainer"
-    >
+    <van-popup v-model:show="showPopup"
+               round
+               position="bottom"
+               :get-container="getContainer">
       <div class="popup-content">
         <div class="title">{{ "专辑: " + item.name }}</div>
         <div class="functions">
-          <div class="delete" @click="handleDelete">
+          <div class="delete"
+               @click="handleDelete">
             <div class="icon">
               <i class="iconfont icon-shanchu"></i>
             </div>
             <div class="text">取消收藏</div>
           </div>
         </div>
-        <div class="cancle" @click="showPopup = false">取消</div>
+        <div class="cancle"
+             @click="showPopup = false">取消</div>
       </div>
     </van-popup>
   </div>
@@ -72,7 +78,7 @@ export default {
       default: () => false,
     },
   },
-  data() {
+  data () {
     return {
       actions: [
         {
@@ -90,20 +96,20 @@ export default {
   },
   computed: {
     ...mapWritableState(useUserStore, ["user"]),
-    loadBgStyle() {
+    loadBgStyle () {
       return !this.item.picUrl ? "background:#f2f3f5" : "";
     },
   },
   methods: {
-    goToSongSheetInfo() {
+    goToSongSheetInfo () {
       if (!this.showPopup) {
         this.$router.push(`/songSheetDisc/${this.item.id}`);
       }
     },
-    handleHpenFunctions() {
+    handleHpenFunctions () {
       this.showPopup = !this.showPopup;
     },
-    handleDelete() {
+    handleDelete () {
       this.showPopup = false;
       this.$utils
         .alertConfirm({
@@ -128,16 +134,14 @@ export default {
           this.showActionSheet = false;
         });
     },
-    getContainer() {
+    getContainer () {
       return document.querySelector("#app");
     },
   },
 };
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
-.album-container .functions :deep(.van-icon-ellipsis){
+.album-container .functions :deep(.van-icon-ellipsis) {
   transform: rotate(90deg);
 }
 

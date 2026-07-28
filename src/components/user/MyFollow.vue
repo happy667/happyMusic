@@ -138,16 +138,14 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
-.my-follow-container :deep(.scroll){
+.my-follow-container :deep(.scroll) {
   position: absolute;
   width: 100%;
   height: 100%;
   overflow: hidden;
 }
 
-.my-follow-container :deep(.singerList){
+.my-follow-container :deep(.singerList) {
   padding-top: 0.1rem;
 }
 

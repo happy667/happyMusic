@@ -1,111 +1,103 @@
 <template>
-  <div
-    class="singer-info-container"
-    @touchstart="handleTouchStart"
-    @touchmove="handleTouchMove"
-    @touchend="handleTouchEnd"
-  >
+  <div class="singer-info-container"
+       @touchstart="handleTouchStart"
+       @touchmove="handleTouchMove"
+       @touchend="handleTouchEnd">
     <!-- 返回 -->
     <!-- 头部导航栏 -->
     <van-sticky>
-      <van-nav-bar
-        :title="$route.meta.title"
-        ref="navBar"
-        left-arrow
-        :z-index="99"
-        @click-left="routerBack"
-      />
+      <van-nav-bar :title="$route.meta.title"
+                   ref="navBar"
+                   left-arrow
+                   :z-index="99"
+                   @click-left="routerBack" />
     </van-sticky>
     <!--歌手信息-->
     <section class="content">
-      <scroll
-        ref="singerInfo_scroll"
-        @scroll="scroll"
-        :listenScroll="listenScroll"
-        :pullUp="pullUp"
-        @pullingUpLoad="handlePullingUp"
-        :probeType="probeType"
-      >
-        <div class="container" ref="container">
+      <scroll ref="singerInfo_scroll"
+              @scroll="scroll"
+              :listenScroll="listenScroll"
+              :pullUp="pullUp"
+              @pullingUpLoad="handlePullingUp"
+              :probeType="probeType">
+        <div class="container"
+             ref="container">
           <!-- 歌手背景图片 -->
-          <singer-image :imageUrl="backgroundUrl" @toggle="handleClickSingerBackground" />
+          <singer-image :imageUrl="backgroundUrl"
+                        @toggle="handleClickSingerBackground" />
 
-          <van-tabs
-            title-active-color="#FD4979"
-            ref="vanTab"
-            color="#FD4979"
-            animated
-            v-model="currentIndex"
-            @change="handleTabsChange"
-            swipeable
-          >
+          <van-tabs title-active-color="#FD4979"
+                    ref="vanTab"
+                    color="#FD4979"
+                    animated
+                    v-model="currentIndex"
+                    @change="handleTabsChange"
+                    swipeable>
             <!-- 歌手单曲 -->
             <van-tab title="歌曲">
-              <singer-song
-                :list="singerSong ? singerSong : []"
-                ref="singerSong"
-                :loading="loading"
-              />
+              <singer-song :list="singerSong ? singerSong : []"
+                           ref="singerSong"
+                           :loading="loading" />
             </van-tab>
             <!-- 歌手专辑 -->
             <van-tab :title="albumTitle">
               <singer-album :singerAlbum="singerAlbum" />
               <!-- loading -->
-              <loading :loading="loadMoreAlbum" height="2rem" />
+              <loading :loading="loadMoreAlbum"
+                       height="2rem" />
             </van-tab>
             <!-- 歌手mv -->
             <van-tab :title="mvTitle">
               <singer-mv :mvList="singerMV" />
               <!-- loading -->
-              <loading :loading="loadMoreMV" height="2rem" />
+              <loading :loading="loadMoreMV"
+                       height="2rem" />
             </van-tab>
             <!-- 歌手描述 -->
             <van-tab title="关于">
-              <singer-desc
-                ref="singerDesc"
-                :goToIntroduce="goToIntroduce"
-                :simSingerList="simSingerList ? simSingerList : []"
-                :singerDesc="singerDesc"
-                @selectSimSinger="selectSimSinger"
-              />
-              <loading :loading="loadSimSinger" height="2rem" />
+              <singer-desc ref="singerDesc"
+                           :goToIntroduce="goToIntroduce"
+                           :simSingerList="simSingerList ? simSingerList : []"
+                           :singerDesc="singerDesc"
+                           @selectSimSinger="selectSimSinger" />
+              <loading :loading="loadSimSinger"
+                       height="2rem" />
             </van-tab>
           </van-tabs>
           <div class="singer-card-container">
             <div class="singer-card">
               <div class="content">
                 <!-- 歌手头像 -->
-                <div
-                  class="singer-avatar"
-                  @click="handleClickSingerAvatar"
-                  :style="loadAvatarStyle"
-                >
-                  <my-image
-                    v-if="this.singerDetail"
-                    :src="this.singerDetail.artist.avatar"
-                    size="big"
-                  />
+                <div class="singer-avatar"
+                     @click="handleClickSingerAvatar"
+                     :style="loadAvatarStyle">
+                  <my-image v-if="this.singerDetail"
+                            :src="this.singerDetail.artist.avatar"
+                            size="big" />
                 </div>
-                <van-skeleton :row="4" :loading="!this.singerDetail" row-width="100%">
+                <van-skeleton :row="4"
+                              :loading="!this.singerDetail"
+                              row-width="100%">
                   <template v-if="this.singerDetail">
                     <!-- 歌手名称 -->
-                    <div class="singer-name" :style="singerNameStyle">
+                    <div class="singer-name"
+                         :style="singerNameStyle">
                       {{ singer.name }}
                     </div>
                     <!-- 粉丝数量 -->
-                    <p class="follows" v-if="singer">
+                    <p class="follows"
+                       v-if="singer">
                       {{ $filters.convertCount(singer.followCount) }}粉丝
                     </p>
-                    <div class="singer-desc" v-if="this.singerDetail.identify">
+                    <div class="singer-desc"
+                         v-if="this.singerDetail.identify">
                       {{ this.singerDetail.identify.imageDesc }}
                     </div>
                     <!-- 收藏 -->
                     <div class="follow">
-                      <follow
-                        @clickFollow="handleClickFollow"
-                        :followed="singer.followed"
-                        :followText="singer.followDay"
-                      ></follow>
+                      <follow @clickFollow="handleClickFollow"
+                              :followed="singer.followed"
+                              :followText="singer.followDay"></follow>
                     </div>
                   </template>
                 </van-skeleton>
@@ -115,15 +107,14 @@
         </div>
 
         <!-- 定位 -->
-        <position v-show="isShowPosition" @click="handlePosition"></position>
+        <position v-show="isShowPosition"
+                  @click="handlePosition"></position>
       </scroll>
       <!-- 遮罩层 -->
       <template v-if="this.singerDetail">
-        <overlay
-          :showImage="showImage"
-          :imgUrl="overlayUrl"
-          @toggle="handleToggleShowImage"
-        >
+        <overlay :showImage="showImage"
+                 :imgUrl="overlayUrl"
+                 @toggle="handleToggleShowImage">
         </overlay>
       </template>
     </section>
@@ -157,7 +148,7 @@ export default {
     id: String,
   },
   mixins: [playlistMixin],
-  data() {
+  data () {
     return {
       singerDesc: null, //歌手描述
       simSingerList: null, // 相似
@@ -177,25 +168,25 @@ export default {
       overlayUrl: "",
     };
   },
-  created() {
+  created () {
     this.listenScroll = true; // 可以监听页面滚动
     this.scrollEnd = true; // 可以监听页面停止滚动
     this.probeType = 3; // 可以监听缓冲时的滑动位置
     this.pullUp = true;
   },
   watch: {
-    loadMoreAlbum() {
+    loadMoreAlbum () {
       this.$nextTick(() => {
         this.refresh();
       });
     },
-    loadMoreMV() {
+    loadMoreMV () {
       this.$nextTick(() => {
         this.refresh();
       });
     },
   },
-  async mounted() {
+  async mounted () {
     if (this.singer) {
       this.singer.picUrl = "";
     }
@@ -212,24 +203,24 @@ export default {
     ...mapWritableState(usePlayerStore, ['playerFullScreen', 'currentPlayIndex', 'isPlayerClick', 'hideMiniPlayer']),
     ...mapState(usePlayerStore, ['currentSong']),
     currentIndex: {
-      get() {
+      get () {
         return this.singerCurrentIndex;
       },
-      set(index) {
+      set (index) {
         this.singerCurrentIndex = index;
       },
     },
-    followCount() {
+    followCount () {
       return this.singer.followCount ? this.singer.followCount : 0;
     },
     // 是否显示定位
-    isShowPosition() {
+    isShowPosition () {
       if (!this.singerSong) return;
       // 判断当前歌曲列表是否有正在播放的歌曲（-1表示没有，currentIndex表示当前tab切换页是否在歌曲列表页）
       let index = this.$utils.findIndex(this.singerSong, this.currentSong);
       return this.showPosition && this.currentIndex === 0 && index !== -1;
     },
-    backgroundUrl() {
+    backgroundUrl () {
       if (!this.singerDetail) {
         return;
       }
@@ -237,31 +228,31 @@ export default {
         ? this.singerDetail.user.backgroundUrl
         : this.singerDetail.artist.cover;
     },
-    singerNameStyle() {
+    singerNameStyle () {
       if (!this.singerDetail) {
         return;
       }
       return this.singerDetail.artist ? "margin-top:0.6rem" : "margin-top:0";
     },
-    albumTitle() {
+    albumTitle () {
       return this.singerDetail ? "专辑 " + this.singerDetail.artist.albumSize : "专辑";
     },
-    mvTitle() {
+    mvTitle () {
       return this.singerDetail ? "MV " + this.singerDetail.artist.mvSize : "MV";
     },
-    loadAvatarStyle() {
+    loadAvatarStyle () {
       return !this.singerDetail ? "background:#fff" : "";
     },
   },
   methods: {
     ...mapActions(useAppStore, ['addNoCacheComponent', 'removeNoCacheComponent']),
-    routerBack() {
+    routerBack () {
       if (!this.playerFullScreen && this.isPlayerClick) {
         this.playerFullScreen = true;
       }
       this.$utils.routerBack();
     },
-    handleVanTab() {
+    handleVanTab () {
       // 适配tab栏与歌手名片距离
       let top = "";
       if (this.singerDetail.identify) {
@@ -273,7 +264,7 @@ export default {
         this.$refs.vanTab.$el.style.marginTop = top;
       });
     },
-    async handleTabsChange(name) {
+    async handleTabsChange (name) {
       switch (name) {
         case 0: // 歌手单曲
           if (!this.singerSong) this.getSingerSong(this.id);
@@ -295,7 +286,7 @@ export default {
       }
     },
     // 获取歌手单曲
-    async getSingerSong(id) {
+    async getSingerSong (id) {
       try {
         this.loading = true;
 
@@ -342,7 +333,7 @@ export default {
         this.loading = false;
       }
     },
-    async getSingerDetail(id) {
+    async getSingerDetail (id) {
       const { data: res } = await singerApi.getSingerDetail(id);
       if (res.code === ERR_OK) {
         // 成功获取歌手详情
@@ -354,7 +345,7 @@ export default {
       }
     },
     // 获取歌手专辑
-    async getSingerAlbum(id) {
+    async getSingerAlbum (id) {
       // 获取歌手专辑
       const offset = this.singerAlbum ? this.singerAlbum.length : 0;
       const { data: res } = await singerApi.getSingerAlbum(id, offset);
@@ -388,7 +379,7 @@ export default {
       }
     },
     // 获取歌手mv
-    async getSingerMV(id) {
+    async getSingerMV (id) {
       // 获取歌手专辑
       const offset = this.singerMV ? this.singerMV.length : 0;
       // 获取歌手mv
@@ -411,7 +402,7 @@ export default {
     },
 
     // 获取歌手描述
-    async getSingerDesc(id) {
+    async getSingerDesc (id) {
       const { data: res } = await singerApi.getSingerDesc(id);
       if (res.code === ERR_OK) {
         // 成功 获取歌手详情
@@ -424,7 +415,7 @@ export default {
       }
     },
     // 获取相似歌手
-    async getSimilarSinger(id) {
+    async getSimilarSinger (id) {
       this.loadSimSinger = true;
       const { data: res } = await singerApi.getSimilarSinger(id);
       if (res.code === ERR_OK) {
@@ -452,7 +443,7 @@ export default {
     },
 
     // 获取歌手关注
-    async getSingerFollow(id) {
+    async getSingerFollow (id) {
       const { data: res } = await singerApi.getSingerFollow(id);
       if (res.code === ERR_OK) {
         // 成功 获取
@@ -464,7 +455,7 @@ export default {
       }
     },
     // 设置歌手
-    setSingerInfo(singer) {
+    setSingerInfo (singer) {
       let newSinger = new Singer({
         id: singer.id,
         name: singer.name,
@@ -477,7 +468,7 @@ export default {
       this.singer = newSinger;
     },
     // 上拉加载
-    handlePullingUp() {
+    handlePullingUp () {
       if (this.loading) return;
       switch (this.currentIndex) {
         case 1:
@@ -489,7 +480,7 @@ export default {
       }
     },
     // 处理加载更多专辑
-    handleLoadMoreAlbum() {
+    handleLoadMoreAlbum () {
       if (this.singerAlbumFinished) {
         // 加载完成
         return;
@@ -508,7 +499,7 @@ export default {
       }, 300);
     },
     // 处理加载更多mv
-    handleLoadMoreMV() {
+    handleLoadMoreMV () {
       if (this.singerMVFinished) {
         // 加载完成
         return;
@@ -527,7 +518,7 @@ export default {
       }, 300);
     },
     // 处理定位
-    handlePosition() {
+    handlePosition () {
       // 说明有歌曲在播放
       if (this.currentSong) {
         // 获取当前歌曲索引
@@ -537,27 +528,27 @@ export default {
         this.$toast("已定位到当前歌曲");
       }
     },
-    handleTouchStart() {
+    handleTouchStart () {
       if (this.currentIndex === 0) {
         clearTimeout(this.timer);
       }
     },
-    handleTouchMove() {
+    handleTouchMove () {
       this.showPosition = true;
     },
-    handleTouchEnd() {
+    handleTouchEnd () {
       this.timer = setTimeout(() => {
         this.showPosition = false;
       }, 5000);
     },
     // 隐藏定位
-    handleHidePosition() {
+    handleHidePosition () {
       this.showPosition = false;
     },
-    goToIntroduce() {
+    goToIntroduce () {
       this.$router.push(`/singerIntroduce/${this.id}`);
     },
-    handlePlaylist(playList) {
+    handlePlaylist (playList) {
       // 适配播放器与页面底部距离
       const bottom = playList.length > 0 ? "1.5rem" : "";
       this.$nextTick(() => {
@@ -566,14 +557,14 @@ export default {
       });
     },
     // 页面滚动
-    scroll(pos) {
+    scroll (pos) {
       this.scrollY = pos.y;
     },
-    refresh() {
+    refresh () {
       this.$refs.singerInfo_scroll.refresh();
     },
     // 显示隐藏图片
-    handleToggleShowImage() {
+    handleToggleShowImage () {
       this.showImage = !this.showImage;
       this.handleHidePosition();
       if (this.currentPlayIndex !== -1) {
@@ -581,23 +572,23 @@ export default {
       }
     },
     //点击背景图片
-    handleClickSingerBackground() {
+    handleClickSingerBackground () {
       this.overlayUrl = this.backgroundUrl;
       this.handleToggleShowImage();
     },
     //点击歌手头像
-    handleClickSingerAvatar() {
+    handleClickSingerAvatar () {
       this.overlayUrl = this.singerDetail.artist.avatar;
       this.handleToggleShowImage();
     },
     // 选择相似歌手
-    selectSimSinger(item) {
+    selectSimSinger (item) {
       this.singerCurrentIndex = 0;
       this.addNoCacheComponent("singerInfo");
       this.$router.push(`/singerInfo/${item.id}`);
     },
     // 选中收藏歌手
-    handleClickFollow() {
+    handleClickFollow () {
       if (this.user) {
         // 说明已经登录
         this.follow(); // 收藏/取消收藏歌手
@@ -607,7 +598,7 @@ export default {
       }
     },
     // 收藏/取消收藏歌手
-    follow() {
+    follow () {
       let singer = this.singer;
       let follow = !singer.followed;
       follow = follow ? 1 : 0; // 1代表收藏，0代表不收藏
@@ -632,7 +623,7 @@ export default {
                 this.$toast(err.data.message);
               });
           })
-          .catch(() => {});
+          .catch(() => { });
       } else {
         userApi
           .updateFollowSinger(singer.id, follow)
@@ -666,8 +657,6 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .singer-info-container :deep(.scroll) {
   position: absolute;
   width: 100%;

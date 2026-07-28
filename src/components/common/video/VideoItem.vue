@@ -48,8 +48,6 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .video-list-item-container {
   width: 100%;
   display: flex;

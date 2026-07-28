@@ -27,7 +27,8 @@
             <div class="right delete"
                  @click.stop="handleDelete(item)">
               <div class="icon">
-                <van-icon name="cross" size="16" />
+                <van-icon name="cross"
+                          size="16" />
               </div>
             </div>
           </li>
@@ -125,8 +126,6 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .scroll-wrapper {
   position: relative;
   height: 9rem;
@@ -134,10 +133,10 @@ export default {
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
 
-
   &::-webkit-scrollbar {
     display: none;
   }
+
   -ms-overflow-style: none;
   scrollbar-width: none;
 }

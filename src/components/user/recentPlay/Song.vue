@@ -3,13 +3,12 @@
     <!-- loading -->
     <loading :loading="loading" />
     <template v-if="songList.length !== 0">
-      <play-all :length="songList.length" @play="handlePlayAll(songList)"></play-all>
-      <song-list
-        @select="selectSong"
-        :showImage="true"
-        ref="songList"
-        :songsList="songList"
-      ></song-list>
+      <play-all :length="songList.length"
+                @play="handlePlayAll(songList)"></play-all>
+      <song-list @select="selectSong"
+                 :showImage="true"
+                 ref="songList"
+                 :songsList="songList"></song-list>
     </template>
 
     <template v-if="!loading && total === 0">
@@ -32,7 +31,7 @@ import Singer from "@/assets/common/js/singer.js";
 
 export default {
   name: "RecentPlaySong",
-  data() {
+  data () {
     return {
       songList: [], // 歌曲列表
       loading: false, // 加载状态
@@ -42,16 +41,16 @@ export default {
   computed: {
     ...mapState(usePlayerStore, ["currentSong"]), // 获取当前播放的歌曲
   },
-  mounted() {
+  mounted () {
     this.getSongs();
   },
   methods: {
     // 播放全部歌曲
-    handlePlayAll(list) {
+    handlePlayAll (list) {
       this.$utils.playAllSong(list); // 调用工具方法播放全部歌曲
     },
     // 查询单曲
-    async getSongs() {
+    async getSongs () {
       this.loading = true; // 开始加载
       try {
         const { data: res } = await userApi.getUserRencent("song");
@@ -94,7 +93,7 @@ export default {
       }
     },
     // 选择歌曲
-    async selectSong(item, index) {
+    async selectSong (item, index) {
       this.$emit("closeList");
       // 比较当前播放的歌曲和点击的歌曲
       const result = this.$utils.compareSong(this.currentSong, item);
@@ -111,8 +110,6 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .recent-song-container {
   padding-top: 0.2rem;
 

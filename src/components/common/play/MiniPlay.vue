@@ -1,13 +1,14 @@
 <template>
-  <transition
-    enter-active-class="animated fadeIn faster"
-    leave-active-class="animated fadeOut faster"
-  >
-    <div class="mini-play-container" @click="handleShowFullPlay">
+  <transition enter-active-class="animated fadeIn faster"
+              leave-active-class="animated fadeOut faster">
+    <div class="mini-play-container"
+         @click="handleShowFullPlay">
       <div class="fixed">
         <div class="swiper player-swiper">
           <div class="swiper-wrapper">
-            <div class="swiper-slide" v-for="item in sequenceList" :key="item.id">
+            <div class="swiper-slide"
+                 v-for="item in sequenceList"
+                 :key="item.id">
               <div class="swiper-list-item">
                 <!-- 左侧图片 -->
                 <div class="left">
@@ -22,10 +23,8 @@
                 </div>
                 <div class="right">
                   <!--歌曲信息-->
-                  <div
-                    class="song-info"
-                    :class="currentSong.id === item.id ? 'active' : ''"
-                >
+                  <div class="song-info"
+                       :class="currentSong.id === item.id ? 'active' : ''">
                     <p class="song-name">{{ item.name + " - " + item.singers }}</p>
                   </div>
                 </div>
@@ -35,24 +34,28 @@
         </div>
         <!-- 按钮区域 -->
         <div class="player-controller">
-          <div class="play" @click.stop="handleTogglePlaying">
-            <van-circle
-              v-model="playerParams.width"
-              size="35"
-              color="#fd4979"
-              layer-color="#E2E2E2"
-          >
+          <div class="play"
+               @click.stop="handleTogglePlaying">
+            <van-circle v-model="playerParams.width"
+                        size="35"
+                        color="#fd4979"
+                        layer-color="#E2E2E2">
             </van-circle>
-            <div v-if="!songLoading" class="icon">
-              <i class="iconfont" :style="iconStyle" :class="playIcon"></i>
+            <div v-if="!songLoading"
+                 class="icon">
+              <i class="iconfont"
+                 :style="iconStyle"
+                 :class="playIcon"></i>
             </div>
-            <div v-if="songLoading" class="icon">
+            <div v-if="songLoading"
+                 class="icon">
               <i class="loading iconfont icon-loading rotate"></i>
             </div>
           </div>
 
           <!-- 歌曲列表 -->
-          <div class="play-list icon" @click.stop="handlePlayList">
+          <div class="play-list icon"
+               @click.stop="handlePlayList">
             <i class="iconfont icon-bofangliebiao"></i>
           </div>
         </div>
@@ -68,7 +71,7 @@ import { mapWritableState, mapState, mapActions } from 'pinia'
 import { usePlayerStore, useAppStore } from '@/stores'
 let vm = null;
 export default {
-  data() {
+  data () {
     return {
       isLoop: false,
     };
@@ -79,30 +82,30 @@ export default {
     ...mapWritableState(usePlayerStore, ['playing', 'sequenceList', 'currentPlayIndex', 'songLoading']),
     ...mapWritableState(useAppStore, ['audio']),
     ...mapWritableState(usePlayerStore, ['playerFullScreen', 'isPlayerClick', 'togglePlayList']),
-    playIcon() {
+    playIcon () {
       return this.playing ? "icon-zanting" : "icon-bofang";
     },
-    cdCls() {
+    cdCls () {
       return this.playing ? "play" : "play pause";
     },
-    iconStyle() {
+    iconStyle () {
       return {
         marginLeft: this.playing ? "0.03rem" : "0.07rem",
       };
     },
   },
-  mounted() {
+  mounted () {
     this.$nextTick(() => {
       // 初始化轮播图组件
       this.initSwiper();
       console.log(this.sequenceList);
     });
   },
-  created() {
+  created () {
     vm = this;
   },
   watch: {
-    currentSong() {
+    currentSong () {
       if (this.currentSong) {
         let index = this.sequenceList.findIndex(
           (item) => item.id === this.currentSong.id
@@ -114,16 +117,16 @@ export default {
 
   methods: {
     ...mapActions(usePlayerStore, ['next', 'prev', 'handleTogglePlaying']),
-    handleShowFullPlay() {
+    handleShowFullPlay () {
       this.playerFullScreen = true;
       this.isPlayerClick = false;
     },
     // 查看歌曲列表
-    handlePlayList() {
+    handlePlayList () {
       this.togglePlayList = true;
     },
     // 初始化轮播图组件
-    initSwiper() {
+    initSwiper () {
       // 通过settimeout 解决数据还没有完全加载的时候就已经渲染swiper，导致loop失效。
       setTimeout(() => {
         let index = this.sequenceList.findIndex(
@@ -138,13 +141,13 @@ export default {
           centeredSlides: true,
           slidesPerView: "auto",
           on: {
-            sliderMove(swiper, e) {
+            sliderMove (swiper, e) {
               e.stopPropagation();
             },
-            slidePrevTransitionEnd() {
+            slidePrevTransitionEnd () {
               vm.prev();
             },
-            slideNextTransitionEnd() {
+            slideNextTransitionEnd () {
               vm.next();
             },
           },
@@ -155,8 +158,6 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .mini-play-container {
   height: 0;
 

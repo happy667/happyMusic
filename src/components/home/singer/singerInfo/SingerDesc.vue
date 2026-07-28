@@ -78,7 +78,7 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .singer-desc-container {
-  @import '~common/stylus/variable';
+  import: 'common/stylus/variable';
 
   .context {
     margin: 0.2rem 0 0.4rem;

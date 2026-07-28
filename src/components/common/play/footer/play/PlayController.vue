@@ -1,24 +1,33 @@
 <template>
   <div class="play-controller-container">
     <!-- 播放类型 -->
-    <div class="play-type icon" @click="changeMode">
-      <i class="iconfont" :class="playModeIcon"></i>
+    <div class="play-type icon"
+         @click="changeMode">
+      <i class="iconfont"
+         :class="playModeIcon"></i>
     </div>
     <!-- 上一首 -->
-    <div class="prev icon" @click="prev">
+    <div class="prev icon"
+         @click="prev">
       <i class="iconfont icon-shangyishoushangyige"></i>
     </div>
     <!-- 播放暂停 -->
-    <div class="play icon" @click="handleTogglePlaying">
-      <van-icon v-if="!songLoading" :name="playIcon" size="60" />
-      <i v-if="songLoading" class="loading iconfont icon-loading rotate"></i>
+    <div class="play icon"
+         @click="handleTogglePlaying">
+      <van-icon v-if="!songLoading"
+                :name="playIcon"
+                size="60" />
+      <i v-if="songLoading"
+         class="loading iconfont icon-loading rotate"></i>
     </div>
     <!--下一曲-->
-    <div class="next icon" @click="next">
+    <div class="next icon"
+         @click="next">
       <i class="iconfont icon-xiayigexiayishou"></i>
     </div>
     <!-- 歌曲列表 -->
-    <div class="play-list icon" @click="handlePlayList">
+    <div class="play-list icon"
+         @click="handlePlayList">
       <i class="iconfont icon-bofangliebiao"></i>
     </div>
   </div>
@@ -32,29 +41,27 @@ export default {
   computed: {
     ...mapWritableState(usePlayerStore, ["playing", "playMode", "songLoading"]),
     ...mapWritableState(usePlayerStore, ["togglePlayList"]),
-    playIcon() {
+    playIcon () {
       return this.playing ? "pause-circle-o" : "play-circle-o";
     },
-    playModeIcon() {
+    playModeIcon () {
       return this.playMode === PLAY_MODE.sequence
         ? "icon-xunhuanbofang"
         : this.playMode === PLAY_MODE.loop
-        ? "icon-danquxunhuan"
-        : "icon-suijibofang";
+          ? "icon-danquxunhuan"
+          : "icon-suijibofang";
     },
   },
   methods: {
     ...mapActions(usePlayerStore, ["handleTogglePlaying", "changeMode", "prev", "next"]),
     // 查看歌曲列表
-    handlePlayList() {
+    handlePlayList () {
       this.togglePlayList = true;
     },
   },
 };
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .play-controller-container {
   margin: 0 0.65rem;
   display: flex;

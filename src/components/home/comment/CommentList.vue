@@ -1,6 +1,7 @@
 <template>
   <div class="comment-list-container">
-    <template v-for="item in commentList" :key="item.commentId">
+    <template v-for="item in commentList"
+              :key="item.commentId">
       <comment-item :comment="item"></comment-item>
     </template>
 
@@ -21,9 +22,7 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
-.comment-list-container :deep(.comment-item-container){
+.comment-list-container :deep(.comment-item-container) {
   &:first-child {
     padding-top: 0;
   }

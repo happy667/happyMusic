@@ -84,8 +84,6 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .editNikename-container {
   position: fixed;
   width: 100%;
@@ -93,7 +91,7 @@ export default {
   background-color: $color-common-background;
 }
 
-.editNikename-container :deep(.van-nav-bar__text){
+.editNikename-container :deep(.van-nav-bar__text) {
   color: $color-common;
 }
 </style>

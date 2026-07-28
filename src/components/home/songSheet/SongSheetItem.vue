@@ -29,8 +29,6 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .song-sheet-item-container {
   display: flex;
   align-content: space-between;

@@ -73,8 +73,6 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .recent-video-container {
   padding: 0.25rem 0.4rem 0;
   box-sizing: border-box;

@@ -4,29 +4,21 @@
     <loading :loading="pageLoading" />
 
     <template v-if="song.songList.length !== 0">
-      <play-all
-        :length="song.songList.length"
-        @play="handlePlayAll(song.songList)"
-      ></play-all>
-      <van-list
-        v-model="loading"
-        :finished="finished"
-        finished-text="没有更多了"
-        @load="handlePullingUp"
-      >
-        <song-list
-          @select="selectSong"
-          ref="songList"
-          :songsList="song.songList"
-        ></song-list>
+      <play-all :length="song.songList.length"
+                @play="handlePlayAll(song.songList)"></play-all>
+      <van-list v-model="loading"
+                :finished="finished"
+                finished-text="没有更多了"
+                @load="handlePullingUp">
+        <song-list @select="selectSong"
+                   ref="songList"
+                   :songsList="song.songList"></song-list>
       </van-list>
     </template>
 
-    <no-result
-      v-else-if="song.songCount === 0"
-      text="暂无相关歌曲"
-      image="search"
-    ></no-result>
+    <no-result v-else-if="song.songCount === 0"
+               text="暂无相关歌曲"
+               image="search"></no-result>
   </div>
 </template>
 <script>
@@ -46,7 +38,7 @@ import songApi from "@/api/song.js";
 
 export default {
   name: "searchResultSong",
-  data() {
+  data () {
     return {
       song: {
         songCount: -1,
@@ -60,11 +52,11 @@ export default {
   computed: {
     ...mapWritableState(useSearchStore, ["searchKeywords", "searchCurrentIndex"]),
     ...mapState(usePlayerStore, ["currentSong"]),
-    pageLoading() {
+    pageLoading () {
       return this.song.songList.length === 0 && !this.song.isNull;
     },
   },
-  mounted() {
+  mounted () {
     if (this.searchKeywords.trim().length === 0) {
       this.song.isNull = true;
       return;
@@ -73,12 +65,12 @@ export default {
   },
   methods: {
     // 播放全部歌曲
-    handlePlayAll(list) {
+    handlePlayAll (list) {
       // 引入vue原型上的utils
       this.$utils.playAllSong(list);
     },
     // 查询单曲
-    async getSearchSong() {
+    async getSearchSong () {
       // 显示加载logo
       this.loading = true;
       // 设置偏移量=歌曲列表长度
@@ -136,7 +128,7 @@ export default {
               }),
               isOriginal:
                 !item.originSongSimpleData &&
-                (item.originCoverType === 0 || item.originCoverType === 1)
+                  (item.originCoverType === 0 || item.originCoverType === 1)
                   ? 1
                   : 0,
             })
@@ -154,7 +146,7 @@ export default {
       }
     },
     // 上拉加载更多单曲
-    handlePullingUp() {
+    handlePullingUp () {
       // 加载时判断当前滚动的页面是否为该页面，因为其他页面在上拉加载时会干扰该页面
       if (this.searchCurrentIndex === 1) {
         if (this.song.isNull) {
@@ -175,7 +167,7 @@ export default {
       }
     },
     // 选择歌曲
-    async selectSong(item, index) {
+    async selectSong (item, index) {
       this.$emit("closeList");
       // 比较两首歌曲
       let result = this.$utils.compareSong(this.currentSong, item);
@@ -200,8 +192,6 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .search-song-container {
   padding-top: 0.25rem;
 

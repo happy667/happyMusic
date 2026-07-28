@@ -2,34 +2,30 @@
   <div class="play-ranking-container">
     <!-- 头部导航栏 -->
     <van-sticky>
-      <van-nav-bar :title="$route.meta.title" left-arrow @click-left="routerBack" />
+      <van-nav-bar :title="$route.meta.title"
+                   left-arrow
+                   @click-left="routerBack" />
     </van-sticky>
-    <van-tabs
-      title-active-color="#FD4979"
-      color="#FD4979"
-      animated
-      v-model:active="index"
-      @click-tab="handleChange"
-      swipeable
-    >
+    <van-tabs title-active-color="#FD4979"
+              color="#FD4979"
+              animated
+              v-model:active="index"
+              @click-tab="handleChange"
+              swipeable>
       <van-tab title="最近一周">
         <scroll ref="songList_weekend_scroll">
-          <song-list
-            ref="songList_weekend_container"
-            :list="weekendSongList"
-            :loading="loading"
-            noResult="暂无听歌记录"
-          />
+          <song-list ref="songList_weekend_container"
+                     :list="weekendSongList"
+                     :loading="loading"
+                     noResult="暂无听歌记录" />
         </scroll>
       </van-tab>
       <van-tab title="所有时间">
         <scroll ref="songList_all_scroll">
-          <song-list
-            ref="songList_all_container"
-            :list="allSongList"
-            :loading="loading"
-            noResult="暂无听歌记录"
-          />
+          <song-list ref="songList_all_container"
+                     :list="allSongList"
+                     :loading="loading"
+                     noResult="暂无听歌记录" />
         </scroll>
       </van-tab>
     </van-tabs>
@@ -49,7 +45,7 @@ import { useUserStore } from "@/stores";
 import { playlistMixin } from "@/assets/common/js/mixin.js";
 export default {
   name: "playRanking",
-  data() {
+  data () {
     return {
       weekendSongList: null, // 最近一周
       allSongList: null, // 所有时间
@@ -61,25 +57,25 @@ export default {
   computed: {
     ...mapWritableState(useUserStore, ["user"]),
   },
-  provide() {
+  provide () {
     return {
       showPlayCount: true,
     };
   },
   watch: {
-    user() {
+    user () {
       this.handleChange(this.index);
     },
   },
-  mounted() {
+  mounted () {
     this.handleChange(this.index);
   },
   methods: {
     // 返回上一个路由
-    routerBack() {
+    routerBack () {
       this.$utils.routerBack();
     },
-    async getUserPlayRecord(id, type) {
+    async getUserPlayRecord (id, type) {
       if (this.loading) return;
       this.loading = true;
       const { data: res } = await userApi.getUserPlayRecord(id, type);
@@ -124,7 +120,7 @@ export default {
         return songList;
       }
     },
-    async handleChange(name) {
+    async handleChange (name) {
       this.handlePlaylist(this.playList);
       if (this.user) {
         if (name === 0) {
@@ -139,7 +135,7 @@ export default {
         }
       }
     },
-    handlePlaylist(playList) {
+    handlePlaylist (playList) {
       // 适配播放器与页面底部距离
       const bottom = playList.length > 0 ? "1.5rem" : "";
       this.$nextTick(() => {
@@ -164,31 +160,29 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
-.play-ranking-container :deep(.scroll){
+.play-ranking-container :deep(.scroll) {
   position: absolute;
   width: 100%;
   height: 100%;
   overflow: hidden;
 }
 
-.play-ranking-container :deep(.song-list-container){
+.play-ranking-container :deep(.song-list-container) {
   padding-top: 0.1rem;
 }
 
-.play-ranking-container :deep(.van-tabs){
+.play-ranking-container :deep(.van-tabs) {
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
-.play-ranking-container :deep(.van-tabs__content){
+.play-ranking-container :deep(.van-tabs__content) {
   position: relative;
   flex: 1;
 }
 
-.play-ranking-container :deep(.van-tabs__content .van-tabs__track), .play-ranking-container :deep(.van-tabs__content .van-tab__pane){
+.play-ranking-container :deep(.van-tabs__content .van-tabs__track), .play-ranking-container :deep(.van-tabs__content .van-tab__pane) {
   position: absolute;
   top: 0;
   bottom: 0;

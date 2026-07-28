@@ -117,9 +117,7 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
-.song-sheet-mini-item-container .functions :deep(.van-icon-ellipsis){
+.song-sheet-mini-item-container .functions :deep(.van-icon-ellipsis) {
   transform: rotate(90deg);
 }
 

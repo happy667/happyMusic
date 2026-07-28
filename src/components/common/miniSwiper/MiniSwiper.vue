@@ -1,16 +1,17 @@
 <template>
   <div class="mini-swiper-container">
     <slot></slot>
-    <div class="swiper mini-swiper" v-swiper-nested>
+    <div class="swiper mini-swiper"
+         v-swiper-nested>
       <div class="swiper-wrapper">
-        <div class="swiper-slide" v-for="item in list" :key="item.id">
-          <mini-swiper-item
-            :item="item"
-            :showPlayCount="showPlayCount"
-            :showIcon="showIcon"
-            ref="item"
-            @select="selectItem"
-          ></mini-swiper-item>
+        <div class="swiper-slide"
+             v-for="item in list"
+             :key="item.id">
+          <mini-swiper-item :item="item"
+                            :showPlayCount="showPlayCount"
+                            :showIcon="showIcon"
+                            ref="item"
+                            @select="selectItem"></mini-swiper-item>
         </div>
       </div>
     </div>
@@ -34,7 +35,7 @@ export default {
   },
   methods: {
     // 初始化轮播图组件
-    initSwiper() {
+    initSwiper () {
       setTimeout(() => {
         var mySwiper = new Swiper(".mini-swiper", {
           slidesPerView: "auto",
@@ -47,13 +48,13 @@ export default {
     },
 
     // 选择专辑进入专辑页面
-    selectItem(item) {
+    selectItem (item) {
       this.$router.push({
         path: `/singerAlbum/${item.id}`,
       });
     },
   },
-  mounted() {
+  mounted () {
     this.$nextTick(() => {
       this.initSwiper();
     });
@@ -64,8 +65,6 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .mini-swiper-container {
   .swiper {
     .swiper-wrapper {

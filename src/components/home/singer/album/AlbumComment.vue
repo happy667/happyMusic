@@ -175,7 +175,6 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
 
 .album-comment-container :deep(.song-list-item-containter){
   border-radius: 0.2rem;

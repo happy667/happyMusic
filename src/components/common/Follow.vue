@@ -47,8 +47,6 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .follow-container {
   display: flex;
   align-items: center;

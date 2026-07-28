@@ -65,12 +65,10 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .song-list-containter {
   .songs-list {
     .songs-list-item {
-      &.active :deep(.song-list-item-containter){
+      &.active :deep(.song-list-item-containter) {
         .sg-info, .song-name, .song-index {
           color: $color-common;
         }

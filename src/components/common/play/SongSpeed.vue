@@ -70,8 +70,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .song-speed-container {
   padding: 0.6rem 0.4rem 0.4rem;
   text-align: center;

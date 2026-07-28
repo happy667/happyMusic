@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="header-navBar-container" ref="navBar">
     <!-- 头部导航栏 -->
     <van-tabs

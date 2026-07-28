@@ -1,14 +1,18 @@
 <template>
-  <div class="mini-swiper-item-container" @click.stop="handleClick">
+  <div class="mini-swiper-item-container"
+       @click.stop="handleClick">
     <div class="mini-swiper-item">
       <div class="image-wrapper">
         <div class="image animated fadeIn">
-          <img v-lazy="picUrl" :key="picUrl" />
-          <div class="playCount" v-if="showPlayCount">
+          <img v-lazy="picUrl"
+               :key="picUrl" />
+          <div class="playCount"
+               v-if="showPlayCount">
             <i class="iconfont icon-bofang"></i>
             {{ $filters.convertCount(item.playCount) }}
           </div>
-          <div class="icon" v-if="showIcon">
+          <div class="icon"
+               v-if="showIcon">
             <van-icon name="play-circle-o" />
           </div>
         </div>
@@ -31,12 +35,12 @@ export default {
     },
   },
   computed: {
-    picUrl() {
+    picUrl () {
       return this.item.picUrl || this.item.coverImgUrl;
     },
   },
   methods: {
-    handleClick() {
+    handleClick () {
       this.$emit("select", this.item);
     },
   },
@@ -44,8 +48,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import '~common/stylus/variable';
-
 .mini-swiper-item-container {
   position: relative;
   width: 2.8rem;
