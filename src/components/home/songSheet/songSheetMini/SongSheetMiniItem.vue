@@ -2,8 +2,7 @@
   <div class="song-sheet-mini-item-container"
        @click="goToSongSheetInfo">
     <!--  图片 -->
-    <div class="img animated fadeIn"
-         :style="loadBgStyle">
+    <div class="image">
       <img v-lazy="item.coverImgUrl"
            :key="item.coverImgUrl" />
     </div>
@@ -51,7 +50,7 @@ import userApi from '@/api/user.js'
 import {
   ERR_OK
 } from '@/api/config.js'
-import { mapWritableState, mapState } from 'pinia'
+import { mapWritableState } from 'pinia'
 
 import { useUserStore } from '@/stores'
 export default {
@@ -73,10 +72,7 @@ export default {
     }
   },
   computed: {
-    ...mapWritableState(useUserStore, ['user']),
-    loadBgStyle () {
-      return !this.item.coverImgUrl ? "background:#f2f3f5" : ''
-    }
+    ...mapWritableState(useUserStore, ['user'])
   },
   methods: {
     goToSongSheetInfo () {
@@ -165,11 +161,12 @@ export default {
   display: flex;
   margin-bottom: 0.3rem;
 
-  .img {
+  .image {
     margin-right: 0.4rem;
     width: 1.3rem;
     height: 1.3rem;
     border-radius: 0.2rem;
+    background:$color-common-b;
 
     img {
       display: block;

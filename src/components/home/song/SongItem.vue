@@ -6,8 +6,7 @@
          :class="top?'rank':''"
          v-if="showIndex">{{index}}</div>
     <!-- 歌曲图片 -->
-    <div class="song-img animated fadeIn"
-         :style="loadBgStyle"
+    <div class="song-img"
          v-if="showImage">
       <img v-lazy="picUrl"
            :key="picUrl">
@@ -103,10 +102,7 @@ export default {
     // 歌手名称-专辑名称
     sgName () {
       return this.song.album ? this.song.singers + ' - ' + this.song.album.name : this.song.singers
-    },
-    loadBgStyle () {
-      return !this.picUrl ? "background:#f2f3f5" : ''
-    },
+    }
   },
   watch: {
     userLikeList () {
@@ -230,6 +226,7 @@ export default {
     margin: 0.15rem 0.3rem 0.15rem 0;
     border-radius: 50%;
     flex: none;
+    background-color: $color-common-b;
 
     img {
       text-align: center;

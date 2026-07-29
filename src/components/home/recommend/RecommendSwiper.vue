@@ -7,8 +7,7 @@
              @click.stop="selectItem(item)"
              v-for="(item, index) in banners"
              :key="index">
-          <div class="image animated fadeIn"
-               :style="loadBgStyle">
+          <div class="image">
             <img v-lazy="item.imageUrl" />
             <div class="title">{{ item.typeTitle }}</div>
           </div>
@@ -41,10 +40,7 @@ export default {
     this.initSwiper();
   },
   computed: {
-    ...mapState(usePlayerStore, ['currentSong']),
-    loadBgStyle () {
-      return !this.banners ? "background:#f2f3f5" : "";
-    },
+    ...mapState(usePlayerStore, ['currentSong'])
   },
   methods: {
     selectItem (item) {
@@ -166,6 +162,7 @@ export default {
           width: 100%;
           height: 100%;
           border-radius: 0.2rem;
+          background: $color-common-b;
 
           img {
             display: block;

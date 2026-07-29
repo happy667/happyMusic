@@ -38,7 +38,7 @@
             </div>
 
             <!-- 视频描述 -->
-            <div class="video-desc-container animated fadeIn"
+            <div class="video-desc-container animate__animated animate__fadeIn"
                  v-show="showMoreInfo">
               <div class="top">
                 <div class="video-num">{{ video.playCount }} 次观看</div>
@@ -147,7 +147,6 @@ import Singer from "@/assets/common/js/singer.js";
 import SingerPopup from "@/components/common/SingerPopup";
 import userApi from "@/api/user.js";
 import { mapWritableState, mapState, mapActions } from "pinia";
-
 import { usePlayerStore, useUserStore, useSingerStore, useAppStore } from "@/stores";
 import { ERR_OK } from "@/api/config.js";
 import { RECOURCE_TYPE } from "@/assets/common/js/config.js";

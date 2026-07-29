@@ -1,35 +1,49 @@
 <template>
-  <div
-    class="song-sheet-desc-container"
-    @touchstart="handleTouchStart"
-    @touchmove="handleTouchMove"
-    @touchend="handleTouchEnd"
-  >
-    <div class="container" ref="container">
+  <div class="song-sheet-desc-container"
+       @touchstart="handleTouchStart"
+       @touchmove="handleTouchMove"
+       @touchend="handleTouchEnd">
+    <div class="container"
+         ref="container">
       <!-- 头部导航栏 -->
-      <div class="nav-bar-container" ref="navBar" v-show="!loading">
-        <van-nav-bar :title="title" class="nav-bar" left-arrow @click-left="routerBack">
+      <div class="nav-bar-container"
+           ref="navBar"
+           v-show="!loading">
+        <van-nav-bar :title="title"
+                     class="nav-bar"
+                     left-arrow
+                     @click-left="routerBack">
           <template #right>
-            <div class="share" @click="handleClickShare" ref="share">
+            <div class="share"
+                 @click="handleClickShare"
+                 ref="share">
               <div class="icon">
                 <i class="iconfont icon-fenxiang"></i>
               </div>
             </div>
           </template>
         </van-nav-bar>
-        <div class="bg-layer" ref="bgLayer"></div>
+        <div class="bg-layer"
+             ref="bgLayer"></div>
       </div>
-      <header class="header-container animated fadeIn" ref="headerContainer">
+      <header class="header-container animate__animated animate__fadeIn"
+              ref="headerContainer">
         <!-- 背景 -->
-        <div class="bg header-bg" v-if="image" v-lazy:background-image="image"></div>
+        <div class="bg header-bg"
+             v-if="image"
+             v-lazy:background-image="image"></div>
         <!-- 歌单头部 -->
-        <section class="song-sheet-header" :style="loadBgStyle">
-          <div class="song-sheet-info" v-if="!loading">
+        <section class="song-sheet-header"
+                 :style="loadBgStyle">
+          <div class="song-sheet-info"
+               v-if="!loading">
             <div class="container header">
-              <div class="left-img" @click="openOverlay">
+              <div class="left-img"
+                   @click="openOverlay">
                 <div class="song-sheet-image">
-                  <div class="image animated fadeIn">
-                    <img v-lazy="songSheetDisc.picUrl" :key="songSheetDisc.picUrl" />
+                  <div class="image">
+                    <img v-lazy="songSheetDisc.picUrl"
+                         :key="songSheetDisc.picUrl" />
                   </div>
                   <div class="playCount">
                     <i class="iconfont icon-bofang"></i>
@@ -38,22 +52,25 @@
                 </div>
               </div>
               <article class="right-info">
-                <div class="creator animated fadeIn" :style="loadBgStyle">
-                  <img class="avatar" v-lazy="songSheetDisc.creator.avatarUrl" />
+                <div class="creator">
+                  <div class="image">
+                    <img class="avatar"
+                       v-lazy="songSheetDisc.creator.avatarUrl" />
+                  </div>
                   <span class="name">{{ songSheetDisc.creator.nickname }}</span>
                 </div>
                 <div class="func">
-                  <div
-                    class="func-item"
-                    v-if="songSheetDisc.creator.userId !== userId"
-                    @click="handleClickFollow"
-                  >
-                    <div class="icon" :class="followCls">
+                  <div class="func-item"
+                       v-if="songSheetDisc.creator.userId !== userId"
+                       @click="handleClickFollow">
+                    <div class="icon"
+                         :class="followCls">
                       <van-icon :name="followIcon" />
                     </div>
                     {{ followText }}
                   </div>
-                  <div class="func-item" @click="goToSongSheetComment">
+                  <div class="func-item"
+                       @click="goToSongSheetComment">
                     <div class="icon">
                       <van-icon name="more-o" />
                     </div>
@@ -64,67 +81,70 @@
                 </div>
               </article>
             </div>
-            <div
-              class="bottom tags"
-              v-if="songSheetDisc.tags && songSheetDisc.tags.length !== 0"
-            >
-              <tag-list
-                bgColor="rgba(0, 0, 0, .3)"
-                color="#fff"
-                :tags="songSheetDisc.tags"
-              />
+            <div class="bottom tags"
+                 v-if="songSheetDisc.tags && songSheetDisc.tags.length !== 0">
+              <tag-list bgColor="rgba(0, 0, 0, .3)"
+                        color="#fff"
+                        :tags="songSheetDisc.tags" />
             </div>
           </div>
         </section>
       </header>
 
-      <div class="section-container" ref="sectionBox">
+      <div class="section-container"
+           ref="sectionBox">
         <!-- 歌单描述 -->
-        <article class="songs-desc" @click="openOverlay">
-          <van-skeleton :row="2" :loading="loading" row-width="100%">
+        <article class="songs-desc"
+                 @click="openOverlay">
+          <van-skeleton :row="2"
+                        :loading="loading"
+                        row-width="100%">
             <p class="desc">{{ songSheetDisc.description }}</p>
           </van-skeleton>
           <template v-if="!loading">
             <div class="songs-nt">
               <span class="songs-num">{{ songSheetDisc.songs.length }}首</span>
-              <span class="songs-time" v-if="songSheetDisc.songs.length !== 0">{{
+              <span class="songs-time"
+                    v-if="songSheetDisc.songs.length !== 0">{{
                 $filters.convertDate(songSheetDisc.updateTime)
               }}</span>
             </div>
             <!-- 播放按钮 -->
-            <div class="playBtn" @click.stop="playAllSong(songSheetDisc.songs)">
+            <div class="playBtn"
+                 @click.stop="playAllSong(songSheetDisc.songs)">
               <i class="iconfont icon-bofang"></i>
             </div>
           </template>
         </article>
         <template v-if="!loading">
           <!-- 歌曲列表 -->
-          <songs-list
-            :songsList="songSheetDisc.songs"
-            ref="songList"
-            :showImage="!rank"
-            :showIndex="rank"
-            :top="rank"
-            @select="selectSong"
-          />
+          <songs-list :songsList="songSheetDisc.songs"
+                      ref="songList"
+                      :showImage="!rank"
+                      :showIndex="rank"
+                      :top="rank"
+                      @select="selectSong" />
 
-          <no-result
-            v-if="songSheetDisc.songs.length === 0"
-            text="暂无相关资源"
-          ></no-result>
+          <no-result v-if="songSheetDisc.songs.length === 0"
+                     text="暂无相关资源"></no-result>
         </template>
         <!-- loading -->
         <loading :loading="loading"></loading>
       </div>
     </div>
     <!-- 定位 -->
-    <position v-show="isShowPosition" @click="handlePosition"></position>
+    <position v-show="isShowPosition"
+              @click="handlePosition"></position>
     <!-- 遮罩层 -->
-    <van-overlay :show="showOverlay" v-if="songSheetDisc" class="overlay-container">
-      <div class="container" @click="closeOverlay" @touchmove.stop>
+    <van-overlay :show="showOverlay"
+                 v-if="songSheetDisc"
+                 class="overlay-container">
+      <div class="container"
+           @click="closeOverlay"
+           @touchmove.stop>
         <div class="top">
           <div class="image-container">
-            <div class="image animated fadeIn">
+            <div class="image">
               <img v-lazy="songSheetDisc.picUrl" />
             </div>
           </div>
@@ -133,24 +153,24 @@
         </div>
         <div class="bottom">
           <article class="description">
-            <div
-              class="tags"
-              v-if="songSheetDisc.tags && songSheetDisc.tags.length !== 0"
-            >
+            <div class="tags"
+                 v-if="songSheetDisc.tags && songSheetDisc.tags.length !== 0">
               <span class="title">标签:</span>
-              <tag-list
-                bgColor="rgba(0, 0, 0, .2)"
-                color="#fff"
-                :tags="songSheetDisc.tags"
-              />
+              <tag-list bgColor="rgba(0, 0, 0, .2)"
+                        color="#fff"
+                        :tags="songSheetDisc.tags" />
             </div>
-            <div class="content" v-html="songSheetDisc.description"></div>
+            <div class="content"
+                 v-html="songSheetDisc.description"></div>
           </article>
         </div>
       </div>
       <!-- 背景 -->
-      <div class="bg" v-if="image" v-lazy:background-image="image"></div>
-      <div class="close" @click="closeOverlay">
+      <div class="bg"
+           v-if="image"
+           v-lazy:background-image="image"></div>
+      <div class="close"
+           @click="closeOverlay">
         <div class="icon">
           <i class="iconfont icon-cha"></i>
         </div>
@@ -182,7 +202,7 @@ export default {
     id: String,
   },
   mixins: [playlistMixin],
-  data() {
+  data () {
     return {
       songSheetDisc: null,
       showPosition: false,
@@ -190,7 +210,7 @@ export default {
       showOverlay: false, // 是否显示遮罩层
     };
   },
-  mounted() {
+  mounted () {
     this.getSongSheetById(this.id);
     // 初始化分享
     this.initShare();
@@ -198,15 +218,15 @@ export default {
     this.addScrollListner();
   },
 
-  activated() {
+  activated () {
     // 监听页面滚动
     this.addScrollListner();
   },
-  deactivated() {
+  deactivated () {
     // 取消监听页面滚动
     this.removeScrollListner();
   },
-  destroyed() {
+  destroyed () {
     // 取消监听页面滚动
     this.removeScrollListner();
   },
@@ -215,53 +235,53 @@ export default {
     ...mapWritableState(usePlayerStore, ["hideMiniPlayer", "currentPlayIndex"]),
     ...mapState(usePlayerStore, ["currentSong"]),
     // 是否显示定位
-    isShowPosition() {
+    isShowPosition () {
       if (!this.songSheetDisc || !this.songSheetDisc.songs) return false;
       // 判断当前歌曲列表是否有正在播放的歌曲（-1表示没有)
       let index = this.$utils.findIndex(this.songSheetDisc.songs, this.currentSong);
       return this.showPosition && index !== -1;
     },
-    rank() {
+    rank () {
       return Boolean(this.$route.query.rank);
     },
-    followIcon() {
+    followIcon () {
       return this.followed ? "like" : "like-o";
     },
-    followCls() {
+    followCls () {
       return this.followed ? "followed" : "";
     },
-    followText() {
+    followText () {
       return this.followed ? "已收藏" : "收藏";
     },
-    followed() {
+    followed () {
       return this.songSheetDisc ? this.songSheetDisc.followed : false;
     },
-    image() {
+    image () {
       if (!this.songSheetDisc) return "";
       let bgImage = this.songSheetDisc.backgroundCoverUrl
         ? this.songSheetDisc.backgroundCoverUrl
         : this.songSheetDisc.picUrl;
       return bgImage;
     },
-    title() {
+    title () {
       return this.songSheetDisc ? this.songSheetDisc.name : "";
     },
-    userId() {
+    userId () {
       return this.user ? this.user.userId : null;
     },
-    loadBgStyle() {
+    loadBgStyle () {
       return this.loading ? "background:#f2f3f5" : "";
     },
   },
   methods: {
     ...mapActions(usePlayerStore, ["setSelectPlay"]),
     // 返回上一个路由
-    routerBack() {
+    routerBack () {
       this.$route.meta.isBack = true;
       this.$utils.routerBack();
     },
     // 根据id获取歌单列表
-    async getSongSheetById(id) {
+    async getSongSheetById (id) {
       this.loading = true;
       try {
         const { data: res } = await recommendApi.getSongSheetById(id);
@@ -329,7 +349,7 @@ export default {
         this.$router.replace("/");
       }
     },
-    selectSong(item, index) {
+    selectSong (item, index) {
       // 比较两首歌曲
       let result = this.$utils.compareSong(this.currentSong, item);
       if (!result) {
@@ -338,12 +358,12 @@ export default {
       }
     },
     // 播放所有歌曲
-    playAllSong(list) {
+    playAllSong (list) {
       // 引入vue原型上的utils
       this.$utils.playAllSong(list);
     },
     // 收藏歌单
-    handleClickFollow() {
+    handleClickFollow () {
       if (this.user) {
         // 说明已经登录
         this.follow();
@@ -352,7 +372,7 @@ export default {
       }
     },
 
-    follow() {
+    follow () {
       let follow = !this.followed;
       if (follow) {
         // 1代表收藏，2代表不收藏
@@ -386,10 +406,10 @@ export default {
                 this.$toast(err.data.message);
               });
           })
-          .catch(() => {});
+          .catch(() => { });
       }
     },
-    handlePosition() {
+    handlePosition () {
       // 说明有歌曲在播放
       if (this.currentSong) {
         // 获取当前歌曲索引
@@ -406,7 +426,7 @@ export default {
       }
     },
     // 分享
-    handleClickShare() {
+    handleClickShare () {
       this.clipboard.on("success", (e) => {
         this.$toast("已复制到剪贴板");
       });
@@ -415,7 +435,7 @@ export default {
       });
     },
     // 初始化分享
-    initShare() {
+    initShare () {
       // 分享
       this.clipboard = new Clipboard(this.$refs.share, {
         text: () => {
@@ -428,12 +448,12 @@ export default {
       });
     },
     // 跳转到歌单评论列表
-    goToSongSheetComment() {
+    goToSongSheetComment () {
       this.$route.meta.isBack = false;
       this.$router.push(`/songSheetComment/${this.id}`);
     },
     // 打开遮罩层
-    openOverlay() {
+    openOverlay () {
       if (this.loading) return;
       this.showOverlay = true;
       this.hideMiniPlayer = true;
@@ -441,13 +461,13 @@ export default {
       document.body.style.overflow = "hidden";
     },
     // 关闭遮罩层
-    closeOverlay() {
+    closeOverlay () {
       this.showOverlay = false;
       this.hideMiniPlayer = false;
       document.body.style.overflow = "";
     },
     // 监听页面滚动
-    handleScroll() {
+    handleScroll () {
       let bgLayer = this.$refs.bgLayer;
       let navBar = this.$refs.navBar;
       let scrollTop =
@@ -466,25 +486,25 @@ export default {
       }
     },
     // 监听页面滚动
-    addScrollListner() {
+    addScrollListner () {
       window.addEventListener("scroll", this.handleScroll);
     },
     // 取消监听页面滚动
-    removeScrollListner() {
+    removeScrollListner () {
       window.removeEventListener("scroll", this.handleScroll);
     },
-    handleTouchStart() {
+    handleTouchStart () {
       clearTimeout(this.timer);
     },
-    handleTouchMove() {
+    handleTouchMove () {
       this.showPosition = true;
     },
-    handleTouchEnd() {
+    handleTouchEnd () {
       this.timer = setTimeout(() => {
         this.showPosition = false;
       }, 5000);
     },
-    handlePlaylist(playList) {
+    handlePlaylist (playList) {
       // 适配播放器与页面底部距离
       const bottom = playList.length > 0 ? "1.5rem" : "";
       this.$nextTick(() => {
@@ -546,8 +566,8 @@ export default {
   width: 100%;
   height: 100%;
   transition: background-image 0.6s;
-  background-size: cover
-  background-position: 50% 50%
+  background-size: cover;
+  background-position: 50% 50%;
   background-repeat: no-repeat;
   transform-origin: center center;
   filter: blur(20px);
@@ -627,7 +647,7 @@ export default {
           .header {
             display: flex;
 
-            .header-bg{
+            .header-bg {
               z-index: 0;
             }
 
@@ -649,6 +669,7 @@ export default {
                   z-index: 3;
                   border-radius: 0.2rem;
                   box-shadow: 0.06rem 0.06rem 0.14rem rgba(0, 0, 0, 0.3);
+                  background: $color-common-b;
 
                   img {
                     display: block;
@@ -692,15 +713,19 @@ export default {
                 display: flex;
                 height: 0.7rem;
                 line-height: 0.7rem;
-
-                .avatar {
+                
+                .image{
                   margin-right: 0.3rem;
-                  display: block;
-                  width: 0.7rem;
-                  height: 0.7rem;
+                  background: $color-common-b;
                   border-radius: 50%;
+                  .avatar {
+                    display: block;
+                    width: 0.7rem;
+                    height: 0.7rem;
+                    border-radius: 50%;
+                  }
                 }
-
+              
                 .name {
                   color: #fff;
                   no-wrap();
@@ -816,7 +841,8 @@ export default {
       min-height: 100%;
       box-sizing: border-box;
       color: #fff;
-      z-index:1;
+      z-index: 1;
+
       .top {
         margin-bottom: 0.5rem;
         width: 100%;

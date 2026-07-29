@@ -5,7 +5,6 @@
       <!-- 排行列表图片 -->
       <div class="official-list-img">
         <img v-lazy="rankingObj.coverImgUrl"
-             class="animated fadeIn"
              :key="rankingObj.coverImgUrl" />
       </div>
       <!-- 歌曲排名 -->

@@ -3,7 +3,7 @@
        @click.stop="handleClick">
     <div class="mini-swiper-item">
       <div class="image-wrapper">
-        <div class="image animated fadeIn">
+        <div class="image">
           <img v-lazy="picUrl"
                :key="picUrl" />
           <div class="playCount"

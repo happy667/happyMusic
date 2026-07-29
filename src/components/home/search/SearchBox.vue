@@ -42,7 +42,7 @@
                     <span class="name">{{ item.searchWord }}</span>
                     <span class="icon"
                           v-if="item.iconUrl">
-                      <img :src="item.iconUrl" />
+                      <img v-lazy="item.iconUrl" />
                     </span>
                   </div>
                   <p class="bottom">

@@ -6,7 +6,7 @@
       <div class="singer-img"
            @click="handleClick">
         <div id="image"
-             class="animated fadeIn">
+             class="animate__animated animate__fadeIn">
           <van-image :src="imageUrl"
                      fit="cover">
             <template v-slot:loading>

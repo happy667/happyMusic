@@ -1,6 +1,6 @@
 <template>
-  <transition enter-active-class="animated fadeIn faster"
-              leave-active-class="animated fadeOut faster">
+  <transition enter-active-class="animate__animate__animated animate__fadeIn faster"
+              leave-active-class="animate__animated animate__fadeOut faster">
     <div class="mini-play-container"
          @click="handleShowFullPlay">
       <div class="fixed">
@@ -13,10 +13,10 @@
                 <!-- 左侧图片 -->
                 <div class="left">
                   <div class="image-container">
-                    <div class="image animated fadeIn">
+                    <div class="image animate__animated animate__fadeIn">
                       <img v-lazy="item.album.picUrl || item.picUrl" />
                     </div>
-                    <div class="digital-album animated fadeIn">
+                    <div class="digital-album animate__animated animate__fadeIn">
                       <img src="@/assets/images/digital-album.svg" />
                     </div>
                   </div>

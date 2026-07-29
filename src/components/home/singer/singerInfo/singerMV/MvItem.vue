@@ -2,8 +2,7 @@
   <div class="mv-item-container">
     <div class="video-image">
       <div class="image">
-        <img v-lazy="item.imgurl"
-             class="animated fadeIn">
+        <img v-lazy="item.imgurl">
       </div>
       <div class="publishTime-playCount">
         <div class="publish-time">

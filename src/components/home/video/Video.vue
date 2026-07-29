@@ -13,13 +13,12 @@
                noValue />
       <div class="cover-image"
            v-if="showCoverImage">
-        <img v-lazy="videoParams.coverUrl"
-             class="animated fadeIn" />
+        <img v-lazy="videoParams.coverUrl" />
       </div>
       <div class="videoBox"
            ref="videoBox">
         <video :src="videoParams.url"
-               class="animated fadeIn"
+               class="animate__animated animate__fadeIn"
                preload="metadata"
                ref="video"
                muted
@@ -34,8 +33,8 @@
         <div class="cover-controller"
              ref="coverController">
           <!-- 头部导航 -->
-          <transition enter-active-class="animated fadeInDown faster"
-                      leave-active-class="animated fadeOutUp faster">
+          <transition enter-active-class="animate__animated fadeInDown faster"
+                      leave-active-class="animate__animated fadeOutUp faster">
             <div class="top-container"
                  v-if="isClickScreen || isFirstPlay">
               <div class="back"
@@ -55,8 +54,8 @@
             </div>
           </template>
           <template v-else>
-            <transition enter-active-class="animated fadeIn faster"
-                        leave-active-class="animated fadeOut faster">
+            <transition enter-active-class="animate__animated animate__fadeIn faster"
+                        leave-active-class="animate__animated animate__fadeOut faster">
               <div class="big-btn"
                    v-show="isClickScreen">
                 <van-icon @click.stop="handleTogglePlay"
@@ -90,8 +89,8 @@
               </div>
             </template>
             <template v-else>
-              <transition enter-active-class="animated fadeInUp faster"
-                          leave-active-class="animated fadeOutDown faster">
+              <transition enter-active-class="animate__animated fadeInUp faster"
+                          leave-active-class="animate__animated fadeOutDown faster">
                 <div class="controller-box"
                      v-if="isClickScreen">
                   <div class="play-controller">
@@ -400,7 +399,6 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-
 @keyframes wordsLoop {
   0% {
     transform: translate3d(110%, 0, 0);

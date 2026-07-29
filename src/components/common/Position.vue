@@ -1,7 +1,7 @@
 <template>
   <transition v-if="animation"
-              enter-active-class="animated fadeIn faster"
-              leave-active-class="animated fadeOut faster">
+              enter-active-class="animate__animate__animate__animated animate__fadeIn faster"
+              leave-active-class="animate__animate__animate__animated animate__fadeOut faster">
     <div class="position-container"
          @click.stop="handleClick">
       <div class="icon">

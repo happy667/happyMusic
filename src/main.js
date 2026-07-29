@@ -23,5 +23,16 @@ registerGlobalComponents(app)
 app.use(pinia)
 app.use(router)
 app.use(Vant)
-app.use(VueLazyload, { preLoad: 1.3 })
+app.use(VueLazyload, {
+  preLoad: 1.3,
+  adapter: {
+    loaded: e=>{
+      var img = e.el;
+      if (img && img.tagName === "IMG") {
+        img.style.opacity = "1";
+        img.parentElement.style.background = "transparent";
+      }
+    }
+  }
+})
 app.mount('#app')

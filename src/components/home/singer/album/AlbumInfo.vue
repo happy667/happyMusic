@@ -15,7 +15,7 @@
           <div class="left-img"
                @click="openOverlay">
             <div class="album-image">
-              <div class="image animated fadeIn"
+              <div class="image"
                    :style="loadAlbumBgStyle">
                 <img v-lazy="albumObj.album.picUrl"
                      :key="albumObj.album.picUrl" />
@@ -117,7 +117,7 @@
            @click="closeOverlay"
            @touchmove.stop>
         <div class="top">
-          <div class="image-container animated fadeIn">
+          <div class="image-container">
             <div class="image">
               <img v-lazy="albumObj.album.picUrl">
             </div>

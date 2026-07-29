@@ -2,8 +2,7 @@
   <div class="singer-swiper-item-container"
        @click="handleClick">
     <div class="singer-swiper-item">
-      <div class="image animated fadeIn"
-           :style="loadBgStyle">
+      <div class="image">
         <img v-lazy="item.avatar"
              :key="item.avatar">
       </div>
@@ -16,11 +15,6 @@
 export default {
   props: {
     item: Object
-  },
-  computed: {
-    loadBgStyle () {
-      return !this.item.avatar ? "background:#f2f3f5" : ''
-    }
   },
   methods: {
     handleClick () {
@@ -48,6 +42,7 @@ export default {
       padding-bottom: 100%;
       border-radius: 50%;
       box-shadow: 0.06rem 0.06rem 0.14rem rgba(0, 0, 0, 0.3);
+      background:$color-common-b;
 
       img {
         position: absolute;

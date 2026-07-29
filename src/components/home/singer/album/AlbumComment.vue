@@ -23,8 +23,7 @@
               <div class="album-info">
                 <div class="container">
                   <div class="left-img">
-                    <div class="album-image animated fadeIn"
-                         :style="loadBgStyle">
+                    <div class="album-image">
                       <img v-lazy="album.picUrl"
                            :key="album.picUrl" />
                     </div>
@@ -101,10 +100,7 @@ export default {
   computed: {
     commentText () {
       return this.commentCount === 0 ? '' : this.commentCount
-    },
-    loadBgStyle () {
-      return !this.album.picUrl ? "background:#f2f3f5" : ''
-    },
+    }
   },
   methods: {
     // 返回上一个路由
@@ -254,6 +250,7 @@ export default {
                 height: 1.7rem;
                 border-radius: 0.3rem;
                 box-shadow: 0.06rem 0.06rem 0.14rem rgba(0, 0, 0, 0.3);
+                background:$color-common-b;
 
                 img {
                   display: block;

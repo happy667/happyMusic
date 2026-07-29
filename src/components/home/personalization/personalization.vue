@@ -4,19 +4,19 @@
     <div class="swiper sw-personalization">
       <div class="swiper-wrapper">
         <div class="swiper-slide">
-          <div class="daily-recommendation item animated"
+          <div class="daily-recommendation item animate__animated animate__fadeIn"
                @click="handleDailyRecommendation">
             <span class="title">今日推荐</span>
           </div>
         </div>
         <div class="swiper-slide">
-          <div class="scenario-based-recommendation item animated"
+          <div class="scenario-based-recommendation item animate__animated animate__fadeIn"
                @click="handleScenarioRecommendation">
             <span class="title">场景化推荐</span>
           </div>
         </div>
         <div class="swiper-slide">
-          <div class="ai-emotional-radio-station item animated"
+          <div class="ai-emotional-radio-station item animate__animated animate__fadeIn"
                @click="openAiDialog">
             <span class="title">AI情绪电台</span>
           </div>
@@ -499,7 +499,6 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-
 .personalization-container {
   .swiper {
     .swiper-wrapper {

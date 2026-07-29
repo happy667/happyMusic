@@ -7,7 +7,7 @@
                   appear>
         <div class="logo">
           <img src="@/assets/images/logoIndex.png"
-               class="animated fadeIn" />
+               class="animate__animated animate__fadeIn" />
         </div>
       </transition>
 

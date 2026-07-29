@@ -2,8 +2,7 @@
   <section class="video-list-item-container"
            @click="handleClick">
     <!-- video 图片 -->
-    <div class="video-img animated fadeIn"
-         :style="loadBgStyle">
+    <div class="video-img">
       <img v-lazy="video.coverUrl"
            :key="video.coverUrl" />
       <!-- 播放次数 -->
@@ -35,11 +34,6 @@ export default {
       type: Object
     }
   },
-  computed: {
-    loadBgStyle () {
-      return !this.video.coverUrl ? "background:#f2f3f5" : ''
-    }
-  },
   methods: {
     handleClick () {
       this.$emit('click', this.video)
@@ -60,6 +54,7 @@ export default {
     width: 2.9rem;
     flex: none;
     border-radius: 0.1rem;
+    background-color: $color-common-b;
 
     img {
       display: block;

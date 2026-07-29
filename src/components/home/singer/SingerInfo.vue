@@ -185,6 +185,22 @@ export default {
         this.refresh();
       });
     },
+    id (newId, oldId) {
+      if (newId !== oldId) {
+        this.loading = true;
+        this.singer = null;
+        this.singerSong = null;
+        this.singerAlbum = null;
+        this.singerMV = null;
+        this.singerDesc = null;
+        this.simSingerList = null;
+        this.singerDetail = null;
+        this.singerAlbumFinished = false;
+        this.singerMVFinished = false;
+        this.getSingerDetail(newId);
+        this.handleTabsChange(this.singerCurrentIndex);
+      }
+    },
   },
   async mounted () {
     if (this.singer) {

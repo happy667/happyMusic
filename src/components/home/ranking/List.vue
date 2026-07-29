@@ -7,8 +7,7 @@
           :key="index">
         <div class="list-item-img">
           <img v-lazy="item.coverImgUrl"
-               :key="item.coverImgUrl"
-               class="animated fadeIn" />
+               :key="item.coverImgUrl" />
         </div>
         <div class="list-item-title">{{item.name}}</div>
       </li>

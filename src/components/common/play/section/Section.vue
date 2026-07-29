@@ -16,7 +16,7 @@
         <p class="text">{{currentPlayLyric}}</p>
       </div>
     </div>
-    <transition enter-active-class="animated fadeIn faster">
+    <transition enter-active-class="animate__animate__animate__animated animate__fadeIn faster">
       <div class="lyric"
            v-show="!playerShowImage">
         <scroll ref="lyricList"

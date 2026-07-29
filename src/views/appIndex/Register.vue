@@ -3,8 +3,7 @@
     <div class="container">
       <!-- logo -->
       <div class="logo">
-        <img src="@/assets/images/logo.png"
-             class="animated fadeIn" />
+        <img src="@/assets/images/logo.png" />
       </div>
       <!-- 注册表单 -->
       <div class="register-form">

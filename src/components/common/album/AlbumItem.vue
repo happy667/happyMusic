@@ -2,8 +2,7 @@
   <div class="album-container">
     <div class="album-image">
       <div class="image-container">
-        <div class="image animated fadeIn"
-             :style="loadBgStyle">
+        <div class="image">
           <img v-lazy="item.picUrl" />
         </div>
         <div class="digital-album">
@@ -95,10 +94,7 @@ export default {
     };
   },
   computed: {
-    ...mapWritableState(useUserStore, ["user"]),
-    loadBgStyle () {
-      return !this.item.picUrl ? "background:#f2f3f5" : "";
-    },
+    ...mapWritableState(useUserStore, ["user"])
   },
   methods: {
     goToSongSheetInfo () {
@@ -200,6 +196,7 @@ export default {
         width: 100%;
         height: 100%;
         border-radius: 0.1rem;
+        background-color: $color-common-b;
 
         img {
           display: block;

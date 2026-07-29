@@ -1,6 +1,6 @@
 <template>
   <div class="video-item-container">
-    <div class="container animated fadeIn">
+    <div class="container animate__animated animate__fadeIn">
       <div class="video-image"
            @click="goToVideoInfo">
         <div class="cover-image">

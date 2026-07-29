@@ -18,11 +18,10 @@
               <div class="song-sheet-info">
                 <div class="container">
                   <div class="left-img">
-                    <div class="song-sheet-image" :style="loadBgStyle">
+                    <div class="song-sheet-image">
                       <img
                         v-lazy="songSheet.picUrl"
                         :key="songSheet.picUrl"
-                        class="animated fadeIn"
                       />
                     </div>
                   </div>
@@ -103,10 +102,7 @@ export default {
         ? this.songSheet.backgroundCoverUrl
         : this.songSheet.picUrl;
       return bgImage;
-    },
-    loadBgStyle() {
-      return !this.songSheet.picUrl ? "background:#f2f3f5" : "";
-    },
+    }
   },
   methods: {
     // 返回上一个路由
@@ -252,6 +248,7 @@ export default {
                 height: 1.7rem;
                 border-radius: 0.3rem;
                 box-shadow: 0.06rem 0.06rem 0.14rem rgba(0, 0, 0, 0.3);
+                background:$color-common-b;
 
                 img {
                   display: block;
