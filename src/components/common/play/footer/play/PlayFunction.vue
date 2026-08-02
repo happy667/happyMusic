@@ -1,5 +1,5 @@
 <template>
-  <div class="function-container">
+  <div class="function-container anim-fade-in">
     <!-- 倍速播放 -->
     <div class="song-speed icon" @click="handleSongSpeedClick">
       <i class="iconfont icon-speed"></i>

@@ -1,6 +1,6 @@
 <template>
   <div class="song-sheet-item-container">
-    <div class="sons-img animate__animated animate__fadeIn">
+    <div class="sons-img anim-fade-in">
       <div class="songs-playCount"
            v-if="playCount">
         <i class="iconfont icon-bofang"></i> {{ $filters.convertCount(playCount) }}

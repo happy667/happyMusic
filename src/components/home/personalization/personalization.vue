@@ -4,19 +4,19 @@
     <div class="swiper sw-personalization">
       <div class="swiper-wrapper">
         <div class="swiper-slide">
-          <div class="daily-recommendation item animate__animated animate__fadeIn"
+          <div class="daily-recommendation item anim-fade-in"
                @click="handleDailyRecommendation">
             <span class="title">今日推荐</span>
           </div>
         </div>
         <div class="swiper-slide">
-          <div class="scenario-based-recommendation item animate__animated animate__fadeIn"
+          <div class="scenario-based-recommendation item anim-fade-in"
                @click="handleScenarioRecommendation">
             <span class="title">场景化推荐</span>
           </div>
         </div>
         <div class="swiper-slide">
-          <div class="ai-emotional-radio-station item animate__animated animate__fadeIn"
+          <div class="ai-emotional-radio-station item anim-fade-in"
                @click="openAiDialog">
             <span class="title">AI情绪电台</span>
           </div>

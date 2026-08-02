@@ -1,179 +1,175 @@
 <template>
-  <section class="section-container"
-           @click="toggleImage">
-    <div class="song-index"
-         v-show="playerShowImage">
+  <section class="section-container" @click="toggleImage">
+    <div class="song-index" v-show="playerShowImage">
       <div class="song-image">
-        <div class="image-box"
-             :class="cdCls">
+        <div class="image-box" :class="cdCls">
           <div class="image">
-            <img v-lazy="picUrl"
-                 :key="picUrl">
+            <img v-lazy="picUrl" :key="picUrl" />
           </div>
         </div>
       </div>
       <div class="current-play-lyric">
-        <p class="text">{{currentPlayLyric}}</p>
+        <p class="text">{{ currentPlayLyric }}</p>
       </div>
     </div>
-    <transition enter-active-class="animate__animate__animate__animated animate__fadeIn faster">
-      <div class="lyric"
-           v-show="!playerShowImage">
-        <scroll ref="lyricList"
-                v-if="currentLyric">
-          <div class="lyric-list-container">
-            <ul class="lyric-list">
-              <li ref="lyricLine"
-                  class="lyric-list-item"
-                  :class="index===currentLineNum?'active':''"
-                  v-for="(line,index) in currentLyric.lines"
-                  :key="index">
-                <p class="txt">{{line.txt}}</p>
-                <p class="translateLyric"
-                   v-if="line.translateText">{{line.translateText}}</p>
-              </li>
-            </ul>
-          </div>
-        </scroll>
-        <div class="no-result"
-             v-else>
-          {{text}}
+    <div class="lyric anim-fade-in" v-show="!playerShowImage">
+      <scroll ref="lyricList" v-if="currentLyric">
+        <div class="lyric-list-container">
+          <ul class="lyric-list">
+            <li
+              ref="lyricLine"
+              class="lyric-list-item"
+              :class="index === currentLineNum ? 'active' : ''"
+              v-for="(line, index) in currentLyric.lines"
+              :key="index"
+            >
+              <p class="txt">{{ line.txt }}</p>
+              <p class="translateLyric" v-if="line.translateText">
+                {{ line.translateText }}
+              </p>
+            </li>
+          </ul>
         </div>
+      </scroll>
+      <div class="no-result" v-else>
+        {{ text }}
       </div>
-    </transition>
+    </div>
   </section>
 </template>
 <script>
-import Lyric from 'lyric-parser'
-import songApi from '@/api/song.js'
-import Scroll from '@/components/common/Scroll'
-import {
-  DEFAULT_IMAGE
-} from '@/assets/common/js/config.js'
-import {
-  ERR_OK
-} from '@/api/config.js'
-import { mapWritableState, mapState, mapActions } from 'pinia'
+import Lyric from "lyric-parser";
+import songApi from "@/api/song.js";
+import Scroll from "@/components/common/Scroll";
+import { DEFAULT_IMAGE } from "@/assets/common/js/config.js";
+import { ERR_OK } from "@/api/config.js";
+import { mapWritableState, mapState, mapActions } from "pinia";
 
-import { usePlayerStore } from '@/stores'
+import { usePlayerStore } from "@/stores";
 export default {
-  data () {
+  data() {
     return {
       nolyric: true,
-      text: '歌词加载中...',
-    }
+      text: "歌词加载中...",
+    };
   },
-  inject: ['playerParams'],
+  inject: ["playerParams"],
   computed: {
-    ...mapWritableState(usePlayerStore, ['playing', 'playerShowImage', 'currentLyric', 'currentLineNum', 'currentPlayLyric', 'playerFullScreen']),
-    ...mapState(usePlayerStore, ['currentSong']),
-    cdCls () {
-      return this.playing ? 'play' : 'play pause'
+    ...mapWritableState(usePlayerStore, [
+      "playing",
+      "playerShowImage",
+      "currentLyric",
+      "currentLineNum",
+      "currentPlayLyric",
+      "playerFullScreen",
+    ]),
+    ...mapState(usePlayerStore, ["currentSong"]),
+    cdCls() {
+      return this.playing ? "play" : "play pause";
     },
-    picUrl () {
-      return this.currentSong.album ? this.currentSong.album.picUrl : DEFAULT_IMAGE
+    picUrl() {
+      return this.currentSong.album ? this.currentSong.album.picUrl : DEFAULT_IMAGE;
     },
-    lyric () {
-      return this.currentLyric
-    }
-
+    lyric() {
+      return this.currentLyric;
+    },
   },
   methods: {
-
     // 获取歌词
-    getLyric (id) {
-      this.text = '歌词加载中...'
-      songApi.getSongLyric(id).then(res => {
-        res = res.data
+    getLyric(id) {
+      this.text = "歌词加载中...";
+      songApi
+        .getSongLyric(id)
+        .then((res) => {
+          res = res.data;
 
-        if (res.code === ERR_OK) {
-          // 没有歌词
-          if (res.nolyric || !res.lrc.lyric) {
-            this.text = '暂无歌词'
-            this.currentLyric = null
+          if (res.code === ERR_OK) {
+            // 没有歌词
+            if (res.nolyric || !res.lrc.lyric) {
+              this.text = "暂无歌词";
+              this.currentLyric = null;
+            } else {
+              // 先解析歌词
+              let lyric = res.lrc.lyric;
+              // 创建lyric对象对歌词进行处理
+              let currentLyric = new Lyric(lyric, this.handleLyric);
+              if (res.tlyric) {
+                //翻译歌词
+                let tlyric = res.tlyric.lyric;
+                let translateLyric = new Lyric(tlyric, this.handleLyric);
+                //同步歌词和翻译
+                this.handleSynchronousTranslation(currentLyric, translateLyric);
+              }
+              this.currentLyric = currentLyric;
+              // 若解析出来没有歌词说明该歌曲没有歌词
+              if (currentLyric.lines.length === 1) {
+                this.text = currentLyric.lines[0].txt;
+                this.currentLyric = null;
+              }
+
+              if (this.playing && this.currentLyric) {
+                this.currentLyric.play();
+              }
+              setTimeout(() => {
+                this.refresh();
+              }, 20);
+            }
           } else {
-            // 先解析歌词
-            let lyric = res.lrc.lyric
-            // 创建lyric对象对歌词进行处理
-            let currentLyric = new Lyric(lyric, this.handleLyric)
-            if (res.tlyric) { //翻译歌词
-              let tlyric = res.tlyric.lyric
-              let translateLyric = new Lyric(tlyric, this.handleLyric)
-              //同步歌词和翻译
-              this.handleSynchronousTranslation(currentLyric, translateLyric)
-            }
-            this.currentLyric = currentLyric
-            // 若解析出来没有歌词说明该歌曲没有歌词
-            if (currentLyric.lines.length === 1) {
-              this.text = currentLyric.lines[0].txt
-              this.currentLyric = null
-            }
-
-            if (this.playing && this.currentLyric) {
-              this.currentLyric.play()
-            }
-            setTimeout(() => {
-              this.refresh()
-            }, 20)
+            this.$toast(res.data.message);
           }
-        } else {
-          this.$toast(res.data.message)
-        }
-      }).catch((e) => {
-        console.log(e)
-        this.text = '暂无歌词'
-        this.currentLyric = null
-        this.currentLineNum = 0
-      })
+        })
+        .catch((e) => {
+          console.log(e);
+          this.text = "暂无歌词";
+          this.currentLyric = null;
+          this.currentLineNum = 0;
+        });
     },
     // lyric-parse中的方法
-    handleLyric ({
-      lineNum,
-      txt
-    }) {
-      this.currentLineNum = lineNum
+    handleLyric({ lineNum, txt }) {
+      this.currentLineNum = lineNum;
       if (lineNum > 4) {
         if (this.currentLyric) {
-          let lineEl = this.$refs.lyricLine[lineNum - 4] // 滚动到元素
-          this.$refs.lyricList.scrollToElement(lineEl, 1000)
+          let lineEl = this.$refs.lyricLine[lineNum - 4]; // 滚动到元素
+          this.$refs.lyricList.scrollToElement(lineEl, 1000);
         }
       } else {
         if (this.currentLyric) {
-          this.$refs.lyricList.scrollTo(0, 0, 1000) // 滚动到顶部
+          this.$refs.lyricList.scrollTo(0, 0, 1000); // 滚动到顶部
         }
       }
-      this.currentPlayLyric = txt
+      this.currentPlayLyric = txt;
     },
-    refresh () {
+    refresh() {
       if (this.$refs.lyricList) {
         this.$nextTick(() => {
-          this.$refs.lyricList.refresh()
-        })
+          this.$refs.lyricList.refresh();
+        });
       }
     },
     // 歌词和图片
-    toggleImage () {
-      this.playerShowImage = !this.playerShowImage
+    toggleImage() {
+      this.playerShowImage = !this.playerShowImage;
     },
     //同步歌词和翻译
-    handleSynchronousTranslation (lyric, tlyric) {
-      lyric.lines.forEach(item => {
-        item.translateText = ''
-      })
-      tlyric.lines.forEach(item1 => {
+    handleSynchronousTranslation(lyric, tlyric) {
+      lyric.lines.forEach((item) => {
+        item.translateText = "";
+      });
+      tlyric.lines.forEach((item1) => {
         lyric.lines.forEach((item2, index) => {
           if (item1.time == item2.time) {
-            lyric.lines[index].translateText = item1.txt
-            return false
+            lyric.lines[index].translateText = item1.txt;
+            return false;
           }
-        })
-      })
-    }
+        });
+      });
+    },
   },
   components: {
-    Scroll
-  }
-}
+    Scroll,
+  },
+};
 </script>
 <style lang="stylus" scoped>
 .section-container :deep(.scroll) {

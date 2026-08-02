@@ -58,3 +58,33 @@ img[data-src] {
   opacity: 0;
   transition: opacity .5s ease;
 }
+
+// ============================================
+// 公共过渡动画（基于 animate.css @keyframes）
+// 配合 <transition name="fade | slide-up | slide-down"> 使用
+// ============================================
+
+// 淡入淡出
+.fade-enter-active
+  animation fadeIn .3s both
+
+.fade-leave-active
+  animation fadeOut .3s both
+
+// 上滑淡入 / 上滑淡出
+.slide-up-enter-active
+  animation fadeInUp .3s both
+
+.slide-up-leave-active
+  animation fadeOutDown .3s both
+
+// 下滑淡入 / 下滑淡出
+.slide-down-enter-active
+  animation fadeInDown .3s both
+
+.slide-down-leave-active
+  animation fadeOutUp .3s both
+
+// 一次性挂载淡入（替代 animate__animated animate__fadeIn）
+.anim-fade-in
+  animation fadeIn .5s both

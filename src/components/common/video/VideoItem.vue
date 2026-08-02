@@ -1,6 +1,6 @@
 <template>
   <section class="video-list-item-container"
-           @click="handleClick">
+           @click="$emit('select-video', this.video)">
     <!-- video 图片 -->
     <div class="video-img">
       <img v-lazy="video.coverUrl"
@@ -32,11 +32,6 @@ export default {
   props: {
     video: {
       type: Object
-    }
-  },
-  methods: {
-    handleClick () {
-      this.$emit('click', this.video)
     }
   }
 }

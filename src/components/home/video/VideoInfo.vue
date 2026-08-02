@@ -6,29 +6,26 @@
       <loading />
     </template>
     <template v-else>
-      <div class="video"
-           ref="video">
-        <video-component :videoParams="video"
-                         :class="fixed ? 'fixed' : ''"
-                         @openFullScreen="fixed = false"
-                         @closeFullScreen="fixed = true"
-                         @toggleInfo="handleToggleInfo">
+      <div class="video" ref="video">
+        <video-component
+          :videoParams="video"
+          :class="fixed ? 'fixed' : ''"
+          @openFullScreen="fixed = false"
+          @closeFullScreen="fixed = true"
+          @toggleInfo="handleToggleInfo"
+        >
         </video-component>
         <div class="fixed-box"></div>
       </div>
       <section class="container">
         <!-- 视频信息 -->
-        <div class="video-info"
-             v-if="!loadVideoInfo">
-          <div class="info-top"
-               @click="handleToggleInfo">
+        <div class="video-info" v-if="!loadVideoInfo">
+          <div class="info-top" @click="handleToggleInfo">
             <div class="content">
               <!-- 视频标题 -->
               <div class="title">
                 <div class="icon">
-                  <van-tag size="large"
-                           plain
-                           color="#FD4979">mv</van-tag>
+                  <van-tag size="large" plain color="#FD4979">mv</van-tag>
                 </div>
                 <div class="name">{{ video.name }}</div>
               </div>
@@ -36,47 +33,47 @@
                 <van-icon :name="rightIcon" />
               </div>
             </div>
-
             <!-- 视频描述 -->
-            <div class="video-desc-container animate__animated animate__fadeIn"
-                 v-show="showMoreInfo">
-              <div class="top">
-                <div class="video-num">{{ video.playCount }} 次观看</div>
-                <div class="video-time">{{ video.publishTime }} 发布</div>
+            <div class="video-desc-container anim-fade-in" v-if="showMoreInfo"
+              >
+                <div class="top">
+                  <div class="video-num">{{ video.playCount }} 次观看</div>
+                  <div class="video-time">{{ video.publishTime }} 发布</div>
+                </div>
+                <div class="bottom">
+                  <div class="desc">{{ video.desc }}</div>
+                </div>
               </div>
-              <div class="bottom">
-                <div class="desc">{{ video.desc }}</div>
-              </div>
-            </div>
           </div>
           <!-- 视频收藏、分享、点赞、评论 -->
           <div class="info-center van-hairline--bottom">
-            <div class="item"
-                 :class="video.liked ? 'active' : ''"
-                 @click="handleClickLike">
+            <div
+              class="item"
+              :class="video.liked ? 'active' : ''"
+              @click="handleClickLike"
+            >
               <div class="love icon">
                 <i class="iconfont icon-dianzan"></i>
               </div>
               <p class="text">{{ $filters.convertCount(video.likeCount) }}</p>
             </div>
-            <div class="item"
-                 :class="video.followed ? 'active' : ''"
-                 @click="handleClickFollow">
+            <div
+              class="item"
+              :class="video.followed ? 'active' : ''"
+              @click="handleClickFollow"
+            >
               <div class="follow icon">
                 <van-icon :name="followIcon" />
               </div>
               <p class="text">{{ $filters.convertCount(video.subCount) }}</p>
             </div>
-            <div class="item"
-                 @click="handleClickComment">
+            <div class="item" @click="handleClickComment">
               <div class="comment icon">
                 <van-icon name="more-o" />
               </div>
               <p class="text">{{ $filters.convertCount(video.commentCount) }}</p>
             </div>
-            <div class="item"
-                 ref="share"
-                 @click="handleClickShare()">
+            <div class="item" ref="share" @click="handleClickShare()">
               <div class="share icon">
                 <i class="iconfont icon-fenxiang"></i>
               </div>
@@ -84,8 +81,7 @@
             </div>
           </div>
           <!-- 视频出处 -->
-          <div class="info-bottom"
-               @click="selectCreator(video.creatorList)">
+          <div class="info-bottom" @click="selectCreator(video.creatorList)">
             <div class="play-source-img">
               <my-image :src="video.artist.avatar" />
             </div>
@@ -94,25 +90,22 @@
             </div>
           </div>
         </div>
-        <div class="other-info"
-             v-if="!loadVideoInfo">
+        <div class="other-info" v-if="!loadVideoInfo">
           <!-- 相关mv -->
-          <div class="related-mv"
-               v-if="simiMVList">
+          <div class="related-mv" v-if="simiMVList">
             <p>相关视频</p>
-            <video-list :list="simiMVList"
-                        @select="goToVideoInfo"></video-list>
+            <video-list :list="simiMVList" @select="goToVideoInfo"></video-list>
           </div>
           <!-- 评论列表 -->
-          <div class="comment"
-               ref="commentContainer"
-               v-if="simiMVList && commentList">
+          <div class="comment" ref="commentContainer" v-if="simiMVList && commentList">
             <div class="comment-title">精彩评论 {{ commentText }}</div>
-            <van-list v-model="loading"
-                      :immediate-check="false"
-                      :finished="finished"
-                      :finished-text="commentCount === 0 ? '' : '没有更多了'"
-                      @load="handlePullingUp">
+            <van-list
+              v-model="loading"
+              :immediate-check="false"
+              :finished="finished"
+              :finished-text="commentCount === 0 ? '' : '没有更多了'"
+              @load="handlePullingUp"
+            >
               <template v-if="commentList.length !== 0">
                 <comment-list :commentList="commentList"></comment-list>
               </template>
@@ -124,12 +117,14 @@
         </div>
         <loading :loading="loadVideoInfo || !simiMVList || !commentList" />
       </section>
-      <singer-popup :list="video.creatorList"
-                    :showPopup="showSingerPopup"
-                    @closePopup="showSingerPopup = false"
-                    @finishedLoadImage="handleFinished"
-                    @clickListItem="clickListItem"
-                    :isLoadImage="isLoadImage"></singer-popup>
+      <singer-popup
+        :list="video.creatorList"
+        :showPopup="showSingerPopup"
+        @closePopup="showSingerPopup = false"
+        @finishedLoadImage="handleFinished"
+        @clickListItem="clickListItem"
+        :isLoadImage="isLoadImage"
+      ></singer-popup>
     </template>
   </div>
 </template>
@@ -146,7 +141,7 @@ import Video from "@/assets/common/js/video.js";
 import Singer from "@/assets/common/js/singer.js";
 import SingerPopup from "@/components/common/SingerPopup";
 import userApi from "@/api/user.js";
-import { mapWritableState, mapState, mapActions } from "pinia";
+import { mapWritableState, mapActions } from "pinia";
 import { usePlayerStore, useUserStore, useSingerStore, useAppStore } from "@/stores";
 import { ERR_OK } from "@/api/config.js";
 import { RECOURCE_TYPE } from "@/assets/common/js/config.js";
@@ -156,7 +151,7 @@ export default {
   props: {
     id: String,
   },
-  data () {
+  data() {
     return {
       loading: false, // 加载中
       loadVideoInfo: false, // 加载视频详情
@@ -170,14 +165,14 @@ export default {
       fixed: true, // 固定视频
     };
   },
-  beforeRouteLeave (to, from) {
+  beforeRouteLeave(to, from) {
     // 如果播放就显示迷你播放器
     if (this.currentPlayIndex !== -1) {
       this.hideMiniPlayer = false;
     }
     return true;
   },
-  activated () {
+  activated() {
     // 初始化加载图片
     this.isLoadImage = true;
   },
@@ -187,26 +182,38 @@ export default {
     ...mapWritableState(useUserStore, ["user"]),
     ...mapWritableState(useSingerStore, ["isLoadVideoInfoImage", "singerCurrentIndex"]),
     ...mapWritableState(useAppStore, ["noCacheComponents"]),
-    commentText () {
+    commentText() {
       return this.commentCount === 0 ? "" : this.commentCount;
     },
-    rightIcon () {
+    rightIcon() {
       return this.showMoreInfo ? "arrow-up" : "arrow-down";
     },
-    followIcon () {
+    followIcon() {
       return this.video.followed ? "like" : "like-o";
     },
     // 是否要加载图片
     isLoadImage: {
-      get () {
+      get() {
         return this.isLoadVideoInfoImage;
       },
-      set (val) {
+      set(val) {
         this.isLoadVideoInfoImage = val;
       },
     },
   },
-  mounted () {
+  watch: {
+    id(newId) {
+      if (newId) {
+        this.video = null;
+        this.simiMVList = null;
+        this.commentList = null;
+        this.getVideoDetail(newId);
+        this.getSimiMV(newId);
+        this.getVideoComment(newId);
+      }
+    },
+  },
+  mounted() {
     this.$nextTick(async () => {
       await this.getVideoDetail(this.id);
       await this.getSimiMV(this.id);
@@ -220,7 +227,7 @@ export default {
   methods: {
     ...mapActions(useAppStore, ["addNoCacheComponent", "removeNoCacheComponent"]),
     // 获取视频详情
-    async getVideoDetail (id) {
+    async getVideoDetail(id) {
       try {
         // 获取视频详情
         const { data: videoDetailRes } = await videoApi.getVideoDetail(id);
@@ -273,7 +280,7 @@ export default {
       }
     },
     //获取歌手信息
-    getSingerInfo (artists) {
+    getSingerInfo(artists) {
       const creatorList = [];
       for (const item of artists) {
         const artist = item;
@@ -288,7 +295,7 @@ export default {
       return creatorList;
     },
     // 获取相似mv
-    async getSimiMV (id) {
+    async getSimiMV(id) {
       const { data: res } = await videoApi.getSimiMV(id);
       if (res.code === ERR_OK) {
         // 用于保存处理后的视频列表
@@ -308,7 +315,7 @@ export default {
       }
     },
     // 获取该mv评论
-    async getVideoComment (id) {
+    async getVideoComment(id) {
       let offset = this.commentList ? this.commentList.length : 0;
       let list = this.commentList ? this.commentList : [];
       const { data: res } = await videoApi.getVideoComment(id, offset);
@@ -318,7 +325,7 @@ export default {
       }
     },
     // 上拉加载
-    handlePullingUp () {
+    handlePullingUp() {
       setTimeout(async () => {
         await this.getVideoComment(this.id);
         if (this.commentList.length >= this.commentCount) {
@@ -327,18 +334,18 @@ export default {
         this.loading = false;
       }, 500);
     },
-    goToVideoInfo (mv) {
+    goToVideoInfo(mv) {
       // 初始化加载图片
       this.isLoadImage = true;
       this.addNoCacheComponent("videoInfo");
       this.$router.push(`/videoInfo/${mv.id}`);
     },
     // 切换显示隐藏视频详情信息
-    handleToggleInfo () {
+    handleToggleInfo() {
       this.showMoreInfo = !this.showMoreInfo;
     },
     // 选择创作者
-    selectCreator () {
+    selectCreator() {
       let list = this.video.creatorList;
       if (list.length === 1) {
         // 只有一个歌手直接跳转到歌手页面
@@ -349,10 +356,10 @@ export default {
       }
     },
     // 选择列表中歌手
-    clickListItem () {
+    clickListItem() {
       this.showSingerPopup = false;
     },
-    handleClickFollow () {
+    handleClickFollow() {
       if (this.user) {
         // 说明已经登录
         this.follow(); // 收藏/取消收藏专辑
@@ -362,7 +369,7 @@ export default {
       }
     },
     // 收藏/取消收藏专辑
-    follow () {
+    follow() {
       let follow = !this.video.followed;
       follow = follow ? 1 : 0; // 1代表收藏，0代表不收藏
       if (follow) {
@@ -399,11 +406,11 @@ export default {
                 this.$toast(err.data.message);
               });
           })
-          .catch(() => { });
+          .catch(() => {});
       }
     },
     // 选中歌曲喜欢
-    handleClickLike () {
+    handleClickLike() {
       let video = this.video;
       if (this.user) {
         // 说明已经登录
@@ -413,7 +420,7 @@ export default {
         this.$utils.alertLogin(this.$route.fullPath);
       }
     },
-    likeVideo (video) {
+    likeVideo(video) {
       let like = !video.liked;
       userApi
         .resourceLike({
@@ -441,14 +448,14 @@ export default {
         });
     },
     // 点击评论
-    handleClickComment () {
+    handleClickComment() {
       let element = this.$refs.commentContainer;
       let player = this.$refs.video;
       let top = element.offsetTop - player.offsetHeight;
       window.scrollTo(0, top);
     },
     // 分享
-    handleClickShare () {
+    handleClickShare() {
       this.clipboard.on("success", (e) => {
         this.$toast("已复制到剪贴板");
       });
@@ -457,7 +464,7 @@ export default {
       });
     },
     // 初始化分享
-    initShare () {
+    initShare() {
       // 分享
       this.clipboard = new Clipboard(this.$refs.share, {
         text: () => {
@@ -470,7 +477,7 @@ export default {
       });
     },
     // 数据获取完成
-    handleFinished () {
+    handleFinished() {
       this.isLoadImage = false;
     },
   },
@@ -500,7 +507,7 @@ export default {
 
   .fixed-box {
     width: 100%;
-    height: 5.17rem;
+    height: 5.63rem;
   }
 
   .container {
@@ -639,4 +646,5 @@ export default {
     }
   }
 }
+
 </style>

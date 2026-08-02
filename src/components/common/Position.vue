@@ -1,7 +1,6 @@
 <template>
   <transition v-if="animation"
-              enter-active-class="animate__animate__animate__animated animate__fadeIn faster"
-              leave-active-class="animate__animate__animate__animated animate__fadeOut faster">
+              name="fade">
     <div class="position-container"
          @click.stop="handleClick">
       <div class="icon">
@@ -53,4 +52,5 @@ export default {
     box-shadow: 0 0 0.4rem rgba(0, 0, 0, 0.12);
   }
 }
+
 </style>

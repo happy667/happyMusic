@@ -5,7 +5,7 @@
       <!-- logo -->
       <div class="logo">
         <img src="@/assets/images/logo.png"
-             class="animate__animated animate__fadeIn" />
+             class="anim-fade-in" />
       </div>
       <!-- 登录表单 -->
       <div class="login-form">

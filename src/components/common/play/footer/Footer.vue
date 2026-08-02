@@ -2,9 +2,7 @@
   <footer class="footer-container"
           :style="playerShowImage ? '' : 'paddingTop:0.5rem'">
     <!-- 功能区 -->
-    <transition enter-active-class="animate__animated animate__fadeIn faster">
       <play-function v-show="playerShowImage"></play-function>
-    </transition>
     <!-- 播放进度 -->
     <play-progress></play-progress>
     <!-- 播放控件区域 -->

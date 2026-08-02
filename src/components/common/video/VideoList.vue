@@ -3,7 +3,7 @@
     <div class="video-list">
       <template v-for="item in list"
                 :key="item.id">
-        <video-item @click="handleClick"
+        <video-item @select-video="handleSelectVideo"
                     :video="item"></video-item>
       </template>
 
@@ -20,7 +20,7 @@ export default {
     }
   },
   methods: {
-    handleClick (video) {
+    handleSelectVideo (video) {
       this.$emit('select', video)
     }
   },

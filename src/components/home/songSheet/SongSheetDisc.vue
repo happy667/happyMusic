@@ -26,7 +26,7 @@
         <div class="bg-layer"
              ref="bgLayer"></div>
       </div>
-      <header class="header-container animate__animated animate__fadeIn"
+      <header class="header-container anim-fade-in"
               ref="headerContainer">
         <!-- 背景 -->
         <div class="bg header-bg"
